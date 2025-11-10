@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import { getMessages } from "next-intl/server";
 import "./globals.css";
+import Providers from "@/src/providers/Providers";
+import Header from "@/src/components/header";
+import { NextIntlClientProvider } from "next-intl";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 const cairoFont = Cairo({
   subsets: ["arabic", "latin"],
@@ -36,7 +41,12 @@ export default async function RootLayout({
         className={`${cairoFont.variable} antialiased font-cairo`}
         suppressHydrationWarning
       >
-        {children}
+        <NextIntlClientProvider messages={messages}>
+        <Providers>
+          <Header />
+          <Suspense fallback={<Loading />}>{children}</Suspense>
+        </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -1,1 +1,21 @@
-{}
+{
+  "header": {
+    "search": "Search...",
+    "cart": "Cart",
+    "account": "Account",
+    "myAccount": "My Account",
+    "orders": "Orders",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "onSale": "On Sale",
+    "newArrivals": "New Arrivals",
+    "brands": "Brands",
+    "home": "Home",
+    "products": "Products",
+    "about": "About Us",
+    "contact": "Contact Us",
+    "language": "Language",
+    "theme": "Theme"
+  }
+}
