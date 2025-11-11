@@ -5,8 +5,31 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import { Autoplay } from "swiper/modules"
 import "swiper/css"
 import "./carousel.css"
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const NewArrivals = () => {
+  const [products, setProducts] = useState(newArrivals);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get("");
+        if (response?.data?.data) {
+          setProducts(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
   return (
     <section className="py-16 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700">
       <div className="container mx-auto">
@@ -18,7 +41,7 @@ const NewArrivals = () => {
 
         {/* Products Grid */}
         {/* <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {newArrivals.map((item, i) => (
+          {products.map((item, i) => (
             <ProductCard key={i} {...item} />
           ))}
         </div> */}
@@ -45,7 +68,7 @@ const NewArrivals = () => {
           }}
           className="pb-4"
         >
-          {newArrivals.map((item, i) => (
+          {products.map((item, i) => (
             <SwiperSlide key={i} >
               <ProductCard {...item} />
             </SwiperSlide>

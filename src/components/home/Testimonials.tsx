@@ -1,21 +1,45 @@
 "use client"
-import { testimonials } from "@/src/data/data";
+import { testimonials as test } from "@/src/data/data";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Testimonials = () => {
+  const [testimonials, setTestimonials] = useState(test);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get("");
+        if (response?.data?.data) {
+          setTestimonials(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
+
   return (
     <section className="pt-16 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
-        
+
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
           <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white uppercase">
             Our Happy Customers
           </h2>
-          
+
           {/* Custom Navigation Arrows */}
           <div className="hidden md:flex gap-4">
             <button className="testimonials-prev w-10 h-10 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition">

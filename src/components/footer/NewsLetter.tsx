@@ -1,6 +1,6 @@
 const NewsLetter = () => {
   return (
-    <div className="lg:translate-y-1/2 py-10 lg:pt-0">
+    <div dir="ltr" className="lg:translate-y-1/2 py-10 lg:pt-0">
         <div className="container">
           <div className="lg:max-w-6xl mx-auto bg-primary rounded-3xl px-8 md:px-16 py-8 flex flex-col lg:flex-row items-center justify-between gap-6">
             <h2 className="text-white text-3xl md:text-4xl font-extrabold max-w-xl text-center lg:text-left">
