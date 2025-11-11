@@ -14,7 +14,9 @@ const logos = [
 const BrandsMarquee = ({ speed = 20 }: { speed?: number }) => {
   const wrapRef = useRef<HTMLDivElement | null>(null)
 
-  const repeated = [...logos, ...logos, ...logos]
+  const calculateRepeats = () => {
+    return Array(10).fill(null).flatMap(() => logos)
+  }
 
   return (
     <section className="bg-gray-800 dark:bg-gray-950 p-4 lg:py-6">
@@ -25,26 +27,26 @@ const BrandsMarquee = ({ speed = 20 }: { speed?: number }) => {
           aria-hidden={false}
         >
           <div
-            className="marquee ho-center gap-10"
+            className="marquee flex gap-10"
             style={
               {
                 animationDuration: `${speed}s`,
               } as React.CSSProperties
             }
           >
-            {repeated.map((src, i) => (
+            {calculateRepeats().map((src, i) => (
               <div
-                key={i}
-                className="shrink-0 w-32 h-16 center"
+                key={`${src}-${i}`}
+                className="shrink-0 w-32 h-16 flex items-center justify-center"
                 role="img"
                 aria-label={`brand-${i % logos.length}`}
               >
                 <Image
                   src={src}
-                  alt={`brand ${i}`}
+                  alt={`brand ${i % logos.length}`}
                   width={160}
                   height={80}
-                  className="object-contain w-32 h-16 filter grayscale opacity-70 hover:opacity-100 transition"
+                  className="object-contain w-32 h-16 filter grayscale opacity-70 hover:opacity-100 transition-opacity duration-300"
                 />
               </div>
             ))}
@@ -79,9 +81,6 @@ const BrandsMarquee = ({ speed = 20 }: { speed?: number }) => {
           100% {
             transform: translateX(-50%);
           }
-        }
-
-        .marquee > :global(div) {
         }
       `}</style>
     </section>
