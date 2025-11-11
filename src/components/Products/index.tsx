@@ -100,7 +100,7 @@ const Products = () => {
         <section className="pt-20 bg-white dark:bg-gray-900">
             <Breadcrumb className="my-4" />
             <div className="flex gap-5 container">
-                <aside className="w-1/4 max-w-96 bg-white dark:bg-gray-900 p-5 rounded-3xl border border-gray-200 dark:border-gray-700 h-fit sticky top-24">
+                <aside className="hidden lg:block w-1/4 max-w-96 bg-white dark:bg-gray-900 p-5 rounded-3xl border border-gray-200 dark:border-gray-700 h-fit sticky top-24">
                     <div className="flex-between border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Filters</h2>
                         <button onClick={handleResetFilters} title="Reset Filters">
@@ -147,22 +147,22 @@ const Products = () => {
 
                 <section className="flex-1 bg-white dark:bg-gray-900 p-5 rounded-3xl border border-gray-200 dark:border-gray-700">
                     {/* Header with Sort and Layout Toggle */}
-                    <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-                        <p className="text-gray-600 dark:text-gray-400">
+                    <div className="flex-between flex-col lg:flex-row gap-2 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+                        <p className="hidden lg:block text-gray-600 dark:text-gray-400">
                             Showing {products.length} products
                         </p>
                         
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center justify-between lg:justify-center w-full lg:w-fit gap-4">
                             {/* Sort Dropdown */}
                             <div className="flex items-center gap-2">
-                                <label htmlFor="sort" className="text-sm text-gray-600 dark:text-gray-400">
+                                <label htmlFor="sort" className="hidden lg:block text-sm text-gray-600 dark:text-gray-400">
                                     Sort by:
                                 </label>
                                 <select
                                     id="sort"
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value)}
-                                    className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                                    className="px-4 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
                                 >
                                     <option value="default">Default</option>
                                     <option value="price-low">Price: Low to High</option>
@@ -174,13 +174,13 @@ const Products = () => {
                             </div>
 
                             {/* Layout Toggle */}
-                            <div className="flex items-center gap-2 border border-gray-200 dark:border-gray-700 rounded-lg p-1">
+                            <div className="flex items-center gap-2 border border-gray-200 dark:border-gray-700 rounded-xl p-1">
                                 <button
                                     onClick={() => setLayoutMode('grid')}
-                                    className={`p-2 rounded transition ${
+                                    className={`p-2 rounded-lg transition ${
                                         layoutMode === 'grid'
-                                            ? 'bg-black dark:bg-white text-white dark:text-black'
-                                            : 'text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'
+                                            ? 'bg-secondary dark:bg-white text-white dark:text-secondary'
+                                            : 'text-gray-600 dark:text-gray-400 hover:text-secondary dark:hover:text-white'
                                     }`}
                                     title="Grid View"
                                 >
@@ -193,10 +193,10 @@ const Products = () => {
                                 </button>
                                 <button
                                     onClick={() => setLayoutMode('list')}
-                                    className={`p-2 rounded transition ${
+                                    className={`p-2 rounded-lg transition ${
                                         layoutMode === 'list'
-                                            ? 'bg-black dark:bg-white text-white dark:text-black'
-                                            : 'text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'
+                                            ? 'bg-secondary dark:bg-white text-white dark:text-secondary'
+                                            : 'text-gray-600 dark:text-gray-400 hover:text-secondary dark:hover:text-white'
                                     }`}
                                     title="List View"
                                 >
@@ -273,7 +273,7 @@ const Products = () => {
                                                     </>
                                                 )}
                                             </div>
-                                            <button className="px-6 py-2 bg-black dark:bg-white text-white dark:text-black rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition">
+                                            <button className="px-6 py-2 bg-primary dark:bg-white text-white dark:text-black rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition">
                                                 Add to Cart
                                             </button>
                                         </div>
