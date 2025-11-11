@@ -7,6 +7,7 @@ import ColorFilter from "./filters/ColorFilter"
 import SizeFilter from "./filters/SizeFilter"
 import { newArrivals } from "@/src/data/data"
 import ProductCard from "../common/ProductCard"
+import ProductRowCard from "../common/ProductRowCard"
 
 // Mock data - replace with API calls later
 const categories = [
@@ -222,62 +223,7 @@ const Products = () => {
                     ) : (
                         <div className="flex flex-col gap-4">
                             {sortedProducts?.map((product, index) => (
-                                <div key={index} className="flex gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-2xl hover:shadow-lg transition">
-                                    <img 
-                                        src={product.image} 
-                                        alt={product.title}
-                                        className="w-32 h-32 object-cover rounded-lg"
-                                    />
-                                    <div className="flex-1 flex flex-col justify-between">
-                                        <div>
-                                            <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-2">
-                                                {product.title}
-                                            </h3>
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <div className="flex items-center">
-                                                    {[...Array(5)].map((_, i) => (
-                                                        <svg
-                                                            key={i}
-                                                            className={`w-4 h-4 ${
-                                                                i < Math.floor(product.rating)
-                                                                    ? 'text-yellow-400 fill-current'
-                                                                    : 'text-gray-300 dark:text-gray-600'
-                                                            }`}
-                                                            viewBox="0 0 20 20"
-                                                        >
-                                                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                                                        </svg>
-                                                    ))}
-                                                </div>
-                                                <span className="text-sm text-gray-600 dark:text-gray-400">
-                                                    {product.rating}/5
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                                                    ${product.price}
-                                                </span>
-                                                {product.oldPrice && (
-                                                    <>
-                                                        <span className="text-lg text-gray-400 line-through">
-                                                            ${product.oldPrice}
-                                                        </span>
-                                                        {product.discount && (
-                                                            <span className="px-2 py-1 bg-red-100 text-red-600 rounded-full text-sm font-medium">
-                                                                -{product.discount}%
-                                                            </span>
-                                                        )}
-                                                    </>
-                                                )}
-                                            </div>
-                                            <button className="px-6 py-2 bg-primary dark:bg-white text-white dark:text-black rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition">
-                                                Add to Cart
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                                <ProductRowCard key={index} {...product} />
                             ))}
                         </div>
                     )}
