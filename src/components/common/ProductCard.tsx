@@ -1,7 +1,8 @@
 "use client";
 
-import { StarIcon } from "lucide-react";
+import { StarIcon, ShoppingCart, Heart } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 interface ProductCardProps {
   image: string;
@@ -20,6 +21,8 @@ const ProductCard = ({
   oldPrice,
   discount,
 }: ProductCardProps) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
   return (
     <div className="cursor-pointer group soft rounded-2xl">
       
@@ -31,6 +34,41 @@ const ProductCard = ({
           fill
           className="object-fill rounded-2xl overflow-hidden group-hover:scale-105 soft"
         />
+        
+        {/* Favorite Button - Top Left */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsFavorite(!isFavorite);
+          }}
+          className="absolute top-3 left-3 w-10 h-10 bg-white dark:bg-gray-800 rounded-full center shadow-md hover:scale-110 soft z-10"
+          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+        >
+          <Heart
+            size={20}
+            className={`${
+              isFavorite
+                ? "fill-red-500 text-red-500"
+                : "text-gray-600 dark:text-gray-300"
+            } soft`}
+          />
+        </button>
+
+        {/* Add to Cart Button - Bottom Left */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            // Add to cart logic here
+            console.log("Added to cart:", title);
+          }}
+          className="absolute bottom-3 left-3 w-10 h-10 bg-primary dark:bg-white rounded-2xl hover:bg-secondary center shadow-lg hover:scale-110 soft z-10"
+          title="Add to cart"
+        >
+          <ShoppingCart
+            size={18}
+            className="text-white dark:text-primary"
+          />
+        </button>
       </div>
 
       {/* Content */}
