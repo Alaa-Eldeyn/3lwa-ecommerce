@@ -24,12 +24,12 @@ const ProductCard = ({
     <div className="cursor-pointer group soft rounded-2xl">
       
       {/* IMG */}
-      <div className="w-full aspect-square relative bg-[#F0EEED] dark:bg-gray-700 center rounded-2xl overflow-hidden">
+      <div className="w-full aspect-square relative bg-[#F0EEED] dark:bg-gray-700 center rounded-3xl overflow-hidden">
         <Image
           src={image}
           alt={title}
           fill
-          className="object-contain rounded-2xl overflow-hidden group-hover:scale-105 soft"
+          className="object-fill rounded-2xl overflow-hidden group-hover:scale-105 soft"
         />
       </div>
 

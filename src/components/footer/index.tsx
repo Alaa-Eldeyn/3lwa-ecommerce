@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import NewsLetter from "./NewsLetter";
 import { footerLinks, socialLinks } from "@/src/data/data";
@@ -7,13 +6,13 @@ import { footerLinks, socialLinks } from "@/src/data/data";
 
 const Footer = () => {
   return (
-    <footer className="bg-white">
+    <footer className="bg-white dark:bg-gray-900">
       {/* Newsletter Section */}
       <NewsLetter/>
 
       {/* Main Footer Content */}
 
-      <div className="bg-gray-100 dark:bg-gray-900 pt-20">
+      <div className="bg-gray-100 dark:bg-gray-800 pt-20">
       <div className="container mx-auto px-4 pt-12 pb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
           {/* Brand Section */}

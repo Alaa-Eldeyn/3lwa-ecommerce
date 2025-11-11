@@ -21,10 +21,12 @@ const categories = [
 
 const CategoriesBentoGrid = () => {
   return (
-    <section className="pt-16 bg-white">
-      <div className="container py-10 bg-gray-100 dark:bg-gray-800 rounded-3xl">
+    <section className="pt-16 bg-white dark:bg-gray-900">
+      <div className="container">
+        <div className="p-10 bg-gray-100 dark:bg-gray-800 rounded-3xl">
+
         {/* Title */}
-        <h2 className="text-center text-4xl font-extrabold text-gray-900 dark:text-white mb-12 uppercase">
+        <h2 className="text-center text-4xl tracking-wide font-extrabold text-gray-900 dark:text-white mb-10 uppercase">
           Browse by Dress Style
         </h2>
 
@@ -33,7 +35,7 @@ const CategoriesBentoGrid = () => {
           {/* Casual - Large */}
           <div  className="relative bg-white dark:bg-gray-700 rounded-3xl overflow-hidden group cursor-pointer h-72 transition-transform hover:scale-[1.02]">
             <div className="absolute top-8 left-8 z-10">
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h3 className="text-3xl font-bold text-gray-900 ">
                 {categories[0].name}
               </h3>
             </div>
@@ -50,7 +52,7 @@ const CategoriesBentoGrid = () => {
           {/* Formal - Small */}
           <div className="md:col-span-2 relative bg-white dark:bg-gray-700 rounded-3xl overflow-hidden group cursor-pointer h-72 transition-transform hover:scale-[1.02]">
             <div className="absolute top-8 left-8 z-10">
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h3 className="text-3xl font-bold text-gray-900 ">
                 {categories[1].name}
               </h3>
             </div>
@@ -67,7 +69,7 @@ const CategoriesBentoGrid = () => {
           {/* Gym - Large */}
           <div className="md:col-span-2 relative bg-white dark:bg-gray-700 rounded-3xl overflow-hidden group cursor-pointer h-72 transition-transform hover:scale-[1.02]">
             <div className="absolute top-8 left-8 z-10">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-3xl font-bold text-gray-900 ">
                 {categories[2].name}
               </h2>
             </div>
@@ -84,7 +86,7 @@ const CategoriesBentoGrid = () => {
           {/* Party - Small */}
           <div className="relative bg-white dark:bg-gray-700 rounded-3xl overflow-hidden group cursor-pointer h-72 transition-transform hover:scale-[1.02]">
             <div className="absolute top-8 left-8 z-10">
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h3 className="text-3xl font-bold text-gray-900 ">
                 {categories[3].name}
               </h3>
             </div>
@@ -97,6 +99,7 @@ const CategoriesBentoGrid = () => {
               />
             </div>
           </div>
+        </div>
         </div>
       </div>
     </section>

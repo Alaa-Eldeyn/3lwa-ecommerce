@@ -8,7 +8,7 @@ import "./carousel.css"
 
 const NewArrivals = () => {
   return (
-    <section className="py-16 bg-white dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700">
+    <section className="py-16 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700">
       <div className="container mx-auto">
 
         {/* Title */}
