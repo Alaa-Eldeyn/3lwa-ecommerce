@@ -7,7 +7,7 @@ const Logo = () => {
       className={`relative block font-extrabold text-secondary text-4xl tracking-wide focus:outline-none`}
       aria-label="Go to homepage"
     >
-      3lwa.Dev
+      Alwa.Dev
     </Link>
   )
 }

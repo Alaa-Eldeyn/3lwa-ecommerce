@@ -17,7 +17,7 @@ const BrandsMarquee = ({ speed = 20 }: { speed?: number }) => {
   const repeated = [...logos, ...logos, ...logos]
 
   return (
-    <section className="bg-gray-800 dark:bg-gray-950 py-8">
+    <section className="bg-gray-800 dark:bg-gray-950 p-4 lg:py-6">
       <div className="container mx-auto overflow-hidden">
         <div
           ref={wrapRef}
@@ -44,7 +44,7 @@ const BrandsMarquee = ({ speed = 20 }: { speed?: number }) => {
                   alt={`brand ${i}`}
                   width={160}
                   height={80}
-                  className="object-contain"
+                  className="object-contain w-32 h-16 filter grayscale opacity-70 hover:opacity-100 transition"
                 />
               </div>
             ))}

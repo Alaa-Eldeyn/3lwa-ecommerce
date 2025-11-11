@@ -4,7 +4,7 @@ import { useTheme } from "next-themes"
 import { Moon, Sun } from "lucide-react"
 
 const ThemeSwitcher = () => {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
 
   return (
     <button

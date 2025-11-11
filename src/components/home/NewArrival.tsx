@@ -1,9 +1,14 @@
+"use client"
 import { newArrivals } from "@/src/data/data";
 import ProductCard from "../common/ProductCard";
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Autoplay } from "swiper/modules"
+import "swiper/css"
+import "./carousel.css"
 
 const NewArrivals = () => {
   return (
-    <section className="py-16 bg-white dark:bg-gray-900">
+    <section className="py-16 bg-white dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700">
       <div className="container mx-auto">
 
         {/* Title */}
@@ -12,11 +17,40 @@ const NewArrivals = () => {
         </h2>
 
         {/* Products Grid */}
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {/* <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {newArrivals.map((item, i) => (
             <ProductCard key={i} {...item} />
           ))}
-        </div>
+        </div> */}
+
+        <Swiper
+          modules={[Autoplay]}
+          spaceBetween={30}
+          slidesPerView={1}
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+
+          breakpoints={{
+            640: {
+              slidesPerView: 2,
+            },
+            768: {
+              slidesPerView: 3,
+            },
+            1024: {
+              slidesPerView: 4,
+            },
+          }}
+          className="pb-4"
+        >
+          {newArrivals.map((item, i) => (
+            <SwiperSlide key={i} >
+              <ProductCard {...item} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
         {/* Button */}
         <div className="flex justify-center mt-12">

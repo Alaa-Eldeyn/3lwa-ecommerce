@@ -1,0 +1,249 @@
+export const newArrivals = [
+  {
+    image: "/images/products/Frame 32.png",
+    title: "T-shirt with Tape Details",
+    rating: 4.5,
+    price: 120,
+  },
+  {
+    image: "/images/products/Frame 33.png",
+    title: "Skinny Fit Jeans",
+    rating: 3.5,
+    price: 240,
+    oldPrice: 260,
+    discount: 20,
+  },
+  {
+    image: "/images/products/Frame 34.png",
+    title: "Checkered Shirt",
+    rating: 4.5,
+    price: 180,
+  },
+  {
+    image: "/images/products/Frame 38.png",
+    title: "Sleeve Striped T-shirt",
+    rating: 4.5,
+    price: 130,
+    oldPrice: 160,
+    discount: 30,
+  },
+  {
+    image: "/images/products/Frame 32.png",
+    title: "T-shirt with Tape Details",
+    rating: 4.5,
+    price: 120,
+  },
+  {
+    image: "/images/products/Frame 33.png",
+    title: "Skinny Fit Jeans",
+    rating: 3.5,
+    price: 240,
+    oldPrice: 260,
+    discount: 20,
+  },
+  {
+    image: "/images/products/Frame 34.png",
+    title: "Checkered Shirt",
+    rating: 4.5,
+    price: 180,
+  },
+  {
+    image: "/images/products/Frame 38.png",
+    title: "Sleeve Striped T-shirt",
+    rating: 4.5,
+    price: 130,
+    oldPrice: 160,
+    discount: 30,
+  },
+];
+
+export const flashDeals = [
+  {
+    image: "/images/products/Frame40.png",
+    title: "Classic T-Shirt",
+    rating: 4.8,
+    price: 89,
+    oldPrice: 150,
+    discount: 40,
+  },
+  {
+    image: "/images/products/Frame41.png",
+    title: "Denim Jacket",
+    rating: 4.6,
+    price: 199,
+    oldPrice: 350,
+    discount: 43,
+  },
+  {
+    image: "/images/products/Frame43.png",
+    title: "Casual Sneakers",
+    rating: 4.9,
+    price: 149,
+    oldPrice: 220,
+    discount: 32,
+  },
+  {
+    image: "/images/products/Frame44.png",
+    title: "Leather Wallet",
+    rating: 4.7,
+    price: 79,
+    oldPrice: 120,
+    discount: 34,
+  },
+  {
+    image: "/images/products/Frame 32.png",
+    title: "Summer Dress",
+    rating: 4.5,
+    price: 120,
+    oldPrice: 200,
+    discount: 40,
+  },
+  {
+    image: "/images/products/Frame 33.png",
+    title: "Sports Watch",
+    rating: 4.4,
+    price: 299,
+    oldPrice: 450,
+    discount: 33,
+  },
+];
+
+export const topSellers = [
+  {
+    image: "/images/products/Frame40.png",
+    title: "T-shirt with Tape Details",
+    rating: 4.5,
+    price: 120,
+  },
+  {
+    image: "/images/products/Frame41.png",
+    title: "Skinny Fit Jeans",
+    rating: 3.5,
+    price: 240,
+    oldPrice: 260,
+    discount: 20,
+  },
+  {
+    image: "/images/products/Frame43.png",
+    title: "Checkered Shirt",
+    rating: 4.5,
+    price: 180,
+  },
+  {
+    image: "/images/products/Frame44.png",
+    title: "Sleeve Striped T-shirt",
+    rating: 4.5,
+    price: 130,
+    oldPrice: 160,
+    discount: 30,
+  },
+];
+
+export const testimonials = [
+  {
+    name: "Sarah M.",
+    verified: true,
+    rating: 5,
+    review: "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.",
+  },
+  {
+    name: "Alex K.",
+    verified: true,
+    rating: 5,
+    review: "Finding clothes that align with my personal style used to be a challenge until I discovered Shop.co. The range of options they offer is truly remarkable, catering to a variety of tastes and occasions.",
+  },
+  {
+    name: "James L.",
+    verified: true,
+    rating: 5,
+    review: "As someone who's always on the lookout for unique fashion pieces, I'm thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.",
+  },
+  {
+    name: "Mooen",
+    verified: true,
+    rating: 5,
+    review: "As a fashion enthusiast, I'm always on the hunt for unique and stylish pieces, and Shop.co never disappoints. Their collection is curated with a keen eye for the latest trends.",
+  },
+  {
+    name: "Emma R.",
+    verified: true,
+    rating: 5,
+    review: "Shop.co has transformed my wardrobe completely! The quality is exceptional and the prices are very reasonable. I highly recommend it to anyone looking for trendy clothes.",
+  },
+  {
+    name: "Michael T.",
+    verified: true,
+    rating: 5,
+    review: "Outstanding service and amazing products. Every item I've purchased has been exactly as described. The fast shipping is a huge bonus!",
+  },
+];
+
+export const footerLinks = {
+  company: [
+    { name: "About", href: "/about" },
+    { name: "Features", href: "/features" },
+    { name: "Works", href: "/works" },
+    { name: "Career", href: "/career" },
+  ],
+  help: [
+    { name: "Customer Support", href: "/support" },
+    { name: "Delivery Details", href: "/delivery" },
+    { name: "Terms & Conditions", href: "/terms" },
+    { name: "Privacy Policy", href: "/privacy" },
+  ],
+  faq: [
+    { name: "Account", href: "/faq/account" },
+    { name: "Manage Deliveries", href: "/faq/deliveries" },
+    { name: "Orders", href: "/faq/orders" },
+    { name: "Payments", href: "/faq/payments" },
+  ],
+  resources: [
+    { name: "Free eBooks", href: "/resources/ebooks" },
+    { name: "Development Tutorial", href: "/resources/tutorial" },
+    { name: "How to - Blog", href: "/blog" },
+    { name: "Youtube Playlist", href: "/resources/youtube" },
+  ],
+};
+
+export const socialLinks = [
+  {
+    name: "Twitter",
+    href: "https://twitter.com",
+    icon: (
+      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+      </svg>
+    ),
+    className: "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white",
+  },
+  {
+    name: "Facebook",
+    href: "https://facebook.com",
+    icon: (
+      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+      </svg>
+    ),
+        className: "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white",
+  },
+  {
+    name: "Instagram",
+    href: "https://instagram.com",
+    icon: (
+      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+      </svg>
+    ),
+    className: "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white",
+  },
+  {
+    name: "GitHub",
+    href: "https://github.com",
+    icon: (
+      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+      </svg>
+    ),
+    className: "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white",
+  },
+];

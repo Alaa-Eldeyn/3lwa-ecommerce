@@ -6,6 +6,7 @@ import SearchBar from "./SearchBar"
 import LangSwitch from "./LangSwitch"
 import MobileMenu from "./MobileMenu"
 import ThemeSwitcher from "./ThemeSwitcher"
+import Link from "next/link"
 
 const HeaderActions = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const t = useTranslations("header")
@@ -37,12 +38,12 @@ const HeaderActions = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             <div className="absolute right-0 w-48 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-lg z-50">
               {isLoggedIn ? (
                 <>
-                  <a className="block px-4 py-2 hover:bg-gray-200 rounded-xl dark:hover:bg-gray-700 cursor-pointer">
+                  <Link href="#" className="block px-4 py-2 hover:bg-gray-200 rounded-xl dark:hover:bg-gray-700 cursor-pointer">
                     {t("myAccount")}
-                  </a>
-                  <a className="block px-4 py-2 hover:bg-gray-200 rounded-xl dark:hover:bg-gray-700 cursor-pointer">
+                  </Link>
+                  <Link href="#" className="block px-4 py-2 hover:bg-gray-200 rounded-xl dark:hover:bg-gray-700 cursor-pointer">
                     {t("orders")}
-                  </a>
+                  </Link>
                   <button className="w-full px-4 py-2 flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
                     <LogOut size={16} />
                     {t("logout")}
@@ -50,14 +51,14 @@ const HeaderActions = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 </>
               ) : (
                 <>
-                  <button className="flex items-center gap-2 w-full rounded-t-xl px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
+                  <Link href="#" className="flex items-center gap-2 w-full rounded-t-xl px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
                     <LogIn size={16} />
                     {t("login")}
-                  </button>
-                  <button className="flex items-center gap-2 w-full rounded-b-xl px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
+                  </Link>
+                  <Link href="#" className="flex items-center gap-2 w-full rounded-b-xl px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
                     <User size={16} />
                     {t("register")}
-                  </button>
+                  </Link>
                 </>
               )}
             </div>

@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 
 const Hero = () => {
   return (
@@ -16,16 +17,16 @@ const Hero = () => {
           </p>
 
           <div className="flex gap-4 flex-wrap">
-            <a
+            <Link
               href="#"
               className="inline-flex items-center justify-center px-5 py-3 text-base font-medium 
                 text-white rounded-lg bg-secondary hover:bg-secondary/80 
                 dark:text-white dark:border-gray-700 dark:focus:ring-gray-800"
             >
               View Products
-            </a>
+            </Link>
 
-            <a
+            <Link
               href="#"
               className="inline-flex group items-center justify-center px-5 py-3 text-base font-medium 
                 text-secondary dark:text-white rounded-lg bg-primary-700 hover:bg-primary-800 
@@ -43,7 +44,7 @@ const Hero = () => {
                   clipRule="evenodd"
                 ></path>
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
 

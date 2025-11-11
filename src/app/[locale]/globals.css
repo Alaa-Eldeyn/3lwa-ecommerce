@@ -12,7 +12,8 @@
   --color-foreground: var(--foreground);
   --font-cairo: var(--font-cairo);
   --color-primary: #282a5c;
-  --color-secondary: #e4652a;
+  --color-secondary: #ea252e;
+  --color-accent: #fdf0d5;
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1100px;
@@ -80,7 +81,7 @@
   }
 
   .container {
-    @apply mx-auto px-4 sm:px-10 lg:px-14 xl:px-20;
+    @apply mx-auto px-4 sm:px-10 ;
   }
 
   .center {

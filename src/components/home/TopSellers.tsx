@@ -3,7 +3,7 @@ import ProductCard from "../common/ProductCard";
 
 const TopSellers = () => {
   return (
-    <section className="py-16 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+    <section className="pt-16 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
       <div className="container mx-auto">
 
         {/* Title */}

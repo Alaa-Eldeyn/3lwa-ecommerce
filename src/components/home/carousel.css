@@ -1,0 +1,177 @@
+/* Banner Carousel Styles */
+.banner-carousel {
+    position: relative;
+}
+
+/* Navigation Buttons */
+.banner-carousel .swiper-button-next,
+.banner-carousel .swiper-button-prev {
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    opacity: 0;
+    padding: 10px 0px;
+    color: white;
+}
+
+.banner-carousel:hover .swiper-button-next,
+.banner-carousel:hover .swiper-button-prev {
+    opacity: 1;
+}
+
+.banner-carousel .swiper-button-next:hover,
+.banner-carousel .swiper-button-prev:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
+}
+
+.banner-carousel .swiper-button-next::after,
+.banner-carousel .swiper-button-prev::after {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Next Button Position */
+.banner-carousel .swiper-button-next {
+    right: 20px;
+}
+
+/* Previous Button Position */
+.banner-carousel .swiper-button-prev {
+    left: 20px;
+}
+
+/* Pagination Dots */
+.banner-carousel .swiper-pagination {
+    bottom: 5px !important;
+}
+
+.banner-carousel .swiper-pagination-bullet {
+    width: 12px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 1;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.banner-carousel .swiper-pagination-bullet:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.2);
+}
+
+.banner-carousel .swiper-pagination-bullet-active {
+    background: white;
+    width: 32px;
+}
+
+/* RTL Support */
+[dir="rtl"] .banner-carousel .swiper-button-next {
+    right: auto;
+    left: 20px;
+}
+
+[dir="rtl"] .banner-carousel .swiper-button-prev {
+    left: auto;
+    right: 20px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .banner-carousel .swiper-button-next,
+    .banner-carousel .swiper-button-prev {
+        width: 40px;
+        height: 40px;
+        opacity: 1;
+    }
+
+    .banner-carousel .swiper-button-next::after,
+    .banner-carousel .swiper-button-prev::after {
+        font-size: 16px;
+    }
+
+    .banner-carousel .swiper-button-next {
+        right: 10px;
+    }
+
+    .banner-carousel .swiper-button-prev {
+        left: 10px;
+    }
+
+    .banner-carousel .swiper-pagination {
+        bottom: 10px !important;
+    }
+
+    .banner-carousel .swiper-pagination-bullet-active {
+        width: 24px;
+    }
+}
+
+/* Flash Deals Carousel Styles */
+.flash-deals-carousel {
+    position: relative;
+}
+
+.flash-deals-carousel .swiper-button-next,
+.flash-deals-carousel .swiper-button-prev {
+    width: 30px;
+    height: 30px;
+    background: white;
+    color: var(--color-secondary);
+    border: 1px solid var(--color-secondary);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    padding: 10px;
+}
+
+.flash-deals-carousel .swiper-button-next:hover,
+.flash-deals-carousel .swiper-button-prev:hover {
+    transform: scale(1.1);
+}
+
+.flash-deals-carousel .swiper-button-next::after,
+.flash-deals-carousel .swiper-button-prev::after {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+}
+
+.flash-deals-carousel .swiper-button-next {
+    right: 0;
+}
+
+.flash-deals-carousel .swiper-button-prev {
+    left: 0;
+}
+
+/* RTL Support for Flash Deals */
+[dir="rtl"] .flash-deals-carousel .swiper-button-next {
+    right: auto;
+    left: 0;
+}
+
+[dir="rtl"] .flash-deals-carousel .swiper-button-prev {
+    left: auto;
+    right: 0;
+}
+
+/* Mobile Responsive for Flash Deals */
+@media (max-width: 768px) {
+    .flash-deals-carousel {
+        padding: 0 50px;
+    }
+
+    .flash-deals-carousel .swiper-button-next,
+    .flash-deals-carousel .swiper-button-prev {
+        width: 35px;
+        height: 35px;
+    }
+
+    .flash-deals-carousel .swiper-button-next::after,
+    .flash-deals-carousel .swiper-button-prev::after {
+        font-size: 14px;
+    }
+}
