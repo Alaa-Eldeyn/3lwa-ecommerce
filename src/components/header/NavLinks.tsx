@@ -1,11 +1,12 @@
 "use client"
 import { useTranslations } from "next-intl"
 import { getMenuData } from "@/src/data/menuData"
-import Link from "next/link"
+import { Link } from "@/src/i18n/routing"
 
 const NavLinks = () => {
   const t = useTranslations("header")
   const menuData = getMenuData(t)
+  
   return (
     <nav className="hidden lg:flex items-center space-x-8">
 

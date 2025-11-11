@@ -17,5 +17,18 @@
     "contact": "اتصل بنا",
     "language": "اللغة",
     "theme": "المظهر"
-  }
+  },
+  "breadcrumb": {
+    "home": "الرئيسية",
+    "products": "المنتجات",
+    "about": "من نحن",
+    "contact": "اتصل بنا",
+    "cart": "السلة",
+    "checkout": "الدفع",
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "account": "الحساب",
+    "orders": "الطلبات"
+  },
+  "filters": "الفلاتر"
 }

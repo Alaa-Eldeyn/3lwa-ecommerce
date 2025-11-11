@@ -13,7 +13,7 @@ const LangSwitch = () => {
   return (
     <button 
       onClick={toggleLang}
-      className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full text-sm soft hover:text-secondary"
+      className="px-3 py-1 active:scale-90 bg-gray-200 dark:bg-gray-700 rounded-full text-sm soft hover:text-secondary"
     >
       {pathname.startsWith("/ar") ? "EN" : "AR"}
     </button>

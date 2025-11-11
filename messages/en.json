@@ -17,5 +17,18 @@
     "contact": "Contact Us",
     "language": "Language",
     "theme": "Theme"
-  }
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "products": "Products",
+    "about": "About",
+    "contact": "Contact",
+    "cart": "Cart",
+    "checkout": "Checkout",
+    "login": "Login",
+    "register": "Register",
+    "account": "Account",
+    "orders": "Orders"
+  },
+  "filters": "Filters"
 }

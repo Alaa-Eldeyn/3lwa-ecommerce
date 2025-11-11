@@ -1,4 +1,5 @@
-import Link from "next/link";
+"use client"
+import { Link } from "@/src/i18n/routing";
 import NewsLetter from "./NewsLetter";
 import { footerLinks, socialLinks } from "@/src/data/data";
 
@@ -26,7 +27,7 @@ const Footer = () => {
             {/* Social Icons */}
             <div className="flex gap-3">
               {socialLinks.map((social) => (
-                <Link
+                <a
                   key={social.name}
                   href={social.href}
                   className={`w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition ${social.className}`}
@@ -34,7 +35,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                 >
                   {social.icon}
-                </Link>
+                </a>
               ))}
             </div>
           </div>
