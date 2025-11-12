@@ -38,13 +38,13 @@ const FlashDeals = () => {
         <div className="flex flex-col md:flex-row items-center justify-between mb-12">
           <div>
             <h2 className="text-center md:text-left text-4xl font-extrabold text-gray-900 dark:text-white mb-2">
-              <span className="text-secondary">FLASH</span> DEALS
+              <span className="text-red-600">FLASH</span> DEALS
             </h2>
           </div>
 
           <div className="flex gap-3 mt-4 md:mt-0">
             <div className="relative">
-              <div className="bg-secondary rounded-xl p-3 min-w-[65px] shadow-lg">
+              <div className="bg-red-600 rounded-xl p-3 min-w-[65px] shadow-lg">
                 <span className="block text-3xl font-bold text-white text-center leading-none">
                   {String(timeLeft.hours).padStart(2, '0')}
                 </span>
@@ -54,10 +54,10 @@ const FlashDeals = () => {
               </span>
             </div>
             <div className="flex items-center pb-6">
-              <span className="text-2xl font-bold text-secondary">:</span>
+              <span className="text-2xl font-bold text-red-600">:</span>
             </div>
             <div className="relative">
-              <div className="bg-secondary rounded-xl p-3 min-w-[65px] shadow-lg">
+              <div className="bg-red-600 rounded-xl p-3 min-w-[65px] shadow-lg">
                 <span className="block text-3xl font-bold text-white text-center leading-none">
                   {String(timeLeft.minutes).padStart(2, '0')}
                 </span>
@@ -67,10 +67,10 @@ const FlashDeals = () => {
               </span>
             </div>
             <div className="flex items-center pb-6">
-              <span className="text-2xl font-bold text-secondary">:</span>
+              <span className="text-2xl font-bold text-red-600">:</span>
             </div>
             <div className="relative">
-              <div className="bg-secondary rounded-xl p-3 min-w-[65px] shadow-lg">
+              <div className="bg-red-600 rounded-xl p-3 min-w-[65px] shadow-lg">
                 <span className="block text-3xl font-bold text-white text-center leading-none">
                   {String(timeLeft.seconds).padStart(2, '0')}
                 </span>

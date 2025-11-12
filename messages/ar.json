@@ -28,7 +28,8 @@
     "login": "تسجيل الدخول",
     "register": "إنشاء حساب",
     "account": "الحساب",
-    "orders": "الطلبات"
+    "orders": "الطلبات",
+    "product-details": "تفاصيل المنتج"
   },
   "filters": "الفلاتر"
 }

@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 
 const Logo = () => {
@@ -7,7 +8,12 @@ const Logo = () => {
       className={`relative block font-extrabold text-secondary dark:text-white text-4xl tracking-wide focus:outline-none`}
       aria-label="Go to homepage"
     >
-      Alwa.Dev
+      <Image
+        src="/images/logo/logo.png"
+        alt="Alwa.Dev Logo"
+        width={120}
+        height={30}
+      />
     </Link>
   )
 }

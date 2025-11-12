@@ -24,10 +24,10 @@ const ProductRowCard = ({
   const [isFavorite, setIsFavorite] = useState(false);
 
   return (
-    <div className="cursor-pointer group soft rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-lg p-4">
-      <div className="flex gap-4">
+    <div className="cursor-pointer group soft rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-lg p-4 max-w-68 sm:max-w-none w-full mx-auto">
+      <div className="flex flex-col lg:flex-row gap-4">
         {/* Image */}
-        <div className="w-58 h-58 relative bg-[#F0EEED] dark:bg-gray-700 center rounded-2xl overflow-hidden shrink-0">
+        <div className="w-58 h-58 relative bg-[#F0EEED] dark:bg-gray-700 center rounded-2xl overflow-hidden shrink-0 mx-auto">
           <Image
             src={image}
             alt={title}
@@ -62,7 +62,7 @@ const ProductRowCard = ({
             <h3 className="text-xl font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
               {title}
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4 max-w-xl line-clamp-2">
+            <p className="text-gray-600 dark:text-gray-400 mb-4 max-w-xl line-clamp-2 lg:line-clamp-3">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam blanditiis eius ipsum aperiam iusto qui deserunt dignissimos a accusantium tenetur repudiandae illum facere, fugit corrupti voluptatum rem nulla quasi obcaecati.
             </p>
 

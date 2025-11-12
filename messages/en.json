@@ -28,7 +28,8 @@
     "login": "Login",
     "register": "Register",
     "account": "Account",
-    "orders": "Orders"
+    "orders": "Orders",
+    "product-details": "Product Details"
   },
   "filters": "Filters"
 }

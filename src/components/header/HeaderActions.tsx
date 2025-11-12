@@ -10,7 +10,7 @@ import Link from "next/link"
 
 const HeaderActions = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const t = useTranslations("header")
-  const { isMobileOpen, toggleMobile, isAccountOpen, toggleAccount } =
+  const { isMobileOpen, toggleMobile, isAccountOpen, toggleAccount, toggleCart } =
     useHeaderStore()
 
   return (
@@ -21,16 +21,19 @@ const HeaderActions = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
         <SearchBar />
 
         {/* Cart */}
-        <button className="relative text-gray-700 dark:text-gray-300 soft hover:text-secondary">
+        <button 
+          onClick={toggleCart}
+          className="relative text-gray-700 dark:text-gray-300 soft hover:text-primary"
+        >
           <ShoppingCart size={24} />
-          <span className="absolute -top-1.5 -right-1.5 bg-secondary text-white text-[11px] rounded-full h-4 w-4 flex items-center justify-center">
+          <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[11px] rounded-full h-4 w-4 center">
             2
           </span>
         </button>
 
         {/* Account */}
         <div className="relative">
-          <button onClick={toggleAccount} className="p-1 soft hover:text-secondary">
+          <button onClick={toggleAccount} className="p-1 soft text-gray-800 dark:text-white hover:text-primary">
             <User size={24} />
           </button>
 

@@ -5,6 +5,9 @@ interface HeaderState {
   toggleMobile: () => void
   isAccountOpen: boolean
   toggleAccount: () => void
+  isCartOpen: boolean
+  toggleCart: () => void
+  closeCart: () => void
 }
 
 
@@ -14,4 +17,8 @@ export const useHeaderStore = create<HeaderState>((set) => ({
 
   isAccountOpen: false,
   toggleAccount: () => set((s) => ({ isAccountOpen: !s.isAccountOpen })),
+
+  isCartOpen: false,
+  toggleCart: () => set((s) => ({ isCartOpen: !s.isCartOpen })),
+  closeCart: () => set({ isCartOpen: false }),
 }))

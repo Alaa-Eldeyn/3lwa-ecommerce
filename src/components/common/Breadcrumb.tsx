@@ -13,25 +13,20 @@ const Breadcrumb = ({ className }: { className?: string }) => {
   const locale = useLocale();
   const t = useTranslations("breadcrumb");
 
-  // Remove locale from pathname
   const pathWithoutLocale = pathname.replace(`/${locale}`, "");
   
-  // Split path into segments
   const pathSegments = pathWithoutLocale.split("/").filter((segment) => segment);
 
-  // Build breadcrumb items
   const breadcrumbItems: BreadcrumbItem[] = pathSegments.map((segment, index) => {
     const href = "/" + pathSegments.slice(0, index + 1).join("/");
-    // Capitalize first letter and replace hyphens with spaces
-    const label = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
-    
-    return {
-      label: t(segment, { default: label }),
-      href,
-    };
+    const formattedLabel = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
+
+    const label =
+      index < 2 ? t(segment, { default: formattedLabel }) : formattedLabel;
+
+    return { label, href };
   });
 
-  // Don't show breadcrumb on home page
   if (pathSegments.length === 0) {
     return null;
   }
@@ -39,11 +34,10 @@ const Breadcrumb = ({ className }: { className?: string }) => {
   return (
     <nav className={`flex py-4 container ${className}`} aria-label="Breadcrumb">
       <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-        {/* Home */}
         <li className="inline-flex items-center">
           <Link
             href="/"
-            className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+            className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-secondary dark:text-gray-400 dark:hover:text-white"
           >
             <svg
               className="w-3 h-3 me-2.5"
@@ -58,10 +52,9 @@ const Breadcrumb = ({ className }: { className?: string }) => {
           </Link>
         </li>
 
-        {/* Dynamic breadcrumb items */}
         {breadcrumbItems.map((item, index) => {
           const isLast = index === breadcrumbItems.length - 1;
-
+          const isLink = index < 1;
           return (
             <li key={item.href} aria-current={isLast ? "page" : undefined}>
               <div className="flex items-center">
@@ -80,17 +73,17 @@ const Breadcrumb = ({ className }: { className?: string }) => {
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
-                {isLast ? (
-                  <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
-                    {item.label}
-                  </span>
-                ) : (
+                {isLink ? (
                   <Link
                     href={item.href}
-                    className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
+                    className="ms-1 text-sm font-medium text-gray-700 hover:text-secondary md:ms-2 dark:text-gray-400 dark:hover:text-white"
                   >
                     {item.label}
                   </Link>
+                ) : (
+                  <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+                    {item.label}
+                  </span>
                 )}
               </div>
             </li>

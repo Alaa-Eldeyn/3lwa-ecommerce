@@ -13,9 +13,9 @@ const SearchBar = () => {
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder={t("search")}
-        className="w-full px-4 py-2 pr-10 rounded-full border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 outline-none focus:border-secondary"
+        className="w-full px-4 py-2 pr-10 rounded-full border border-gray-200 text-gray-600  dark:border-gray-700 bg-gray-100 dark:bg-gray-800 outline-none focus:border-primary"
       />
-      <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 ">
+      <button className="absolute right-3 top-1/2 -translate-y-1/2">
         <Search size={20} />
       </button>
     </div>

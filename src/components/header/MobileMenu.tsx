@@ -15,12 +15,12 @@ interface MobileMenuProps {
 
 const MobileMenu = ({ isLoggedIn }: MobileMenuProps) => {
   const t = useTranslations("header")
-  const { isMobileOpen } = useHeaderStore()
+  const { isMobileOpen, toggleCart, toggleMobile } = useHeaderStore()
   const menuData = getMenuData(t);
 
   return (
     <div
-      className={`lg:hidden absolute top-full left-0 w-full bg-white dark:bg-gray-900 shadow-lg border-t border-gray-200 dark:border-gray-700 z-40 overflow-hidden transition-all duration-300 ease-in-out ${isMobileOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0 border-t-0'
+      className={`lg:hidden absolute top-full text-secondary left-0 w-full bg-white dark:bg-gray-900 shadow-lg border-t border-gray-200 dark:border-gray-700 z-40 overflow-hidden soft ${isMobileOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0 border-t-0'
         }`}
     >
       <div className="container py-4">
@@ -45,12 +45,18 @@ const MobileMenu = ({ isLoggedIn }: MobileMenuProps) => {
 
         {/* Cart */}
         <div className="mb-4 border-b border-gray-200 dark:border-gray-700 pb-4">
-          <button className="flex items-center justify-between w-full px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition">
+          <button 
+            onClick={()=>{
+              toggleMobile()
+              toggleCart()
+            }}
+            className="flex items-center justify-between w-full px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition"
+          >
             <span className="flex items-center gap-3">
               <ShoppingCart size={20} />
               {t("cart")}
             </span>
-            <span className="bg-secondary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            <span className="bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
               2
             </span>
           </button>

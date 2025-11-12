@@ -2,6 +2,8 @@
 
 import { StarIcon, ShoppingCart, Heart } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface ProductCardProps {
@@ -22,19 +24,19 @@ const ProductCard = ({
   discount,
 }: ProductCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
-
+  const router = useRouter();
   return (
     <div className="cursor-pointer group soft rounded-2xl">
-      
       {/* IMG */}
-      <div className="w-full aspect-square relative bg-[#F0EEED] dark:bg-gray-700 center rounded-3xl overflow-hidden">
+      <div onClick={() => router.push(`/products/product-details/1`)} className="w-full aspect-square relative bg-[#F0EEED] dark:bg-gray-700 center rounded-3xl overflow-hidden">
         <Image
           src={image}
           alt={title}
           fill
+          
           className="object-fill rounded-2xl overflow-hidden group-hover:scale-105 soft"
         />
-        
+
         {/* Favorite Button - Top Left */}
         <button
           onClick={(e) => {
@@ -46,11 +48,10 @@ const ProductCard = ({
         >
           <Heart
             size={20}
-            className={`${
-              isFavorite
+            className={`${isFavorite
                 ? "fill-red-500 text-red-500"
                 : "text-gray-600 dark:text-gray-300"
-            } soft`}
+              } soft`}
           />
         </button>
 
@@ -74,9 +75,9 @@ const ProductCard = ({
       {/* Content */}
       <div className="py-4 ">
         {/* Title */}
-        <h3 className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
+        <Link href={`/products/product-details/1`} className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
           {title}
-        </h3>
+        </Link>
 
         {/* Rating */}
         <div className="flex items-center gap-1 mb-2">
@@ -84,13 +85,12 @@ const ProductCard = ({
             <StarIcon
               key={i}
               size={14}
-              className={`${
-                i < Math.floor(rating) 
-                  ? "fill-yellow-400 text-yellow-400" 
-                  : i < rating 
-                  ? "fill-yellow-400 text-yellow-400 opacity-50"
-                  : "fill-gray-300 text-gray-300"
-              }`}
+              className={`${i < Math.floor(rating)
+                  ? "fill-yellow-400 text-yellow-400"
+                  : i < rating
+                    ? "fill-yellow-400 text-yellow-400 opacity-50"
+                    : "fill-gray-300 text-gray-300"
+                }`}
             />
           ))}
           <span className="text-gray-900 dark:text-gray-300 ml-1 text-sm font-normal">
