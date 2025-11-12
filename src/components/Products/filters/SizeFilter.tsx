@@ -49,7 +49,7 @@ const SizeFilter = ({ sizes, selectedSizes, onChange }: SizeFilterProps) => {
                 onClick={() => handleSizeToggle(size.id)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
                   isSelected
-                    ? "bg-black dark:bg-white text-white dark:text-black"
+                    ? "bg-primary dark:bg-white text-white dark:text-primary"
                     : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
                 }`}
               >

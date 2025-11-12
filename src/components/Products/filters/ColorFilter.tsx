@@ -48,7 +48,7 @@ const ColorFilter = ({ colors, selectedColors, onChange }: ColorFilterProps) => 
               <button
                 key={color.id}
                 onClick={() => handleColorToggle(color.id)}
-                className={`w-10 h-10 rounded-full relative transition-all ${
+                className={`w-10 h-10 rounded-full relative soft border border-gray-200 dark:border-gray-700 ${
                   isSelected ? "ring-2 ring-offset-2 ring-gray-900 dark:ring-white" : ""
                 }`}
                 style={{ backgroundColor: color.hex }}

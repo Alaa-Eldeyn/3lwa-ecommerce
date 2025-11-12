@@ -27,7 +27,7 @@ const ProductRowCard = ({
     <div className="cursor-pointer group soft rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-lg p-4">
       <div className="flex gap-4">
         {/* Image */}
-        <div className="w-32 h-32 relative bg-[#F0EEED] dark:bg-gray-700 center rounded-2xl overflow-hidden shrink-0">
+        <div className="w-58 h-58 relative bg-[#F0EEED] dark:bg-gray-700 center rounded-2xl overflow-hidden shrink-0">
           <Image
             src={image}
             alt={title}
@@ -59,9 +59,12 @@ const ProductRowCard = ({
         <div className="flex-1 flex flex-col justify-between min-w-0">
           <div>
             {/* Title */}
-            <h3 className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
+            <h3 className="text-xl font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
               {title}
             </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4 max-w-xl line-clamp-2">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam blanditiis eius ipsum aperiam iusto qui deserunt dignissimos a accusantium tenetur repudiandae illum facere, fugit corrupti voluptatum rem nulla quasi obcaecati.
+            </p>
 
             {/* Rating */}
             <div className="flex items-center gap-1 mb-2">
