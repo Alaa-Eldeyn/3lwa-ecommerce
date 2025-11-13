@@ -1,16 +1,15 @@
 import Footer from "@/src/components/footer";
 import Header from "@/src/components/header";
+import React from "react";
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Header />
-        {children}
+      {children}
       <Footer />
     </>
   );
-}
+};
+
+export default layout;

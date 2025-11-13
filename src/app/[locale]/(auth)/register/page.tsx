@@ -1,8 +1,8 @@
-import Login from '@/src/components/auth/login'
+import Register from '@/src/components/auth/register'
 
 const page = () => {
   return (
-    <Login />
+    <Register />
   )
 }
 

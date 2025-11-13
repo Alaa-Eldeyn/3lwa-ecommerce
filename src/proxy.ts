@@ -14,7 +14,7 @@ const authPages = ["/login", "/signin", "/signup"];
 const protectedPages = ["/checkout"];
 
 export function proxy(req: NextRequest) {
-  const user = req.cookies.get("userDataRefresh")?.value;
+  const user = req.cookies.get("ecommerceUser")?.value;
   // const isUserLoggedIn = Boolean(user);
   const isUserLoggedIn = true;
 

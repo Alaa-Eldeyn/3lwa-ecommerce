@@ -35,6 +35,8 @@
   "auth": {
     "welcomeBack": "مرحباً بعودتك!",
     "loginSubtitle": "سجل الدخول إلى حسابك للمتابعة",
+    "secureLogin": "آمن ومحمي",
+    "secureLoginDescription": "بياناتك مشفرة ومحمية بأحدث معايير الأمان",
     "createAccount": "إنشاء حساب",
     "registerSubtitle": "انضم إلينا وابدأ التسوق اليوم",
     "email": "البريد الإلكتروني",

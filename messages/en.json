@@ -35,6 +35,8 @@
   "auth": {
     "welcomeBack": "Welcome Back!",
     "loginSubtitle": "Sign in to your account to continue",
+    "secureLogin": "Secure & Protected",
+    "secureLoginDescription": "Your data is encrypted and protected with the latest security standards",
     "createAccount": "Create Account",
     "registerSubtitle": "Join us and start shopping today",
     "email": "Email Address",

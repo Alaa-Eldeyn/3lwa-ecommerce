@@ -3,33 +3,30 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Mail, Lock, Eye, EyeOff, User, UserPlus } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-
-const registerSchema = z.object({
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  confirmPassword: z.string(),
-  agreeToTerms: z.boolean().refine((val) => val === true, {
-    message: "You must agree to the terms and conditions",
-  }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
-
-type RegisterFormData = z.infer<typeof registerSchema>;
+import { registerSchema } from "@/src/schemas/schemas";
+import { RegisterFormData } from "@/src/types/types";
+import { registerUser } from "@/src/utils/auth";
+import Lottie from "lottie-react";
+import { useEffect } from "react";
 
 const Register = () => {
   const t = useTranslations("auth");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [secureAnimation, setSecureAnimation] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/animation/secure.json")
+      .then((res) => res.json())
+      .then((data) => setSecureAnimation(data))
+      .catch((err) => console.error("Failed to load animation:", err));
+  }, []);
 
   const {
     register,
@@ -42,9 +39,7 @@ const Register = () => {
   const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
     try {
-      console.log("Register data:", data);
-      // Handle registration logic here
-      // Example: await registerUser(data);
+      await registerUser(data);
     } catch (error) {
       console.error("Registration error:", error);
     } finally {
@@ -53,24 +48,33 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-80px)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-md w-full space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <div className="mx-auto h-16 w-16 bg-primary rounded-2xl center mb-4">
-            <UserPlus size={32} className="text-white" />
+    <div className="min-h-screen flex items-center justify-center py-10 px-4 bg-gray-50 dark:bg-gray-900">
+      <div className="bg-primary/10 w-1/2 fixed top-0 right-0 bottom-0 z-0"></div>
+      <div className="w-full container grid lg:grid-cols-2 gap-8 items-center z-10">
+        {/* Left Side - Animation */}
+        <div className="hidden lg:flex flex-col items-center justify-center ">
+          <div className="w-full max-w-lg">
+            {secureAnimation && (
+              <Lottie animationData={secureAnimation} loop={true} />
+            )}
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-            {t("createAccount")}
-          </h2>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            {t("registerSubtitle")}
-          </p>
         </div>
 
-        {/* Form */}
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        {/* Right Side - Form */}
+        <div className="w-full space-y-8">
+          {/* Header */}
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              {t("createAccount")}
+            </h2>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
+              {t("registerSubtitle")}
+            </p>
+          </div>
+
+          {/* Form */}
+          <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 max-w-lg mx-auto">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Name Fields */}
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -256,7 +260,7 @@ const Register = () => {
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
-              className="flex items-center justify-center gap-2 px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 soft"
+              className="center text-gray-900! gap-2 px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 soft"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
@@ -281,7 +285,7 @@ const Register = () => {
 
             <button
               type="button"
-              className="flex items-center justify-center gap-2 px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 soft"
+              className="center text-gray-900! gap-2 px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 soft"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
@@ -305,6 +309,7 @@ const Register = () => {
         </div>
       </div>
     </div>
+  </div>
   );
 };
 
