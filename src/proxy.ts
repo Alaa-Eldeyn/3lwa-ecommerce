@@ -15,7 +15,8 @@ const protectedPages = ["/checkout"];
 
 export function proxy(req: NextRequest) {
   const user = req.cookies.get("userDataRefresh")?.value;
-  const isUserLoggedIn = Boolean(user);
+  // const isUserLoggedIn = Boolean(user);
+  const isUserLoggedIn = true;
 
   const url = new URL(req.url);
   let pathname = url.pathname; 

@@ -31,5 +31,36 @@
     "orders": "الطلبات",
     "product-details": "تفاصيل المنتج"
   },
-  "filters": "الفلاتر"
+  "filters": "الفلاتر",
+  "auth": {
+    "welcomeBack": "مرحباً بعودتك!",
+    "loginSubtitle": "سجل الدخول إلى حسابك للمتابعة",
+    "createAccount": "إنشاء حساب",
+    "registerSubtitle": "انضم إلينا وابدأ التسوق اليوم",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "example@email.com",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+    "firstName": "الاسم الأول",
+    "firstNamePlaceholder": "أحمد",
+    "lastName": "اسم العائلة",
+    "lastNamePlaceholder": "محمد",
+    "rememberMe": "تذكرني",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "loginButton": "تسجيل الدخول",
+    "registerButton": "إنشاء حساب",
+    "loggingIn": "جاري تسجيل الدخول...",
+    "creatingAccount": "جاري إنشاء الحساب...",
+    "orContinueWith": "أو متابعة باستخدام",
+    "dontHaveAccount": "ليس لديك حساب؟",
+    "signUpNow": "سجل الآن",
+    "alreadyHaveAccount": "لديك حساب بالفعل؟",
+    "signInNow": "سجل الدخول الآن",
+    "agreeToTerms": "أوافق على",
+    "termsAndConditions": "الشروط والأحكام",
+    "and": "و",
+    "privacyPolicy": "سياسة الخصوصية"
+  }
 }

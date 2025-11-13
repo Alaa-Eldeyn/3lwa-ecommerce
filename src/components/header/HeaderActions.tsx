@@ -41,10 +41,10 @@ const HeaderActions = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             <div className="absolute right-0 w-48 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-lg z-50">
               {isLoggedIn ? (
                 <>
-                  <Link href="#" className="block px-4 py-2 hover:bg-gray-200 rounded-xl dark:hover:bg-gray-700 cursor-pointer">
+                  <Link href="/account" className="block px-4 py-2 hover:bg-gray-200 rounded-xl dark:hover:bg-gray-700 cursor-pointer">
                     {t("myAccount")}
                   </Link>
-                  <Link href="#" className="block px-4 py-2 hover:bg-gray-200 rounded-xl dark:hover:bg-gray-700 cursor-pointer">
+                  <Link href="/orders" className="block px-4 py-2 hover:bg-gray-200 rounded-xl dark:hover:bg-gray-700 cursor-pointer">
                     {t("orders")}
                   </Link>
                   <button className="w-full px-4 py-2 flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
@@ -54,11 +54,11 @@ const HeaderActions = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 </>
               ) : (
                 <>
-                  <Link href="#" className="flex items-center gap-2 w-full rounded-t-xl px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
+                  <Link href="/login" className="flex items-center gap-2 w-full rounded-t-xl px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
                     <LogIn size={16} />
                     {t("login")}
                   </Link>
-                  <Link href="#" className="flex items-center gap-2 w-full rounded-b-xl px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
+                  <Link href="/register" className="flex items-center gap-2 w-full rounded-b-xl px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
                     <User size={16} />
                     {t("register")}
                   </Link>

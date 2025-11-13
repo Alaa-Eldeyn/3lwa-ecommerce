@@ -31,5 +31,36 @@
     "orders": "Orders",
     "product-details": "Product Details"
   },
-  "filters": "Filters"
+  "filters": "Filters",
+  "auth": {
+    "welcomeBack": "Welcome Back!",
+    "loginSubtitle": "Sign in to your account to continue",
+    "createAccount": "Create Account",
+    "registerSubtitle": "Join us and start shopping today",
+    "email": "Email Address",
+    "emailPlaceholder": "john@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter your password",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "John",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Doe",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "loginButton": "Sign In",
+    "registerButton": "Create Account",
+    "loggingIn": "Signing in...",
+    "creatingAccount": "Creating account...",
+    "orContinueWith": "Or continue with",
+    "dontHaveAccount": "Don't have an account?",
+    "signUpNow": "Sign up now",
+    "alreadyHaveAccount": "Already have an account?",
+    "signInNow": "Sign in now",
+    "agreeToTerms": "I agree to the",
+    "termsAndConditions": "Terms and Conditions",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy"
+  }
 }
