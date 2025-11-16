@@ -27,7 +27,7 @@ const NewsLetter = () => {
                   />
                 </svg>
               </div>
-              <button className="w-full px-8 py-3 rounded-full bg-white text-primary font-medium hover:bg-gray-100 transition">
+              <button className="w-full px-8 py-3 rounded-full bg-primary text-white font-medium transition">
                 Subscribe to Newsletter
               </button>
             </div>

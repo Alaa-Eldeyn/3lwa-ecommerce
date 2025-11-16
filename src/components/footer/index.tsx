@@ -2,6 +2,7 @@
 import { Link } from "@/src/i18n/routing";
 import NewsLetter from "./NewsLetter";
 import { footerLinks, socialLinks } from "@/src/data/data";
+import Logo from "../common/Logo";
 
 
 
@@ -18,10 +19,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
           {/* Brand Section */}
           <div className="lg:col-span-1">
-            <Link href="/" className="text-3xl font-extrabold text-gray-900 dark:text-white mb-6 block">
-              Alwa.dev
-            </Link>
-            <p className="text-gray-600 dark:text-gray-400 text-sm mb-6">
+            <Logo />
+            <p className="text-gray-600 dark:text-gray-400 text-sm my-6">
               We have clothes that suits your style and which you&apos;re proud to wear. From women to men.
             </p>
             {/* Social Icons */}

@@ -41,7 +41,7 @@ const Testimonials = () => {
           </h2>
 
           {/* Custom Navigation Arrows */}
-          <div className="hidden md:flex gap-4">
+          <div dir="ltr" className="hidden md:flex gap-4">
             <button className="testimonials-prev w-10 h-10 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition">
               <svg className="w-5 h-5 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -76,10 +76,9 @@ const Testimonials = () => {
               slidesPerView: 3,
             },
           }}
-          className="pb-4"
         >
           {testimonials.map((testimonial, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={index} className="py-2">
               <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 h-full min-h-60">
                 {/* Stars */}
                 <div className="flex gap-1 mb-4">

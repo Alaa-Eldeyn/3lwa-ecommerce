@@ -160,9 +160,6 @@
 
 /* Mobile Responsive for Flash Deals */
 @media (max-width: 768px) {
-    .flash-deals-carousel {
-        padding: 0 50px;
-    }
 
     .flash-deals-carousel .swiper-button-next,
     .flash-deals-carousel .swiper-button-prev {

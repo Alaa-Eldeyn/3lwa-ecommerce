@@ -7,6 +7,7 @@ import "swiper/css"
 import "./carousel.css"
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 const NewArrivals = () => {
   const [products, setProducts] = useState(newArrivals);
@@ -31,7 +32,7 @@ const NewArrivals = () => {
   }, []);
 
   return (
-    <section className="py-16 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700">
+    <section className="py-10 lg:py-16 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700">
       <div className="container mx-auto">
 
         {/* Title */}
@@ -48,39 +49,44 @@ const NewArrivals = () => {
 
         <Swiper
           modules={[Autoplay]}
-          spaceBetween={30}
-          slidesPerView={1}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
-
-          breakpoints={{
-            640: {
-              slidesPerView: 2,
-            },
-            768: {
-              slidesPerView: 3,
-            },
-            1024: {
-              slidesPerView: 4,
-            },
-          }}
-          className="pb-4"
+          spaceBetween={20}
+            slidesPerView={1}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            breakpoints={{
+              320: {
+                slidesPerView: 2,
+                spaceBetween: 10,
+              },
+              768: {
+                slidesPerView: 3,
+                spaceBetween: 20,
+              },
+              1024: {
+                slidesPerView: 4,
+                spaceBetween: 20,
+              },
+              1200: {
+                slidesPerView: 5,
+                spaceBetween: 20,
+              },
+            }}
         >
           {products.map((item, i) => (
-            <SwiperSlide key={i} >
+            <SwiperSlide key={i} className="py-2">
               <ProductCard {...item} />
             </SwiperSlide>
           ))}
         </Swiper>
 
         {/* Button */}
-        <div className="flex justify-center mt-12">
+        <Link href="/products" className="flex justify-center mt-8 lg:mt-12">
           <button className="px-10 py-3 border border-gray-400 rounded-full text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
             View All
           </button>
-        </div>
+        </Link>
 
       </div>
     </section>

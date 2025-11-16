@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import Link from "next/link";
 
 const FlashDeals = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -32,7 +33,7 @@ const FlashDeals = () => {
   }, []);
 
   return (
-    <section className="py-16 bg-white dark:bg-gray-900">
+    <section className="py-10 lg:py-16 bg-white dark:bg-gray-900">
       <div className="container mx-auto">
 
         <div className="flex flex-col md:flex-row items-center justify-between mb-12">
@@ -84,31 +85,34 @@ const FlashDeals = () => {
 
         <div className="flash-deals-carousel">
           <Swiper
-            // modules={[Autoplay, Navigation]}
             modules={[Autoplay]}
-            spaceBetween={30}
+            spaceBetween={20}
             slidesPerView={1}
-            // navigation
             autoplay={{
               delay: 3000,
               disableOnInteraction: false,
             }}
-            
             breakpoints={{
-              640: {
+              320: {
                 slidesPerView: 2,
+                spaceBetween: 10,
               },
               768: {
                 slidesPerView: 3,
+                spaceBetween: 20,
               },
               1024: {
                 slidesPerView: 4,
+                spaceBetween: 20,
+              },
+              1200: {
+                slidesPerView: 5,
+                spaceBetween: 20,
               },
             }}
-            className="pb-4"
           >
             {flashDeals.map((item, i) => (
-              <SwiperSlide key={i}>
+              <SwiperSlide key={i} className="py-2">
                 <ProductCard {...item} />
               </SwiperSlide>
             ))}
@@ -116,11 +120,11 @@ const FlashDeals = () => {
         </div>
 
         {/* Button */}
-        <div className="flex justify-center mt-12">
+        <Link href="/products" className="flex justify-center mt-8 lg:mt-12">
           <button className="px-10 py-3 border border-gray-400 rounded-full text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
             View All
           </button>
-        </div>
+        </Link>
 
       </div>
     </section>
