@@ -31,7 +31,6 @@ const Checkout = () => {
     formState: { errors },
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
-    mode: "onBlur",
   });
 
   const [paymentMethod, setPaymentMethod] = useState<

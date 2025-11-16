@@ -38,7 +38,7 @@ const ProductCard = ({
             src={image}
             alt={title}
             fill
-            className="object-contain group-hover:scale-110 soft"
+            className="object-contain scale-110 group-hover:scale-115 soft"
           />
 
           {/* Discount Badge */}
@@ -58,7 +58,7 @@ const ProductCard = ({
           </div>
 
           {/* Title */}
-          <Link href={`/products/product-details/1`} className="block text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-tight group-hover:text-primary soft">
+          <Link href={`/products/product-details/1`} className="!block! text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 leading-tight group-hover:text-primary soft">
             {title}
           </Link>
 
@@ -70,12 +70,12 @@ const ProductCard = ({
           {/* Prices */}
           <div className="flex items-center gap-2 mb-3">
             <span className="text-xl font-bold text-gray-900 dark:text-white">
-              {price}.00 ريس
+              ${price}
             </span>
 
             {oldPrice && (
               <span className="text-sm line-through text-gray-400 dark:text-gray-500">
-                {oldPrice}.00 ريس
+                ${oldPrice}
               </span>
             )}
           </div>
@@ -89,8 +89,8 @@ const ProductCard = ({
               className="w-full bg-primary hover:bg-primary/90 text-white rounded-md center soft p-2.5 font-medium shadow-sm hover:shadow-md"
               title="Add to cart"
             >
-              <span className="mx-2">أضف للسلة</span>
-              <ShoppingCart size={18} />
+              <span className="lg:mx-2 text-xs">أضف للسلة</span>
+              <ShoppingCart size={18} className="hidden lg:block" />
             </button>
             <button
               onClick={(e) => {

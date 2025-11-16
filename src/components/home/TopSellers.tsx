@@ -27,7 +27,7 @@ const TopSellers = () => {
     fetchItems();
   }, []);
   return (
-    <section className="pt-10 lg:pt-16 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+    <section className="py-10 lg:py-16 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
       <div className="container mx-auto">
 
         {/* Title */}
@@ -36,7 +36,7 @@ const TopSellers = () => {
         </h2>
 
         {/* Products Grid */}
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 py-2">
+        <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 py-2">
           {products.map((item, i) => (
             <ProductCard key={i} {...item} />
           ))}

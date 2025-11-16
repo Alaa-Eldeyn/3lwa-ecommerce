@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -50,10 +49,10 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center py-10 px-4 bg-gray-50 dark:bg-gray-900">
       <div className="bg-primary/10 w-1/2 fixed top-0 right-0 bottom-0 z-0"></div>
-      <div className="w-full container grid lg:grid-cols-2 gap-8 items-center z-10">
-        {/* Left Side - Animation */}
-        <div className="hidden lg:flex flex-col items-center justify-center ">
-          <div className="w-full max-w-lg">
+      <div className="w-full container grid lg:grid-cols-2 gap-8 items-start z-10">
+        {/* Left Side - Animation (Sticky) */}
+        <div className="hidden lg:flex flex-col items-center justify-center sticky top-10 h-[calc(100vh-5rem)]">
+          <div className="w-full max-w-lg flex items-center justify-center h-full">
             {secureAnimation && (
               <Lottie animationData={secureAnimation} loop={true} />
             )}
