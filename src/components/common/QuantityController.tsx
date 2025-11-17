@@ -1,0 +1,73 @@
+"use client";
+
+import { Plus, Minus, Trash2 } from "lucide-react";
+
+interface QuantityControllerProps {
+  quantity: number;
+  onIncrement: (e: React.MouseEvent) => void;
+  onDecrement: (e: React.MouseEvent) => void;
+  variant?: "default" | "compact" | "large";
+  className?: string;
+  showDeleteIcon?: boolean;
+}
+
+const QuantityController = ({
+  quantity,
+  onIncrement,
+  onDecrement,
+  variant = "default",
+  className = "",
+  showDeleteIcon = true,
+}: QuantityControllerProps) => {
+  const isLastItem = quantity === 1;
+
+  // Variant styles
+  const variants = {
+    default: {
+      container: "bg-primary text-white rounded-2xl flex items-center justify-between p-2",
+      button: "hover:bg-white/20 rounded-lg p-2 transition",
+      text: "font-semibold text-sm",
+      iconSize: 16,
+    },
+    compact: {
+      container: "bg-primary text-white rounded-full flex items-center justify-between px-1 py-1 gap-3",
+      button: "rounded-xl hover:bg-white/20 rounded p-1 transition",
+      text: "font-bold text-white min-w-5 text-center",
+      iconSize: 18,
+    },
+    large: {
+      container: "bg-secondary rounded-2xl flex items-center justify-between p-3",
+      button: "hover:bg-white/20 rounded-lg px-3 py-1.5 transition text-white",
+      text: "font-bold text-white",
+      iconSize: 18,
+    },
+  };
+
+  const styles = variants[variant];
+
+  return (
+    <div className={`${styles.container} ${className}`}>
+      <button
+        onClick={onDecrement}
+        className={styles.button}
+        title={isLastItem ? "Remove from cart" : "Decrease quantity"}
+      >
+        {isLastItem && showDeleteIcon ? (
+          <Trash2 size={styles.iconSize} className="text-white" />
+        ) : (
+          <Minus size={styles.iconSize} className="text-white" />
+        )}
+      </button>
+      <span className={styles.text}>{quantity}</span>
+      <button
+        onClick={onIncrement}
+        className={styles.button}
+        title="Increase quantity"
+      >
+        <Plus size={styles.iconSize} className="text-white" />
+      </button>
+    </div>
+  );
+};
+
+export default QuantityController;

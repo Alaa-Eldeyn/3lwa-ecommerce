@@ -40,20 +40,26 @@ const NewArrivals = () => {
           NEW ARRIVALS
         </h2>
 
-        {/* Products Grid */}
-        {/* <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {products.map((item, i) => (
-            <ProductCard key={i} {...item} />
-          ))}
-        </div> */}
-
-        <Swiper
-          modules={[Autoplay]}
-          spaceBetween={20}
+        {/* Products Carousel */}
+        {loading ? (
+          <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div className="bg-gray-200 dark:bg-gray-700 aspect-square rounded-lg mb-3"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <Swiper
+            modules={[Autoplay]}
+            spaceBetween={20}
             slidesPerView={1}
             autoplay={{
               delay: 3000,
-              disableOnInteraction: false,
+              disableOnInteraction: true,
+              pauseOnMouseEnter: true,
             }}
             breakpoints={{
               320: {
@@ -73,13 +79,14 @@ const NewArrivals = () => {
                 spaceBetween: 20,
               },
             }}
-        >
-          {products.map((item, i) => (
-            <SwiperSlide key={i} className="py-2">
-              <ProductCard {...item} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+          >
+            {products.map((item, i) => (
+              <SwiperSlide key={i} className="py-2">
+                <ProductCard {...item} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
 
         {/* Button */}
         <Link href="/products" className="flex justify-center mt-8 lg:mt-12">

@@ -2,7 +2,9 @@
 
 import { StarIcon, ShoppingCart, Heart } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useCartStore } from "@/src/store/cartStore";
+import QuantityController from "./QuantityController";
 
 interface ProductRowCardProps {
   image: string;
@@ -11,6 +13,7 @@ interface ProductRowCardProps {
   price: number;
   oldPrice?: number;
   discount?: number;
+  id?: string;
 }
 
 const ProductRowCard = ({
@@ -20,8 +23,47 @@ const ProductRowCard = ({
   price,
   oldPrice,
   discount,
+  id,
 }: ProductRowCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const { items, addItem, updateQuantity, removeItem } = useCartStore();
+
+  // Generate a stable product ID based on title and price
+  const productId = id || `${title}-${price}`.toLowerCase().replace(/\s+/g, '-');
+
+  // Find if product exists in cart
+  const cartItem = useMemo(() => 
+    items.find((item) => item.id === productId),
+    [items, productId]
+  );
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    addItem({
+      id: productId,
+      name: title,
+      price: price,
+      image: image,
+    });
+  };
+
+  const handleIncrement = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (cartItem) {
+      updateQuantity(productId, cartItem.quantity + 1);
+    }
+  };
+
+  const handleDecrement = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (cartItem) {
+      if (cartItem.quantity === 1) {
+        removeItem(productId);
+      } else {
+        updateQuantity(productId, cartItem.quantity - 1);
+      }
+    }
+  };
 
   return (
     <div className="cursor-pointer group soft rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-lg p-4 max-w-68 sm:max-w-none w-full mx-auto">
@@ -109,17 +151,24 @@ const ProductRowCard = ({
             </div>
 
             {/* Add to Cart Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log("Added to cart:", title);
-              }}
-              className="px-6 py-2 bg-primary dark:bg-white text-white dark:text-primary rounded-full font-medium hover:bg-secondary dark:hover:bg-gray-200 soft center gap-2 shrink-0"
-              title="Add to cart"
-            >
-              <ShoppingCart size={18} />
-              <span className="hidden sm:inline">Add to Cart</span>
-            </button>
+            {cartItem ? (
+              <QuantityController
+                quantity={cartItem.quantity}
+                onIncrement={handleIncrement}
+                onDecrement={handleDecrement}
+                variant="compact"
+                className="shrink-0"
+              />
+            ) : (
+              <button
+                onClick={handleAddToCart}
+                className="px-6 py-2 bg-primary dark:bg-white text-white dark:text-primary rounded-full font-medium hover:bg-secondary dark:hover:bg-gray-200 soft center gap-2 shrink-0"
+                title="Add to cart"
+              >
+                <ShoppingCart size={18} />
+                <span className="hidden sm:inline">Add to Cart</span>
+              </button>
+            )}
           </div>
         </div>
       </div>

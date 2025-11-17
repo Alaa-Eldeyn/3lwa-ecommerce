@@ -1,12 +1,42 @@
 "use client"
 import { Link } from "@/src/i18n/routing";
 import NewsLetter from "./NewsLetter";
-import { footerLinks, socialLinks } from "@/src/data/data";
+import { socialLinks } from "@/src/data/data";
 import Logo from "../common/Logo";
+import { useTranslations } from "next-intl";
 
 
 
 const Footer = () => {
+  const t = useTranslations('footer');
+
+  const footerLinks = {
+    company: [
+      { name: t('company.about'), href: "/about" },
+      { name: t('company.features'), href: "/features" },
+      { name: t('company.works'), href: "/works" },
+      { name: t('company.career'), href: "/career" },
+    ],
+    help: [
+      { name: t('help.support'), href: "/support" },
+      { name: t('help.delivery'), href: "/delivery" },
+      { name: t('help.terms'), href: "/terms" },
+      { name: t('help.privacy'), href: "/privacy" },
+    ],
+    faq: [
+      { name: t('faq.account'), href: "/faq/account" },
+      { name: t('faq.deliveries'), href: "/faq/deliveries" },
+      { name: t('faq.orders'), href: "/faq/orders" },
+      { name: t('faq.payments'), href: "/faq/payments" },
+    ],
+    resources: [
+      { name: t('resources.ebooks'), href: "/resources/ebooks" },
+      { name: t('resources.tutorial'), href: "/resources/tutorial" },
+      { name: t('resources.blog'), href: "/blog" },
+      { name: t('resources.youtube'), href: "/resources/youtube" },
+    ],
+  };
+
   return (
     <footer className="bg-white dark:bg-gray-900">
       {/* Newsletter Section */}
@@ -21,7 +51,7 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <Logo />
             <p className="text-gray-600 dark:text-gray-400 text-sm my-6">
-              We have clothes that suits your style and which you&apos;re proud to wear. From women to men.
+              {t('description')}
             </p>
             {/* Social Icons */}
             <div className="flex gap-3">
@@ -42,7 +72,7 @@ const Footer = () => {
           {/* Company */}
           <div>
             <h3 className="font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wider text-sm">
-              Company
+              {t('company.title')}
             </h3>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
@@ -58,7 +88,7 @@ const Footer = () => {
           {/* Help */}
           <div>
             <h3 className="font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wider text-sm">
-              Help
+              {t('help.title')}
             </h3>
             <ul className="space-y-3">
               {footerLinks.help.map((link) => (
@@ -74,7 +104,7 @@ const Footer = () => {
           {/* FAQ */}
           <div>
             <h3 className="font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wider text-sm">
-              FAQ
+              {t('faq.title')}
             </h3>
             <ul className="space-y-3">
               {footerLinks.faq.map((link) => (
@@ -90,7 +120,7 @@ const Footer = () => {
           {/* Resources */}
           <div>
             <h3 className="font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-wider text-sm">
-              Resources
+              {t('resources.title')}
             </h3>
             <ul className="space-y-3">
               {footerLinks.resources.map((link) => (
@@ -107,7 +137,7 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="border-t border-gray-300 dark:border-gray-700 pt-6 mt-8">
             <p className="text-gray-600 dark:text-gray-400 text-sm text-center">
-              Alwa.dev © 2000-{new Date().getFullYear()}, All Rights Reserved
+              Alwa.dev © 2000-{new Date().getFullYear()}, {t('rights')}
             </p>
         </div>
         </div>

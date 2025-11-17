@@ -69,6 +69,23 @@
     scroll-behavior: smooth !important;
     /* border: 1px solid red; */
   }
+
+  /* React International Phone Styles */
+  .react-international-phone-input-container {
+    width: 100%;
+  }
+
+  .react-international-phone-input {
+    width: 100%;
+  }
+
+  .react-international-phone-country-selector-button {
+    border-radius: 0.75rem 0 0 0.75rem;
+  }
+
+  [dir="rtl"] .react-international-phone-country-selector-button {
+    border-radius: 0 0.75rem 0.75rem 0;
+  }
 }
 
 @layer utilities {

@@ -4,7 +4,9 @@ import { StarIcon, ShoppingCart, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useCartStore } from "@/src/store/cartStore";
+import QuantityController from "./QuantityController";
 
 interface ProductCardProps {
   image: string;
@@ -14,6 +16,7 @@ interface ProductCardProps {
   oldPrice?: number;
   discount?: number;
   variant?: "default" | "bordered" | "minimal";
+  id?: string; // Optional product ID
 }
 
 const ProductCard = ({
@@ -23,10 +26,49 @@ const ProductCard = ({
   price,
   oldPrice,
   discount,
-  variant = "minimal",
+  variant = "bordered",
+  id,
 }: ProductCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();
+  const { items, addItem, updateQuantity, removeItem } = useCartStore();
+
+  // Generate a stable product ID based on title and price
+  const productId = id || `${title}-${price}`.toLowerCase().replace(/\s+/g, '-');
+
+  // Find if product exists in cart
+  const cartItem = useMemo(() =>
+    items.find((item) => item.id === productId),
+    [items, productId]
+  );
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    addItem({
+      id: productId,
+      name: title,
+      price: price,
+      image: image,
+    });
+  };
+
+  const handleIncrement = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (cartItem) {
+      updateQuantity(productId, cartItem.quantity + 1);
+    }
+  };
+
+  const handleDecrement = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (cartItem) {
+      if (cartItem.quantity === 1) {
+        removeItem(productId);
+      } else {
+        updateQuantity(productId, cartItem.quantity - 1);
+      }
+    }
+  };
 
   // Card variant - similar to the image design
   if (variant === "minimal") {
@@ -81,17 +123,24 @@ const ProductCard = ({
           </div>
 
           <div className="flex gap-2">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log("Added to cart:", title);
-              }}
-              className="w-full bg-primary hover:bg-primary/90 text-white rounded-md center soft p-2.5 font-medium shadow-sm hover:shadow-md"
-              title="Add to cart"
-            >
-              <span className="lg:mx-2 text-xs">أضف للسلة</span>
-              <ShoppingCart size={18} className="hidden lg:block" />
-            </button>
+            {cartItem ? (
+              <QuantityController
+                quantity={cartItem.quantity}
+                onIncrement={handleIncrement}
+                onDecrement={handleDecrement}
+                variant="default"
+                className="w-full"
+              />
+            ) : (
+              <button
+                onClick={handleAddToCart}
+                className="w-full bg-primary hover:bg-primary/90 text-white rounded-md center soft p-2.5 font-medium shadow-sm hover:shadow-md"
+                title="Add to cart"
+              >
+                <span className="lg:mx-2 text-xs">أضف للسلة</span>
+                <ShoppingCart size={18} className="hidden lg:block" />
+              </button>
+            )}
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -105,7 +154,7 @@ const ProductCard = ({
                 className={`${isFavorite
                   ? "fill-red-500 text-red-500"
                   : "text-gray-600 dark:text-gray-300"
-                  } soft group-hover:scale-115 group-active:scale-75`}
+                  } soft group-hover:scale-115 active:scale-75`}
               />
             </button>
           </div>
@@ -133,7 +182,7 @@ const ProductCard = ({
               e.stopPropagation();
               setIsFavorite(!isFavorite);
             }}
-            className="absolute top-3 left-3 w-10 h-10 bg-white dark:bg-gray-800 rounded-full center shadow-md hover:scale-110 soft z-10"
+            className="absolute top-3 left-3 w-9 h-9 bg-white dark:bg-gray-800 rounded-full center shadow-md hover:scale-110 soft z-10"
             title={isFavorite ? "Remove from favorites" : "Add to favorites"}
           >
             <Heart
@@ -146,20 +195,26 @@ const ProductCard = ({
           </button>
 
           {/* Add to Cart Button - Bottom Left */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              // Add to cart logic here
-              console.log("Added to cart:", title);
-            }}
-            className="absolute bottom-3 left-3 w-10 h-10 bg-primary dark:bg-white rounded-2xl hover:bg-secondary center shadow-lg hover:scale-110 soft z-10"
-            title="Add to cart"
-          >
-            <ShoppingCart
-              size={18}
-              className="text-white dark:text-primary"
+          {cartItem ? (
+            <QuantityController
+              quantity={cartItem.quantity}
+              onIncrement={handleIncrement}
+              onDecrement={handleDecrement}
+              variant="compact"
+              className="absolute bottom-3 left-3 shadow-lg"
             />
-          </button>
+          ) : (
+            <button
+              onClick={handleAddToCart}
+              className="absolute bottom-3 left-3 w-9 h-9 bg-primary dark:bg-white rounded-2xl hover:bg-secondary center shadow-lg hover:scale-110 soft z-10"
+              title="Add to cart"
+            >
+              <ShoppingCart
+                size={18}
+                className="text-white dark:text-primary"
+              />
+            </button>
+          )}
         </div>
 
         {/* Content */}
@@ -292,21 +347,27 @@ const ProductCard = ({
             )}
           </div>
 
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              // Add to cart logic here
-              console.log("Added to cart:", title);
-            }}
-            className="w-full  bg-secondary rounded-2xl center soft p-3 mt-4 hover:bg-primary text-sm lg:text-base"
-            title="Add to cart"
-          >
-            <span className="mx-2">Add to Cart</span>
-            <ShoppingCart
-              size={20}
-              className="text-white dark:text-primary"
+          {cartItem ? (
+            <QuantityController
+              quantity={cartItem.quantity}
+              onIncrement={handleIncrement}
+              onDecrement={handleDecrement}
+              variant="default"
+              className="w-full mt-4"
             />
-          </button>
+          ) : (
+            <button
+              onClick={handleAddToCart}
+              className="w-full  bg-secondary rounded-2xl center soft p-3 mt-4 hover:bg-primary text-sm lg:text-base"
+              title="Add to cart"
+            >
+              <span className="mx-2">Add to Cart</span>
+              <ShoppingCart
+                size={20}
+                className="text-white dark:text-primary"
+              />
+            </button>
+          )}
         </div>
       </div>
     );

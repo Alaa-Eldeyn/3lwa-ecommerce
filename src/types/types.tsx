@@ -1,5 +1,36 @@
 import z from "zod";
-import { loginSchema, registerSchema } from "../schemas/schemas";
+import { loginSchema, registerSchema, profileSchema, passwordUpdateSchema } from "../schemas/schemas";
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;
+export type ProfileFormData = z.infer<typeof profileSchema>;
+export type PasswordUpdateFormData = z.infer<typeof passwordUpdateSchema>;
+
+export interface Address {
+  id: string;
+  addressLine1: string;
+  addressLine2?: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  isDefault: boolean;
+  type: "shipping" | "billing";
+}
+
+export interface Order {
+  id: string;
+  orderNumber: string;
+  date: string;
+  total: number;
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  items: OrderItem[];
+}
+
+export interface OrderItem {
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
+  image: string;
+}

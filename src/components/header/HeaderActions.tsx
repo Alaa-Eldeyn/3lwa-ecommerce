@@ -2,6 +2,7 @@
 import { ShoppingCart, User, Menu, X, LogIn, LogOut } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useHeaderStore } from "@/src/store/headerStore"
+import { useCartStore } from "@/src/store/cartStore"
 import SearchBar from "./SearchBar"
 import LangSwitch from "./LangSwitch"
 import MobileMenu from "./MobileMenu"
@@ -12,6 +13,9 @@ const HeaderActions = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const t = useTranslations("header")
   const { isMobileOpen, toggleMobile, isAccountOpen, toggleAccount, toggleCart } =
     useHeaderStore()
+  const totalItems = useCartStore((state) => 
+    state.items.reduce((total, item) => total + item.quantity, 0)
+  )
 
   return (
     <>
@@ -26,9 +30,11 @@ const HeaderActions = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           className="relative text-gray-700 dark:text-gray-300 soft hover:text-primary"
         >
           <ShoppingCart size={24} />
-          <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[11px] rounded-full h-4 w-4 center">
-            2
-          </span>
+          {totalItems > 0 && (
+            <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[11px] rounded-full h-4 w-4 center">
+              {totalItems}
+            </span>
+          )}
         </button>
 
         {/* Account */}

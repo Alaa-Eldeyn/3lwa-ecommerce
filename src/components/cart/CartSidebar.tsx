@@ -1,67 +1,35 @@
 "use client";
 
-import { useState } from "react";
 import { X, ShoppingBag, Trash2 } from "lucide-react";
 import { useHeaderStore } from "@/src/store/headerStore";
+import { useCartStore } from "@/src/store/cartStore";
 import Link from "next/link";
 import Image from "next/image";
-
-interface CartItemType {
-    id: string;
-    image: string;
-    title: string;
-    size: string;
-    color: string;
-    price: number;
-    quantity: number;
-}
-
-// Mock cart data - replace with real data from state management
-const initialCartItems: CartItemType[] = [
-    {
-        id: "1",
-        image: "/images/products/Frame 32.png",
-        title: "Gradient Graphic T-shirt",
-        size: "Large",
-        color: "White",
-        price: 145,
-        quantity: 1,
-    },
-    {
-        id: "2",
-        image: "/images/products/Frame 33.png",
-        title: "Checkered Shirt",
-        size: "Medium",
-        color: "Red",
-        price: 180,
-        quantity: 1,
-    },
-];
+import QuantityController from "../common/QuantityController";
 
 const CartSidebar = () => {
     const { isCartOpen, closeCart } = useHeaderStore();
-    const [cartItems, setCartItems] = useState<CartItemType[]>(initialCartItems);
+    const { items, updateQuantity, removeItem, getTotalPrice } = useCartStore();
 
-    const handleQuantityChange = (id: string, delta: number) => {
-        setCartItems((items) =>
-            items.map((item) => {
-                if (item.id === id) {
-                    const newQuantity = Math.max(1, item.quantity + delta);
-                    return { ...item, quantity: newQuantity };
-                }
-                return item;
-            })
-        );
+    const handleIncrement = (id: string) => (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const item = items.find(i => i.id === id);
+        if (item) {
+            updateQuantity(id, item.quantity + 1);
+        }
     };
 
-    const handleRemoveItem = (id: string) => {
-        setCartItems((items) => items.filter((item) => item.id !== id));
+    const handleDecrement = (id: string) => (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const item = items.find(i => i.id === id);
+        if (item) {
+            if (item.quantity === 1) {
+                removeItem(id);
+            } else {
+                updateQuantity(id, item.quantity - 1);
+            }
+        }
     };
-
-    const subtotal = cartItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-    );
 
     return (
         <>
@@ -84,7 +52,7 @@ const CartSidebar = () => {
                     <div className="flex items-center gap-2">
                         <ShoppingBag size={24} className="text-primary" />
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                            السلة ({cartItems.length})
+                            السلة ({items.length})
                         </h2>
                     </div>
                     <button
@@ -97,7 +65,7 @@ const CartSidebar = () => {
 
                 {/* Cart Items */}
                 <div className="flex-1 overflow-y-auto p-4">
-                    {cartItems.length === 0 ? (
+                    {items.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center">
                             <ShoppingBag size={64} className="text-gray-300 dark:text-gray-700 mb-4" />
                             <p className="text-gray-500 dark:text-gray-400 text-lg">
@@ -106,7 +74,7 @@ const CartSidebar = () => {
                         </div>
                     ) : (
                         <div className="space-y-4">
-                            {cartItems.map((item) => (
+                            {items.map((item) => (
                                 <div
                                     key={item.id}
                                     className="flex gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
@@ -115,7 +83,7 @@ const CartSidebar = () => {
                                     <div className="relative w-20 h-20 shrink-0 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                                         <Image
                                             src={item.image}
-                                            alt={item.title}
+                                            alt={item.name}
                                             fill
                                             className="object-cover"
                                         />
@@ -124,38 +92,31 @@ const CartSidebar = () => {
                                     {/* Details */}
                                     <div className="flex-1 min-w-0">
                                         <h3 className="font-semibold text-sm text-gray-900 dark:text-white truncate">
-                                            {item.title}
+                                            {item.name}
                                         </h3>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                            {item.size} • {item.color}
-                                        </p>
+                                        {(item.size || item.color) && (
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                {item.size && item.size}{item.size && item.color && " • "}{item.color && item.color}
+                                            </p>
+                                        )}
 
                                         {/* Quantity Controls */}
                                         <div className="flex items-center justify-between mt-2">
-                                            <div className="flex items-center gap-2 bg-white dark:bg-gray-700 rounded-lg px-2 py-1">
-                                                <button
-                                                    onClick={() => handleQuantityChange(item.id, -1)}
-                                                    className="text-gray-600 dark:text-gray-400 hover:text-primary w-6 h-6 flex items-center justify-center"
-                                                >
-                                                    -
-                                                </button>
-                                                <span className="text-sm text-secondary font-medium w-6 text-center">
-                                                    {item.quantity}
-                                                </span>
-                                                <button
-                                                    onClick={() => handleQuantityChange(item.id, 1)}
-                                                    className="text-gray-600 dark:text-gray-400 hover:text-primary w-6 h-6 flex items-center justify-center"
-                                                >
-                                                    +
-                                                </button>
-                                            </div>
+                                            <QuantityController
+                                                quantity={item.quantity}
+                                                onIncrement={handleIncrement(item.id)}
+                                                onDecrement={handleDecrement(item.id)}
+                                                variant="default"
+                                                className="bg-white! dark:bg-gray-700! text-gray-900! dark:text-white!"
+                                                showDeleteIcon={false}
+                                            />
 
                                             <div className="flex items-center gap-2">
                                                 <span className="font-bold text-gray-900 dark:text-white">
                                                     ${item.price * item.quantity}
                                                 </span>
                                                 <button
-                                                    onClick={() => handleRemoveItem(item.id)}
+                                                    onClick={() => removeItem(item.id)}
                                                     className="text-red-500 hover:text-red-600 p-1"
                                                 >
                                                     <Trash2 size={16} />
@@ -170,13 +131,13 @@ const CartSidebar = () => {
                 </div>
 
                 {/* Footer */}
-                {cartItems.length > 0 && (
+                {items.length > 0 && (
                     <div className="border-t dark:border-gray-700 p-4 space-y-3">
                         {/* Subtotal */}
                         <div className="flex items-center justify-between text-lg">
                             <span className="text-gray-600 dark:text-gray-400">المجموع:</span>
                             <span className="font-bold text-gray-900 dark:text-white">
-                                ${subtotal}
+                                ${getTotalPrice().toFixed(2)}
                             </span>
                         </div>
 

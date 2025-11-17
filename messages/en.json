@@ -41,6 +41,8 @@
     "registerSubtitle": "Join us and start shopping today",
     "email": "Email Address",
     "emailPlaceholder": "john@example.com",
+    "phone": "Phone Number",
+    "phonePlaceholder": "+1 (555) 000-0000",
     "password": "Password",
     "passwordPlaceholder": "Enter your password",
     "confirmPassword": "Confirm Password",
@@ -64,5 +66,200 @@
     "termsAndConditions": "Terms and Conditions",
     "and": "and",
     "privacyPolicy": "Privacy Policy"
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Learn about our story and vision",
+    "hero": {
+      "title": "We Make a Difference in E-Commerce",
+      "description": "Since 2020, we've been providing the best products and finest services to our customers worldwide"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "We strive to deliver an exceptional shopping experience by providing high-quality products and outstanding customer service. We believe shopping should be easy, enjoyable, and secure."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "To be the leading e-commerce platform in the region, offering a unique shopping experience that combines quality, innovation, and trust."
+    },
+    "values": {
+      "title": "Our Values",
+      "quality": {
+        "title": "Quality",
+        "description": "We carefully select our products to ensure the highest quality standards"
+      },
+      "trust": {
+        "title": "Trust",
+        "description": "We build long-term relationships with our customers through transparency and credibility"
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "We constantly strive to improve our services and provide innovative solutions"
+      },
+      "customer": {
+        "title": "Customer First",
+        "description": "Customer satisfaction is our top priority in everything we do"
+      }
+    },
+    "stats": {
+      "customers": "Happy Customers",
+      "products": "Diverse Products",
+      "countries": "Countries Served",
+      "experience": "Years Experience"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We're here to help and answer your questions",
+    "form": {
+      "title": "Send Us a Message",
+      "name": "Full Name",
+      "namePlaceholder": "Enter your name",
+      "email": "Email Address",
+      "emailPlaceholder": "john@example.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+1 (555) 000-0000",
+      "subject": "Subject",
+      "subjectPlaceholder": "What do you want to ask?",
+      "message": "Message",
+      "messagePlaceholder": "Write your message here...",
+      "submit": "Send Message",
+      "sending": "Sending..."
+    },
+    "info": {
+      "title": "Contact Information",
+      "address": {
+        "title": "Address",
+        "value": "Riyadh, Saudi Arabia"
+      },
+      "email": {
+        "title": "Email",
+        "value": "support@alwa.dev"
+      },
+      "phone": {
+        "title": "Phone",
+        "value": "+966 50 000 0000"
+      },
+      "hours": {
+        "title": "Business Hours",
+        "value": "Sunday - Thursday: 9 AM - 6 PM"
+      }
+    },
+    "success": "Your message has been sent successfully! We'll get back to you soon.",
+    "error": "An error occurred while sending the message. Please try again."
+  },
+  "footer": {
+    "description": "We have clothes that suits your style and which you're proud to wear. From women to men.",
+    "newsletter": {
+      "title": "Stay up to date about our latest offers",
+      "placeholder": "Enter your email address",
+      "button": "Subscribe"
+    },
+    "company": {
+      "title": "Company",
+      "about": "About",
+      "features": "Features",
+      "works": "Works",
+      "career": "Career"
+    },
+    "help": {
+      "title": "Help",
+      "support": "Customer Support",
+      "delivery": "Delivery Details",
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy Policy"
+    },
+    "faq": {
+      "title": "FAQ",
+      "account": "Account",
+      "deliveries": "Manage Deliveries",
+      "orders": "Orders",
+      "payments": "Payments"
+    },
+    "resources": {
+      "title": "Resources",
+      "ebooks": "Free eBooks",
+      "tutorial": "Development Tutorial",
+      "blog": "How to - Blog",
+      "youtube": "Youtube Playlist"
+    },
+    "rights": "All Rights Reserved"
+  },
+  "profile": {
+    "title": "My Profile",
+    "subtitle": "Manage your account information",
+    "tabs": {
+      "personalInfo": "Personal Information",
+      "addresses": "Addresses",
+      "orders": "Order History",
+      "security": "Security"
+    },
+    "personalInfo": {
+      "title": "Personal Information",
+      "description": "Update your personal details and contact information",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+1 (555) 000-0000",
+      "dateOfBirth": "Date of Birth",
+      "gender": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "preferNotToSay": "Prefer not to say",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "changePhoto": "Change Profile Photo",
+      "uploadPhoto": "Upload Photo",
+      "removePhoto": "Remove Photo",
+      "maxSize": "Max size: 5MB"
+    },
+    "addresses": {
+      "title": "Saved Addresses",
+      "description": "Manage your shipping and billing addresses",
+      "addNew": "Add New Address",
+      "edit": "Edit",
+      "delete": "Delete",
+      "setDefault": "Set as Default",
+      "default": "Default",
+      "shipping": "Shipping",
+      "billing": "Billing",
+      "noAddresses": "No addresses saved yet",
+      "addressLine1": "Address Line 1",
+      "addressLine2": "Address Line 2 (Optional)",
+      "city": "City",
+      "state": "State/Province",
+      "zipCode": "ZIP/Postal Code",
+      "country": "Country"
+    },
+    "orders": {
+      "title": "Order History",
+      "description": "View and track your orders",
+      "orderNumber": "Order #",
+      "date": "Date",
+      "total": "Total",
+      "status": "Status",
+      "viewDetails": "View Details",
+      "noOrders": "No orders yet",
+      "startShopping": "Start Shopping",
+      "pending": "Pending",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "security": {
+      "title": "Security Settings",
+      "description": "Update your password and security preferences",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmNewPassword": "Confirm New Password",
+      "updatePassword": "Update Password",
+      "updating": "Updating...",
+      "twoFactor": "Two-Factor Authentication",
+      "twoFactorDescription": "Add an extra layer of security to your account",
+      "enable": "Enable",
+      "disable": "Disable",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    }
   }
 }
