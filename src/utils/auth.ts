@@ -1,6 +1,12 @@
 import axios from "axios";
 import { setCookie, getCookie, deleteCookie } from "cookies-next";
-import { LoginFormData, RegisterFormData, User, AuthResponse } from "../types/types";
+import {
+  LoginFormData,
+  RegisterFormData,
+  User,
+  AuthResponse,
+} from "../types/types";
+import { customAxios } from "./customAxios";
 
 const COOKIE_NAME = "ecommerceUser";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
@@ -29,7 +35,7 @@ export const getUserFromCookie = (): User | null => {
   try {
     const userStr = getCookie(COOKIE_NAME);
     if (!userStr) return null;
-    
+
     const user = JSON.parse(userStr as string) as User;
     return user;
   } catch (error) {
@@ -80,7 +86,7 @@ const handleAuthSuccess = (response: AuthResponse): User => {
   if (!response.success || !response.data) {
     throw new Error(response.message || "Authentication failed");
   }
-  
+
   const userData: User = {
     id: response.data.id,
     firstName: response.data.firstName,
@@ -91,16 +97,16 @@ const handleAuthSuccess = (response: AuthResponse): User => {
     refreshToken: response.data.refreshToken,
     role: response.data.role,
   };
-  
+
   saveUserToCookie(userData);
-  
+
   // تحديث الـ store إذا كان متاح (client-side فقط)
   if (typeof window !== "undefined") {
     import("../store/userStore").then(({ useUserStore }) => {
       useUserStore.getState().setUser(userData);
     });
   }
-  
+
   return userData;
 };
 
@@ -116,11 +122,11 @@ export const loginUser = async (data: LoginFormData): Promise<User> => {
         password: data.password,
       }
     );
-    
+
     return handleAuthSuccess(response.data);
   } catch (error) {
     console.error("Login failed:", error);
-    const errorMessage = axios.isAxiosError(error) 
+    const errorMessage = axios.isAxiosError(error)
       ? error.response?.data?.message || "فشل تسجيل الدخول"
       : "فشل تسجيل الدخول";
     throw new Error(errorMessage);
@@ -143,7 +149,7 @@ export const registerUser = async (data: RegisterFormData): Promise<User> => {
         agreeToTerms: data.agreeToTerms,
       }
     );
-    
+
     return handleAuthSuccess(response.data);
   } catch (error) {
     console.error("Registration failed:", error);
@@ -157,9 +163,10 @@ export const registerUser = async (data: RegisterFormData): Promise<User> => {
 /**
  * تسجيل خروج المستخدم
  */
-export const logoutUser = (): void => {
+export const logoutUser = async (): Promise<void> => {
+  await customAxios.post(`/Auth/logout`);
   removeUserFromCookie();
-  
+
   // تحديث الـ store إذا كان متاح (client-side فقط)
   if (typeof window !== "undefined") {
     import("../store/userStore").then(({ useUserStore }) => {

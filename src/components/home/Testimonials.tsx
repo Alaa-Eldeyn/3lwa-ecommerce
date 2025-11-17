@@ -18,7 +18,7 @@ const Testimonials = () => {
       try {
         setLoading(true);
         const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/Testimonial`);
-        console.log("Testimonials Response:", response);
+        // console.log("Testimonials Response:", response);
         if (response?.data?.data && Array.isArray(response.data.data)) {
           setTestimonials(response.data.data);
         }

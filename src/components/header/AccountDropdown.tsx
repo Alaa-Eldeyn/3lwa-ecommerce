@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useUserStore } from "@/src/store/userStore";
+import { logoutUser } from "@/src/utils/auth";
 
 interface AccountDropdownProps {
   onClose?: () => void;
@@ -15,7 +16,7 @@ const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
   const t = useTranslations("header");
   const pathname = usePathname();
   const locale = pathname.split("/")[1];
-  const { user, logout, initUser } = useUserStore();
+  const { user, initUser } = useUserStore();
 
   useEffect(() => {
     initUser();
@@ -25,8 +26,8 @@ const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
     if (onClose) onClose();
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logoutUser();
     if (onClose) onClose();
   };
 

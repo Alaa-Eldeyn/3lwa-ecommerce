@@ -11,11 +11,12 @@ import { getMenuData } from "@/src/data/menuData"
 import Link from "next/link"
 import { useEffect } from "react"
 import { usePathname } from "next/navigation"
+import { logoutUser } from "@/src/utils/auth"
 
 const MobileMenu = () => {
   const t = useTranslations("header")
   const { isMobileOpen, toggleCart, toggleMobile } = useHeaderStore()
-  const { user, logout, initUser } = useUserStore()
+  const { user, initUser } = useUserStore()
   const menuData = getMenuData(t);
   const pathname = usePathname();
   const locale = pathname.split("/")[1];
@@ -25,7 +26,7 @@ const MobileMenu = () => {
   }, [initUser]);
 
   const handleLogout = () => {
-    logout();
+    logoutUser();
   };
 
   const isLoggedIn = !!user;
