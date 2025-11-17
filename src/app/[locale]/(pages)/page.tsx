@@ -1,5 +1,3 @@
-import Footer from "@/src/components/footer";
-import Header from "@/src/components/header";
 import BrandsMarquee from "@/src/components/home/BrandsMarquee";
 import CategoriesBentoGrid from "@/src/components/home/CategoriesBentoGrid";
 import FlashDeals from "@/src/components/home/FlashDeals";
@@ -11,8 +9,6 @@ import TopSellers from "@/src/components/home/TopSellers";
 
 export default function Home() {
   return (
-    <>
-      <Header />
       <main className="pt-20">
         {/* <Hero /> */}
         <TopBannersCarousel />
@@ -23,7 +19,5 @@ export default function Home() {
         <CategoriesBentoGrid />
         <Testimonials />
       </main>
-      <Footer />
-    </>
   );
 }

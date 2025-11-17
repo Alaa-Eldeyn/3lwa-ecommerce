@@ -1,15 +1,21 @@
 import Footer from "@/src/components/footer";
 import Header from "@/src/components/header";
-import React from "react";
+import { Suspense } from "react";
+import Loading from "../loading";
 
-const layout = ({ children }: { children: React.ReactNode }) => {
+export default async function RootLayout({
+  children
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+
   return (
     <>
       <Header />
-      {children}
+        <Suspense fallback={<Loading />}>
+          {children}
+        </Suspense>
       <Footer />
     </>
   );
-};
-
-export default layout;
+}

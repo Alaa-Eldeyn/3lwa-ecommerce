@@ -1,16 +1,14 @@
 "use client"
-import { ShoppingCart, User, Menu, X, LogIn, LogOut } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { ShoppingCart, User, Menu, X } from "lucide-react"
 import { useHeaderStore } from "@/src/store/headerStore"
 import { useCartStore } from "@/src/store/cartStore"
 import SearchBar from "./SearchBar"
 import LangSwitch from "./LangSwitch"
 import MobileMenu from "./MobileMenu"
 import ThemeSwitcher from "./ThemeSwitcher"
-import Link from "next/link"
+import AccountDropdown from "./AccountDropdown"
 
-const HeaderActions = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
-  const t = useTranslations("header")
+const HeaderActions = () => {
   const { isMobileOpen, toggleMobile, isAccountOpen, toggleAccount, toggleCart } =
     useHeaderStore()
   const totalItems = useCartStore((state) => 
@@ -39,38 +37,17 @@ const HeaderActions = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
 
         {/* Account */}
         <div className="relative">
-          <button onClick={toggleAccount} className="p-1 soft text-gray-800 dark:text-white hover:text-primary">
+          <button 
+            onClick={toggleAccount} 
+            className="p-1 soft text-gray-800 dark:text-white hover:text-primary"
+          >
             <User size={24} />
           </button>
 
           {isAccountOpen && (
-            <div className="absolute right-0 w-48 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-lg z-50">
-              {isLoggedIn ? (
-                <>
-                  <Link href="/account" className="block px-4 py-2 hover:bg-gray-200 rounded-xl dark:hover:bg-gray-700 cursor-pointer">
-                    {t("myAccount")}
-                  </Link>
-                  <Link href="/orders" className="block px-4 py-2 hover:bg-gray-200 rounded-xl dark:hover:bg-gray-700 cursor-pointer">
-                    {t("orders")}
-                  </Link>
-                  <button className="w-full px-4 py-2 flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
-                    <LogOut size={16} />
-                    {t("logout")}
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link href="/login" className="flex items-center gap-2 w-full rounded-t-xl px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
-                    <LogIn size={16} />
-                    {t("login")}
-                  </Link>
-                  <Link href="/register" className="flex items-center gap-2 w-full rounded-b-xl px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-left">
-                    <User size={16} />
-                    {t("register")}
-                  </Link>
-                </>
-              )}
-            </div>
+            <AccountDropdown 
+              onClose={toggleAccount}
+            />
           )}
         </div>
 
@@ -91,7 +68,7 @@ const HeaderActions = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
       </button>
 
       {/* Mobile Menu */}
-      <MobileMenu isLoggedIn={isLoggedIn} />
+      <MobileMenu />
     </>
   )
 }

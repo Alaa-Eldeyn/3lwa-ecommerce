@@ -13,6 +13,7 @@ interface ProfileSidebarProps {
     lastName: string;
     email: string;
   };
+  profileImagePath?: string;
   activeTab: string;
   tabs: Tab[];
   onTabChange: (tabId: string) => void;
@@ -20,7 +21,7 @@ interface ProfileSidebarProps {
   t?: (key: string) => string;
 }
 
-const ProfileSidebar = ({ userData, activeTab, tabs, onTabChange, onImageChange, t }: ProfileSidebarProps) => {
+const ProfileSidebar = ({ userData, profileImagePath, activeTab, tabs, onTabChange, onImageChange, t }: ProfileSidebarProps) => {
   const handleImageChange = (file: File) => {
     if (onImageChange) {
       onImageChange(file);
@@ -32,6 +33,7 @@ const ProfileSidebar = ({ userData, activeTab, tabs, onTabChange, onImageChange,
       <div className="flex flex-col items-center mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
         <div className="mb-3">
           <ProfileImageUpload
+            currentImage={profileImagePath}
             userName={`${userData.firstName} ${userData.lastName}`}
             onImageChange={handleImageChange}
             t={t || ((key) => key)}

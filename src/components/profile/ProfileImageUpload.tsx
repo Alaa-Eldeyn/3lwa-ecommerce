@@ -10,9 +10,18 @@ interface ProfileImageUploadProps {
 }
 
 const ProfileImageUpload = ({ currentImage, userName, onImageChange, t }: ProfileImageUploadProps) => {
-  const [previewImage, setPreviewImage] = useState<string | null>(currentImage || null);
+  // بناء URL الصورة الكامل
+  const getImageUrl = (imagePath?: string) => {
+    if (!imagePath) return null;
+    if (imagePath.startsWith('http')) return imagePath;
+    return `${process.env.NEXT_PUBLIC_DOMAIN}/${imagePath}`;
+  };
+
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const displayImage = previewImage || getImageUrl(currentImage);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -58,9 +67,9 @@ const ProfileImageUpload = ({ currentImage, userName, onImageChange, t }: Profil
     <>
       <div className="relative group">
         <div className="w-32 h-32 rounded-full overflow-hidden bg-linear-to-br from-primary to-primary/60 flex items-center justify-center text-white text-4xl font-bold border-4 border-white dark:border-gray-800 shadow-lg">
-          {previewImage ? (
+          {displayImage ? (
             <Image
-              src={previewImage}
+              src={displayImage}
               alt={userName}
               width={128}
               height={128}
@@ -110,7 +119,7 @@ const ProfileImageUpload = ({ currentImage, userName, onImageChange, t }: Profil
               </button>
 
               {/* Remove Button */}
-              {previewImage && (
+              {displayImage && (
                 <button
                   onClick={handleRemoveImage}
                   className="w-full flex items-center gap-3 px-6 py-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 soft"

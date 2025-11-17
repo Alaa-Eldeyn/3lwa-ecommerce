@@ -9,15 +9,18 @@ import { useTranslations } from "next-intl";
 import { loginSchema } from "@/src/schemas/schemas";
 import { LoginFormData } from "@/src/types/types";
 import { loginUser } from "@/src/utils/auth";
+import { useUserStore } from "@/src/store/userStore";
+import { useRouter } from "next/navigation";
 import Lottie from "lottie-react";
 import { useEffect } from "react";
 
 const Login = () => {
   const t = useTranslations("auth");
+  const router = useRouter();
+  const { setUser } = useUserStore();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [secureAnimation, setSecureAnimation] = useState<any>(null);
+  const [secureAnimation, setSecureAnimation] = useState<object | null>(null);
 
   useEffect(() => {
     fetch("/animation/secure.json")
@@ -37,7 +40,9 @@ const Login = () => {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      await loginUser(data);
+      const user = await loginUser(data);
+      setUser(user);
+      router.push("/");
     } catch (error) {
       console.error("Login error:", error);
     } finally {
@@ -46,12 +51,12 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-10 px-4 bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-[calc(100vh-160px)] center px-4 bg-gray-50 dark:bg-gray-900">
       <div className="bg-primary/10 w-1/2 fixed top-0 right-0 bottom-0 z-0"></div>
       <div className="w-full container grid lg:grid-cols-2 gap-8 items-start z-10">
         {/* Left Side - Animation (Sticky) */}
-        <div className="hidden lg:flex flex-col items-center justify-center sticky top-10 h-[calc(100vh-5rem)]">
-          <div className="w-full max-w-lg flex items-center justify-center h-full">
+        <div className="hidden lg:flex flex-col items-center justify-center sticky top-10 h-[calc(100vh-5rem)] overflow-hidden">
+          <div className="w-full max-w-lg center h-full overflow-hidden">
             {secureAnimation && (
               <Lottie animationData={secureAnimation} loop={true} />
             )}
@@ -59,7 +64,7 @@ const Login = () => {
         </div>
 
         {/* Right Side - Form */}
-        <div className="w-full space-y-8">
+        <div className="w-full space-y-5 py-10 lg:py-5 xl:py-24">
           {/* Header */}
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -72,7 +77,7 @@ const Login = () => {
 
           {/* Form */}
           <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 max-w-lg mx-auto">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               {/* Email Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -128,30 +133,12 @@ const Login = () => {
                 )}
               </div>
 
-              {/* Remember Me & Forgot Password */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    {...register("rememberMe")}
-                    id="rememberMe"
-                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded cursor-pointer"
-                  />
-                  <label
-                    htmlFor="rememberMe"
-                    className="ms-2 block text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
-                  >
-                    {t("rememberMe")}
-                  </label>
-                </div>
-
-                <Link
+              <Link
                   href="/forget-password"
-                  className="text-sm text-primary hover:text-primary/80 soft"
+                  className="text-sm text-primary hover:text-primary/80 soft block"
                 >
                   {t("forgotPassword")}
                 </Link>
-              </div>
 
               {/* Submit Button */}
               <button
@@ -164,7 +151,7 @@ const Login = () => {
             </form>
 
             {/* Divider */}
-            <div className="relative my-6">
+            <div className="relative my-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
               </div>

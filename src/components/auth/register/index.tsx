@@ -11,15 +11,18 @@ import { useTranslations } from "next-intl";
 import { registerSchema } from "@/src/schemas/schemas";
 import { RegisterFormData } from "@/src/types/types";
 import { registerUser } from "@/src/utils/auth";
+import { useUserStore } from "@/src/store/userStore";
+import { useRouter } from "next/navigation";
 import Lottie from "lottie-react";
 
 const Register = () => {
   const t = useTranslations("auth");
+  const router = useRouter();
+  const { setUser } = useUserStore();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [secureAnimation, setSecureAnimation] = useState<any>(null);
+  const [secureAnimation, setSecureAnimation] = useState<object | null>(null);
 
   useEffect(() => {
     fetch("/animation/secure.json")
@@ -40,7 +43,9 @@ const Register = () => {
   const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
     try {
-      await registerUser(data);
+      const user = await registerUser(data);
+      setUser(user);
+      router.push("/");
     } catch (error) {
       console.error("Registration error:", error);
     } finally {
@@ -49,12 +54,12 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-10 px-4 bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-[calc(100vh-160px)] flex items-center justify-center px-4 bg-gray-50 dark:bg-gray-900">
       <div className="bg-primary/10 w-1/2 fixed top-0 right-0 bottom-0 z-0"></div>
       <div className="w-full container grid lg:grid-cols-2 gap-8 items-start z-10">
         {/* Left Side - Animation (Sticky) */}
-        <div className="hidden lg:flex flex-col items-center justify-center sticky top-10 h-[calc(100vh-5rem)]">
-          <div className="w-full max-w-lg flex items-center justify-center h-full">
+        <div className="hidden lg:flex flex-col items-center justify-center sticky top-20 h-[calc(100vh-10rem)] overflow-hidden">
+          <div className="w-full max-w-lg center h-full overflow-hidden">
             {secureAnimation && (
               <Lottie animationData={secureAnimation} loop={true} />
             )}
@@ -62,7 +67,7 @@ const Register = () => {
         </div>
 
         {/* Right Side - Form */}
-        <div className="w-full space-y-8">
+        <div className="w-full space-y-5 py-10 lg:py-5">
           {/* Header */}
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -75,7 +80,7 @@ const Register = () => {
 
           {/* Form */}
           <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 max-w-lg mx-auto">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               {/* Name Fields */}
               <div className="grid grid-cols-2 gap-4">
                 <div>

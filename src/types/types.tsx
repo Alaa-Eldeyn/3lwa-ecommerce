@@ -34,3 +34,23 @@ export interface OrderItem {
   price: number;
   image: string;
 }
+
+export interface User {
+  id: string | null;
+  firstName: string;
+  lastName: string;
+  email: string;
+  profileImagePath: string;
+  token: string;
+  refreshToken: string;
+  role: string;
+}
+
+export interface AuthResponse {
+  success: boolean;
+  statusCode: number;
+  data: User;
+  message: string;
+  errorCode: string | null;
+  errors: string[];
+}

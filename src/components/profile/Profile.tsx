@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { User, MapPin, Package, Shield } from "lucide-react";
-import { ProfileFormData, PasswordUpdateFormData, Address, Order } from "@/src/types/types";
+import { User, Package, Shield } from "lucide-react";
+import { ProfileFormData, PasswordUpdateFormData, Order } from "@/src/types/types";
+import { useUserStore } from "@/src/store/userStore";
 import toast from "react-hot-toast";
 import ProfileSidebar from "./ProfileSidebar";
 import PersonalInfoTab from "./PersonalInfoTab";
@@ -12,21 +14,42 @@ import SecurityTab from "./SecurityTab";
 
 type TabType = "personalInfo" | "orders" | "security";
 
+const validTabs: TabType[] = ["personalInfo", "orders", "security"];
+
 const Profile = () => {
   const t = useTranslations("profile");
   const tAuth = useTranslations("auth");
-  const [activeTab, setActiveTab] = useState<TabType>("personalInfo");
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab") as TabType | null;
+  
+  // التحقق من صحة tab parameter وإلا استخدام personalInfo كافتراضي
+  const initialTab = tabParam && validTabs.includes(tabParam) ? tabParam : "personalInfo";
+  
+  const [activeTab, setActiveTab] = useState<TabType>(initialTab);
+
+  useEffect(() => {
+    if (tabParam && validTabs.includes(tabParam)) {
+      setActiveTab(tabParam);
+    } else if (!tabParam) {
+      setActiveTab("personalInfo");
+    }
+  }, [tabParam]);
   const [isLoading, setIsLoading] = useState(false);
+  const { user, initUser } = useUserStore();
+
+  useEffect(() => {
+    initUser();
+  }, [initUser]);
 
   // Mock user data - replace with actual data from API
-  const [userData] = useState({
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    phone: "+1 (555) 123-4567",
-    dateOfBirth: "1990-01-15",
+  const userData = {
+    firstName: user?.firstName || "User",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
+    phone: "",
+    dateOfBirth: "",
     gender: "male" as const,
-  });
+  };
 
 
   // Mock orders data
@@ -101,6 +124,7 @@ const Profile = () => {
           <div className="lg:col-span-1">
             <ProfileSidebar
               userData={userData}
+              profileImagePath={user?.profileImagePath}
               activeTab={activeTab}
               tabs={tabs}
               onTabChange={(tabId) => setActiveTab(tabId as TabType)}

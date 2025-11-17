@@ -1,15 +1,9 @@
-import { cookies } from "next/headers"
 import NavLinks from "./NavLinks"
 import HeaderActions from "./HeaderActions"
 import Logo from "../common/Logo"
 import CartSidebar from "../cart/CartSidebar"
 
-const Header = async () => {
-  const cookieStore = await cookies()
-
-  const user = cookieStore.get("userToken")
-  const isLoggedIn = Boolean(user)
-
+const Header = () => {
   return (
     <>
       <header className="text-primary dark:text-white w-full shadow-md fixed top-0 z-50 bg-white dark:bg-gray-900">
@@ -22,7 +16,7 @@ const Header = async () => {
           <NavLinks />
 
           {/* Actions (Client) */}
-          <HeaderActions isLoggedIn={isLoggedIn} />
+          <HeaderActions />
 
         </div>
       </header>
