@@ -144,8 +144,8 @@ const Register = () => {
               </div>
 
               {/* Phone Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <div dir="ltr">
+                <label className="block text-right text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t("phone")}
                 </label>
                 <Controller
@@ -153,7 +153,7 @@ const Register = () => {
                   control={control}
                   render={({ field: { onChange, value } }) => (
                     <PhoneInput
-                      defaultCountry="us"
+                      defaultCountry="eg"
                       value={value || ""}
                       onChange={onChange}
                       inputClassName="!w-full !px-4 !py-3 !bg-gray-50 dark:!bg-gray-900 !rounded-r-xl !text-gray-900 dark:!text-white focus:!outline-none"
