@@ -6,16 +6,20 @@ import axios from "axios";
 import Link from "next/link";
 
 const TopSellers = () => {
-    const [products, setProducts] = useState(topSellers);
+  const [products, setProducts] = useState({
+    items: topSellers,
+    totalRecords: topSellers.length
+  });
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("");
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/Item/best-sellers`);
+        // console.log("Best Sellers Response:", response);
         if (response?.data?.data) {
-          setProducts(response.data.data);
+          // setProducts(response?.data?.data);
         }
       } catch (error) {
         console.error("Error fetching items:", error);
@@ -26,6 +30,9 @@ const TopSellers = () => {
 
     fetchItems();
   }, []);
+
+  if (products?.totalRecords == 0) return null;
+
   return (
     <section className="py-10 lg:pt-16 lg:pb-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
       <div className="container mx-auto">
@@ -49,7 +56,7 @@ const TopSellers = () => {
           </div>
         ) : (
           <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 py-2">
-            {products.map((item, i) => (
+            {products?.items?.map((item: any, i: number) => (
               <ProductCard key={i} {...item} />
             ))}
           </div>

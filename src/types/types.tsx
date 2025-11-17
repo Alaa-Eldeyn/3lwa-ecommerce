@@ -54,3 +54,20 @@ export interface AuthResponse {
   errorCode: string | null;
   errors: string[];
 }
+
+export interface Testimonial {
+  id: string;
+  customerName: string;
+  customerTitle: string;
+  base64Image: string | null;
+  customerImagePath: string;
+  testimonialText: string;
+  displayOrder: number;
+  createdDateUtc: string;
+  updatedDateUtc: string;
+  // Fallback for old data structure
+  name?: string;
+  rating?: number;
+  review?: string;
+  verified?: boolean;
+}

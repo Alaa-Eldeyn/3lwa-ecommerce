@@ -10,16 +10,20 @@ import axios from "axios";
 import Link from "next/link";
 
 const NewArrivals = () => {
-  const [products, setProducts] = useState(newArrivals);
+  const [products, setProducts] = useState<any>({
+    items: newArrivals,
+    totalRecords: newArrivals.length
+  });
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("");
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/Item/new-arrivals`);
+        // console.log("New Arrivals Response:", response);
         if (response?.data?.data) {
-          setProducts(response.data.data);
+          // setProducts(response?.data?.data);
         }
       } catch (error) {
         console.error("Error fetching items:", error);
@@ -30,6 +34,8 @@ const NewArrivals = () => {
 
     fetchItems();
   }, []);
+
+  if (products?.totalRecords == 0) return null;
 
   return (
     <section className="py-10 lg:py-16 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700">
@@ -80,7 +86,7 @@ const NewArrivals = () => {
               },
             }}
           >
-            {products.map((item, i) => (
+            {products?.items?.map((item:any, i:number) => (
               <SwiperSlide key={i} className="py-2">
                 <ProductCard {...item} />
               </SwiperSlide>

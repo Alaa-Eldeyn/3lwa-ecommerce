@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl";
 import { User, Package, Shield } from "lucide-react";
 import { ProfileFormData, PasswordUpdateFormData, Order } from "@/src/types/types";
 import { useUserStore } from "@/src/store/userStore";
+import { customAxios } from "@/src/utils/customAxios";
+import axios from "axios";
 import toast from "react-hot-toast";
 import ProfileSidebar from "./ProfileSidebar";
 import PersonalInfoTab from "./PersonalInfoTab";
@@ -21,10 +23,10 @@ const Profile = () => {
   const tAuth = useTranslations("auth");
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab") as TabType | null;
-  
+
   // التحقق من صحة tab parameter وإلا استخدام personalInfo كافتراضي
   const initialTab = tabParam && validTabs.includes(tabParam) ? tabParam : "personalInfo";
-  
+
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
 
   useEffect(() => {
@@ -90,13 +92,28 @@ const Profile = () => {
   const onSubmitPassword = async (data: PasswordUpdateFormData) => {
     setIsLoading(true);
     try {
-      // API call would go here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success("Password updated successfully!");
-      console.log("Password data:", data);
+      const response = await customAxios.put("/Password/change-password", {
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+        passwordConfirmation: data.confirmNewPassword,
+      });
+
+      if (response?.data?.success) {
+        toast.success(response.data.message || "Password updated successfully!");
+      } else {
+        toast.error(response.data.message || "Failed to update password");
+      }
     } catch (error) {
-      toast.error("Failed to update password");
-      console.error(error);
+      console.error("Password update error:", error);
+
+      let errorMessage = "Failed to update password";
+      if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data?.message ||
+          error.response?.data?.errors?.[0] ||
+          errorMessage;
+      }
+
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
