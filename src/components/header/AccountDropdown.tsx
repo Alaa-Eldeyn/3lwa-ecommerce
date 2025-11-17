@@ -1,9 +1,8 @@
 "use client";
 
 import { LogIn, LogOut, User, ShoppingBag } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useUserStore } from "@/src/store/userStore";
 import { logoutUser } from "@/src/utils/auth";
@@ -14,8 +13,7 @@ interface AccountDropdownProps {
 
 const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
   const t = useTranslations("header");
-  const pathname = usePathname();
-  const locale = pathname.split("/")[1];
+  const locale = useLocale();
   const { user, initUser } = useUserStore();
 
   useEffect(() => {
