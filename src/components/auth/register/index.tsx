@@ -237,7 +237,7 @@ const Register = () => {
                   />
                   <label
                     htmlFor="agreeToTerms"
-                    className="ml-2 block text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
+                    className="ms-2 block text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
                   >
                     {t("agreeToTerms")}{" "}
                     <Link
