@@ -50,6 +50,7 @@ const MobileMenu = () => {
               href={item.path}
               target={item.newTab ? "_blank" : "_self"}
               className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition"
+              onClick={toggleMobile}
             >
               {item.title}
             </Link>
