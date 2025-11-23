@@ -77,7 +77,7 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
 
       {/* Fullscreen Modal */}
       {isFullScreen && (
-        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
           {/* Close Button */}
           <button
             onClick={closeFullScreen}
@@ -100,7 +100,7 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
           </button>
 
           {/* Main Image */}
-          <div className="relative w-[90vw] h-[90vh] max-w-6xl">
+          <div className="relative w-[70vw] h-[70vh] max-w-6xl">
             <Image
               src={images[selectedImage]}
               alt={`${productTitle} ${selectedImage + 1}`}

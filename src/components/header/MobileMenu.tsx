@@ -3,23 +3,25 @@
 import { useHeaderStore } from "@/src/store/headerStore"
 import { useUserStore } from "@/src/store/userStore"
 import { useTranslations } from "next-intl"
-import { ShoppingCart, User, LogIn, LogOut } from "lucide-react"
+import { ShoppingCart, User, LogIn, LogOut, ChevronDown } from "lucide-react"
 import SearchBar from "./SearchBar"
 import LangSwitch from "./LangSwitch"
 import ThemeSwitcher from "./ThemeSwitcher"
-import { getMenuData } from "@/src/data/menuData"
+import { getCategoriesData } from "@/src/data/categoriesData"
 import Link from "next/link"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import { logoutUser } from "@/src/utils/auth"
 
 const MobileMenu = () => {
   const t = useTranslations("header")
+  const tCat = useTranslations("categories")
   const { isMobileOpen, toggleCart, toggleMobile } = useHeaderStore()
   const { user, initUser } = useUserStore()
-  const menuData = getMenuData(t);
-  const pathname = usePathname();
-  const locale = pathname.split("/")[1];
+  const categories = getCategoriesData(tCat)
+  const pathname = usePathname()
+  const locale = pathname.split("/")[1]
+  const [expandedCategory, setExpandedCategory] = useState<number | null>(null)
 
   useEffect(() => {
     initUser();
@@ -33,7 +35,7 @@ const MobileMenu = () => {
 
   return (
     <div
-      className={`lg:hidden absolute top-full text-secondary left-0 w-full bg-white dark:bg-gray-900 shadow-lg border-t border-gray-200 dark:border-gray-700 z-40 overflow-hidden soft ${isMobileOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0 border-t-0'
+      className={`lg:hidden absolute top-full text-secondary left-0 w-full bg-white dark:bg-gray-900 shadow-lg border-t border-gray-200 dark:border-gray-700 z-40 overflow-hidden soft ${isMobileOpen ? 'max-h-[80vh] opacity-100 overflow-y-auto' : 'max-h-0 opacity-0 border-t-0'
         }`}
     >
       <div className="container py-4">
@@ -42,18 +44,43 @@ const MobileMenu = () => {
           <SearchBar />
         </div>
 
-        {/* Navigation Links */}
+        {/* Categories */}
         <nav className="flex flex-col space-y-1 mb-4 border-b border-gray-200 dark:border-gray-700 pb-4">
-          {menuData.map((item) => (
-            <Link
-              key={item.id}
-              href={item.path}
-              target={item.newTab ? "_blank" : "_self"}
-              className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition"
-              onClick={toggleMobile}
-            >
-              {item.title}
-            </Link>
+          {categories.map((category) => (
+            <div key={category.id}>
+              <button
+                onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
+                className="flex items-center justify-between w-full px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition"
+              >
+                <span>{category.title}</span>
+                <ChevronDown 
+                  size={18} 
+                  className={`transition-transform ${expandedCategory === category.id ? 'rotate-180' : ''}`}
+                />
+              </button>
+              
+              {expandedCategory === category.id && (
+                <div className="pl-4 mt-1 space-y-1">
+                  {category.subcategories.map((subcategory) => (
+                    <div key={subcategory.id} className="mb-2">
+                      <h4 className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
+                        {subcategory.title}
+                      </h4>
+                      {subcategory.items.map((item) => (
+                        <Link
+                          key={item.id}
+                          href={item.path}
+                          onClick={toggleMobile}
+                          className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition"
+                        >
+                          {item.title}
+                        </Link>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </nav>
 

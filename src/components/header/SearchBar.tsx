@@ -8,7 +8,7 @@ const SearchBar = () => {
   const [q, setQ] = useState("")
 
   return (
-    <div className="relative w-full lg:w-64">
+    <div className="relative w-full ">
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}

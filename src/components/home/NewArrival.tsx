@@ -8,6 +8,7 @@ import "./carousel.css"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import Image from "next/image";
 
 const NewArrivals = () => {
   const [products, setProducts] = useState<any>({
@@ -38,11 +39,14 @@ const NewArrivals = () => {
   if (products?.totalRecords == 0) return null;
 
   return (
-    <section className="py-10 lg:py-16 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700">
+    <section className="py-10 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700">
       <div className="container mx-auto">
+        <div className=" bg-gray-300 max-h-96 aspect-12/2 w-full center relative overflow-hidden rounded-xl">
+                <Image fill src="/images/banners/banner4.jpg" alt="top banner" className="object-cover w-full h-full" />
+            </div>
 
         {/* Title */}
-        <h2 className="text-center text-4xl font-extrabold text-gray-900 dark:text-white mb-12">
+        <h2 className="text-center text-4xl font-extrabold text-gray-900 dark:text-white my-6">
           NEW ARRIVALS
         </h2>
 
@@ -95,7 +99,7 @@ const NewArrivals = () => {
         )}
 
         {/* Button */}
-        <Link href="/products" className="flex justify-center mt-8 lg:mt-12">
+        <Link href="/products" className="flex justify-center mt-5">
           <button className="px-10 py-3 border border-gray-400 rounded-full text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
             View All
           </button>

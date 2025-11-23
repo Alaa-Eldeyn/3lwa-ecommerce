@@ -90,7 +90,7 @@ const reviews = [
 
 const ProductDetails = () => {
   return (
-    <section className="pt-20 pb-px bg-white dark:bg-gray-900">
+    <section className="">
       <Breadcrumb className="my-4" />
 
       <div className="container">

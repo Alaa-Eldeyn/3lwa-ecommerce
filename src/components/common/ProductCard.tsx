@@ -26,7 +26,7 @@ const ProductCard = ({
   price,
   oldPrice,
   discount,
-  variant = "bordered",
+  variant = "minimal",
   id,
 }: ProductCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -34,11 +34,12 @@ const ProductCard = ({
   const { items, addItem, updateQuantity, removeItem } = useCartStore();
 
   // Generate a stable product ID based on title and price
-  const productId = id || `${title}-${price}`.toLowerCase().replace(/\s+/g, '-');
+  const productId =
+    id || `${title}-${price}`.toLowerCase().replace(/\s+/g, "-");
 
   // Find if product exists in cart
-  const cartItem = useMemo(() =>
-    items.find((item) => item.id === productId),
+  const cartItem = useMemo(
+    () => items.find((item) => item.id === productId),
     [items, productId]
   );
 
@@ -73,9 +74,12 @@ const ProductCard = ({
   // Card variant - similar to the image design
   if (variant === "minimal") {
     return (
-      <div className="cursor-pointer group soft rounded-md overflow-hidden border border-primary/20 bg-white dark:bg-gray-800 hover:-translate-y-1 hover:border-primary/40">
+      <div className="cursor-pointer group soft rounded-lg overflow-hidden border border-primary/10 bg-white dark:bg-gray-800 hover:-translate-y-1 hover:border-primary/40">
         {/* IMG */}
-        <div onClick={() => router.push(`/products/product-details/1`)} className="w-full aspect-square relative bg-linear-to-br from-accent/30 to-accent/10 dark:from-primary/10 dark:to-primary/5 center overflow-hidden">
+        <div
+          onClick={() => router.push(`/products/product-details/1`)}
+          className="w-full aspect-square relative bg-linear-to-br from-accent/30 to-accent/10 dark:from-primary/10 dark:to-primary/5 center overflow-hidden"
+        >
           <Image
             src={image}
             alt={title}
@@ -89,7 +93,6 @@ const ProductCard = ({
               جديد
             </div>
           )}
-
         </div>
 
         {/* Content */}
@@ -100,7 +103,10 @@ const ProductCard = ({
           </div>
 
           {/* Title */}
-          <Link href={`/products/product-details/1`} className="!block! text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 leading-tight group-hover:text-primary soft">
+          <Link
+            href={`/products/product-details/1`}
+            className="!block! text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 leading-tight group-hover:text-primary soft"
+          >
             {title}
           </Link>
 
@@ -134,10 +140,10 @@ const ProductCard = ({
             ) : (
               <button
                 onClick={handleAddToCart}
-                className="w-full bg-primary hover:bg-primary/90 text-white rounded-md center soft p-2.5 font-medium shadow-sm hover:shadow-md"
+                className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg center soft p-3.5 font-medium shadow-sm hover:shadow-md"
                 title="Add to cart"
               >
-                <span className="lg:mx-2 text-xs">أضف للسلة</span>
+                <span className="lg:mx-2 text-sm">أضف للسلة</span>
                 <ShoppingCart size={18} className="hidden lg:block" />
               </button>
             )}
@@ -146,15 +152,16 @@ const ProductCard = ({
                 e.stopPropagation();
                 setIsFavorite(!isFavorite);
               }}
-              className=" w-16 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-500 rounded-md center group"
+              className=" w-16 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-500 rounded-lg center group"
               title={isFavorite ? "Remove from favorites" : "Add to favorites"}
             >
               <Heart
                 size={18}
-                className={`${isFavorite
-                  ? "fill-red-500 text-red-500"
-                  : "text-gray-600 dark:text-gray-300"
-                  } soft group-hover:scale-115 active:scale-75`}
+                className={`${
+                  isFavorite
+                    ? "fill-red-500 text-red-500"
+                    : "text-gray-600 dark:text-gray-300"
+                } soft group-hover:scale-115 active:scale-75`}
               />
             </button>
           </div>
@@ -167,12 +174,14 @@ const ProductCard = ({
     return (
       <div className="cursor-pointer group soft rounded-2xl">
         {/* IMG */}
-        <div onClick={() => router.push(`/products/product-details/1`)} className="w-full aspect-square relative bg-[#F0EEED] dark:bg-gray-700 center rounded-3xl overflow-hidden">
+        <div
+          onClick={() => router.push(`/products/product-details/1`)}
+          className="w-full aspect-square relative bg-[#F0EEED] dark:bg-gray-700 center rounded-3xl overflow-hidden"
+        >
           <Image
             src={image}
             alt={title}
             fill
-
             className="object-fill rounded-2xl overflow-hidden group-hover:scale-105 soft"
           />
 
@@ -187,10 +196,11 @@ const ProductCard = ({
           >
             <Heart
               size={20}
-              className={`${isFavorite
-                ? "fill-red-500 text-red-500"
-                : "text-gray-600 dark:text-gray-300"
-                } soft`}
+              className={`${
+                isFavorite
+                  ? "fill-red-500 text-red-500"
+                  : "text-gray-600 dark:text-gray-300"
+              } soft`}
             />
           </button>
 
@@ -220,7 +230,10 @@ const ProductCard = ({
         {/* Content */}
         <div className="py-4 ">
           {/* Title */}
-          <Link href={`/products/product-details/1`} className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
+          <Link
+            href={`/products/product-details/1`}
+            className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1"
+          >
             {title}
           </Link>
 
@@ -230,12 +243,13 @@ const ProductCard = ({
               <StarIcon
                 key={i}
                 size={14}
-                className={`${i < Math.floor(rating)
-                  ? "fill-yellow-400 text-yellow-400"
-                  : i < rating
+                className={`${
+                  i < Math.floor(rating)
+                    ? "fill-yellow-400 text-yellow-400"
+                    : i < rating
                     ? "fill-yellow-400 text-yellow-400 opacity-50"
                     : "fill-gray-300 text-gray-300"
-                  }`}
+                }`}
               />
             ))}
             <span className="text-gray-900 dark:text-gray-300 ml-1 text-sm font-normal">
@@ -271,7 +285,10 @@ const ProductCard = ({
     return (
       <div className="cursor-pointer group soft rounded-3xl p-4 border border-gray-200 dark:border-gray-700">
         {/* IMG */}
-        <div onClick={() => router.push(`/products/product-details/1`)} className="w-full aspect-square relative bg-[#F0EEED] dark:bg-gray-700 center rounded-2xl overflow-hidden">
+        <div
+          onClick={() => router.push(`/products/product-details/1`)}
+          className="w-full aspect-square relative bg-[#F0EEED] dark:bg-gray-700 center rounded-2xl overflow-hidden"
+        >
           <Image
             src={image}
             alt={title}
@@ -290,20 +307,22 @@ const ProductCard = ({
           >
             <Heart
               size={20}
-              className={`${isFavorite
-                ? "fill-red-500 text-red-500"
-                : "text-gray-600 dark:text-gray-300"
-                } soft`}
+              className={`${
+                isFavorite
+                  ? "fill-red-500 text-red-500"
+                  : "text-gray-600 dark:text-gray-300"
+              } soft`}
             />
           </button>
-
-
         </div>
 
         {/* Content */}
         <div className="pt-4 ">
           {/* Title */}
-          <Link href={`/products/product-details/1`} className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
+          <Link
+            href={`/products/product-details/1`}
+            className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1"
+          >
             {title}
           </Link>
 
@@ -313,12 +332,13 @@ const ProductCard = ({
               <StarIcon
                 key={i}
                 size={14}
-                className={`${i < Math.floor(rating)
-                  ? "fill-yellow-400 text-yellow-400"
-                  : i < rating
+                className={`${
+                  i < Math.floor(rating)
+                    ? "fill-yellow-400 text-yellow-400"
+                    : i < rating
                     ? "fill-yellow-400 text-yellow-400 opacity-50"
                     : "fill-gray-300 text-gray-300"
-                  }`}
+                }`}
               />
             ))}
             <span className="text-gray-900 dark:text-gray-300 ml-1 text-sm font-normal">
@@ -328,13 +348,13 @@ const ProductCard = ({
 
           {/* Prices */}
           <div className="flex items-center gap-2">
-            <span className="text-base lg:text-xl font-bold text-gray-900 dark:text-white">
+            <span className="text-base lg:text-lg font-bold text-gray-900 dark:text-white">
               ${price}
             </span>
 
             {oldPrice && (
               <>
-                <span className="text-sm lg:text-base font-bold line-through text-gray-400 dark:text-gray-500">
+                <span className="text-sm font-bold line-through text-gray-400 dark:text-gray-500">
                   ${oldPrice}
                 </span>
               </>
@@ -358,7 +378,7 @@ const ProductCard = ({
           ) : (
             <button
               onClick={handleAddToCart}
-              className="w-full  bg-secondary rounded-2xl center soft p-3 mt-4 hover:bg-primary text-sm lg:text-base"
+              className="w-full  bg-secondary text-white rounded-2xl center soft p-3 mt-4 hover:bg-primary text-sm lg:text-base"
               title="Add to cart"
             >
               <span className="mx-2">Add to Cart</span>
@@ -371,7 +391,6 @@ const ProductCard = ({
         </div>
       </div>
     );
-
   }
 };
 

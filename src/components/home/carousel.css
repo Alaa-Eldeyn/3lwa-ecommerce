@@ -172,3 +172,77 @@
         font-size: 14px;
     }
 }
+
+/* Categories Carousel Styles */
+.categories-swiper {
+    position: relative;
+    padding: 0 40px;
+}
+
+.categories-swiper .swiper-button-next,
+.categories-swiper .swiper-button-prev {
+    width: 40px;
+    height: 40px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    color: #374151;
+    padding: 10px;
+}
+
+.dark .categories-swiper .swiper-button-next,
+.dark .categories-swiper .swiper-button-prev {
+    background: #1f2937;
+    color: #d1d5db;
+}
+
+.categories-swiper .swiper-button-next:hover,
+.categories-swiper .swiper-button-prev:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.categories-swiper .swiper-button-next::after,
+.categories-swiper .swiper-button-prev::after {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.categories-swiper .swiper-button-next {
+    right: 0;
+}
+
+.categories-swiper .swiper-button-prev {
+    left: 0;
+}
+
+/* RTL Support for Categories */
+[dir="rtl"] .categories-swiper .swiper-button-next {
+    right: auto;
+    left: 0;
+}
+
+[dir="rtl"] .categories-swiper .swiper-button-prev {
+    left: auto;
+    right: 0;
+}
+
+/* Mobile Responsive for Categories */
+@media (max-width: 768px) {
+    .categories-swiper {
+        padding: 0 30px;
+    }
+
+    .categories-swiper .swiper-button-next,
+    .categories-swiper .swiper-button-prev {
+        width: 32px;
+        height: 32px;
+    }
+
+    .categories-swiper .swiper-button-next::after,
+    .categories-swiper .swiper-button-prev::after {
+        font-size: 14px;
+    }
+}
+

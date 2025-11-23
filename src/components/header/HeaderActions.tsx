@@ -18,30 +18,39 @@ const HeaderActions = () => {
   return (
     <>
       {/* Desktop Actions */}
-      <div className="hidden lg:flex items-center space-x-4">
-        {/* Search */}
-        <SearchBar />
+      <div className="hidden lg:flex items-center gap-6 flex-1 justify-end">
+        {/* Search - Takes more space */}
+        <div className="flex-1">
+          <SearchBar />
+        </div>
+
+        {/* Language Switch */}
+        <LangSwitch />
 
         {/* Cart */}
         <button 
           onClick={toggleCart}
-          className="relative text-gray-700 dark:text-gray-300 soft hover:text-primary"
+          className="relative text-white soft hover:text-secondary flex items-center gap-2"
         >
-          <ShoppingCart size={24} />
-          {totalItems > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[11px] rounded-full h-4 w-4 center">
-              {totalItems}
-            </span>
-          )}
+          <div className="relative">
+            <ShoppingCart size={24} />
+            {totalItems > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-secondary text-white text-[11px] rounded-full h-4 w-4 center">
+                {totalItems}
+              </span>
+            )}
+          </div>
+          <span className="text-sm">العربة</span>
         </button>
 
         {/* Account */}
         <div className="relative">
           <button 
             onClick={toggleAccount} 
-            className="p-1 soft text-gray-800 dark:text-white hover:text-primary"
+            className="p-1 soft text-white hover:text-secondary flex items-center gap-2"
           >
             <User size={24} />
+            <span className="text-sm">حسابي</span>
           </button>
 
           {isAccountOpen && (
@@ -50,9 +59,6 @@ const HeaderActions = () => {
             />
           )}
         </div>
-
-        {/* Lang Switch */}
-        <LangSwitch />
         
         {/* Theme Switch */}
         <ThemeSwitcher />
@@ -61,7 +67,7 @@ const HeaderActions = () => {
       {/* Mobile Toggle Button */}
       <button 
         onClick={toggleMobile} 
-        className="lg:hidden p-2 text-gray-700 dark:text-gray-300"
+        className="lg:hidden p-2 text-white"
         aria-label="Toggle menu"
       >
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}

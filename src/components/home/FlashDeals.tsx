@@ -45,7 +45,7 @@ const FlashDeals = () => {
     <section className="py-10 lg:py-16 bg-white dark:bg-gray-900">
       <div className="container mx-auto">
 
-        <div className="flex flex-col md:flex-row items-center justify-between mb-12">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-6">
           <div>
             <h2 className="text-center md:text-left text-4xl font-extrabold text-gray-900 dark:text-white mb-2">
               <span className="text-red-600">FLASH</span> DEALS
@@ -142,7 +142,7 @@ const FlashDeals = () => {
         </div>
 
         {/* Button */}
-        <Link href="/products" className="flex justify-center mt-8 lg:mt-12">
+        <Link href="/products" className="flex justify-center mt-5">
           <button className="px-10 py-3 border border-gray-400 rounded-full text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
             View All
           </button>
