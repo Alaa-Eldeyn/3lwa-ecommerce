@@ -6,6 +6,10 @@ import { newArrivals } from "@/src/data/data";
 import ImageGallery from "./ImageGallery";
 import ProductInfo from "./ProductInfo";
 import ProductTabsContent from "./ProductTabsContent";
+import ProductSections from "./ProductSections";
+import ProductDetailsSection from "./ProductDetailsSection";
+import ReviewsSection from "./ReviewsSection";
+import FAQsSection from "./FAQsSection";
 
 // Mock product data - replace with actual product data from props/API
 const productData = {
@@ -113,11 +117,14 @@ const ProductDetails = () => {
         </div>
 
         {/* Tabs Section */}
-        <ProductTabsContent
+        {/* <ProductTabsContent
           description={productData.description}
           reviews={reviews}
           totalReviews={productData.totalReviews}
-        />
+        /> */}
+        <ProductDetailsSection description={productData.description} />
+        <ReviewsSection reviews={reviews} totalReviews={productData.totalReviews} />
+        <FAQsSection />
 
         {/* You Might Also Like */}
         <div className="mb-16">
