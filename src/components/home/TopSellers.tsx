@@ -6,7 +6,11 @@ import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 
-const TopSellers = () => {
+interface TopSellersProps {
+  cardVariant?: "default" | "bordered" | "minimal" | "homz" | "nike" | "clean" | "gradient";
+}
+
+const TopSellers = ({ cardVariant }: TopSellersProps) => {
   const [products, setProducts] = useState({
     items: topSellers,
     totalRecords: topSellers.length
@@ -35,14 +39,10 @@ const TopSellers = () => {
   if (products?.totalRecords == 0) return null;
 
   return (
-    <section className="py-10 lg:pb-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+    <section className="pb-10 lg:pb-0 bg-white dark:bg-gray-900">
       <div className="container mx-auto">
-                <div className=" bg-gray-300 max-h-96 aspect-12/2 w-full center relative overflow-hidden rounded-xl">
-                        <Image fill src="/images/banners/banner5.jpg" alt="top banner" className="object-cover w-full h-full" />
-                    </div>
-
         {/* Title */}
-        <h2 className="text-center text-4xl font-extrabold text-gray-900 dark:text-white my-6">
+        <h2 className="text-center text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
           TOP SELLERS
         </h2>
 
@@ -61,7 +61,7 @@ const TopSellers = () => {
         ) : (
           <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 py-2">
             {products?.items?.map((item: any, i: number) => (
-              <ProductCard key={i} {...item} />
+              <ProductCard key={i} {...item} variant={cardVariant} />
             ))}
           </div>
         )}

@@ -2,12 +2,14 @@ export const newArrivals = [
   {
     image: "/images/products/Frame 32.png",
     title: "T-shirt with Tape Details",
+    description: "A casual T-shirt with unique tape details for a contemporary look.",
     rating: 4.5,
     price: 120,
   },
   {
     image: "/images/products/Frame 33.png",
     title: "Skinny Fit Jeans",
+    description: "Classic skinny fit jeans with a modern cut and comfortable stretch.",
     rating: 3.5,
     price: 240,
     oldPrice: 260,
@@ -16,12 +18,14 @@ export const newArrivals = [
   {
     image: "/images/products/Frame 34.png",
     title: "Checkered Shirt",
+    description: "Lightweight checkered shirt suitable for both formal and casual wear.",
     rating: 4.5,
     price: 180,
   },
   {
     image: "/images/products/Frame 38.png",
     title: "Sleeve Striped T-shirt",
+    description: "Trendy T-shirt featuring striped sleeves for a sporty touch.",
     rating: 4.5,
     price: 130,
     oldPrice: 160,
@@ -30,12 +34,14 @@ export const newArrivals = [
   {
     image: "/images/products/Frame 32.png",
     title: "T-shirt with Tape Details",
+    description: "A casual T-shirt with unique tape details for a contemporary look.",
     rating: 4.5,
     price: 120,
   },
   {
     image: "/images/products/Frame 33.png",
     title: "Skinny Fit Jeans",
+    description: "Classic skinny fit jeans with a modern cut and comfortable stretch.",
     rating: 3.5,
     price: 240,
     oldPrice: 260,
@@ -44,12 +50,14 @@ export const newArrivals = [
   {
     image: "/images/products/Frame 34.png",
     title: "Checkered Shirt",
+    description: "Lightweight checkered shirt suitable for both formal and casual wear.",
     rating: 4.5,
     price: 180,
   },
   {
     image: "/images/products/Frame 38.png",
     title: "Sleeve Striped T-shirt",
+    description: "Trendy T-shirt featuring striped sleeves for a sporty touch.",
     rating: 4.5,
     price: 130,
     oldPrice: 160,
@@ -61,6 +69,7 @@ export const flashDeals = [
   {
     image: "/images/products/Frame40.png",
     title: "Classic T-Shirt",
+    description: "Simple and comfortable classic t-shirt ideal for everyday wear.",
     rating: 4.8,
     price: 89,
     oldPrice: 150,
@@ -69,6 +78,7 @@ export const flashDeals = [
   {
     image: "/images/products/Frame41.png",
     title: "Denim Jacket",
+    description: "Stylish denim jacket perfect for layering in all seasons.",
     rating: 4.6,
     price: 199,
     oldPrice: 350,
@@ -77,6 +87,7 @@ export const flashDeals = [
   {
     image: "/images/products/Frame43.png",
     title: "Casual Sneakers",
+    description: "Versatile casual sneakers designed for everyday comfort.",
     rating: 4.9,
     price: 149,
     oldPrice: 220,
@@ -85,6 +96,7 @@ export const flashDeals = [
   {
     image: "/images/products/Frame44.png",
     title: "Leather Wallet",
+    description: "Premium leather wallet with multiple compartments.",
     rating: 4.7,
     price: 79,
     oldPrice: 120,
@@ -93,6 +105,7 @@ export const flashDeals = [
   {
     image: "/images/products/Frame 32.png",
     title: "Summer Dress",
+    description: "Light and breezy summer dress with an elegant flow.",
     rating: 4.5,
     price: 120,
     oldPrice: 200,
@@ -101,6 +114,7 @@ export const flashDeals = [
   {
     image: "/images/products/Frame 33.png",
     title: "Sports Watch",
+    description: "Durable and stylish sports watch with water resistance.",
     rating: 4.4,
     price: 299,
     oldPrice: 450,
