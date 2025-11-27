@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { flashDeals } from "@/src/data/data";
 import ProductCard from "../common/ProductCard";
 import { useState, useEffect } from "react";
@@ -8,12 +8,16 @@ import "swiper/css";
 import "swiper/css/navigation";
 import Link from "next/link";
 
-const FlashDeals = () => {
+interface FlashDealsProps {
+  cardVariant?: "default" | "bordered" | "minimal" | "homz" | "nike" | "clean" | "gradient";
+}
+
+const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState({
     hours: 23,
     minutes: 59,
-    seconds: 59
+    seconds: 59,
   });
 
   useEffect(() => {
@@ -42,9 +46,8 @@ const FlashDeals = () => {
   }, []);
 
   return (
-    <section className="py-10 lg:py-16 bg-white dark:bg-gray-900">
+    <section className="py-10 bg-white dark:bg-gray-900">
       <div className="container mx-auto">
-
         <div className="flex flex-col md:flex-row items-center justify-between mb-6">
           <div>
             <h2 className="text-center md:text-left text-4xl font-extrabold text-gray-900 dark:text-white mb-2">
@@ -56,7 +59,7 @@ const FlashDeals = () => {
             <div className="relative">
               <div className="bg-red-600 rounded-xl p-3 min-w-[65px] shadow-lg">
                 <span className="block text-3xl font-bold text-white text-center leading-none">
-                  {String(timeLeft.hours).padStart(2, '0')}
+                  {String(timeLeft.hours).padStart(2, "0")}
                 </span>
               </div>
               <span className="block text-xs text-gray-600 dark:text-gray-400 mt-1 text-center font-medium">
@@ -69,7 +72,7 @@ const FlashDeals = () => {
             <div className="relative">
               <div className="bg-red-600 rounded-xl p-3 min-w-[65px] shadow-lg">
                 <span className="block text-3xl font-bold text-white text-center leading-none">
-                  {String(timeLeft.minutes).padStart(2, '0')}
+                  {String(timeLeft.minutes).padStart(2, "0")}
                 </span>
               </div>
               <span className="block text-xs text-gray-600 dark:text-gray-400 mt-1 text-center font-medium">
@@ -82,7 +85,7 @@ const FlashDeals = () => {
             <div className="relative">
               <div className="bg-red-600 rounded-xl p-3 min-w-[65px] shadow-lg">
                 <span className="block text-3xl font-bold text-white text-center leading-none">
-                  {String(timeLeft.seconds).padStart(2, '0')}
+                  {String(timeLeft.seconds).padStart(2, "0")}
                 </span>
               </div>
               <span className="block text-xs text-gray-600 dark:text-gray-400 mt-1 text-center font-medium">
@@ -130,11 +133,10 @@ const FlashDeals = () => {
                   slidesPerView: 5,
                   spaceBetween: 20,
                 },
-              }}
-            >
+              }}>
               {flashDeals.map((item, i) => (
                 <SwiperSlide key={i} className="py-2">
-                  <ProductCard {...item} />
+                  <ProductCard {...item} variant={cardVariant} />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -147,7 +149,6 @@ const FlashDeals = () => {
             View All
           </button>
         </Link>
-
       </div>
     </section>
   );

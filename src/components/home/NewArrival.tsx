@@ -8,9 +8,12 @@ import "./carousel.css"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import Image from "next/image";
 
-const NewArrivals = () => {
+interface NewArrivalsProps {
+  cardVariant?: "default" | "bordered" | "minimal" | "homz" | "nike" | "clean" | "gradient";
+}
+
+const NewArrivals = ({ cardVariant }: NewArrivalsProps) => {
   const [products, setProducts] = useState<any>({
     items: newArrivals,
     totalRecords: newArrivals.length
@@ -39,14 +42,10 @@ const NewArrivals = () => {
   if (products?.totalRecords == 0) return null;
 
   return (
-    <section className="py-10 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700">
+    <section className="pb-10 bg-white dark:bg-gray-800">
       <div className="container mx-auto">
-        <div className=" bg-gray-300 max-h-96 aspect-12/2 w-full center relative overflow-hidden rounded-xl">
-                <Image fill src="/images/banners/banner4.jpg" alt="top banner" className="object-cover w-full h-full" />
-            </div>
-
         {/* Title */}
-        <h2 className="text-center text-4xl font-extrabold text-gray-900 dark:text-white my-6">
+        <h2 className="text-center text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
           NEW ARRIVALS
         </h2>
 
@@ -92,7 +91,7 @@ const NewArrivals = () => {
           >
             {products?.items?.map((item:any, i:number) => (
               <SwiperSlide key={i} className="py-2">
-                <ProductCard {...item} />
+                <ProductCard {...item} variant={cardVariant} />
               </SwiperSlide>
             ))}
           </Swiper>

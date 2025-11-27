@@ -74,14 +74,14 @@ const categories = [
 ];
 
 interface CategoriesCarouselProps {
-  variant?: "circular" | "gradient" | "card";
+  variant?: "rounded" | "gradient" | "card";
 }
 
 const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) => {
   const t = useTranslations("categories");
 
   // Circular variant
-  if (variant === "circular") {
+  if (variant === "rounded") {
     return (
       <section className="py-8 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
