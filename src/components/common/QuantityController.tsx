@@ -6,7 +6,7 @@ interface QuantityControllerProps {
   quantity: number;
   onIncrement: (e: React.MouseEvent) => void;
   onDecrement: (e: React.MouseEvent) => void;
-  variant?: "default" | "compact" | "large";
+  variant?: "default" | "compact" | "large" | "homz" | "nike" | "clean" | "gradient";
   className?: string;
   showDeleteIcon?: boolean;
 }
@@ -39,6 +39,30 @@ const QuantityController = ({
       container: "bg-secondary rounded-2xl flex items-center justify-between p-3",
       button: "hover:bg-white/20 rounded-lg px-3 py-1.5 transition text-white",
       text: "font-bold text-white",
+      iconSize: 18,
+    },
+    homz: {
+      container: "border border-gray-300 bg-primary text-white rounded-lg flex items-center justify-between p-1.5",
+      button: "hover:bg-white/20 rounded-lg p-2 transition",
+      text: "font-semibold text-sm",
+      iconSize: 16,
+    },
+    nike: {
+      container: "border border-primary/90 dark:border-primary/80 bg-primary text-white rounded-2xl flex items-center justify-between p-2",
+      button: "rounded-xl hover:bg-white/20 rounded p-1 transition",
+      text: "font-bold text-white min-w-5 text-center",
+      iconSize: 18,
+    },
+    clean: {
+      container: "border border-gray-900 bg-gray-900 text-white rounded-xl flex items-center justify-between p-2",
+      button: "rounded-xl hover:bg-white/20 rounded p-1 transition",
+      text: "font-bold text-white min-w-5 text-center",
+      iconSize: 18,
+    },
+    gradient: {
+      container: "border border-primary/90 dark:border-primary/80 bg-primary text-white rounded-xl flex items-center justify-between p-2",
+      button: "rounded-xl hover:bg-white/20 rounded p-1 transition",
+      text: "font-bold text-white min-w-5 text-center",
       iconSize: 18,
     },
   };
