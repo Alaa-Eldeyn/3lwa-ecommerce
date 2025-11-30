@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import ReviewCard from "./ReviewCard";
 
 interface Review {
@@ -19,6 +20,8 @@ interface ProductTabsContentProps {
 }
 
 const ProductTabsContent = ({ description, reviews, totalReviews }: ProductTabsContentProps) => {
+  const t = useTranslations("productDetails");
+  const tFeatures = useTranslations("productDetails.features");
   const [activeTab, setActiveTab] = useState<"details" | "reviews" | "faqs">("reviews");
   const [visibleReviews, setVisibleReviews] = useState(6);
 
@@ -38,7 +41,7 @@ const ProductTabsContent = ({ description, reviews, totalReviews }: ProductTabsC
               : "text-gray-500 dark:text-gray-400"
           }`}
         >
-          Product Details
+          {t("productDetails")}
           {activeTab === "details" && (
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary dark:bg-white" />
           )}
@@ -51,7 +54,7 @@ const ProductTabsContent = ({ description, reviews, totalReviews }: ProductTabsC
               : "text-gray-500 dark:text-gray-400"
           }`}
         >
-          Rating & Reviews
+          {t("ratingAndReviews")}
           {activeTab === "reviews" && (
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary dark:bg-white" />
           )}
@@ -64,7 +67,7 @@ const ProductTabsContent = ({ description, reviews, totalReviews }: ProductTabsC
               : "text-gray-500 dark:text-gray-400"
           }`}
         >
-          FAQs
+          {t("faqs")}
           {activeTab === "faqs" && (
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary dark:bg-white" />
           )}
@@ -75,15 +78,15 @@ const ProductTabsContent = ({ description, reviews, totalReviews }: ProductTabsC
       {activeTab === "details" && (
         <div className="text-gray-600 dark:text-gray-400 leading-relaxed animate-fadeIn">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-            Product Information
+            {t("productInformation")}
           </h3>
           <p className="mb-4">{description}</p>
           <ul className="list-disc list-inside space-y-2">
-            <li>100% Premium Cotton</li>
-            <li>Machine washable</li>
-            <li>Comfortable fit</li>
-            <li>Durable and long-lasting</li>
-            <li>Available in multiple colors and sizes</li>
+            <li>{tFeatures("premiumCotton")}</li>
+            <li>{tFeatures("machineWashable")}</li>
+            <li>{tFeatures("comfortableFit")}</li>
+            <li>{tFeatures("durable")}</li>
+            <li>{tFeatures("multipleOptions")}</li>
           </ul>
         </div>
       )}
@@ -93,10 +96,10 @@ const ProductTabsContent = ({ description, reviews, totalReviews }: ProductTabsC
           {/* Reviews Header */}
           <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-              All Reviews ({totalReviews})
+              {t("allReviews")} ({totalReviews})
             </h3>
             <button className="px-6 py-2 bg-primary dark:bg-white text-white dark:text-primary rounded-full font-medium hover:bg-secondary dark:hover:bg-gray-200 soft">
-              Write a Review
+              {t("writeReview")}
             </button>
           </div>
 
@@ -114,7 +117,7 @@ const ProductTabsContent = ({ description, reviews, totalReviews }: ProductTabsC
                 onClick={loadMoreReviews}
                 className="px-8 py-3 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-full font-medium hover:bg-gray-100 dark:hover:bg-gray-800 soft"
               >
-                Load More Reviews
+                {t("loadMoreReviews")}
               </button>
             </div>
           )}

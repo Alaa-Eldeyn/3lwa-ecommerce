@@ -1,6 +1,7 @@
 "use client";
 
 import { StarIcon, Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ReviewCardProps {
   name: string;
@@ -11,6 +12,7 @@ interface ReviewCardProps {
 }
 
 const ReviewCard = ({ name, rating, verified, date, review }: ReviewCardProps) => {
+  const t = useTranslations("productDetails");
   return (
     <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
       {/* Rating */}
@@ -46,7 +48,7 @@ const ReviewCard = ({ name, rating, verified, date, review }: ReviewCardProps) =
       </p>
 
       {/* Date */}
-      <p className="text-sm text-gray-500">Posted on {date}</p>
+      <p className="text-sm text-gray-500">{t("postedOn")} {date}</p>
     </div>
   );
 };

@@ -199,12 +199,12 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
                   spaceBetween: 20,
                 },
                 1024: {
-                  slidesPerView: 5,
-                  spaceBetween: 22,
+                  slidesPerView: 6,
+                  spaceBetween: 20,
                 },
                 1280: {
-                  slidesPerView: 6,
-                  spaceBetween: 24,
+                  slidesPerView: 7,
+                  spaceBetween: 20,
                 },
               }}
               className="categories-clean-swiper">
@@ -213,7 +213,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
                   <Link href={category.path} className="group block">
                     <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden transition-all duration-300 border-2 border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary">
                       {/* Image Container */}
-                      <div className="relative w-full aspect-4/3 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                      <div className="relative w-full aspect-5/3 overflow-hidden bg-gray-100 dark:bg-gray-700">
                         <Image
                           src={category.image}
                           alt={t(category.nameKey)}
@@ -223,8 +223,8 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
                       </div>
 
                       {/* Category Name Below Image */}
-                      <div className="p-4 text-center">
-                        <h3 className="text-gray-900 dark:text-white font-semibold text-sm sm:text-base group-hover:text-primary transition-colors line-clamp-2">
+                      <div className="p-3 text-center">
+                        <h3 className="text-gray-900 dark:text-white font-semibold text-xs sm:text-sm group-hover:text-primary transition-colors line-clamp-2">
                           {t(category.nameKey)}
                         </h3>
                       </div>
@@ -294,12 +294,12 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
                   spaceBetween: 20,
                 },
                 1024: {
-                  slidesPerView: 5,
-                  spaceBetween: 24,
+                  slidesPerView: 6,
+                  spaceBetween: 20,
                 },
                 1280: {
-                  slidesPerView: 6,
-                  spaceBetween: 24,
+                  slidesPerView: 7,
+                  spaceBetween: 20,
                 },
               }}
               className="categories-card-swiper">

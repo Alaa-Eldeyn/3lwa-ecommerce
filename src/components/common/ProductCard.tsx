@@ -27,7 +27,7 @@ const ProductCard = ({
   price,
   oldPrice,
   discount,
-  variant = "homz",
+  variant = "minimal",
   id,
   description,
 }: ProductCardProps) => {
@@ -417,7 +417,7 @@ const ProductCard = ({
           ) : (
             <button
               onClick={handleAddToCart}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-center center soft p-3 mt-4 hover:bg-primary hover:text-white text-sm lg:text-base"
+              className="w-full bg-gray-100 rounded-lg px-4 py-2.5 text-center center soft p-3 mt-4 hover:bg-primary hover:text-white text-sm lg:text-base"
               title="Add to cart">
               <span className="mx-2">Add to Cart</span>
               <ShoppingCart size={20} />
@@ -461,7 +461,7 @@ const ProductCard = ({
         </div>
 
         {/* Content Section - White Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-t-3xl p-4 -mt-4 relative flex flex-col flex-1">
+        <div className="bg-white dark:bg-gray-800 rounded-t-2xl p-4 -mt-4 relative flex flex-col flex-1">
           {/* Title */}
           <Link
             href={`/products/product-details/1`}
@@ -471,7 +471,7 @@ const ProductCard = ({
 
           {/* Description */}
           {description && (
-            <p className="flex-1 text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2 leading-relaxed">
+            <p className="flex-1 text-xs text-gray-600 dark:text-gray-400 mb-5 line-clamp-2 leading-relaxed">
               {description}
             </p>
           )}
@@ -488,7 +488,7 @@ const ProductCard = ({
                   ${oldPrice.toFixed(2)}
                 </div>
               )}
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+              <div className="text-xl font-bold text-gray-900 dark:text-white">
                 ${price.toFixed(2)}
               </div>
             </div>
@@ -500,12 +500,12 @@ const ProductCard = ({
                 onIncrement={handleIncrement}
                 onDecrement={handleDecrement}
                 variant="nike"
-                className="flex-1"
+                className="w-fit"
               />
             ) : (
               <button
                 onClick={handleAddToCart}
-                className="flex-1 bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 text-white rounded-2xl center soft py-3 font-semibold text-sm shadow-md hover:shadow-lg"
+                className="w-fit px-4! bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 text-white rounded-2xl center soft py-3 font-semibold text-sm shadow-md hover:shadow-lg"
                 title="Add to cart">
                 Add to cart
               </button>
@@ -589,7 +589,7 @@ const ProductCard = ({
               onClick={handleAddToCart}
               className="w-full bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-xl center soft py-3 font-medium text-sm shadow-sm hover:shadow-md transition-all"
               title="Add to cart">
-              <ShoppingCart size={16} className="mr-2" />
+              <ShoppingCart size={16} className="me-2" />
               Add to Cart
             </button>
           )}

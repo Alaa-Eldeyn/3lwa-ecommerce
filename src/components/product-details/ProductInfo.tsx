@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { StarIcon, Heart, ShoppingCart, Minus, Plus, Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface Color {
   id: string;
@@ -30,6 +31,7 @@ const ProductInfo = ({
   colors,
   sizes,
 }: ProductInfoProps) => {
+  const t = useTranslations("productDetails");
   const [selectedColor, setSelectedColor] = useState(colors[0]?.id || "");
   const [selectedSize, setSelectedSize] = useState("Large");
   const [quantity, setQuantity] = useState(1);
@@ -109,8 +111,8 @@ const ProductInfo = ({
 
       {/* Color Selection */}
       <div className="mb-6">
-        <h3 className="text-gray-900 dark:text-white font-medium mb-3">
-          Select Colors
+        <h3 className="text-gray-900 dark:text-white font-bold mb-3 text-lg">
+          {t("selectColor")}
         </h3>
         <div className="flex items-center gap-3">
           {colors.map((color) => (
@@ -140,8 +142,8 @@ const ProductInfo = ({
 
       {/* Size Selection */}
       <div className="mb-6">
-        <h3 className="text-gray-900 dark:text-white font-medium mb-3">
-          Choose Size
+        <h3 className="text-gray-900 dark:text-white font-bold mb-3 text-lg">
+          {t("chooseSize")}
         </h3>
         <div className="flex items-center gap-3 flex-wrap">
           {sizes.map((size) => (
@@ -190,7 +192,7 @@ const ProductInfo = ({
           className="flex-1 min-w-[200px] px-8 py-3 bg-primary dark:bg-white text-white dark:text-primary rounded-full font-medium hover:bg-secondary dark:hover:bg-gray-200 soft center gap-2"
         >
           <ShoppingCart size={20} />
-          Add to Cart
+          {t("addToCart")}
         </button>
 
         {/* Favorite */}
