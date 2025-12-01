@@ -75,7 +75,7 @@ export default function Home({ variant = "simple" }: HomeProps) {
         <FlashDeals cardVariant="default" />
         <NewArrivals cardVariant="default" />
         <TopSellers cardVariant="default" />
-        <CategoriesBentoGrid variant="row" />
+        <CategoriesBentoGrid />
       </main>
     );
   }

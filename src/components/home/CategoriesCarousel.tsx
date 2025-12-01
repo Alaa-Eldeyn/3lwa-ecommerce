@@ -83,7 +83,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
   // Circular variant
   if (variant === "rounded") {
     return (
-      <section className="py-8 bg-white dark:bg-gray-900">
+      <section className="py-3 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="relative px-12">
             <Swiper
@@ -178,7 +178,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
   // Card variant
   if (variant === "card") {
     return (
-      <section className="py-8 bg-white dark:bg-gray-900">
+      <section className="py-3 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="relative px-12">
             <Swiper
@@ -273,7 +273,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
   // Gradient variant
   if (variant === "gradient") {
     return (
-      <section className="py-8 bg-gray-50 dark:bg-gray-900">
+      <section className="py-3 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="relative px-12">
             <Swiper
@@ -332,7 +332,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
             </Swiper>
 
             {/* Custom Navigation Buttons */}
-            <button className="categories-card-swiper-button-next absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
+            <button className="categories-card-swiper-button-next absolute left-0 top-1/2 -translate-y-1/2 z-10 p-1 w-5 h-5 sm:w-8 sm:h-8 lg:w-12 lg:h-12 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
               <svg
                 className="w-6 h-6 rtl:rotate-180"
                 fill="none"
@@ -347,7 +347,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
               </svg>
             </button>
 
-            <button className="categories-card-swiper-button-prev absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
+            <button className="categories-card-swiper-button-prev absolute right-0 top-1/2 -translate-y-1/2 z-10 p-1 w-5 h-5 sm:w-8 sm:h-8 lg:w-12 lg:h-12 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
               <svg
                 className="w-6 h-6 rtl:rotate-180"
                 fill="none"

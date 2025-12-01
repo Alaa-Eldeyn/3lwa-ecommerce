@@ -4,9 +4,11 @@ import { useTranslations } from "next-intl";
 import { ChevronDown } from "lucide-react";
 import { getCategoriesData } from "@/src/data/categoriesData";
 import { Link } from "@/src/i18n/routing";
+import { usePathname } from "next/navigation";
 
 const CategoriesNav = () => {
   const t = useTranslations("categories");
+  const pathname = usePathname()
   const categories = getCategoriesData(t);
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -23,7 +25,9 @@ const CategoriesNav = () => {
       setActiveCategory(null);
     }, 50);
   };
-
+  if( pathname?.includes("/login") || pathname?.includes("/register")){ 
+    return null;
+  }
   return (
     <>
       <nav className="hidden lg:flex items-center gap-8 py-4 w-full justify-between relative">
