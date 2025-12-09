@@ -123,7 +123,7 @@ const ProductDetails = ({ variant }:{variant?: string}) => {
         </div>
 
         {/* Tabs Section */}
-        {varient === "taps" ?
+        {variant === "tabs" ?
         
         (<ProductTabsContent
           description={productData.description}

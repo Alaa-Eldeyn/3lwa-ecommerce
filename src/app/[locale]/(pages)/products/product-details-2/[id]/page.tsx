@@ -2,7 +2,7 @@ import ProductDetails from "@/src/components/product-details"
 
 const page = () => {
   return (
-    <ProductDetails variant="taps" />
+    <ProductDetails variant="tabs" />
   )
 }
 export default page
