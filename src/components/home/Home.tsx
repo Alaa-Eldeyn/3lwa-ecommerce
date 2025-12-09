@@ -70,12 +70,15 @@ export default function Home({ variant = "simple" }: HomeProps) {
   else if (variant === "simple") {
     return (
       <main>
-        <TopBannersCarousel variant="rounded" />
+        <TopBannersCarousel variant="default" />
         <CategoriesCarousel variant="card" />
-        <FlashDeals cardVariant="default" />
-        <NewArrivals cardVariant="default" />
-        <TopSellers cardVariant="default" />
-        <CategoriesBentoGrid />
+        <TopBanner />
+        <FlashDeals cardVariant="bordered" />
+        <NewArrivalBanner />
+        <NewArrivals cardVariant="bordered" />
+        <TopSellersBanner />
+        <TopSellers cardVariant="bordered" />
+        <CategoriesBentoGrid variant="row"/>
       </main>
     );
   }

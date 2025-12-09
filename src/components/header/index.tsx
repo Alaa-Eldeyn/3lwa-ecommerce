@@ -6,7 +6,7 @@ import CategoriesNav from "./CategoriesNav"
 const Header = () => {
   return (
     <>
-      <header className="text-primary dark:text-white w-full shadow-md sticky top-0 z-50 bg-white dark:bg-gray-900">
+      <header className="text-primary dark:text-white w-full shadow-md sticky top-0 z-50">
         {/* Top Row - Logo, Search, Actions */}
         <div className="border-b border-gray-200 dark:border-gray-700 bg-header">
           <div className="container min-h-20 flex items-center justify-between gap-6">
@@ -22,7 +22,7 @@ const Header = () => {
 
         {/* Bottom Row - Categories Navigation */}
         <div className="hidden lg:block">
-          <div className="container">
+          <div className="container relative bg-white dark:bg-gray-900">
             <CategoriesNav />
           </div>
         </div>
