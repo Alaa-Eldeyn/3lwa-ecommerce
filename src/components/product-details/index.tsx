@@ -10,6 +10,7 @@ import ProductSections from "./ProductSections";
 import ProductDetailsSection from "./ProductDetailsSection";
 import ReviewsSection from "./ReviewsSection";
 import FAQsSection from "./FAQsSection";
+import { useEffect } from "react";
 
 // Mock product data - replace with actual product data from props/API
 const productData = {
@@ -92,7 +93,12 @@ const reviews = [
   },
 ];
 
-const ProductDetails = () => {
+
+const ProductDetails = ({ variant }:{variant?: string}) => {
+
+  useEffect(()=>{
+    window.scrollTo(0, 0);
+  },[])
   return (
     <section className="">
       <Breadcrumb className="my-4" />
@@ -117,14 +123,19 @@ const ProductDetails = () => {
         </div>
 
         {/* Tabs Section */}
-        {/* <ProductTabsContent
+        {varient === "taps" ?
+        
+        (<ProductTabsContent
           description={productData.description}
           reviews={reviews}
           totalReviews={productData.totalReviews}
-        /> */}
+        />) :(<>
+        
         <ProductDetailsSection description={productData.description} />
         <ReviewsSection reviews={reviews} totalReviews={productData.totalReviews} />
         <FAQsSection />
+        </>)
+      }
 
         {/* You Might Also Like */}
         <div className="mb-16">
