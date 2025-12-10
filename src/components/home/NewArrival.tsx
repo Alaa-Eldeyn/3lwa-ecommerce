@@ -8,12 +8,14 @@ import "./carousel.css"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useTranslations } from 'next-intl';
 
 interface NewArrivalsProps {
   cardVariant?: "default" | "bordered" | "minimal" | "homz" | "nike" | "clean" | "gradient";
 }
 
 const NewArrivals = ({ cardVariant }: NewArrivalsProps) => {
+  const t = useTranslations('home.newArrivals');
   const [products, setProducts] = useState<any>({
     items: newArrivals,
     totalRecords: newArrivals.length
@@ -46,7 +48,7 @@ const NewArrivals = ({ cardVariant }: NewArrivalsProps) => {
       <div className="container mx-auto">
         {/* Title */}
         <h2 className="text-center text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
-          NEW ARRIVALS
+          <span className="text-primary">{t('title')}</span> {t('titleHighlight')}
         </h2>
 
         {/* Products Carousel */}
@@ -100,7 +102,7 @@ const NewArrivals = ({ cardVariant }: NewArrivalsProps) => {
         {/* Button */}
         <Link href="/products" className="flex justify-center mt-5">
           <button className="px-10 py-3 border border-gray-400 rounded-full text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-            View All
+            {t('viewAll')}
           </button>
         </Link>
 

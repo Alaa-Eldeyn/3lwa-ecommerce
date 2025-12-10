@@ -5,12 +5,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslations } from 'next-intl';
 
 interface TopSellersProps {
   cardVariant?: "default" | "bordered" | "minimal" | "homz" | "nike" | "clean" | "gradient";
 }
 
 const TopSellers = ({ cardVariant }: TopSellersProps) => {
+  const t = useTranslations('home.topSellers');
   const [products, setProducts] = useState({
     items: topSellers,
     totalRecords: topSellers.length
@@ -43,7 +45,7 @@ const TopSellers = ({ cardVariant }: TopSellersProps) => {
       <div className="container mx-auto">
         {/* Title */}
         <h2 className="text-center text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
-          TOP SELLERS
+          <span className="text-primary">{t('title')}</span> {t('titleHighlight')}
         </h2>
 
         {/* Products Grid */}
@@ -69,7 +71,7 @@ const TopSellers = ({ cardVariant }: TopSellersProps) => {
         {/* Button */}
         <Link href="/products" className="flex justify-center mt-5">
           <button className="px-10 py-3 border border-gray-400 rounded-full text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-            View All
+            {t('viewAll')}
           </button>
         </Link>
 

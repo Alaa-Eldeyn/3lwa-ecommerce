@@ -439,5 +439,64 @@
       "shippingQuestion": "كم يستغرق الشحن؟",
       "shippingAnswer": "الشحن القياسي يستغرق من 5 إلى 7 أيام عمل. الشحن السريع متاح ويستغرق من 2 إلى 3 أيام عمل."
     }
+  },
+  "home": {
+    "hero": {
+      "title": "مصمم لترقية علامتك التجارية",
+      "description": "ابنِ أسرع. انمُ بذكاء. منصة تأخذ منتجك من فكرة إلى تأثير.",
+      "viewProducts": "عرض المنتجات",
+      "getContact": "تواصل معنا"
+    },
+    "heroCards": {
+      "title1": "عروض ليك من 10 جنيه",
+      "title2": "ركن العروض و التوفير",
+      "title3": "عــــروض فــــلاش",
+      "title4": "اشتري دلوقتي و ادفع بعدين",
+      "item1": "حتى 499 جنيه",
+      "item2": "حتى 199 جنيه",
+      "item3": "من 999 جنيه",
+      "item4": "من 500 جنيه",
+      "description2": "وفر أكثر النهاردة قبل بكرة",
+      "subtitle2": "اشتري دلوقتى",
+      "category1": "الموضة",
+      "category2": "الكترونيات",
+      "category3": "سوبرماركت",
+      "discount1": "حتى 50% أكثر",
+      "discount2": "حتى 25% أكثر",
+      "discount3": "حتى 10% أكثر",
+      "link1": "تسوق المزيد",
+      "link2": "اكتشف عروض أكثر",
+      "link3": "اكتشف العروض",
+      "link4": "تعرف على خطط التقسيط"
+    },
+    "flashDeals": {
+      "title": "مميزة",
+      "titleHighlight": "عروض",
+      "hours": "ساعات",
+      "minutes": "دقائق",
+      "seconds": "ثواني",
+      "viewAll": "عرض الكل"
+    },
+    "newArrivals": {
+      "title": "وصل",
+      "titleHighlight": "حديثاً",
+      "viewAll": "عرض الكل"
+    },
+    "topSellers": {
+      "title": "الأكثر",
+      "titleHighlight": "مبيعاً",
+      "viewAll": "عرض الكل"
+    },
+    "categories": {
+      "title": "تسوق حسب",
+      "titleHighlight": "الفئة"
+    },
+    "brands": {
+      "title": "العلامات التجارية الموثوقة"
+    },
+    "testimonials": {
+      "title": "ماذا يقول",
+      "titleHighlight": "عملاؤنا"
+    }
   }
 }

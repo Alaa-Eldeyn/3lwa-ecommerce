@@ -7,12 +7,14 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import Link from "next/link";
+import { useTranslations } from 'next-intl';
 
 interface FlashDealsProps {
   cardVariant?: "default" | "bordered" | "minimal" | "homz" | "nike" | "clean" | "gradient";
 }
 
 const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
+  const t = useTranslations('home.flashDeals');
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState({
     hours: 23,
@@ -51,7 +53,7 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
         <div className="flex flex-col md:flex-row items-center justify-between mb-6">
           <div>
             <h2 className="text-center md:text-left text-4xl font-extrabold text-gray-900 dark:text-white mb-2">
-              <span className="text-red-600">FLASH</span> DEALS
+              <span className="text-red-600">{t('titleHighlight')}</span> {t('title')}
             </h2>
           </div>
 
@@ -63,7 +65,7 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
                 </span>
               </div>
               <span className="block text-xs text-gray-600 dark:text-gray-400 mt-1 text-center font-medium">
-                Hours
+                {t('hours')}
               </span>
             </div>
             <div className="flex items-center pb-6">
@@ -76,7 +78,7 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
                 </span>
               </div>
               <span className="block text-xs text-gray-600 dark:text-gray-400 mt-1 text-center font-medium">
-                Minutes
+                {t('minutes')}
               </span>
             </div>
             <div className="flex items-center pb-6">
@@ -89,7 +91,7 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
                 </span>
               </div>
               <span className="block text-xs text-gray-600 dark:text-gray-400 mt-1 text-center font-medium">
-                Seconds
+                {t('seconds')}
               </span>
             </div>
           </div>
@@ -146,7 +148,7 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
         {/* Button */}
         <Link href="/products" className="flex justify-center mt-5">
           <button className="px-10 py-3 border border-gray-400 rounded-full text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-            View All
+            {t('viewAll')}
           </button>
         </Link>
       </div>

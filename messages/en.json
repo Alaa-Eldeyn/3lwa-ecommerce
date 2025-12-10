@@ -439,5 +439,64 @@
       "shippingQuestion": "How long does shipping take?",
       "shippingAnswer": "Standard shipping takes 5-7 business days. Express shipping is available and takes 2-3 business days."
     }
+  },
+  "home": {
+    "hero": {
+      "title": "Designed to elevate your brand",
+      "description": "Build faster. Grow smarter. A platform that takes your product from idea to impact.",
+      "viewProducts": "View Products",
+      "getContact": "Get Contact"
+    },
+    "heroCards": {
+      "title1": "Offers for you from $10",
+      "title2": "Offers & Savings Corner",
+      "title3": "Flash Deals",
+      "title4": "Buy Now & Pay Later",
+      "item1": "Up to $499",
+      "item2": "Up to $199",
+      "item3": "From $999",
+      "item4": "From $500",
+      "description2": "Save more today before tomorrow",
+      "subtitle2": "Shop Now",
+      "category1": "Fashion",
+      "category2": "Electronics",
+      "category3": "Supermarket",
+      "discount1": "Up to 50% Off",
+      "discount2": "Up to 25% Off",
+      "discount3": "Up to 10% Off",
+      "link1": "Shop More",
+      "link2": "Discover More Offers",
+      "link3": "Discover Deals",
+      "link4": "Learn About Installment Plans"
+    },
+    "flashDeals": {
+      "title": "Flash",
+      "titleHighlight": "Deals",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "viewAll": "View All"
+    },
+    "newArrivals": {
+      "title": "New",
+      "titleHighlight": "Arrivals",
+      "viewAll": "View All"
+    },
+    "topSellers": {
+      "title": "Top",
+      "titleHighlight": "Sellers",
+      "viewAll": "View All"
+    },
+    "categories": {
+      "title": "Shop by",
+      "titleHighlight": "Category"
+    },
+    "brands": {
+      "title": "Trusted Brands"
+    },
+    "testimonials": {
+      "title": "What our",
+      "titleHighlight": "customers say"
+    }
   }
 }

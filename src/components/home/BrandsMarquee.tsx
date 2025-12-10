@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { useRef } from "react"
+import { useTranslations } from 'next-intl'
 
 const logos = [
   "/images/brands/Group.svg",
@@ -12,6 +13,7 @@ const logos = [
 ]
 
 const BrandsMarquee = ({ speed = 20 }: { speed?: number }) => {
+  const t = useTranslations('home.brands');
   const wrapRef = useRef<HTMLDivElement | null>(null)
 
   const calculateRepeats = () => {

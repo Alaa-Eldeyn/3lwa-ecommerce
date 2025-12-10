@@ -8,8 +8,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { Testimonial } from "@/src/types/types";
+import { useTranslations } from 'next-intl';
 
 const Testimonials = () => {
+  const t = useTranslations('home.testimonials');
   const [testimonials, setTestimonials] = useState<Testimonial[]>(test as Testimonial[]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -50,7 +52,7 @@ const Testimonials = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
           <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white uppercase">
-            Our Happy Customers
+            {t('title')} <span className="text-primary">{t('titleHighlight')}</span>
           </h2>
 
           {/* Custom Navigation Arrows */}

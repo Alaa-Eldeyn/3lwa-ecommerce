@@ -1,49 +1,52 @@
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 const HeroCards = () => {
+  const t = useTranslations('home.heroCards');
   const cards = [
     {
       id: 1,
       image: '/images/hero/b.jpg',
-      title: 'عروض ليبيك من 10 جنيه',
+      title: t('title1'),
       items: [
-        { name: 'حتى 499 جنيه', image: '/images/products/Frame44.png' },
-        { name: 'حتى 199 جنيه', image: '/images/products/Frame43.png' },
-        { name: 'من 999 جنيه', image: '/images/products/Frame41.png' },
-        { name: 'من 500 جنيه', image: '/images/products/Frame40.png' },
+        { name: t('item1'), image: '/images/products/Frame44.png' },
+        { name: t('item2'), image: '/images/products/Frame43.png' },
+        { name: t('item3'), image: '/images/products/Frame41.png' },
+        { name: t('item4'), image: '/images/products/Frame40.png' },
       ],
       link: '/products',
-      linkText: 'تسوق المزيد',
+      linkText: t('link1'),
     },
     {
       id: 2,
       image: '/images/hero/bu.jpg',
-      title: 'ركن العروض و التوفير',
-      description: 'وفر أكثر النهاردة قبل بكرة',
-      subtitle: 'اشتري دلوقتى',
+      title: t('title2'),
+      description: t('description2'),
+      subtitle: t('subtitle2'),
       categories: [
-        { name: 'الموضة', discount: 'حتى 50 اكثر' },
-        { name: 'الكترونيات', discount: 'حتى 25 اكثر' },
-        { name: 'سوبرماركت', discount: 'حتى 10 اكثر' },
+        { name: t('category1'), discount: t('discount1') },
+        { name: t('category2'), discount: t('discount2') },
+        { name: t('category3'), discount: t('discount3') },
       ],
       link: '/products?sale=true',
-      linkText: 'اكتشف عروض أكثر',
+      linkText: t('link2'),
     },
     {
       id: 3,
       image: '/images/hero/bue.jpg',
-      title: 'عــــروض فــــلاش',
+      title: t('title3'),
       link: '/flash-deals',
-      linkText: 'اكتشف العروض',
+      linkText: t('link3'),
     },
     {
       id: 4,
       image: '/images/hero/bue2.jpg',
-      title: 'اشتري دلوقتي و ادفع بعدين',
+      title: t('title4'),
       link: '/installment',
-      linkText: 'تعرف على خطط التقسيط',
+      linkText: t('link4'),
     },
   ];
 
