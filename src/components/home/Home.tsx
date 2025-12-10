@@ -11,6 +11,7 @@ import TopBannersCarousel from "./TopBannersCarousel";
 import TopSellers from "./TopSellers";
 import NewArrivalBanner from "./NewArrivalBanner";
 import TopSellersBanner from "./TopSellersBanner";
+import HeroCards from "./HeroCards";
 
 interface HomeProps {
   variant?: "default" | "no-banners" | "alt-hero" | "simple" | "custom";
@@ -71,6 +72,7 @@ export default function Home({ variant = "simple" }: HomeProps) {
     return (
       <main>
         <TopBannersCarousel variant="default" />
+        <HeroCards />
         <CategoriesCarousel variant="card" />
         <TopBanner />
         <FlashDeals cardVariant="bordered" />

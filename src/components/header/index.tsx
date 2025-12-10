@@ -21,8 +21,8 @@ const Header = () => {
         </div>
 
         {/* Bottom Row - Categories Navigation */}
-        <div className="hidden lg:block">
-          <div className="container relative bg-white dark:bg-gray-900">
+        <div className="hidden lg:block bg-white dark:bg-gray-900">
+          <div className="container relative">
             <CategoriesNav />
           </div>
         </div>

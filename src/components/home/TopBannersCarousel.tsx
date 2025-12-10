@@ -42,7 +42,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
   // Default variant - Full width
   if (variant === "default") {
     return (
-      <div className="w-full max-h-96 aspect-9/2 banner-carousel">
+      <div className="w-full max-h-96 aspect-9/2 banner-carousel !z-0">
         <Swiper
           modules={[Autoplay, Pagination, Navigation]}
           spaceBetween={0}
@@ -76,7 +76,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
   // Rounded variant
   else if (variant === "rounded") {
     return (
-      <div className="w-full py-8">
+      <div className="w-full py-8 !z-0">
         <div className="container mx-auto px-4">
           <div className="relative">
             <Swiper
