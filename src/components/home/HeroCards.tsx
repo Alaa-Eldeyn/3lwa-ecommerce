@@ -9,7 +9,7 @@ const HeroCards = () => {
   const cards = [
     {
       id: 1,
-      image: '/images/hero/b.jpg',
+      image: '/images/Hero/b.jpg',
       title: t('title1'),
       items: [
         { name: t('item1'), image: '/images/products/Frame44.png' },
@@ -22,7 +22,7 @@ const HeroCards = () => {
     },
     {
       id: 2,
-      image: '/images/hero/bu.jpg',
+      image: '/images/Hero/bu.jpg',
       title: t('title2'),
       description: t('description2'),
       subtitle: t('subtitle2'),
@@ -36,14 +36,14 @@ const HeroCards = () => {
     },
     {
       id: 3,
-      image: '/images/hero/bue.jpg',
+      image: '/images/Hero/bue.jpg',
       title: t('title3'),
       link: '/flash-deals',
       linkText: t('link3'),
     },
     {
       id: 4,
-      image: '/images/hero/bue2.jpg',
+      image: '/images/Hero/bue2.jpg',
       title: t('title4'),
       link: '/installment',
       linkText: t('link4'),
