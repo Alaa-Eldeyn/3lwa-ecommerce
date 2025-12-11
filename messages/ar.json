@@ -1,7 +1,7 @@
 {
   "header": {
     "search": "ابحث...",
-    "cart": "السلة",
+    "cart": "العربة",
     "account": "الحساب",
     "myAccount": "حسابي",
     "orders": "الطلبات",
@@ -16,9 +16,13 @@
     "about": "من نحن",
     "contact": "اتصل بنا",
     "language": "اللغة",
-    "theme": "المظهر"
+    "theme": "المظهر",
+    "hello": "مرحباً، تسجيل الدخول",
+    "accountAndLists": "الحساب والقوائم",
+    "returnsLabel": "المرتجعات"
   },
   "categories": {
+    "all": "الكل",
     "furniture": "الأثاث",
     "home_decor": "الديكور المنزلي",
     "kitchen_dining": "المطبخ والطعام",
@@ -488,6 +492,7 @@
       "viewAll": "عرض الكل"
     },
     "categories": {
+      "all": "الكل",
       "title": "تسوق حسب",
       "titleHighlight": "الفئة"
     },

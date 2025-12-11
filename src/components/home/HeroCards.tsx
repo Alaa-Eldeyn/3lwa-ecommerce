@@ -51,7 +51,7 @@ const HeroCards = () => {
   ];
 
   return (
-    <div className="lg:-translate-y-12 z-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 md:px-6 my-6 lg:mb-0">
+    <div className="lg:-translate-y-12 z-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 md:px-6 my-6 lg:mb-0 ">
       {cards.map((card) => (
         <div
           key={card.id}

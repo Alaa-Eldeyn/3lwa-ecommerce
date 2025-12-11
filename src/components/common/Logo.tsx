@@ -9,7 +9,7 @@ const Logo = () => {
       aria-label="Go to homepage"
     >
       <Image
-        src="/images/logo/logo.png"
+        src="/images/logo/logogt.png"
         alt="Alwa.Dev Logo"
         width={120}
         height={30}

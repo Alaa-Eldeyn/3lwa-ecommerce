@@ -16,9 +16,13 @@
     "about": "About Us",
     "contact": "Contact Us",
     "language": "Language",
-    "theme": "Theme"
+    "theme": "Theme",
+    "hello": "Hello, Sign in",
+    "accountAndLists": "Account & Lists",
+    "returnsLabel": "Returns"
   },
   "categories": {
+    "all": "All",
     "furniture": "Furniture",
     "home_decor": "Home Decor",
     "kitchen_dining": "Kitchen & Dining",
@@ -488,6 +492,7 @@
       "viewAll": "View All"
     },
     "categories": {
+      "all": "All",
       "title": "Shop by",
       "titleHighlight": "Category"
     },

@@ -1,5 +1,5 @@
 "use client"
-import { Search } from "lucide-react"
+import { Search, ChevronDown } from "lucide-react"
 import { useState } from "react"
 import { useTranslations } from "next-intl"
 
@@ -8,16 +8,29 @@ const SearchBar = () => {
   const [q, setQ] = useState("")
 
   return (
-    <div className="relative w-full ">
-      <input
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder={t("search")}
-        className="w-full px-4 py-2 pr-10 rounded-full border border-gray-200 text-gray-600  dark:border-gray-700 bg-gray-100 dark:bg-gray-800 outline-none focus:border-primary"
-      />
-      <button className="absolute right-3 top-1/2 -translate-y-1/2">
-        <Search size={20} />
-      </button>
+    <div className="relative w-full">
+      <div className="flex items-center h-10 lg:h-12">
+        
+        {/* Category Dropdown */}
+        <button className="flex items-center gap-2 px-4 h-full bg-white border border-gray-300 rounded-s-lg text-gray-700 hover:bg-gray-50 transition whitespace-nowrap">
+          <span>الكل</span>
+          <ChevronDown size={16} />
+        </button>
+        
+        {/* Search Input */}
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="بحث في Basyit.com"
+          className="flex-1 h-full px-4 text-gray-700 border-t border-b border-gray-300 bg-white focus:outline-none"
+        />
+        
+        {/* Search Button */}
+        <button className="px-6 h-full bg-[#f9a825] hover:bg-[#f57c00] text-white rounded-e-lg transition flex items-center justify-center">
+          <Search size={20} />
+        </button>
+
+      </div>
     </div>
   )
 }
