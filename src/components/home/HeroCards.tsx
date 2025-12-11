@@ -7,19 +7,7 @@ import { useTranslations } from 'next-intl';
 const HeroCards = () => {
   const t = useTranslations('home.heroCards');
   const cards = [
-    {
-      id: 1,
-      image: '/images/Hero/b.jpg',
-      title: t('title1'),
-      items: [
-        { name: t('item1'), image: '/images/products/Frame44.png' },
-        { name: t('item2'), image: '/images/products/Frame43.png' },
-        { name: t('item3'), image: '/images/products/Frame41.png' },
-        { name: t('item4'), image: '/images/products/Frame40.png' },
-      ],
-      link: '/products',
-      linkText: t('link1'),
-    },
+
     {
       id: 2,
       image: '/images/Hero/bu.jpg',
@@ -51,7 +39,8 @@ const HeroCards = () => {
   ];
 
   return (
-    <div className="lg:-translate-y-12 z-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 md:px-6 my-6 lg:mb-0 ">
+    <div className="bg-white dark:bg-gray-900">
+    <div className="lg:-translate-y-12 container z-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-4 md:px-6 py-6 lg:pb-0">
       {cards.map((card) => (
         <div
           key={card.id}
@@ -62,31 +51,10 @@ const HeroCards = () => {
               {card.title}
             </h3>
 
-            {/* Card Type 1: Grid Items */}
-            {card.items && (
-              <div className="grid grid-cols-2 gap-3 mb-4 flex-1">
-                {card.items.map((item, idx) => (
-                  <div key={idx} className="text-center">
-                    <div className="relative w-full aspect-square mb-2 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
-                      {item.name}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-
             {/* Card Type 2: Categories with Discounts */}
             {card.categories && (
               <>
-                <div className="relative w-full aspect-[4/3] mb-4 rounded-lg overflow-hidden">
+                <div className="relative w-full aspect-6/3 mb-4 rounded-lg overflow-hidden">
                   <Image
                     src={card.image}
                     alt={card.title}
@@ -108,7 +76,7 @@ const HeroCards = () => {
                   {card.categories.map((cat, idx) => (
                     <div
                       key={idx}
-                      className="bg-primary text-white px-3 py-2 rounded text-xs sm:text-sm font-medium"
+                      className="bg-primary flex-1 text-center text-white px-3 py-2 rounded text-xs sm:text-sm font-medium"
                     >
                       <div>{cat.name}</div>
                       <div className="text-xs">{cat.discount}</div>
@@ -119,7 +87,7 @@ const HeroCards = () => {
             )}
 
             {/* Card Type 3 & 4: Single Large Image */}
-            {!card.items && !card.categories && (
+            {!card.categories && (
               <div className="relative w-full aspect-[4/3] mb-4 rounded-lg overflow-hidden flex-1">
                 <Image
                   src={card.image}
@@ -140,6 +108,7 @@ const HeroCards = () => {
           </div>
         </div>
       ))}
+    </div>
     </div>
   );
 };
