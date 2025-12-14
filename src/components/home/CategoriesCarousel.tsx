@@ -142,7 +142,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
             {/* Custom Navigation Buttons */}
             <button className="categories-swiper-button-next absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-all hover:scale-110">
               <svg
-                className="w-6 h-6 text-gray-700 dark:text-gray-300 rtl:rotate-180"
+                className="w-5 h-5 text-gray-700 dark:text-gray-300 rtl:rotate-180"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24">
@@ -157,7 +157,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
 
             <button className="categories-swiper-button-prev absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-all hover:scale-110">
               <svg
-                className="w-6 h-6 text-gray-700 dark:text-gray-300 rtl:rotate-180"
+                className="w-5 h-5 text-gray-700 dark:text-gray-300 rtl:rotate-180"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24">
@@ -180,11 +180,11 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
     return (
       <section className="pb-6 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <div className="relative px-12">
+          <div className="relative px-10">
             <Swiper
               modules={[Navigation]}
-              spaceBetween={20}
-              slidesPerView={2}
+              spaceBetween={10}
+              slidesPerView={3}
               navigation={{
                 prevEl: ".categories-clean-swiper-button-prev",
                 nextEl: ".categories-clean-swiper-button-next",
@@ -192,7 +192,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
               breakpoints={{
                 480: {
                   slidesPerView: 3,
-                  spaceBetween: 20,
+                  spaceBetween: 10,
                 },
                 768: {
                   slidesPerView: 4,
@@ -223,8 +223,8 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
                       </div>
 
                       {/* Category Name Below Image */}
-                      <div className="p-3 text-center">
-                        <h3 className="text-gray-900 dark:text-white font-semibold text-xs sm:text-sm group-hover:text-primary transition-colors line-clamp-2">
+                      <div className="p-2 text-center">
+                        <h3 className="text-gray-900 dark:text-white font-semibold text-[10px] sm:text-sm group-hover:text-primary transition-colors line-clamp-2">
                           {t(category.nameKey)}
                         </h3>
                       </div>
@@ -235,9 +235,9 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
             </Swiper>
 
             {/* Custom Navigation Buttons */}
-            <button className="categories-clean-swiper-button-next absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
+            <button className="categories-clean-swiper-button-next absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
               <svg
-                className="w-6 h-6 rtl:rotate-180"
+                className="w-5 h-5 rtl:rotate-180"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24">
@@ -250,9 +250,9 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
               </svg>
             </button>
 
-            <button className="categories-clean-swiper-button-prev absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
+            <button className="categories-clean-swiper-button-prev absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
               <svg
-                className="w-6 h-6 rtl:rotate-180"
+                className="w-5 h-5 rtl:rotate-180"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24">
@@ -334,7 +334,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
             {/* Custom Navigation Buttons */}
             <button className="categories-card-swiper-button-next absolute left-0 top-1/2 -translate-y-1/2 z-10 p-1 w-5 h-5 sm:w-8 sm:h-8 lg:w-12 lg:h-12 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
               <svg
-                className="w-6 h-6 rtl:rotate-180"
+                className="w-5 h-5 rtl:rotate-180"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24">
@@ -349,7 +349,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
 
             <button className="categories-card-swiper-button-prev absolute right-0 top-1/2 -translate-y-1/2 z-10 p-1 w-5 h-5 sm:w-8 sm:h-8 lg:w-12 lg:h-12 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
               <svg
-                className="w-6 h-6 rtl:rotate-180"
+                className="w-5 h-5 rtl:rotate-180"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24">
