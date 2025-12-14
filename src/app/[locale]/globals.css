@@ -14,7 +14,8 @@
   --color-primary: #0c8589;
   --color-secondary: #2a4f7d;
   --color-accent: #ffefd6;
-  --color-header: #243040;
+  --color-header: #0a5c4f;
+  --color-header-hover: #3b7c71;
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1100px;

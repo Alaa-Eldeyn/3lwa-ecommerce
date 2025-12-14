@@ -15,9 +15,9 @@ interface TopBannersCarouselProps {
 
 const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) => {
   const [banners, setBanners] = useState([
-    "/images/banners/banner1.avif",
-    "/images/banners/banner2.avif",
-    "/images/banners/banner3.avif",
+    "/images/banners/m-banner1.png",
+    "/images/banners/m-banner2.png",
+    "/images/banners/m-banner3.png",
   ]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -42,7 +42,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
   // Default variant - Full width
   if (variant === "default") {
     return (
-      <div className="w-full max-h-96 aspect-9/2 banner-carousel !z-0">
+      <div className="w-full h-72 lg:h-[500px] lg:aspect-8/2 banner-carousel !z-0">
         <Swiper
           modules={[Autoplay, Pagination, Navigation]}
           spaceBetween={0}
@@ -62,7 +62,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
                   fill
                   src={banner}
                   alt={`banner ${index + 1}`}
-                  className="object-cover"
+                  className="object-cover object-[30%_45%]"
                   priority={index === 0}
                 />
               </div>

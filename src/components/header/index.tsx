@@ -11,7 +11,7 @@ const Header = () => {
     <>
       <header className="text-primary dark:text-white w-full shadow-md sticky top-0 z-50">
         {/* Top Row - Logo, Search, Actions */}
-        <div className=" dark:border-gray-700 bg-header">
+        <div className=" dark:border-gray-700 bg-header-hover">
           <div className="container min-h-16 lg:min-h-18 flex items-center justify-between gap-6">
             {/* Logo */}
             <div className="flex items-center gap-1">
@@ -24,14 +24,14 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="lg:hidden bg-header">
+        <div className="lg:hidden bg-header-hover">
           <div className="container py-1">
             <SearchBar />
           </div>
         </div>
 
         {/* Bottom Row - Categories Navigation */}
-        <div className=" bg-[#131521]">
+        <div className="bg-header">
           <div className="container relative overflow-auto">
             <CategoriesNav />
           </div>

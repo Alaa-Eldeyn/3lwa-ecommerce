@@ -60,7 +60,7 @@ const CategoriesSidebar = () => {
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b dark:border-gray-700 bg-[#0a5c4f] dark:bg-primary text-white">
+        <div className="flex items-center justify-between p-4 border-b dark:border-gray-700 bg-primary dark:bg-primary text-white">
           <div className="flex items-center gap-2">
             {selectedCategory && (
               <button
@@ -106,7 +106,7 @@ const CategoriesSidebar = () => {
                     </span>
                     <ChevronLeft
                       size={18}
-                      className="text-gray-400 group-hover:text-[#0a5c4f] dark:group-hover:text-primary transition-colors "
+                      className="text-gray-400 group-hover:text-primary dark:group-hover:text-primary transition-colors "
                     />
                   </button>
                 ))}
@@ -126,7 +126,7 @@ const CategoriesSidebar = () => {
                 <Link
                   href={`/products?cat=${selectedCategory.slug}`}
                   onClick={handleClose}
-                  className="block mb-4 p-3 bg-[#0a5c4f] dark:bg-primary text-white font-semibold text-center rounded-lg hover:opacity-90 transition-opacity"
+                  className="block mb-4 p-3 bg-primary dark:bg-primary text-white font-semibold text-center rounded-lg hover:opacity-90 transition-opacity"
                 >
                   عرض جميع {selectedCategory.title}
                 </Link>
@@ -135,7 +135,7 @@ const CategoriesSidebar = () => {
                 <div className="space-y-6">
                   {selectedCategory.subcategories.map((subcategory) => (
                     <div key={subcategory.id} className="space-y-3">
-                      <h3 className="font-bold text-[#0a5c4f] dark:text-primary text-sm uppercase tracking-wide border-b border-gray-200 dark:border-gray-700 pb-2">
+                      <h3 className="font-bold text-secondary dark:text-primary text-sm uppercase tracking-wide border-b border-gray-200 dark:border-gray-700 pb-2">
                         {subcategory.title}
                       </h3>
                       <ul className="space-y-2">
@@ -144,7 +144,7 @@ const CategoriesSidebar = () => {
                             <Link
                               href={item.path}
                               onClick={handleClose}
-                              className="block text-sm text-gray-700 dark:text-gray-300 hover:text-[#0a5c4f] dark:hover:text-primary transition-colors py-1.5 px-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded"
+                              className="block text-sm text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors py-1.5 px-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded"
                             >
                               {item.title}
                             </Link>
