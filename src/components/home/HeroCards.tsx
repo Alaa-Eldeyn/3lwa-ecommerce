@@ -49,7 +49,7 @@ const HeroCards = () => {
 
             {/* Card Type 3 & 4: Single Large Image */}
            
-              <div className="relative w-full aspect-3/4 lg:mb-4 rounded-lg overflow-hidden flex-1">
+              <div className="relative w-full aspect-3/4 lg:aspect-4/3 lg:mb-4 rounded-lg overflow-hidden flex-1">
                 <Image
                   src={card.image}
                   alt={card.title}
