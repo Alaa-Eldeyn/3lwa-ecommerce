@@ -34,7 +34,7 @@ const HeroCards = () => {
 
   return (
     <div className="bg-white dark:bg-gray-900">
-    <div className="-translate-y-16 lg:-translate-y-40 container z-20 grid grid-cols-3 gap-2 lg:gap-4 px-4 md:px-6 py-6 lg:pb-0">
+    <div className="-translate-y-10 lg:-translate-y-20 container z-20 grid grid-cols-3 gap-2 lg:gap-4 px-4 md:px-6 pb-0">
       {cards.map((card) => (
         <div
           key={card.id}
