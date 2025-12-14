@@ -54,7 +54,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
             disableOnInteraction: false,
           }}
           loop={true}
-          className="h-full">
+          className="h-full hide-nav-mobile">
           {banners.map((banner, index) => (
             <SwiperSlide key={index}>
               <div className="relative w-full h-full">
@@ -110,7 +110,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
             </Swiper>
 
             {/* Custom Navigation Buttons */}
-            <button className="banner-rounded-swiper-button-next ml-4 absolute left-0 top-1/2 -translate-y-1/2 p-1 z-10 w-5 h-5 sm:w-8 sm:h-8 lg:w-12 lg:h-12 bg-white dark:bg-gray-800 shadow-xl rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
+            <button className="banner-rounded-swiper-button-next ml-4 absolute left-0 top-1/2 -translate-y-1/2 p-1 z-10 w-5 h-5 sm:w-8 sm:h-8 lg:w-12 lg:h-12 bg-white dark:bg-gray-800 shadow-xl rounded-full hidden md:flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
               <svg
                 className="w-6 h-6 rtl:rotate-180"
                 fill="none"
@@ -125,7 +125,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
               </svg>
             </button>
 
-            <button className="banner-rounded-swiper-button-prev mr-4 absolute right-0 top-1/2 -translate-y-1/2 p-1 z-10 w-5 h-5 sm:w-8 sm:h-8 lg:w-12 lg:h-12 bg-white dark:bg-gray-800 shadow-xl rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
+            <button className="banner-rounded-swiper-button-prev mr-4 absolute right-0 top-1/2 -translate-y-1/2 p-1 z-10 w-5 h-5 sm:w-8 sm:h-8 lg:w-12 lg:h-12 bg-white dark:bg-gray-800 shadow-xl rounded-full hidden md:flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
               <svg
                 className="w-6 h-6 rtl:rotate-180"
                 fill="none"

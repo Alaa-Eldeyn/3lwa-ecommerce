@@ -81,6 +81,12 @@
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
+    /* Hide navigation buttons on mobile */
+    .hide-nav-mobile .swiper-button-next,
+    .hide-nav-mobile .swiper-button-prev {
+        display: none !important;
+    }
+    
     .banner-carousel .swiper-button-next,
     .banner-carousel .swiper-button-prev {
         width: 40px;
