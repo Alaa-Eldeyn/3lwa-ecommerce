@@ -180,7 +180,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
     return (
       <section className="pb-6 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <div className="relative px-10">
+          <div className="relative lg:px-10">
             <Swiper
               modules={[Navigation]}
               spaceBetween={10}
@@ -235,7 +235,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
             </Swiper>
 
             {/* Custom Navigation Buttons */}
-            <button className="categories-clean-swiper-button-next absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
+            <button className="categories-clean-swiper-button-next hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white dark:bg-gray-800 shadow-lg rounded-full items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
               <svg
                 className="w-5 h-5 rtl:rotate-180"
                 fill="none"
@@ -250,7 +250,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
               </svg>
             </button>
 
-            <button className="categories-clean-swiper-button-prev absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
+            <button className="categories-clean-swiper-button-prev hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white dark:bg-gray-800 shadow-lg rounded-full items-center justify-center hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:scale-110">
               <svg
                 className="w-5 h-5 rtl:rotate-180"
                 fill="none"
