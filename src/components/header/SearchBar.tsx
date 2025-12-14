@@ -8,7 +8,7 @@ const SearchBar = () => {
   const [q, setQ] = useState("")
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full pb-1 lg:pb-0">
       <div className="flex items-center h-10 lg:h-12">
         
         {/* Category Dropdown */}
