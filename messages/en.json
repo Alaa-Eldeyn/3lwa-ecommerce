@@ -2,9 +2,11 @@
   "header": {
     "search": "Search...",
     "cart": "Cart",
+    "wishlist": "Wishlist",
     "account": "Account",
     "myAccount": "My Account",
     "orders": "Orders",
+    "addresses": "Addresses",
     "logout": "Logout",
     "login": "Login",
     "register": "Register",
@@ -17,7 +19,7 @@
     "contact": "Contact Us",
     "language": "Language",
     "theme": "Theme",
-    "hello": "Hello, Sign in",
+    "hello": "Hello,",
     "accountAndLists": "Account & Lists",
     "returnsLabel": "Returns"
   },
@@ -184,7 +186,6 @@
     "orders": "Orders",
     "product-details": "Product Details"
   },
-  "filters": "Filters",
   "auth": {
     "welcomeBack": "Welcome Back!",
     "loginSubtitle": "Sign in to your account to continue",
@@ -503,5 +504,65 @@
       "title": "What our",
       "titleHighlight": "customers say"
     }
+  },
+  "filters": {
+    "filtersTitle": "Filters",
+    "search": "Search",
+    "searchPlaceholder": "Search products...",
+    "allCategories": "Categories",
+    "price": "Price",
+    "colors": "Colors",
+    "size": "Size",
+    "minItemRating": "Min Item Rating",
+    "minVendorRating": "Min Vendor Rating",
+    "brands": "Brands",
+    "vendors": "Vendors",
+    "conditions": "Condition",
+    "attributes": "Attributes",
+    "stockQuantity": "Stock & Quantity",
+    "inStockOnly": "In Stock Only",
+    "shippingDelivery": "Shipping & Delivery",
+    "freeShippingOnly": "Free Shipping Only",
+    "vendorSaleOptions": "Vendor & Sale Options",
+    "verifiedVendorsOnly": "Verified Vendors Only",
+    "primeVendorsOnly": "Prime Vendors Only",
+    "onSaleOnly": "On Sale Only",
+    "buyBoxWinnersOnly": "Buy Box Winners Only",
+    "withWarrantyOnly": "With Warranty Only",
+    "showAllOffers": "Show All Offers",
+    "quickFilters": "Quick Filters",
+    "freeShipping": "Free Shipping",
+    "warranty": "With Warranty",
+    "inStock": "In Stock",
+    "all": "All",
+    "stars": "Stars"
+  },
+  "wishlist": {
+    "title": "Wishlist",
+    "emptyTitle": "Your wishlist is empty",
+    "emptyDescription": "Looks like you haven't added anything to your wishlist yet. Start shopping to fill it up!",
+    "continueShopping": "Continue Shopping",
+    "moveToCart": "Move to Cart",
+    "remove": "Remove",
+    "clearAll": "Clear All",
+    "confirmClear": "Are you sure you want to clear all items from your wishlist?",
+    "currency": "EGP",
+    "addedToWishlist": "Added to wishlist",
+    "removedFromWishlist": "Removed from wishlist",
+    "movedToCart": "Moved to cart",
+    "error": "An error occurred, please try again",
+    "itemsCount": "{count} {count, plural, one {item} other {items}}",
+    "off": "OFF",
+    "breadcrumb": {
+      "home": "Home",
+      "wishlist": "Wishlist"
+    }
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "itemsPerPage": "Items per page",
+    "goToPage": "Go to page {page}",
+    "pageInfo": "Page {current} of {total}"
   }
 }

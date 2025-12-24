@@ -1,84 +1,160 @@
 "use client";
 
-import { StarIcon, ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useLocale } from "next-intl";
 import { useCartStore } from "@/src/store/cartStore";
+import { useWishlistStore } from "@/src/store/wishlistStore";
+import { useUserStore } from "@/src/store/userStore";
 import QuantityController from "./QuantityController";
+import { Product } from "@/src/types/types";
 
-interface ProductCardProps {
-  image: string;
-  title: string;
-  rating: number;
-  price: number;
-  oldPrice?: number;
-  discount?: number;
+interface ProductCardProps extends Partial<Product> {
   variant?: "default" | "bordered" | "minimal" | "homz" | "nike" | "clean" | "gradient";
-  id?: string; // Optional product ID
-  description?: string;
 }
 
 const ProductCard = ({
-  image,
-  title,
-  rating,
-  price,
-  oldPrice,
-  discount,
+  thumbnailImage,
+  titleAr,
+  titleEn,
+  itemId,
+  itemCombinationId,
+  shortDescriptionEn,
+  shortDescriptionAr,
+  descriptionEn,
+  descriptionAr,
+  basePrice,
+  minimumPrice,
+  maximumPrice,
+  categoryTitle,
+  brandTitle,
   variant = "minimal",
-  id,
-  description,
 }: ProductCardProps) => {
-  const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();
+  const locale = useLocale();
   const { items, addItem, updateQuantity, removeItem } = useCartStore();
+  const { items: wishlistItems, addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist, loadWishlistFromServer } = useWishlistStore();
+  const { isAuthenticated, user } = useUserStore();
+  const [isWishlistLoading, setIsWishlistLoading] = useState(false);
 
-  // Generate a stable product ID based on title and price
-  const productId = id || `${title}-${price}`.toLowerCase().replace(/\s+/g, "-");
+  const isArabic = locale === "ar";
+  
+  // التحقق من وجود المنتج في الـ wishlist
+  const isFavorite = useMemo(() => {
+    if (!itemCombinationId) return false;
+    return isInWishlist(itemCombinationId);
+  }, [wishlistItems, itemCombinationId, isInWishlist]);
+
+  // تحميل الـ wishlist عند التحميل إذا كان اليوزر مسجل
+  useEffect(() => {
+    if (user) {
+      loadWishlistFromServer();
+    }
+  }, [user, loadWishlistFromServer]);
+  
+
+  const image = thumbnailImage || "";
+  const displayTitle = isArabic ? (titleAr || "") : (titleEn || "");
+  const displayDescription = isArabic 
+    ? (shortDescriptionAr || descriptionAr || "")
+    : (shortDescriptionEn || descriptionEn || "");
+  const displayCategory = isArabic
+    ? (categoryTitle || "")
+    : (categoryTitle || "");
+  
+  const price = basePrice || minimumPrice || 0;
+  const oldPrice = maximumPrice && maximumPrice > price ? maximumPrice : undefined;
+  const discount = oldPrice ? Math.round(((oldPrice - price) / oldPrice) * 100) : undefined;
 
   // Find if product exists in cart
-  const cartItem = useMemo(() => items.find((item) => item.id === productId), [items, productId]);
+  const cartItem = useMemo(() => items.find((item) => item.id === itemId), [items, itemId]);
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    addItem({
-      id: productId,
-      name: title,
-      price: price,
-      image: image,
-    });
-  };
-
-  const handleIncrement = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (cartItem) {
-      updateQuantity(productId, cartItem.quantity + 1);
+    if (!itemId || !itemCombinationId) return;
+    try {
+      await addItem({
+        id: itemCombinationId,
+        itemId: itemId,
+        name: displayTitle,
+        price: price,
+        image: image,
+        offerCombinationPricingId: itemCombinationId,
+      }, isAuthenticated());
+    } catch (error) {
+      console.error("Failed to add item to cart:", error);
     }
   };
 
-  const handleDecrement = (e: React.MouseEvent) => {
+  const handleIncrement = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!itemId || !itemCombinationId) return;
     if (cartItem) {
-      if (cartItem.quantity === 1) {
-        removeItem(productId);
-      } else {
-        updateQuantity(productId, cartItem.quantity - 1);
+      try {
+        await updateQuantity(itemCombinationId, cartItem.quantity + 1, isAuthenticated());
+      } catch (error) {
+        console.error("Failed to update quantity:", error);
       }
     }
   };
+
+  const handleDecrement = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!itemId || !itemCombinationId) return;
+    if (cartItem) {
+      try {
+        if (cartItem.quantity === 1) {
+          await removeItem(itemCombinationId, isAuthenticated());
+        } else {
+          await updateQuantity(itemCombinationId, cartItem.quantity - 1, isAuthenticated());
+        }
+      } catch (error) {
+        console.error("Failed to update quantity:", error);
+      }
+    }
+  };
+
+  const toggleWishlist = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (!itemCombinationId) {
+      console.error("itemCombinationId is required");
+      return;
+    }
+
+    if (!user) {
+      // يمكن إضافة redirect للـ login page
+      alert("Please login to add items to wishlist");
+      return;
+    }
+
+    setIsWishlistLoading(true);
+    try {
+      if (isFavorite) {
+        await removeFromWishlist(itemCombinationId, true);
+      } else {
+        await addToWishlist(itemCombinationId, true);
+      }
+    } catch (error) {
+      console.error("Failed to update wishlist:", error);
+    } finally {
+      setIsWishlistLoading(false);
+    }
+  }
 
   if (variant === "minimal") {
     return (
       <div className="cursor-pointer group soft rounded-lg overflow-hidden border border-primary/10 bg-white dark:bg-gray-800 hover:-translate-y-1 hover:border-primary/40">
         {/* IMG */}
         <div
-          onClick={() => router.push(`/products/product-details/1`)}
+          onClick={() => router.push(`/${locale}/products/product-details/${itemCombinationId}`)}
           className="w-full aspect-square relative bg-linear-to-br from-accent/30 to-accent/10 dark:from-primary/10 dark:to-primary/5 center overflow-hidden">
           <Image
-            src={image}
-            alt={title}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`}
+            alt={displayTitle}
             fill
             className="object-contain scale-110 group-hover:scale-115 soft"
           />
@@ -94,19 +170,25 @@ const ProductCard = ({
         {/* Content */}
         <div className="p-4 bg-white dark:bg-gray-800">
           {/* Category */}
-          <div className="text-xs text-gray-500 dark:text-gray-400 mb-1 font-medium">موبايلات</div>
+          {displayCategory && (
+            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1 font-medium">
+              {displayCategory}
+            </div>
+          )}
 
           {/* Title */}
           <Link
-            href={`/products/product-details/1`}
+            href={`/${locale}/products/product-details/${itemCombinationId}`}
             className="!block! text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 leading-tight group-hover:text-primary soft">
-            {title}
+            {displayTitle}
           </Link>
 
           {/* Description */}
-          <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 line-clamp-1">
-            شاشة سوبر ريتنا XDR مقاس 6.1 بوصة
-          </p>
+          {displayDescription && (
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 line-clamp-1">
+              {displayDescription}
+            </p>
+          )}
 
           {/* Prices */}
           <div className="flex items-center gap-2 mb-3">
@@ -138,11 +220,9 @@ const ProductCard = ({
               </button>
             )}
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsFavorite(!isFavorite);
-              }}
-              className=" w-16 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-500 rounded-lg center group"
+              onClick={toggleWishlist}
+              disabled={isWishlistLoading}
+              className="w-16 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-500 rounded-lg center group disabled:opacity-50 disabled:cursor-not-allowed"
               title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
               <Heart
                 size={18}
@@ -162,22 +242,20 @@ const ProductCard = ({
       <div className="cursor-pointer group soft rounded-2xl">
         {/* IMG */}
         <div
-          onClick={() => router.push(`/products/product-details/1`)}
+          onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
           className="w-full aspect-square relative bg-[#F0EEED] dark:bg-gray-700 center rounded-3xl overflow-hidden">
           <Image
-            src={image}
-            alt={title}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`}
+            alt={displayTitle}
             fill
             className="object-fill rounded-2xl overflow-hidden group-hover:scale-105 soft"
           />
 
           {/* Favorite Button - Top Left */}
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsFavorite(!isFavorite);
-            }}
-            className="absolute top-3 left-3 w-9 h-9 bg-white dark:bg-gray-800 rounded-full center shadow-md hover:scale-110 soft z-10"
+            onClick={toggleWishlist}
+            disabled={isWishlistLoading}
+            className="absolute top-3 left-3 w-9 h-9 bg-white dark:bg-gray-800 rounded-full center shadow-md hover:scale-110 soft z-10 disabled:opacity-50 disabled:cursor-not-allowed"
             title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
             <Heart
               size={20}
@@ -210,30 +288,17 @@ const ProductCard = ({
         <div className="py-4 ">
           {/* Title */}
           <Link
-            href={`/products/product-details/1`}
+            href={`/${locale}/products/product-details/${itemCombinationId}`}
             className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
-            {title}
+            {displayTitle}
           </Link>
 
-          {/* Rating */}
-          <div className="flex items-center gap-1 mb-2">
-            {[...Array(5)].map((_, i) => (
-              <StarIcon
-                key={i}
-                size={14}
-                className={`${
-                  i < Math.floor(rating)
-                    ? "fill-yellow-400 text-yellow-400"
-                    : i < rating
-                    ? "fill-yellow-400 text-yellow-400 opacity-50"
-                    : "fill-gray-300 text-gray-300"
-                }`}
-              />
-            ))}
-            <span className="text-gray-900 dark:text-gray-300 ml-1 text-sm font-normal">
-              {rating}/5
-            </span>
-          </div>
+          {/* Description */}
+          {displayDescription && (
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-1">
+              {displayDescription}
+            </p>
+          )}
 
           {/* Prices */}
           <div className="flex items-center gap-2">
@@ -263,22 +328,20 @@ const ProductCard = ({
       <div className="cursor-pointer group soft rounded-3xl p-4 border border-gray-200 dark:border-gray-700">
         {/* IMG */}
         <div
-          onClick={() => router.push(`/products/product-details/1`)}
+          onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
           className="w-full aspect-square relative bg-[#F0EEED] dark:bg-gray-700 center rounded-2xl overflow-hidden">
           <Image
-            src={image}
-            alt={title}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`}
+            alt={displayTitle}
             fill
             className="object-fill rounded-2xl overflow-hidden group-hover:scale-105 soft"
           />
 
           {/* Favorite Button - Top Left */}
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsFavorite(!isFavorite);
-            }}
-            className="absolute top-3 left-3 size-8 lg:size-10 p-2 bg-white dark:bg-gray-800 rounded-full center shadow-md hover:scale-110 soft z-10"
+            onClick={toggleWishlist}
+            disabled={isWishlistLoading}
+            className="absolute top-3 left-3 size-8 lg:size-10 p-2 bg-white dark:bg-gray-800 rounded-full center shadow-md hover:scale-110 soft z-10 disabled:opacity-50 disabled:cursor-not-allowed"
             title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
             <Heart
               size={20}
@@ -293,30 +356,17 @@ const ProductCard = ({
         <div className="pt-4 ">
           {/* Title */}
           <Link
-            href={`/products/product-details/1`}
+            href={`/${locale}/products/product-details/${itemCombinationId}`}
             className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
-            {title}
+            {displayTitle}
           </Link>
 
-          {/* Rating */}
-          <div className="flex items-center gap-1 mb-2">
-            {[...Array(5)].map((_, i) => (
-              <StarIcon
-                key={i}
-                size={14}
-                className={`${
-                  i < Math.floor(rating)
-                    ? "fill-yellow-400 text-yellow-400"
-                    : i < rating
-                    ? "fill-yellow-400 text-yellow-400 opacity-50"
-                    : "fill-gray-300 text-gray-300"
-                }`}
-              />
-            ))}
-            <span className="text-gray-900 dark:text-gray-300 ml-1 text-sm font-normal">
-              {rating}/5
-            </span>
-          </div>
+          {/* Description */}
+          {displayDescription && (
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-1">
+              {displayDescription}
+            </p>
+          )}
 
           {/* Prices */}
           <div className="flex items-center gap-2">
@@ -366,17 +416,15 @@ const ProductCard = ({
       <div className="cursor-pointer group rounded-2xl overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-lg border border-gray-100 dark:border-gray-700">
         {/* IMG */}
         <div
-          onClick={() => router.push(`/products/product-details/1`)}
+          onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
           className="w-full aspect-square relative bg-gray-50 dark:bg-gray-700 overflow-hidden">
-          <Image src={image} alt={title} fill className="object-cover group-hover:scale-105 soft" />
+          <Image src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`} alt={displayTitle} fill className="object-cover group-hover:scale-105 soft" />
 
           {/* Favorite Button - Top Left */}
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsFavorite(!isFavorite);
-            }}
-            className="absolute top-4 left-4 w-10 h-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full center shadow-md hover:scale-110 soft z-10"
+            onClick={toggleWishlist}
+            disabled={isWishlistLoading}
+            className="absolute top-4 left-4 w-10 h-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full center shadow-md hover:scale-110 soft z-10 disabled:opacity-50 disabled:cursor-not-allowed"
             title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
             <Heart
               size={20}
@@ -391,9 +439,9 @@ const ProductCard = ({
         <div className="p-4">
           {/* Title */}
           <Link
-            href={`/products/product-details/1`}
+            href={`/products/product-details/${itemCombinationId}`}
             className="block text-base font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-relaxed">
-            {title}
+            {displayTitle}
           </Link>
 
           {/* Prices and Discount */}
@@ -433,11 +481,11 @@ const ProductCard = ({
       <div className="flex flex-col cursor-pointer group rounded-3xl overflow-hidden bg-white border border-gray-200 dark:border-gray-700 transition-all duration-300">
         {/* Image Section with Gradient Background */}
         <div
-          onClick={() => router.push(`/products/product-details/1`)}
+          onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
           className="relative w-full aspect-square flex items-center justify-center overflow-hidden scale-105">
           <Image
-            src={image}
-            alt={title}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`}
+            alt={displayTitle}
             fill
             className="object-contain group-hover:scale-105 transition-transform duration-500"
           />
@@ -447,11 +495,9 @@ const ProductCard = ({
 
           {/* Favorite Button - Top Right */}
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsFavorite(!isFavorite);
-            }}
-            className="absolute top-4 right-4 w-12 h-12 bg-primary/50 dark:bg-primary/60 backdrop-blur-sm rounded-full center shadow-md hover:scale-110 soft z-10"
+            onClick={toggleWishlist}
+            disabled={isWishlistLoading}
+            className="absolute top-4 right-4 w-12 h-12 bg-primary/50 dark:bg-primary/60 backdrop-blur-sm rounded-full center shadow-md hover:scale-110 soft z-10 disabled:opacity-50 disabled:cursor-not-allowed"
             title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
             <Heart
               size={22}
@@ -464,15 +510,15 @@ const ProductCard = ({
         <div className="bg-white dark:bg-gray-800 rounded-t-2xl p-4 -mt-4 relative flex flex-col flex-1">
           {/* Title */}
           <Link
-            href={`/products/product-details/1`}
+            href={`/products/product-details/${itemCombinationId}`}
             className="block text-base font-bold text-gray-900 dark:text-white mb-1 line-clamp-1 group-hover:text-primary transition-colors">
-            {title}
+            {displayTitle}
           </Link>
 
           {/* Description */}
-          {description && (
+          {displayDescription && (
             <p className="flex-1 text-xs text-gray-600 dark:text-gray-400 mb-5 line-clamp-2 leading-relaxed">
-              {description}
+              {displayDescription}
             </p>
           )}
 
@@ -521,22 +567,20 @@ const ProductCard = ({
       <div className="cursor-pointer group rounded-3xl overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700">
         {/* Image Section */}
         <div
-          onClick={() => router.push(`/products/product-details/1`)}
+          onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
           className="relative w-full aspect-square bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
           <Image
-            src={image}
-            alt={title}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`}
+            alt={displayTitle}
             fill
             className="object-contain p-8 group-hover:scale-105 transition-transform duration-500"
           />
 
           {/* Favorite Button - Top Right */}
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsFavorite(!isFavorite);
-            }}
-            className="absolute top-4 right-4 w-10 h-10 bg-white dark:bg-gray-800 rounded-full center shadow-md hover:scale-110 soft z-10"
+            onClick={toggleWishlist}
+            disabled={isWishlistLoading}
+            className="absolute top-4 right-4 w-10 h-10 bg-white dark:bg-gray-800 rounded-full center shadow-md hover:scale-110 soft z-10 disabled:opacity-50 disabled:cursor-not-allowed"
             title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
             <Heart
               size={18}
@@ -552,9 +596,9 @@ const ProductCard = ({
           {/* Title and Discount */}
           <div className="flex items-start justify-between gap-2 mb-3">
             <Link
-              href={`/products/product-details/1`}
+              href={`/products/product-details/${itemCombinationId}`}
               className="block text-base font-bold text-gray-900 dark:text-white line-clamp-2 leading-tight group-hover:text-primary transition-colors flex-1">
-              {title}
+              {displayTitle}
             </Link>
             {discount && (
               <span className="shrink-0 bg-teal-100 dark:bg-teal-900 text-teal-600 dark:text-teal-300 text-xs font-semibold px-2 py-1 rounded">
@@ -604,8 +648,8 @@ const ProductCard = ({
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
-            src={image}
-            alt={title}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`}
+            alt={displayTitle}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
@@ -619,11 +663,9 @@ const ProductCard = ({
           <div className="flex items-start justify-between mb-auto">
             {/* Favorite Button - Top Right */}
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsFavorite(!isFavorite);
-              }}
-              className="w-12 h-12 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full center shadow-md hover:scale-110 soft"
+              onClick={toggleWishlist}
+              disabled={isWishlistLoading}
+              className="w-12 h-12 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full center shadow-md hover:scale-110 soft disabled:opacity-50 disabled:cursor-not-allowed"
               title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
               <Heart
                 size={20}
@@ -645,9 +687,9 @@ const ProductCard = ({
           <div className="mt-auto">
             {/* Title */}
             <Link
-              href={`/products/product-details/1`}
+              href={`/products/product-details/${itemCombinationId}`}
               className="block text-lg font-bold text-white line-clamp-2 leading-tight drop-shadow-lg">
-              {title}
+              {displayTitle}
             </Link>
 
             {/* Prices */}

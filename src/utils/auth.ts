@@ -8,7 +8,7 @@ import {
 } from "../types/types";
 import { customAxios } from "./customAxios";
 
-const COOKIE_NAME = "ecommerceUser";
+const COOKIE_NAME = "basitUser";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
 /**
@@ -116,7 +116,7 @@ const handleAuthSuccess = (response: AuthResponse): User => {
 export const loginUser = async (data: LoginFormData): Promise<User> => {
   try {
     const response = await axios.post<AuthResponse>(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/Auth/login`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/Auth/login-customer`,
       {
         identifier: data.email,
         password: data.password,
@@ -139,12 +139,14 @@ export const loginUser = async (data: LoginFormData): Promise<User> => {
 export const registerUser = async (data: RegisterFormData): Promise<User> => {
   try {
     const response = await axios.post<AuthResponse>(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/Auth/register`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/Auth/register-customer`,
       {
         email: data.email,
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
+        phoneCode: data.phoneCode,
+        phoneNumber: data.phoneNumber,
         confirmPassword: data.confirmPassword,
         agreeToTerms: data.agreeToTerms,
       }

@@ -4,32 +4,51 @@ import { StarIcon, ShoppingCart, Heart } from "lucide-react";
 import Image from "next/image";
 import { useState, useMemo } from "react";
 import { useCartStore } from "@/src/store/cartStore";
+import { useUserStore } from "@/src/store/userStore";
 import QuantityController from "./QuantityController";
-
-interface ProductRowCardProps {
-  image: string;
-  title: string;
-  rating: number;
-  price: number;
-  oldPrice?: number;
-  discount?: number;
-  id?: string;
-}
+import { Product } from "@/src/types/types";
+import { useLocale } from "next-intl";
 
 const ProductRowCard = ({
-  image,
-  title,
-  rating,
-  price,
-  oldPrice,
-  discount,
+    thumbnailImage,
+  titleAr,
+  titleEn,
   id,
-}: ProductRowCardProps) => {
+  itemId,
+  itemCombinationId,
+  shortDescriptionEn,
+  shortDescriptionAr,
+  descriptionEn,
+  descriptionAr,
+  basePrice,
+  minimumPrice,
+  maximumPrice,
+  categoryTitle,
+  brandTitle,
+}: Product) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const { items, addItem, updateQuantity, removeItem } = useCartStore();
+  const { isAuthenticated } = useUserStore();
+  const locale = useLocale();
+  const isArabic = locale === "ar";
+  
 
-  // Generate a stable product ID based on title and price
-  const productId = id || `${title}-${price}`.toLowerCase().replace(/\s+/g, '-');
+  const image = thumbnailImage || "";
+  const displayTitle = isArabic ? (titleAr || "") : (titleEn || "");
+  const displayDescription = isArabic 
+    ? (descriptionAr || "")
+    : (descriptionEn || "");
+  const displayCategory = isArabic
+    ? (categoryTitle || "")
+    : (categoryTitle || "");
+  
+  const price = basePrice || minimumPrice || 0;
+  const oldPrice = maximumPrice && maximumPrice > price ? maximumPrice : undefined;
+  const discount = oldPrice ? Math.round(((oldPrice - price) / oldPrice) * 100) : undefined;
+
+  // Use itemCombinationId as the product ID, fallback to itemId or generated ID
+  const productId = itemCombinationId || itemId || id || `${displayTitle}-${price}`.toLowerCase().replace(/\s+/g, '-');
+  const productItemId = itemId || id || productId;
 
   // Find if product exists in cart
   const cartItem = useMemo(() => 
@@ -37,30 +56,45 @@ const ProductRowCard = ({
     [items, productId]
   );
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    addItem({
-      id: productId,
-      name: title,
-      price: price,
-      image: image,
-    });
-  };
-
-  const handleIncrement = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (cartItem) {
-      updateQuantity(productId, cartItem.quantity + 1);
+    if (!productItemId || !itemCombinationId) return;
+    try {
+      await addItem({
+        id: productId,
+        itemId: productItemId,
+        name: displayTitle,
+        price: price,
+        image: image,
+        offerCombinationPricingId: itemCombinationId,
+      }, isAuthenticated());
+    } catch (error) {
+      console.error("Failed to add item to cart:", error);
     }
   };
 
-  const handleDecrement = (e: React.MouseEvent) => {
+  const handleIncrement = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (cartItem) {
-      if (cartItem.quantity === 1) {
-        removeItem(productId);
-      } else {
-        updateQuantity(productId, cartItem.quantity - 1);
+      try {
+        await updateQuantity(productId, cartItem.quantity + 1, isAuthenticated());
+      } catch (error) {
+        console.error("Failed to update quantity:", error);
+      }
+    }
+  };
+
+  const handleDecrement = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (cartItem) {
+      try {
+        if (cartItem.quantity === 1) {
+          await removeItem(productId, isAuthenticated());
+        } else {
+          await updateQuantity(productId, cartItem.quantity - 1, isAuthenticated());
+        }
+      } catch (error) {
+        console.error("Failed to update quantity:", error);
       }
     }
   };
@@ -72,7 +106,7 @@ const ProductRowCard = ({
         <div className="w-58 h-58 relative bg-[#F0EEED] dark:bg-gray-700 center rounded-2xl overflow-hidden shrink-0 mx-auto">
           <Image
             src={image}
-            alt={title}
+            alt={displayTitle}
             fill
             className="object-fill rounded-2xl overflow-hidden group-hover:scale-105 soft"
           />
@@ -102,14 +136,14 @@ const ProductRowCard = ({
           <div>
             {/* Title */}
             <h3 className="text-xl font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
-              {title}
+              {displayTitle}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4 max-w-xl line-clamp-2 lg:line-clamp-3">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam blanditiis eius ipsum aperiam iusto qui deserunt dignissimos a accusantium tenetur repudiandae illum facere, fugit corrupti voluptatum rem nulla quasi obcaecati.
+            {displayDescription}
             </p>
 
             {/* Rating */}
-            <div className="flex items-center gap-1 mb-2">
+            {/* <div className="flex items-center gap-1 mb-2">
               {[...Array(5)].map((_, i) => (
                 <StarIcon
                   key={i}
@@ -126,7 +160,7 @@ const ProductRowCard = ({
               <span className="text-gray-900 dark:text-gray-300 ml-1 text-sm font-normal">
                 {rating}/5
               </span>
-            </div>
+            </div> */}
           </div>
 
           {/* Bottom Section */}

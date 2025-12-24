@@ -2,34 +2,41 @@
 
 import { X, TextAlignJustify, ChevronLeft, ChevronRight } from "lucide-react";
 import { useHeaderStore } from "@/src/store/headerStore";
-import { getCategoriesData } from "@/src/data/categoriesData";
 import { useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/routing";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 interface Category {
-  id: number;
-  title: string;
-  slug: string;
-  subcategories: {
-    id: number;
-    title: string;
-    items: {
-      id: number;
-      title: string;
-      path: string;
-    }[];
-  }[];
+  id: string;
+  titleAr: string;
+  titleEn: string;
+  children: Category[];
+  parentId: string;
+  isMainCategory: boolean;
 }
 
 const CategoriesSidebar = () => {
   const { isCategoriesOpen, closeCategories } = useHeaderStore();
   const t = useTranslations("categories");
-  const categories = getCategoriesData(t);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  
+  const { data: categories } = useQuery({
+    queryKey: ["categoriesTree"],
+    queryFn: () => axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/Category/tree`),
+    refetchOnWindowFocus: false,
+  });
+
+  // فلترة الـ Main Categories فقط
+  const mainCategories = categories?.data?.data?.filter(
+    (cat: Category) => cat.isMainCategory
+  ) || [];
 
   const handleCategoryClick = (category: Category) => {
-    setSelectedCategory(category);
+    if (category.children && category.children.length > 0) {
+      setSelectedCategory(category);
+    }
   };
 
   const handleBack = () => {
@@ -53,7 +60,7 @@ const CategoriesSidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 start-0 h-full w-[85vw] sm:w-96 bg-white dark:bg-gray-900 shadow-2xl z-[70] flex flex-col transition-transform duration-300 ${
+        className={`fixed top-0 start-0 h-full w-[95vw] max-w-80 bg-white dark:bg-gray-900 shadow-2xl z-[70] flex flex-col transition-transform duration-300 ${
           isCategoriesOpen
             ? "translate-x-0"
             : "-translate-x-full rtl:translate-x-full"
@@ -73,7 +80,7 @@ const CategoriesSidebar = () => {
             )}
             <TextAlignJustify size={20} />
             <h2 className="text-lg font-bold">
-              {selectedCategory ? selectedCategory.title : t("all")}
+              {selectedCategory ? selectedCategory.titleAr : t("all")}
             </h2>
           </div>
           <button
@@ -95,19 +102,21 @@ const CategoriesSidebar = () => {
           >
             <div className="p-4">
               <div className="space-y-2">
-                {categories.map((category) => (
+                {mainCategories.map((category: Category) => (
                   <button
                     key={category.id}
                     onClick={() => handleCategoryClick(category)}
                     className="w-full flex items-center justify-between p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors group"
                   >
                     <span className="font-semibold text-gray-900 dark:text-white">
-                      {category.title}
+                      {category.titleAr}
                     </span>
-                    <ChevronLeft
-                      size={18}
-                      className="text-gray-400 group-hover:text-primary dark:group-hover:text-primary transition-colors "
-                    />
+                    {category.children && category.children.length > 0 && (
+                      <ChevronLeft
+                        size={18}
+                        className="text-gray-400 group-hover:text-primary dark:group-hover:text-primary transition-colors"
+                      />
+                    )}
                   </button>
                 ))}
               </div>
@@ -124,33 +133,24 @@ const CategoriesSidebar = () => {
               <div className="p-4">
                 {/* View All Link */}
                 <Link
-                  href={`/products?cat=${selectedCategory.slug}`}
+                  href={`/products?c=${selectedCategory.id}`}
                   onClick={handleClose}
                   className="block mb-4 p-3 bg-primary dark:bg-primary text-white font-semibold text-center rounded-lg hover:opacity-90 transition-opacity"
                 >
-                  عرض جميع {selectedCategory.title}
+                  عرض جميع {selectedCategory.titleAr}
                 </Link>
 
                 {/* Subcategories */}
-                <div className="space-y-6">
-                  {selectedCategory.subcategories.map((subcategory) => (
-                    <div key={subcategory.id} className="space-y-3">
-                      <h3 className="font-bold text-secondary dark:text-primary text-sm uppercase tracking-wide border-b border-gray-200 dark:border-gray-700 pb-2">
-                        {subcategory.title}
-                      </h3>
-                      <ul className="space-y-2">
-                        {subcategory.items.map((item) => (
-                          <li key={item.id}>
-                            <Link
-                              href={item.path}
-                              onClick={handleClose}
-                              className="block text-sm text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors py-1.5 px-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded"
-                            >
-                              {item.title}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
+                <div className="space-y-3">
+                  {selectedCategory.children.map((subcategory) => (
+                    <div key={subcategory.id}>
+                      <Link
+                        href={`/products?s=${subcategory.id}`}
+                        onClick={handleClose}
+                        className="block text-sm font-medium text-gray-900 dark:text-white hover:text-primary dark:hover:text-primary transition-colors py-2 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded"
+                      >
+                        {subcategory.titleAr}
+                      </Link>
                     </div>
                   ))}
                 </div>

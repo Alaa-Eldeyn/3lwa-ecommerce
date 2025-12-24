@@ -8,6 +8,9 @@ interface HeaderState {
   isCartOpen: boolean
   toggleCart: () => void
   closeCart: () => void
+  isWishlistOpen: boolean
+  toggleWishlist: () => void
+  closeWishlist: () => void
   isCategoriesOpen: boolean
   toggleCategories: () => void
   closeCategories: () => void
@@ -24,6 +27,10 @@ export const useHeaderStore = create<HeaderState>((set) => ({
   isCartOpen: false,
   toggleCart: () => set((s) => ({ isCartOpen: !s.isCartOpen })),
   closeCart: () => set({ isCartOpen: false }),
+
+  isWishlistOpen: false,
+  toggleWishlist: () => set((s) => ({ isWishlistOpen: !s.isWishlistOpen })),
+  closeWishlist: () => set({ isWishlistOpen: false }),
 
   isCategoriesOpen: false,
   toggleCategories: () => set((s) => ({ isCategoriesOpen: !s.isCategoriesOpen })),

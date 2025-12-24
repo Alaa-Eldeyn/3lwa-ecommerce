@@ -1,6 +1,6 @@
 "use client";
 
-import { LogIn, LogOut, User, ShoppingBag } from "lucide-react";
+import { LogIn, LogOut, User, ShoppingBag, MapPin } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -62,6 +62,15 @@ const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
           >
             <ShoppingBag size={18} />
             <span className="text-sm font-medium">{t("orders")}</span>
+          </Link>
+
+          <Link
+            href={`/${locale}/profile?tab=address`}
+            onClick={handleLinkClick}
+            className="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors"
+          >
+            <MapPin size={18} />
+            <span className="text-sm font-medium">{t("addresses")}</span>
           </Link>
 
         </div>

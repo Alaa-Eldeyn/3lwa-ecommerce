@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { User, Package, Shield } from "lucide-react";
+import { User, Package, Shield, MapPin } from "lucide-react";
 import { ProfileFormData, PasswordUpdateFormData, Order } from "@/src/types/types";
 import { useUserStore } from "@/src/store/userStore";
 import { customAxios } from "@/src/utils/customAxios";
@@ -13,10 +13,11 @@ import ProfileSidebar from "./ProfileSidebar";
 import PersonalInfoTab from "./PersonalInfoTab";
 import OrdersTab from "./OrdersTab";
 import SecurityTab from "./SecurityTab";
+import AddressesTab from "./AddressesTab";
 
-type TabType = "personalInfo" | "orders" | "security";
+type TabType = "personalInfo" | "orders" | "security" | "address";
 
-const validTabs: TabType[] = ["personalInfo", "orders", "security"];
+const validTabs: TabType[] = ["personalInfo", "orders", "security", "address"];
 
 const Profile = () => {
   const t = useTranslations("profile");
@@ -123,6 +124,7 @@ const Profile = () => {
     { id: "personalInfo" as TabType, label: t("tabs.personalInfo"), icon: User },
     { id: "orders" as TabType, label: t("tabs.orders"), icon: Package },
     { id: "security" as TabType, label: t("tabs.security"), icon: Shield },
+    { id: "address" as TabType, label: t("tabs.addresses"), icon: MapPin },
   ];
 
   return (
@@ -177,6 +179,11 @@ const Profile = () => {
                 <SecurityTab
                   isLoading={isLoading}
                   onSubmit={onSubmitPassword}
+                  t={t}
+                />
+              )}
+              {activeTab === "address" && (
+                <AddressesTab
                   t={t}
                 />
               )}

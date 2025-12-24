@@ -9,7 +9,7 @@ const CategoriesToggle = () => {
   return (
     <button
         onClick={toggleCategories}
-        className="lg:hidden p-2 text-white hover:bg-white/10 transition-all"
+        className="lg:hidden rounded-lg p-2 text-white hover:bg-white/10 transition-all"
         aria-label="Toggle categories"
       >
         <Menu size={24} />

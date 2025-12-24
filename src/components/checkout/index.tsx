@@ -36,10 +36,28 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState<
     "card" | "cash" | "wallet"
   >("card");
+  const [selectedAddress, setSelectedAddress] = useState<any>(null);
 
   const onSubmit = (data: CheckoutFormData) => {
-    console.log("Order submitted:", { ...data, paymentMethod });
-    // Handle form submission
+    const orderData = {
+      contactInfo: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+      },
+      shippingAddress: selectedAddress || {
+        streetAddress: data.address,
+        city: data.city,
+        state: data.state,
+        zipCode: data.zipCode,
+        country: data.country,
+      },
+      paymentMethod,
+      notes: data.notes,
+    };
+    console.log("Order submitted:", orderData);
+    // Handle form submission - send to backend
   };
 
   // Sample order data - replace with actual cart data
@@ -68,7 +86,11 @@ const Checkout = () => {
             <div className="lg:col-span-2 space-y-6">
               <ContactInformation register={register} errors={errors} />
 
-              <ShippingAddress register={register} errors={errors} />
+              <ShippingAddress 
+                register={register} 
+                errors={errors} 
+                onAddressChange={setSelectedAddress}
+              />
 
               <PaymentMethod
                 selectedMethod={paymentMethod}

@@ -2,9 +2,11 @@
   "header": {
     "search": "ابحث...",
     "cart": "العربة",
+    "wishlist": "المفضلة",
     "account": "الحساب",
     "myAccount": "حسابي",
     "orders": "الطلبات",
+    "addresses": "العناوين",
     "logout": "تسجيل الخروج",
     "login": "تسجيل الدخول",
     "register": "إنشاء حساب",
@@ -17,7 +19,7 @@
     "contact": "اتصل بنا",
     "language": "اللغة",
     "theme": "المظهر",
-    "hello": "مرحباً، تسجيل الدخول",
+    "hello": "مرحباً، ",
     "accountAndLists": "الحساب والقوائم",
     "returnsLabel": "المرتجعات"
   },
@@ -184,7 +186,6 @@
     "orders": "الطلبات",
     "product-details": "تفاصيل المنتج"
   },
-  "filters": "الفلاتر",
   "auth": {
     "welcomeBack": "مرحباً بعودتك!",
     "loginSubtitle": "سجل الدخول إلى حسابك للمتابعة",
@@ -503,5 +504,65 @@
       "title": "ماذا يقول",
       "titleHighlight": "عملاؤنا"
     }
+  },
+  "filters": {
+    "filtersTitle": "الفلاتر",
+    "search": "البحث",
+    "searchPlaceholder": "ابحث عن المنتجات...",
+    "allCategories": "الفئات",
+    "price": "السعر",
+    "colors": "الألوان",
+    "size": "المقاس",
+    "minItemRating": "الحد الأدنى لتقييم المنتج",
+    "minVendorRating": "الحد الأدنى لتقييم البائع",
+    "brands": "البراندات",
+    "vendors": "البائعين",
+    "conditions": "حالة المنتج",
+    "attributes": "الصفات",
+    "stockQuantity": "المخزون والكمية",
+    "inStockOnly": "متوفر فقط",
+    "shippingDelivery": "الشحن والتوصيل",
+    "freeShippingOnly": "شحن مجاني فقط",
+    "vendorSaleOptions": "خيارات البائع والمبيعات",
+    "verifiedVendorsOnly": "بائعين موثوقين فقط",
+    "primeVendorsOnly": "بائعين مميزين فقط",
+    "onSaleOnly": "العروض فقط",
+    "buyBoxWinnersOnly": "الفائزين بصندوق الشراء فقط",
+    "withWarrantyOnly": "بضمان فقط",
+    "showAllOffers": "عرض جميع العروض",
+    "quickFilters": "فلاتر سريعة",
+    "freeShipping": "شحن مجاني",
+    "warranty": "ضمان",
+    "inStock": "متوفر",
+    "all": "الكل",
+    "stars": "نجوم"
+  },
+  "wishlist": {
+    "title": "قائمة الأمنيات",
+    "emptyTitle": "قائمة أمنياتك فارغة",
+    "emptyDescription": "يبدو أنك لم تضف أي منتجات إلى قائمة أمنياتك بعد. ابدأ التسوق لملئها!",
+    "continueShopping": "تابع التسوق",
+    "moveToCart": "نقل للعربة",
+    "remove": "إزالة",
+    "clearAll": "مسح الكل",
+    "confirmClear": "هل أنت متأكد من مسح جميع المنتجات من قائمة أمنياتك؟",
+    "currency": "ج.م",
+    "addedToWishlist": "تمت الإضافة إلى قائمة الأمنيات",
+    "removedFromWishlist": "تمت الإزالة من قائمة الأمنيات",
+    "movedToCart": "تم نقل المنتج إلى العربة",
+    "error": "حدث خطأ، يرجى المحاولة مرة أخرى",
+    "itemsCount": "{count} منتج",
+    "off": "خصم",
+    "breadcrumb": {
+      "home": "الرئيسية",
+      "wishlist": "قائمة الأمنيات"
+    }
+  },
+  "pagination": {
+    "previous": "السابق",
+    "next": "التالي",
+    "itemsPerPage": "عناصر في الصفحة",
+    "goToPage": "الانتقال إلى الصفحة {page}",
+    "pageInfo": "الصفحة {current} من {total}"
   }
 }

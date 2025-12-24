@@ -10,6 +10,7 @@ import { loginSchema } from "@/src/schemas/schemas";
 import { LoginFormData } from "@/src/types/types";
 import { loginUser } from "@/src/utils/auth";
 import { useUserStore } from "@/src/store/userStore";
+import { useCartStore } from "@/src/store/cartStore";
 import { useRouter } from "next/navigation";
 import Lottie from "lottie-react";
 import { useEffect } from "react";
@@ -18,6 +19,7 @@ const Login = () => {
   const t = useTranslations("auth");
   const router = useRouter();
   const { setUser } = useUserStore();
+  const { syncWithServer } = useCartStore();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [secureAnimation, setSecureAnimation] = useState<object | null>(null);
@@ -42,6 +44,10 @@ const Login = () => {
     try {
       const user = await loginUser(data);
       setUser(user);
+      
+      // مزامنة الـ cart المحلي مع الـ server بعد تسجيل الدخول
+      await syncWithServer();
+      
       router.push("/");
     } catch (error) {
       console.error("Login error:", error);

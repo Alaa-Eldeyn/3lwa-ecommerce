@@ -2,6 +2,7 @@
 import { useState } from "react";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
+import { useTranslations } from "next-intl";
 
 interface PriceRangeFilterProps {
   min: number;
@@ -12,6 +13,7 @@ interface PriceRangeFilterProps {
 
 const PriceRangeFilter = ({ min, max, value, onChange }: PriceRangeFilterProps) => {
   const [isOpen, setIsOpen] = useState(true);
+  const t = useTranslations("filters");
 
   return (
     <div className="border-b border-gray-200 dark:border-gray-700 pb-2 mb-4">
@@ -19,7 +21,7 @@ const PriceRangeFilter = ({ min, max, value, onChange }: PriceRangeFilterProps) 
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between text-lg font-bold text-gray-900 dark:text-white mb-3"
       >
-        Price
+        {t("price")}
         <svg
           className={`w-5 h-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
           fill="none"

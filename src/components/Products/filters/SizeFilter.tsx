@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface Size {
   id: string;
@@ -14,6 +15,7 @@ interface SizeFilterProps {
 
 const SizeFilter = ({ sizes, selectedSizes, onChange }: SizeFilterProps) => {
   const [isOpen, setIsOpen] = useState(true);
+  const t = useTranslations("filters");
 
   const handleSizeToggle = (sizeId: string) => {
     const newSelected = selectedSizes.includes(sizeId)
@@ -23,12 +25,12 @@ const SizeFilter = ({ sizes, selectedSizes, onChange }: SizeFilterProps) => {
   };
 
   return (
-    <div className="pb-2">
+    <div className="border-b border-gray-200 dark:border-gray-700 pb-2 mb-4">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between text-lg font-bold text-gray-900 dark:text-white mb-3"
       >
-        Size
+        {t("size")}
         <svg
           className={`w-5 h-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
           fill="none"

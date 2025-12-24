@@ -1,72 +1,205 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { addItemToCart, getCartSummary, removeItemFromCart, updateCartItem, clearCartApi, getCartCount } from "../services/cartService";
 
 export interface CartItem {
   id: string;
+  itemId: string;
   name: string;
   price: number;
   image: string;
   quantity: number;
+  offerCombinationPricingId?: string;
   size?: string;
   color?: string;
+  attributes?: Record<string, string>;
 }
 
 interface CartState {
   items: CartItem[];
-  addItem: (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
-  clearCart: () => void;
+  isLoading: boolean;
+  isSyncing: boolean; // للتزامن مع API
+  addItem: (item: Omit<CartItem, 'quantity'> & { quantity?: number }, isAuthenticated?: boolean) => Promise<void>;
+  removeItem: (id: string, isAuthenticated?: boolean) => Promise<void>;
+  updateQuantity: (id: string, quantity: number, isAuthenticated?: boolean) => Promise<void>;
+  clearCart: (isAuthenticated?: boolean) => Promise<void>;
+  syncWithServer: () => Promise<void>; // للمزامنة مع الـ server
+  loadCartFromServer: () => Promise<void>; // لتحميل الـ cart من الـ server
   getTotalItems: () => number;
   getTotalPrice: () => number;
   getItemById: (id: string) => CartItem | undefined;
+  setItems: (items: CartItem[]) => void;
 }
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      isLoading: false,
+      isSyncing: false,
 
-      addItem: (item) => {
-        const items = get().items;
-        const existingItem = items.find((i) => i.id === item.id);
+      // دالة لإضافة item للـ cart
+      addItem: async (item, isAuthenticated = false) => {
+        if (isAuthenticated) {
+          // لو اليوزر مسجل، نستخدم الـ API
+          try {
+            set({ isLoading: true });
+            await addItemToCart({
+              itemId: item.itemId,
+              offerCombinationPricingId: item.offerCombinationPricingId || item.id,
+              quantity: item.quantity || 1,
+            });
+            
+            // نحمل الـ cart من الـ server بعد الإضافة
+            await get().loadCartFromServer();
+          } catch (error) {
+            console.error("Failed to add item to server cart:", error);
+            throw error;
+          } finally {
+            set({ isLoading: false });
+          }
+        } else {
+          // لو اليوزر مش مسجل، نحفظ في localStorage
+          const items = get().items;
+          const existingItem = items.find((i) => i.id === item.id);
 
-        if (existingItem) {
-          set({
-            items: items.map((i) =>
-              i.id === item.id
-                ? { ...i, quantity: i.quantity + (item.quantity || 1) }
-                : i
-            ),
-          });
+          if (existingItem) {
+            set({
+              items: items.map((i) =>
+                i.id === item.id
+                  ? { ...i, quantity: i.quantity + (item.quantity || 1) }
+                  : i
+              ),
+            });
+          } else {
+            set({
+              items: [...items, { ...item, quantity: item.quantity || 1 }],
+            });
+          }
+        }
+      },
+
+      // دالة لحذف item من الـ cart
+      removeItem: async (id, isAuthenticated = false) => {
+        if (isAuthenticated) {
+          try {
+            set({ isLoading: true });
+            await removeItemFromCart(id);
+            await get().loadCartFromServer();
+          } catch (error) {
+            console.error("Failed to remove item from server cart:", error);
+            throw error;
+          } finally {
+            set({ isLoading: false });
+          }
         } else {
           set({
-            items: [...items, { ...item, quantity: item.quantity || 1 }],
+            items: get().items.filter((item) => item.id !== id),
           });
         }
       },
 
-      removeItem: (id) => {
-        set({
-          items: get().items.filter((item) => item.id !== id),
-        });
-      },
-
-      updateQuantity: (id, quantity) => {
+      // دالة لتحديث الكمية
+      updateQuantity: async (id, quantity, isAuthenticated = false) => {
         if (quantity <= 0) {
-          get().removeItem(id);
+          await get().removeItem(id, isAuthenticated);
           return;
         }
 
-        set({
-          items: get().items.map((item) =>
-            item.id === id ? { ...item, quantity } : item
-          ),
-        });
+        if (isAuthenticated) {
+          try {
+            set({ isLoading: true });
+            await updateCartItem({
+              cartItemId: id,
+              quantity,
+            });
+            await get().loadCartFromServer();
+          } catch (error) {
+            console.error("Failed to update item quantity:", error);
+            throw error;
+          } finally {
+            set({ isLoading: false });
+          }
+        } else {
+          set({
+            items: get().items.map((item) =>
+              item.id === id ? { ...item, quantity } : item
+            ),
+          });
+        }
       },
 
-      clearCart: () => {
-        set({ items: [] });
+      // دالة لمسح الـ cart
+      clearCart: async (isAuthenticated = false) => {
+        if (isAuthenticated) {
+          try {
+            set({ isLoading: true });
+            await clearCartApi();
+            set({ items: [] });
+          } catch (error) {
+            console.error("Failed to clear server cart:", error);
+            throw error;
+          } finally {
+            set({ isLoading: false });
+          }
+        } else {
+          set({ items: [] });
+        }
+      },
+
+      // دالة للمزامنة مع الـ server (تستخدم عند تسجيل الدخول)
+      syncWithServer: async () => {
+        try {
+          set({ isSyncing: true });
+          const localItems = get().items;
+
+          if (localItems.length > 0) {
+            // نضيف كل الـ items اللي في localStorage للـ server
+            for (const item of localItems) {
+              try {
+                await addItemToCart({
+                  itemId: item.itemId,
+                  offerCombinationPricingId: item.offerCombinationPricingId || item.id,
+                  quantity: item.quantity,
+                });
+              } catch (error) {
+                console.error("Failed to sync item:", item, error);
+              }
+            }
+          }
+
+          // نحمل الـ cart من الـ server
+          await get().loadCartFromServer();
+        } catch (error) {
+          console.error("Failed to sync cart with server:", error);
+        } finally {
+          set({ isSyncing: false });
+        }
+      },
+
+      // دالة لتحميل الـ cart من الـ server
+      loadCartFromServer: async () => {
+        try {
+          const cartData = await getCartSummary();
+          
+          // نحول الـ response للـ format بتاعنا
+          const serverItems: CartItem[] = cartData.items?.map((item: any) => ({
+            id: item.cartItemId || item.id,
+            itemId: item.itemId || item.id,
+            name: item.itemName || item.name,
+            price: item.price,
+            image: item.imagePath || item.image,
+            quantity: item.quantity,
+            offerCombinationPricingId: item.offerCombinationPricingId,
+            size: item.size,
+            color: item.color,
+          })) || [];
+
+          set({ items: serverItems });
+        } catch (error) {
+          console.error("Failed to load cart from server:", error);
+          throw error;
+        }
       },
 
       getTotalItems: () => {
@@ -82,6 +215,10 @@ export const useCartStore = create<CartState>()(
 
       getItemById: (id) => {
         return get().items.find((item) => item.id === id);
+      },
+
+      setItems: (items) => {
+        set({ items });
       },
     }),
     {

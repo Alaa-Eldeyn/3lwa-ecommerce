@@ -12,20 +12,20 @@ const isValidValue = (value: any): boolean => {
 };
 
 const redirectToLogin = () => {
-  deleteCookie("ecommerceUser");
+  deleteCookie("basitUser");
   if (typeof window !== "undefined") {
     const currentPath = window.location.pathname + window.location.search;
-    window.location.href = `/signin?redirect=${encodeURIComponent(currentPath)}`;
+    window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
   }
 };
 
 const updateAccessTokenOnly = (newAccessToken: string) => {
-  const storedUser = getCookie("ecommerceUser");
+  const storedUser = getCookie("basitUser");
   if (storedUser) {
     try {
       const user = JSON.parse(storedUser as string);
       user.token = newAccessToken;
-      setCookie("ecommerceUser", JSON.stringify(user), {
+      setCookie("basitUser", JSON.stringify(user), {
         maxAge: 60 * 60 * 24 * 7, // 7 أيام
       });
     } catch (error) {
@@ -38,13 +38,13 @@ const updateAccessAndRefreshTokens = (
   newAccessToken: string,
   newRefreshToken: string
 ) => {
-  const storedUser = getCookie("ecommerceUser");
+  const storedUser = getCookie("basitUser");
   if (storedUser) {
     try {
       const user = JSON.parse(storedUser as string);
       user.token = newAccessToken;
       user.refreshToken = newRefreshToken;
-      setCookie("ecommerceUser", JSON.stringify(user), {
+      setCookie("basitUser", JSON.stringify(user), {
         maxAge: 60 * 60 * 24 * 7,
       });
     } catch (error) {
@@ -119,7 +119,7 @@ export const customAxios = axios.create({
 // Request interceptor - لإضافة الـ token للـ headers
 customAxios.interceptors.request.use(
   (config) => {
-    const userStr = getCookie("ecommerceUser");
+    const userStr = getCookie("basitUser");
     
     if (userStr) {
       try {
@@ -149,7 +149,7 @@ customAxios.interceptors.response.use(
 
     originalRequest._retry = true;
 
-    const userStr = getCookie("ecommerceUser");
+    const userStr = getCookie("basitUser");
     if (!userStr) {
       redirectToLogin();
       return Promise.reject("No user data found");

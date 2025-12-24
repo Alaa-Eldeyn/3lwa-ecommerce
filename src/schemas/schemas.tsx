@@ -2,7 +2,7 @@ import z from "zod";
 
 export const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
   rememberMe: z.boolean().optional(),
 });
 
@@ -10,8 +10,10 @@ export const registerSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
-  phone: z.string().optional(),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  phoneCode:z.string().optional(),
+  phoneNumber:z.string().optional(),
+  phone: z.string().min(1, "Phone code is required"),
   confirmPassword: z.string(),
   agreeToTerms: z.boolean().refine((val) => val === true, {
     message: "You must agree to the terms and conditions",
@@ -31,8 +33,8 @@ export const profileSchema = z.object({
 });
 
 export const passwordUpdateSchema = z.object({
-  currentPassword: z.string().min(6, "Password must be at least 6 characters"),
-  newPassword: z.string().min(6, "Password must be at least 6 characters"),
+  currentPassword: z.string().min(8, "Password must be at least 8 characters"),
+  newPassword: z.string().min(8, "Password must be at least 8 characters"),
   confirmNewPassword: z.string(),
 }).refine((data) => data.newPassword === data.confirmNewPassword, {
   message: "Passwords do not match",

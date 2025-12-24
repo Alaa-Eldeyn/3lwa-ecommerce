@@ -3,8 +3,9 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
-import { PhoneInput } from "react-international-phone";
-import "react-international-phone/style.css";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { parsePhoneNumber } from "libphonenumber-js";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
@@ -43,7 +44,28 @@ const Register = () => {
   const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
     try {
-      const user = await registerUser(data);
+      let phoneCode = "";
+      let phoneNumber = "";
+      if (data.phone) {
+        try {
+          const parsed = parsePhoneNumber(data.phone);
+          if (parsed) {
+            phoneCode = parsed.countryCallingCode;
+            phoneNumber = parsed.nationalNumber;
+          }
+        } catch (error) {
+          console.error("Phone parsing error:", error);
+        }
+      }
+
+      // إرسال البيانات مع الكود والرقم المنفصلين
+      const registrationData = {
+        ...data,
+        phoneCode,
+        phoneNumber,
+      };
+
+      const user = await registerUser(registrationData);
       setUser(user);
       router.push("/");
     } catch (error) {
@@ -158,16 +180,11 @@ const Register = () => {
                   control={control}
                   render={({ field: { onChange, value } }) => (
                     <PhoneInput
-                      defaultCountry="eg"
+                      international
+                      defaultCountry="EG"
                       value={value || ""}
                       onChange={onChange}
-                      inputClassName="!w-full !px-4 !py-3 !bg-gray-50 dark:!bg-gray-900 !rounded-r-xl !text-gray-900 dark:!text-white focus:!outline-none"
-                      countrySelectorStyleProps={{
-                        buttonClassName: "!bg-gray-50 !px-2 dark:!bg-gray-900 !border !border-gray-200 dark:!border-gray-700 !rounded-l-xl",
-                        dropdownStyleProps: {
-                          className: "!bg-white dark:!bg-gray-800 !border !border-gray-200 dark:!border-gray-700 !rounded-xl !shadow-lg"
-                        }
-                      }}
+                      className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   )}
                 />

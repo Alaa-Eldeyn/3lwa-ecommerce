@@ -1,10 +1,9 @@
 "use client"
+import { Category } from "@/src/types/types";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
-interface Category {
-  id: string;
-  name: string;
-}
+
 
 interface CategoryFilterProps {
   categories: Category[];
@@ -14,6 +13,9 @@ interface CategoryFilterProps {
 
 const CategoryFilter = ({ categories, selectedCategories, onChange }: CategoryFilterProps) => {
   const [isOpen, setIsOpen] = useState(true);
+  const locale = useLocale()
+  const isArabic = locale === "ar";
+    const t = useTranslations("filters");
 
   const handleCategoryToggle = (categoryId: string) => {
     const newSelected = selectedCategories.includes(categoryId)
@@ -28,7 +30,7 @@ const CategoryFilter = ({ categories, selectedCategories, onChange }: CategoryFi
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between text-lg font-bold text-gray-900 dark:text-white mb-3"
       >
-        Categories
+        {t("allCategories")}
         <svg
           className={`w-5 h-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
           fill="none"
@@ -51,7 +53,7 @@ const CategoryFilter = ({ categories, selectedCategories, onChange }: CategoryFi
                   className="w-4 h-4 text-gray-900 dark:text-white bg-gray-100 border-gray-300 rounded focus:ring-0"
                 />
                 <span className="ms-2 text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
-                  {category.name}
+                  {isArabic ? category.titleAr : category.titleEn}
                 </span>
               </label>
               <svg
