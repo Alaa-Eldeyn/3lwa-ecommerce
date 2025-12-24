@@ -7,8 +7,6 @@ interface CartItemProps {
   id: string;
   image: string;
   title: string;
-  size: string;
-  color: string;
   price: number;
   quantity: number;
   onQuantityChange: (id: string, newQuantity: number) => void;
@@ -19,8 +17,6 @@ const CartItem = ({
   id,
   image,
   title,
-  size,
-  color,
   price,
   quantity,
   onQuantityChange,
@@ -56,12 +52,6 @@ const CartItem = ({
             <h3 className="font-bold text-gray-900 dark:text-white mb-1">
               {title}
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Size: <span className="text-gray-900 dark:text-white">{size}</span>
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Color: <span className="text-gray-900 dark:text-white">{color}</span>
-            </p>
           </div>
 
           {/* Remove Button */}

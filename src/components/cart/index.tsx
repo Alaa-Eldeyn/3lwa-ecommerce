@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useCartStore } from "@/store/cartStore";
-import { useUserStore } from "@/store/userStore";
 import Breadcrumb from "../common/Breadcrumb";
 import CartItem from "./CartItem";
 import OrderSummary from "./OrderSummary";
 import EmptyCart from "./EmptyCart";
+import { useCartStore } from "@/src/store/cartStore";
+import { useUserStore } from "@/src/store/userStore";
 
 const Cart = () => {
   const { items, updateQuantity, removeItem, getTotalPrice, isLoading, loadCartFromServer } = useCartStore();
@@ -102,8 +102,6 @@ const Cart = () => {
                 id={item.id}
                 image={item.image}
                 title={item.name}
-                size={item.size}
-                color={item.color}
                 price={item.price}
                 quantity={item.quantity}
                 onQuantityChange={handleQuantityChange}

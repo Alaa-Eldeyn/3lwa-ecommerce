@@ -1,6 +1,6 @@
 "use client";
 
-import { StarIcon, ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart, Heart } from "lucide-react";
 import Image from "next/image";
 import { useState, useMemo } from "react";
 import { useCartStore } from "@/src/store/cartStore";
@@ -13,7 +13,6 @@ const ProductRowCard = ({
     thumbnailImage,
   titleAr,
   titleEn,
-  id,
   itemId,
   itemCombinationId,
   shortDescriptionEn,
@@ -47,8 +46,8 @@ const ProductRowCard = ({
   const discount = oldPrice ? Math.round(((oldPrice - price) / oldPrice) * 100) : undefined;
 
   // Use itemCombinationId as the product ID, fallback to itemId or generated ID
-  const productId = itemCombinationId || itemId || id || `${displayTitle}-${price}`.toLowerCase().replace(/\s+/g, '-');
-  const productItemId = itemId || id || productId;
+  const productId = itemCombinationId || itemId || `${displayTitle}-${price}`.toLowerCase().replace(/\s+/g, '-');
+  const productItemId = itemId || productId;
 
   // Find if product exists in cart
   const cartItem = useMemo(() => 
