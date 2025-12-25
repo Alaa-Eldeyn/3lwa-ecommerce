@@ -32,7 +32,7 @@ const Header = () => {
 
         {/* Bottom Row - Categories Navigation */}
         <div className="bg-header">
-          <div className="lg:px-5 relative overflow-auto">
+          <div className="px-4 lg:px-8 relative overflow-auto">
             <CategoriesNav />
           </div>
         </div>

@@ -35,14 +35,7 @@ const HeroCards = () => {
       linkText: t('link4'),
     },
 
-    {
-      id: 2,
-      image: '/images/Hero/bu.jpg',
-      title: t('title2'),
-      description: t('description2'),
-      link: '/products?sale=true',
-      linkText: t('link2'),
-    },
+
     {
       id: 39,
       image: '/images/Hero/bue.jpg',
@@ -56,6 +49,14 @@ const HeroCards = () => {
       title: t('title4'),
       link: '/installment',
       linkText: t('link4'),
+    },
+        {
+      id: 2,
+      image: '/images/Hero/bu.jpg',
+      title: t('title2'),
+      description: t('description2'),
+      link: '/products?sale=true',
+      linkText: t('link2'),
     },
   ];
 
