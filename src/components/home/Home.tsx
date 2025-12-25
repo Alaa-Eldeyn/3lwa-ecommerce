@@ -71,10 +71,16 @@ export default function Home({ variant = "simple" }: HomeProps) {
   else if (variant === "simple") {
     return (
       <main>
-        <TopBannersCarousel variant="default" />
-        <HeroCards />
-        <CategoriesCarousel variant="card" />
+        {/* Hero Section with Overlapping Cards - Amazon Style */}
+        <section className="relative mb-8">
+          <TopBannersCarousel variant="default" />
+          <div className="relative -mt-24 lg:-mt-32 z-10">
+            <HeroCards />
+          </div>
+        </section>
+        
         <TopBanner />
+        <CategoriesCarousel variant="card" />
         <FlashDeals cardVariant="bordered" />
         <NewArrivalBanner />
         <NewArrivals cardVariant="bordered" />

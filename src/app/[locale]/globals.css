@@ -22,13 +22,7 @@
   --breakpoint-xl: 1280px;
   --breakpoint-xxl: 1440px;
 }
-/* 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #101828;
-    --foreground: #ededed;
-  }
-} */
+
 
 @layer base {
   h1 {
@@ -139,15 +133,13 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: #fafafa;
+  color: #101828;
   font-family: var(--font-cairo);
   /* padding-top: 140px; */
 }
-
-@media (max-width: 1024px) {
-  body {
-    /* padding-top: 80px; */
-  }
+[data-theme=dark] body{
+  background: #101828;
+  color: #ededed;
 }
 

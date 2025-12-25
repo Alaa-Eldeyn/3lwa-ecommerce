@@ -37,7 +37,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className={`${cairoFont.variable} antialiased font-cairo`}
+        className={`${cairoFont.variable} antialiased font-cairo `}
         suppressHydrationWarning
       >
         <NextIntlClientProvider messages={messages}>

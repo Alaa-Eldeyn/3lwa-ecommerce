@@ -6,6 +6,7 @@ import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations } from 'next-intl';
+import DummyProductCard from "../common/DummyProductCard";
 
 interface TopSellersProps {
   cardVariant?: "default" | "bordered" | "minimal" | "homz" | "nike" | "clean" | "gradient";
@@ -41,7 +42,7 @@ const TopSellers = ({ cardVariant }: TopSellersProps) => {
   if (products?.totalRecords == 0) return null;
 
   return (
-    <section className="pb-10 lg:pb-0 bg-white dark:bg-gray-900">
+    <section className="pb-5 lg:pb-0 bg-white dark:bg-gray-900">
       <div className="container mx-auto">
         {/* Title */}
         <h2 className="text-center text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
@@ -51,7 +52,7 @@ const TopSellers = ({ cardVariant }: TopSellersProps) => {
         {/* Products Grid */}
         {loading ? (
           <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 py-2">
-            {[...Array(5)].map((_, i) => (
+            {[...Array(4)].map((_, i) => (
               <div key={i} className="animate-pulse">
                 <div className="bg-gray-200 dark:bg-gray-700 aspect-square rounded-lg mb-3"></div>
                 <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
@@ -63,14 +64,14 @@ const TopSellers = ({ cardVariant }: TopSellersProps) => {
         ) : (
           <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 py-2">
             {products?.items?.map((item: any, i: number) => (
-              <ProductCard key={i} {...item} variant={cardVariant} />
+              <DummyProductCard key={i} {...item} variant={cardVariant} />
             ))}
           </div>
         )}
 
         {/* Button */}
-        <Link href="/products" className="flex justify-center mt-5">
-          <button className="px-10 py-3 border border-gray-400 rounded-full text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+        <Link href="/products" className="flex justify-center mt-3">
+          <button className="px-10 py-2 border border-gray-400 rounded-xl text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
             {t('viewAll')}
           </button>
         </Link>

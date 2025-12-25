@@ -42,7 +42,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
   // Default variant - Full width
   if (variant === "default") {
     return (
-      <div className="w-full h-72 lg:h-[500px] lg:aspect-8/2 banner-carousel !z-0">
+      <div className="w-full h-72 lg:h-[400px] lg:aspect-8/2 banner-carousel !z-0">
         <Swiper
           modules={[Autoplay, Pagination, Navigation]}
           spaceBetween={0}

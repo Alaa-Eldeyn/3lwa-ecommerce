@@ -83,7 +83,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
   // Circular variant
   if (variant === "rounded") {
     return (
-      <section className="pb-3 bg-white dark:bg-gray-900">
+      <section className="py-3 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="relative px-12">
             <Swiper
@@ -178,7 +178,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
   // Card variant
   if (variant === "card") {
     return (
-      <section className="pb-6 bg-white dark:bg-gray-900">
+      <section className="py-5 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="relative lg:px-10">
             <Swiper

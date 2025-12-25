@@ -8,6 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import Link from "next/link";
 import { useTranslations } from 'next-intl';
+import DummyProductCard from "../common/DummyProductCard";
 
 interface FlashDealsProps {
   cardVariant?: "default" | "bordered" | "minimal" | "homz" | "nike" | "clean" | "gradient";
@@ -48,9 +49,9 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
   }, []);
 
   return (
-    <section className="py-10 bg-white dark:bg-gray-900">
+    <section className="pb-5 bg-white dark:bg-gray-900">
       <div className="container mx-auto">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-3">
           <div>
             <h2 className="text-center md:text-left text-4xl font-extrabold text-gray-900 dark:text-white mb-2">
               <span className="text-red-600">{t('titleHighlight')}</span> {t('title')}
@@ -59,8 +60,8 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
 
           <div className="flex gap-3 mt-4 md:mt-0">
             <div className="relative">
-              <div className="bg-red-600 rounded-xl p-3 min-w-[65px] shadow-lg">
-                <span className="block text-3xl font-bold text-white text-center leading-none">
+              <div className="bg-red-600 rounded-xl p-3 min-w-[60px] shadow-lg">
+                <span className="block text-2xl font-bold text-white text-center leading-none">
                   {String(timeLeft.hours).padStart(2, "0")}
                 </span>
               </div>
@@ -72,8 +73,8 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
               <span className="text-2xl font-bold text-red-600">:</span>
             </div>
             <div className="relative">
-              <div className="bg-red-600 rounded-xl p-3 min-w-[65px] shadow-lg">
-                <span className="block text-3xl font-bold text-white text-center leading-none">
+              <div className="bg-red-600 rounded-xl p-3 min-w-[60px] shadow-lg">
+                <span className="block text-2xl font-bold text-white text-center leading-none">
                   {String(timeLeft.minutes).padStart(2, "0")}
                 </span>
               </div>
@@ -85,8 +86,8 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
               <span className="text-2xl font-bold text-red-600">:</span>
             </div>
             <div className="relative">
-              <div className="bg-red-600 rounded-xl p-3 min-w-[65px] shadow-lg">
-                <span className="block text-3xl font-bold text-white text-center leading-none">
+              <div className="bg-red-600 rounded-xl p-3 min-w-[60px] shadow-lg">
+                <span className="block text-2xl font-bold text-white text-center leading-none">
                   {String(timeLeft.seconds).padStart(2, "0")}
                 </span>
               </div>
@@ -100,7 +101,7 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
         <div className="flash-deals-carousel">
           {loading ? (
             <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {[...Array(5)].map((_, i) => (
+              {[...Array(4)].map((_, i) => (
                 <div key={i} className="animate-pulse">
                   <div className="bg-gray-200 dark:bg-gray-700 aspect-square rounded-lg mb-3"></div>
                   <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
@@ -138,7 +139,7 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
               }}>
               {flashDeals.map((item, i) => (
                 <SwiperSlide key={i} className="py-2">
-                  <ProductCard {...item} variant={cardVariant} />
+                  <DummyProductCard {...item} variant={cardVariant} />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -146,8 +147,8 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
         </div>
 
         {/* Button */}
-        <Link href="/products" className="flex justify-center mt-5">
-          <button className="px-10 py-3 border border-gray-400 rounded-full text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+        <Link href="/products" className="flex justify-center mt-3">
+          <button className="px-10 py-2 border border-gray-400 rounded-xl text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
             {t('viewAll')}
           </button>
         </Link>

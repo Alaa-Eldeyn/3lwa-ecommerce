@@ -27,7 +27,7 @@ const CategoriesBentoGrid = ({ variant = "bento" }: CategoriesBentoGridProps) =>
   // Bento variant
   if (variant === "bento") {
     return (
-      <section className="pt-10 lg:pt-16 bg-white dark:bg-gray-900">
+      <section className="pt-5 bg-white dark:bg-gray-900">
         <div className="container">
           <div className="px-5 lg:px-10 py-10 bg-gray-100 dark:bg-gray-800 rounded-3xl">
             {/* Title */}
@@ -106,7 +106,7 @@ const CategoriesBentoGrid = ({ variant = "bento" }: CategoriesBentoGridProps) =>
   // Row variant
   else if (variant === "row") {
     return (
-      <section className="pt-10 lg:pt-16 bg-white dark:bg-gray-900">
+      <section className="pt-5 bg-white dark:bg-gray-900">
         <div className="container">
           <div className="px-5 lg:px-10 py-10 bg-gray-100 dark:bg-gray-800 rounded-3xl">
             {/* Title */}
