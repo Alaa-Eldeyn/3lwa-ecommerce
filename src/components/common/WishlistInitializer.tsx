@@ -16,7 +16,7 @@ const WishlistInitializer = () => {
     if (user) {
       loadWishlistFromServer();
     }
-  }, [user?.userId]); // نعتمد على userId فقط لتجنب التحميل المتكرر
+  }, [user]); // نعتمد على userId فقط لتجنب التحميل المتكرر
 
   return null;
 };
