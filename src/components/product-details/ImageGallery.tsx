@@ -12,7 +12,6 @@ interface ImageGalleryProps {
 const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
-
   const handlePrevious = () => {
     setSelectedImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
@@ -45,7 +44,7 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
               }`}
             >
               <Image
-                src={img}
+                src={`${process.env.NEXT_PUBLIC_DOMAIN}/${img}`}
                 alt={`${productTitle} ${index + 1}`}
                 width={100}
                 height={100}
@@ -61,7 +60,7 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
           className="flex-1 relative aspect-square bg-[#F0EEED] dark:bg-gray-800 rounded-3xl overflow-hidden cursor-zoom-in group"
         >
           <Image
-            src={images[selectedImage]}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}/${images[selectedImage]}`}
             alt={productTitle}
             fill
             className="object-cover group-hover:scale-105 soft"
@@ -102,7 +101,7 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
           {/* Main Image */}
           <div className="relative w-[70vw] h-[70vh] max-w-6xl">
             <Image
-              src={images[selectedImage]}
+              src={`${process.env.NEXT_PUBLIC_DOMAIN}/${images[selectedImage]}`}
               alt={`${productTitle} ${selectedImage + 1}`}
               fill
               className="object-contain"
@@ -131,7 +130,7 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
                 }`}
               >
                 <Image
-                  src={img}
+                  src={`${process.env.NEXT_PUBLIC_DOMAIN}/${img}`}
                   alt={`Thumbnail ${index + 1}`}
                   width={64}
                   height={64}

@@ -79,6 +79,7 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
     queryKey: ["product", id],
     queryFn: () => axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/ItemDetails/${id}`),
     enabled: !!id,
+    refetchOnWindowFocus: false,
   });
   
   // Try different response paths - API might return data in different structures

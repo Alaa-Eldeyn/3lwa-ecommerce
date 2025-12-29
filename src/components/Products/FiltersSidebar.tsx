@@ -112,10 +112,9 @@ const FiltersSidebar = ({
         className={`
           fixed lg:static
           inset-y-0 left-0
-          w-[95%] max-w-80
+          w-[95%] max-w-[300px]
           bg-white dark:bg-gray-900
-          p-5
-          rounded-none lg:rounded-3xl
+          p-5 rounded-none lg:rounded-3xl
           border-e lg:border border-gray-200 dark:border-gray-700
           h-screen lg:h-fit
           overflow-y-auto
