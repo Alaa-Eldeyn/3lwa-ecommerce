@@ -293,7 +293,7 @@ const Register = () => {
             </form>
 
             {/* Divider */}
-            <div className="relative my-6">
+            {/* <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
               </div>
@@ -302,10 +302,10 @@ const Register = () => {
                   {t("orContinueWith")}
                 </span>
               </div>
-            </div>
+            </div> */}
 
             {/* Social Login Buttons */}
-            <div className="grid grid-cols-2 gap-3">
+            {/* <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 className="center text-gray-900! gap-2 px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 soft"
@@ -340,7 +340,7 @@ const Register = () => {
                 </svg>
                 GitHub
               </button>
-            </div>
+            </div> */}
 
             {/* Sign In Link */}
             <div className="mt-6 text-center">

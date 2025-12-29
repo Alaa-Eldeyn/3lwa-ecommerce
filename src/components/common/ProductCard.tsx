@@ -36,7 +36,7 @@ const ProductCard = ({
   const router = useRouter();
   const locale = useLocale();
   const { items, addItem, updateQuantity, removeItem } = useCartStore();
-  const { items: wishlistItems, addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist, loadWishlistFromServer } = useWishlistStore();
+  const { items: wishlistItems, addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore();
   const { isAuthenticated, user } = useUserStore();
   const [isWishlistLoading, setIsWishlistLoading] = useState(false);
 
@@ -47,13 +47,6 @@ const ProductCard = ({
     if (!itemCombinationId) return false;
     return isInWishlist(itemCombinationId);
   }, [wishlistItems, itemCombinationId, isInWishlist]);
-
-  // تحميل الـ wishlist عند التحميل إذا كان اليوزر مسجل
-  useEffect(() => {
-    if (user) {
-      loadWishlistFromServer();
-    }
-  }, [user, loadWishlistFromServer]);
   
 
   const image = thumbnailImage || "";
@@ -75,6 +68,8 @@ const ProductCard = ({
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!itemId || !itemCombinationId) return;
+    console.log("Adding to cart:", itemCombinationId);
+    console.log("Adding to cart:", itemId);
     try {
       await addItem({
         id: itemCombinationId,

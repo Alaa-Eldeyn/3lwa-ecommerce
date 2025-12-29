@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { StarIcon, Heart, ShoppingCart, Minus, Plus, Check } from "lucide-react";
+import { StarIcon, Heart, ShoppingCart, Minus, Plus, Check, Store } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { useCartStore } from "@/src/store/cartStore";
 import { useUserStore } from "@/src/store/userStore";
 import { ProductDetails, ProductAttribute, SelectedValueId, CombinationResponse } from "@/src/types/types";
 import axios from "axios";
+import VendorsSidebar from "./VendorsSidebar";
 
 const ProductInfo = ({product, onProductUpdate}: {product: ProductDetails, onProductUpdate: (updatedProduct: ProductDetails) => void}) => {
   const t = useTranslations("productDetails");
@@ -108,6 +109,7 @@ const ProductInfo = ({product, onProductUpdate}: {product: ProductDetails, onPro
   const [isFavorite, setIsFavorite] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isLoadingCombination, setIsLoadingCombination] = useState(false);
+  const [isVendorsSidebarOpen, setIsVendorsSidebarOpen] = useState(false);
 
   // Helper function to check if value is a color
   function isColorValue(value: string): boolean {
@@ -319,7 +321,8 @@ const ProductInfo = ({product, onProductUpdate}: {product: ProductDetails, onPro
       Object.entries(selectedAttributes).forEach(([attributeId, attr]) => {
         selectedAttrsData[attributeId] = attr.value;
       });
-
+      console.log(product);
+      // return
       await addItem(
         {
           id: product.currentCombination?.combinationId || product.id,
@@ -350,25 +353,28 @@ const ProductInfo = ({product, onProductUpdate}: {product: ProductDetails, onPro
       </h1>
 
       {/* Rating */}
-      <div className="flex items-center gap-2 mb-4">
-        <div className="flex items-center">
-          {[...Array(5)].map((_, i) => (
-            <StarIcon
-              key={i}
-              size={20}
-              className={`${
-                i < Math.floor(rating)
-                  ? "fill-yellow-400 text-yellow-400"
-                  : i < rating
-                  ? "fill-yellow-400 text-yellow-400 opacity-50"
-                  : "fill-gray-300 text-gray-300"
-              }`}
-            />
-          ))}
+      <div className="flex items-center gap-4 mb-4 flex-wrap">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center">
+            {[...Array(5)].map((_, i) => (
+              <StarIcon
+                key={i}
+                size={20}
+                className={`${
+                  i < Math.floor(rating)
+                    ? "fill-yellow-400 text-yellow-400"
+                    : i < rating
+                    ? "fill-yellow-400 text-yellow-400 opacity-50"
+                    : "fill-gray-300 text-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-gray-900 dark:text-white font-medium">
+            {rating}/5
+          </span>
         </div>
-        <span className="text-gray-900 dark:text-white font-medium">
-          {rating}/5
-        </span>
+
       </div>
 
       {/* Price */}
@@ -541,6 +547,27 @@ const ProductInfo = ({product, onProductUpdate}: {product: ProductDetails, onPro
           />
         </button>
       </div>
+              
+        {/* Vendors Button */}
+        {product?.isMultiVendor && (
+          <button
+            onClick={() => setIsVendorsSidebarOpen(true)}
+            className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full text-sm font-medium text-gray-900 dark:text-white soft"
+          >
+            <Store size={16} />
+            <span>
+              {locale === 'ar' ? 'عروض أخرى' : 'other offers'}
+            </span>
+          </button>
+        )}
+
+      {/* Vendors Sidebar */}
+      <VendorsSidebar
+        isOpen={isVendorsSidebarOpen}
+        onClose={() => setIsVendorsSidebarOpen(false)}
+        itemCombinationId={product.currentCombination?.combinationId || product.id}
+        productName={title}
+      />
     </div>
   );
 };

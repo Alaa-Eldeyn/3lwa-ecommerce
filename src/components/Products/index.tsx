@@ -3,21 +3,6 @@ import Breadcrumb from "../common/Breadcrumb";
 import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import CategoryFilter from "./filters/CategoryFilter";
-import PriceRangeFilter from "./filters/PriceRangeFilter";
-import ColorFilter from "./filters/ColorFilter";
-import SizeFilter from "./filters/SizeFilter";
-import SearchFilter from "./filters/SearchFilter";
-import RatingFilter from "./filters/RatingFilter";
-import StockQuantityFilter from "./filters/StockQuantityFilter";
-import ShippingDeliveryFilter from "./filters/ShippingDeliveryFilter";
-import VendorSaleOptionsFilter from "./filters/VendorSaleOptionsFilter";
-import BrandsFilter from "./filters/BrandsFilter";
-import VendorsFilter from "./filters/VendorsFilter";
-import ConditionsFilter from "./filters/ConditionsFilter";
-import AttributesFilter from "./filters/AttributesFilter";
-import FeaturesFilter from "./filters/FeaturesFilter";
-import CategoriesFilter from "./filters/CategoriesFilter";
 import ProductCard from "../common/ProductCard";
 import ProductRowCard from "../common/ProductRowCard";
 import { useQuery } from "@tanstack/react-query";
@@ -25,8 +10,8 @@ import axios from "axios";
 import { Product } from "@/src/types/types";
 import { DynamicFilters } from "./filters/types";
 import ScrollToTop from "../common/ScrollToTop";
-import { customAxios } from "@/src/utils/customAxios";
 import Pagination from "../common/Pagination";
+import FiltersSidebar from "./FiltersSidebar";
 
 // Mock data - replace with API calls later
 const colors = [
@@ -89,10 +74,10 @@ const Products = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>(() => {
     if (filtersData?.priceRange) {
       const minPrice = filtersData.priceRange.minPrice || 0;
-      const maxPrice = filtersData.priceRange.maxPrice || 2000;
+      const maxPrice = filtersData.priceRange.maxPrice || 50000;
       return [minPrice, maxPrice];
     }
-    return [50, 2000];
+    return [10, 50000];
   });
   
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
@@ -142,8 +127,8 @@ const Products = () => {
         buyBoxWinnersOnly ||
         withWarrantyOnly ||
         showAllOffers ||
-        priceRange[0] !== 50 ||
-        priceRange[1] !== 2000;
+        priceRange[0] !== 10 ||
+        priceRange[1] !== 50000;
 
       // Build payload based on active filters
       const payload: any = {
@@ -156,7 +141,7 @@ const Products = () => {
         if (searchTerm) payload.searchTerm = searchTerm;
         if (categoryIdFromUrl) payload.categoryId = categoryIdFromUrl;
         if (selectedCategories.length > 0) payload.categories = selectedCategories;
-        if (priceRange[0] !== 50 || priceRange[1] !== 2000) {
+        if (priceRange[0] !== 0 || priceRange[1] !== 50000) {
           payload.minPrice = priceRange[0];
           payload.maxPrice = priceRange[1];
         }
@@ -172,7 +157,11 @@ const Products = () => {
         if (buyBoxWinnersOnly) payload.buyBoxWinnersOnly = buyBoxWinnersOnly;
         if (withWarrantyOnly) payload.withWarrantyOnly = withWarrantyOnly;
         if (showAllOffers) payload.showAllOffers = showAllOffers;
-        if (sortBy && sortBy !== "default") payload.sortBy = sortBy;
+      }
+      
+      // Add sortBy outside of hasActiveFilters check
+      if (sortBy && sortBy !== "default") {
+        payload.sortBy = sortBy;
       }
 
       const res = await axios.post(
@@ -196,14 +185,14 @@ const Products = () => {
   const computedPriceRange = useMemo(() => {
     if (filtersData?.priceRange) {
       const minPrice = filtersData.priceRange.minPrice || 0;
-      const maxPrice = filtersData.priceRange.maxPrice || 2000;
+      const maxPrice = filtersData.priceRange.maxPrice || 50000;
       return [minPrice, maxPrice] as [number, number];
     }
-    return [50, 2000] as [number, number];
+    return [10, 50000] as [number, number];
   }, [filtersData?.priceRange]);
 
   // Update priceRange only if it's still using default values
-  if (priceRange[0] === 50 && priceRange[1] === 2000 && computedPriceRange[0] !== 50 && computedPriceRange[1] !== 2000) {
+  if (priceRange[0] === 10 && priceRange[1] === 50000 && computedPriceRange[0] !== 10 && computedPriceRange[1] !== 50000) {
     setPriceRange(computedPriceRange);
   }
 
@@ -211,7 +200,7 @@ const Products = () => {
   const handleResetFilters = () => {
     setSearchTerm("");
     setSelectedCategories([]);
-    setPriceRange([50, 2000]);
+    setPriceRange([10, 50000]);
     setSelectedColors([]);
     setSelectedSizes([]);
     setMinItemRating(0);
@@ -228,34 +217,18 @@ const Products = () => {
     setPageSize(12);
   };
 
-  // Sorting function
-  const getSortedProducts = () => {
-    const productsCopy = [...products];
-
-    switch (sortBy) {
-      case "price-low":
-        return productsCopy.sort((a, b) => (a.basePrice ?? 0) - (b.basePrice ?? 0));
-      case "price-high":
-        return productsCopy.sort((a, b) => (b.basePrice ?? 0) - (a.basePrice ?? 0));
-      case "name-asc":
-        return productsCopy.sort((a, b) => a.title.localeCompare(b.title));
-      case "name-desc":
-        return productsCopy.sort((a, b) => b.title.localeCompare(a.title));
-      case "newest":
-        // Assuming the array order represents newest first
-        return productsCopy.reverse();
-      default:
-        return productsCopy;
-    }
-  };
-
-  const sortedProducts = getSortedProducts();
+  // Remove client-side sorting since API handles it
 
   const handleApplyFilters = () => {
     // Trigger refetch by incrementing filterTrigger
     setFilterTrigger(prev => prev + 1);
     setIsFiltersOpen(false); // Close filters on mobile after applying
     setPageNumber(1); // Reset to first page when filters change
+  };
+  
+  const handleSortChange = (newSort: string) => {
+    setSortBy(newSort);
+    setFilterTrigger(prev => prev + 1); // Trigger refetch when sort changes
   };
 
   const handlePageChange = (page: number) => {
@@ -298,180 +271,47 @@ const Products = () => {
       </div>
 
       <div className="flex gap-5 container">
-        {/* Overlay for mobile */}
-        {isFiltersOpen && (
-          <div
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-            onClick={() => setIsFiltersOpen(false)}
-          />
-        )}
-
         {/* Filters Sidebar */}
-        <aside className={`
-          fixed lg:static
-          inset-y-0 left-0
-          w-[95%] max-w-80
-          bg-white dark:bg-gray-900
-          p-5
-          rounded-none lg:rounded-3xl
-          border-e lg:border border-gray-200 dark:border-gray-700
-          h-screen lg:h-fit
-          overflow-y-auto
-          z-50 lg:z-auto
-          transition-transform duration-300 ease-in-out
-          ${isFiltersOpen ? 'translate-x-0 lg:translate-x-0' : '-translate-x-full lg:translate-x-0'}
-        `}>
-          <div className="flex-between border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              {t("filtersTitle")}
-            </h2>
-            <button 
-              onClick={() => setIsFiltersOpen(false)}
-              className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
-              aria-label="Close filters">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M18 6L6 18M6 6L18 18"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          </div>
-
-          {/* Filters */}
-          <SearchFilter value={searchTerm} onChange={setSearchTerm} />
-
-          {/* Dynamic Categories from API */}
-          {dynamicFilters?.categories && dynamicFilters.categories.length > 0 && (
-            <CategoriesFilter
-              categories={dynamicFilters.categories}
-              selectedCategories={selectedCategories}
-              onChange={setSelectedCategories}
-            />
-          )}
-          
-          <PriceRangeFilter
-            min={dynamicFilters?.priceRange?.minPrice || 0}
-            max={dynamicFilters?.priceRange?.maxPrice || 2000}
-            value={priceRange}
-            onChange={setPriceRange}
-          />
-
-          {/* Dynamic Brands Filter */}
-          {dynamicFilters?.brands && dynamicFilters.brands.length > 0 && (
-            <BrandsFilter
-              brands={dynamicFilters.brands}
-              selectedBrands={selectedBrands}
-              onChange={setSelectedBrands}
-            />
-          )}
-
-          {/* Dynamic Vendors Filter */}
-          {dynamicFilters?.vendors && dynamicFilters.vendors.length > 0 && (
-            <VendorsFilter
-              vendors={dynamicFilters.vendors}
-              selectedVendors={selectedVendors}
-              onChange={setSelectedVendors}
-            />
-          )}
-
-          {/* Dynamic Conditions Filter */}
-          {dynamicFilters?.conditions && dynamicFilters.conditions.length > 0 && (
-            <ConditionsFilter
-              conditions={dynamicFilters.conditions}
-              selectedConditions={selectedConditions}
-              onChange={setSelectedConditions}
-            />
-          )}
-
-          {/* Dynamic Attributes Filter */}
-          {dynamicFilters?.attributes && dynamicFilters.attributes.length > 0 && (
-            <AttributesFilter
-              attributes={dynamicFilters.attributes}
-              selectedAttributes={selectedAttributes}
-              onChange={setSelectedAttributes}
-            />
-          )}
-
-          {/* <ColorFilter
-            colors={colors}
-            selectedColors={selectedColors}
-            onChange={setSelectedColors}
-          />
-
-          <SizeFilter
-            sizes={sizes}
-            selectedSizes={selectedSizes}
-            onChange={setSelectedSizes}
-          /> */}
-
-          <RatingFilter
-            label={t("minItemRating")}
-            value={minItemRating}
-            onChange={setMinItemRating}
-          />
-
-          <RatingFilter
-            label={t("minVendorRating")}
-            value={minVendorRating}
-            onChange={setMinVendorRating}
-          />
-
-          <StockQuantityFilter
-            inStockOnly={inStockOnly}
-            onInStockOnlyChange={setInStockOnly}
-          />
-
-          <ShippingDeliveryFilter
-            freeShippingOnly={freeShippingOnly}
-            onFreeShippingOnlyChange={setFreeShippingOnly}
-          />
-
-          {/* Dynamic Features Filters */}
-          {dynamicFilters?.features && (
-            <FeaturesFilter
-              features={dynamicFilters.features}
-              freeShippingOnly={freeShippingOnly}
-              withWarrantyOnly={withWarrantyOnly}
-              inStockOnly={inStockOnly}
-              onFreeShippingChange={setFreeShippingOnly}
-              onWithWarrantyChange={setWithWarrantyOnly}
-              onInStockChange={setInStockOnly}
-            />
-          )}
-
-          <VendorSaleOptionsFilter
-            verifiedVendorsOnly={verifiedVendorsOnly}
-            onVerifiedVendorsOnlyChange={setVerifiedVendorsOnly}
-            primeVendorsOnly={primeVendorsOnly}
-            onPrimeVendorsOnlyChange={setPrimeVendorsOnly}
-            onSaleOnly={onSaleOnly}
-            onOnSaleOnlyChange={setOnSaleOnly}
-            buyBoxWinnersOnly={buyBoxWinnersOnly}
-            onBuyBoxWinnersOnlyChange={setBuyBoxWinnersOnly}
-            withWarrantyOnly={withWarrantyOnly}
-            onWithWarrantyOnlyChange={setWithWarrantyOnly}
-            showAllOffers={showAllOffers}
-            onShowAllOffersChange={setShowAllOffers}
-          />
-
-          {/* Apply Button */}
-          <button
-            onClick={handleApplyFilters}
-            className="w-full mt-6 px-6 py-3 bg-secondary dark:bg-white text-white dark:text-black rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition"
-          >
-            تطبيق الفلاتر
-          </button>
-        </aside>
+        <FiltersSidebar
+          isOpen={isFiltersOpen}
+          onClose={() => setIsFiltersOpen(false)}
+          dynamicFilters={dynamicFilters}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedCategories={selectedCategories}
+          setSelectedCategories={setSelectedCategories}
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+          selectedBrands={selectedBrands}
+          setSelectedBrands={setSelectedBrands}
+          selectedVendors={selectedVendors}
+          setSelectedVendors={setSelectedVendors}
+          selectedConditions={selectedConditions}
+          setSelectedConditions={setSelectedConditions}
+          selectedAttributes={selectedAttributes}
+          setSelectedAttributes={setSelectedAttributes}
+          minItemRating={minItemRating}
+          setMinItemRating={setMinItemRating}
+          minVendorRating={minVendorRating}
+          setMinVendorRating={setMinVendorRating}
+          inStockOnly={inStockOnly}
+          setInStockOnly={setInStockOnly}
+          freeShippingOnly={freeShippingOnly}
+          setFreeShippingOnly={setFreeShippingOnly}
+          verifiedVendorsOnly={verifiedVendorsOnly}
+          setVerifiedVendorsOnly={setVerifiedVendorsOnly}
+          primeVendorsOnly={primeVendorsOnly}
+          setPrimeVendorsOnly={setPrimeVendorsOnly}
+          onSaleOnly={onSaleOnly}
+          setOnSaleOnly={setOnSaleOnly}
+          buyBoxWinnersOnly={buyBoxWinnersOnly}
+          setBuyBoxWinnersOnly={setBuyBoxWinnersOnly}
+          withWarrantyOnly={withWarrantyOnly}
+          setWithWarrantyOnly={setWithWarrantyOnly}
+          showAllOffers={showAllOffers}
+          setShowAllOffers={setShowAllOffers}
+          onApplyFilters={handleApplyFilters}
+        />
 
         <section className="flex-1 bg-white dark:bg-gray-900 p-5 rounded-3xl border border-gray-200 dark:border-gray-700">
           <div className="flex-between flex-col lg:flex-row gap-2 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
@@ -491,7 +331,7 @@ const Products = () => {
                 <select
                   id="sort"
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
+                  onChange={(e) => handleSortChange(e.target.value)}
                   className="px-4 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
                 >
                   <option value="default">Default</option>
@@ -568,13 +408,13 @@ const Products = () => {
             </div>
           ) : layoutMode === "grid" ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {products?.map((product: Product, index: number) => (
+              {products.map((product: Product, index: number) => (
                 <ProductCard key={index} {...product} />
               ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
-              {products?.map((product: Product, index: number) => (
+              {products.map((product: Product, index: number) => (
                 <ProductRowCard key={index} {...product} />
               ))}
             </div>

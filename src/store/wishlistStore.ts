@@ -19,7 +19,6 @@ interface WishlistState {
   clearAllItems: (isAuthenticated?: boolean) => Promise<void>;
   moveItemToCart: (itemCombinationId: string, quantity: number, isAuthenticated?: boolean) => Promise<void>;
   loadWishlistFromServer: () => Promise<void>;
-  loadWishlistCount: () => Promise<void>;
   getTotalItems: () => number;
   isInWishlist: (itemCombinationId: string) => boolean;
   setItems: (items: WishlistItem[]) => void;
@@ -41,7 +40,6 @@ export const useWishlistStore = create<WishlistState>()(
             
             // نحمل الـ wishlist من الـ server بعد الإضافة
             await get().loadWishlistFromServer();
-            await get().loadWishlistCount();
           } catch (error) {
             console.error("Failed to add item to wishlist:", error);
             throw error;
@@ -62,7 +60,6 @@ export const useWishlistStore = create<WishlistState>()(
             set({ isLoading: true });
             await removeItemFromWishlist(itemCombinationId);
             await get().loadWishlistFromServer();
-            await get().loadWishlistCount();
           } catch (error) {
             console.error("Failed to remove item from wishlist:", error);
             throw error;
@@ -104,7 +101,6 @@ export const useWishlistStore = create<WishlistState>()(
             set({ isLoading: true });
             await moveToCart({ itemCombinationId, quantity });
             await get().loadWishlistFromServer();
-            await get().loadWishlistCount();
           } catch (error) {
             console.error("Failed to move item to cart:", error);
             throw error;
@@ -128,16 +124,6 @@ export const useWishlistStore = create<WishlistState>()(
           // في حالة الخطأ، نستخدم البيانات المحلية
         } finally {
           set({ isLoading: false });
-        }
-      },
-
-      // دالة لتحميل عدد items في الـ wishlist
-      loadWishlistCount: async () => {
-        try {
-          const response = await getWishlistCount();
-          set({ totalCount: response.count });
-        } catch (error) {
-          console.error("Failed to load wishlist count:", error);
         }
       },
 

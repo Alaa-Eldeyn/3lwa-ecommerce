@@ -11,15 +11,9 @@ import { useCartStore } from "@/src/store/cartStore";
 
 const WishlistPage = () => {
   const t = useTranslations("wishlist");
-  const { items, removeItem, clearAllItems, isLoading, loadWishlistFromServer } = useWishlistStore();
+  const { items, removeItem, clearAllItems, isLoading } = useWishlistStore();
   const { user } = useUserStore();
   const { addItem: addToCart } = useCartStore();
-
-  useEffect(() => {
-    if (user) {
-      loadWishlistFromServer();
-    }
-  }, [user, loadWishlistFromServer]);
 
   const handleRemove = async (itemCombinationId: string) => {
     try {

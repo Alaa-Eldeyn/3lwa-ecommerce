@@ -9,7 +9,7 @@ import QuantityController from "../common/QuantityController";
 
 const CartSidebar = () => {
     const { isCartOpen, closeCart } = useHeaderStore();
-    const { items, updateQuantity, removeItem, getTotalPrice } = useCartStore();
+    const { items, updateQuantity, removeItem, clearCart, getTotalPrice } = useCartStore();
 
     const handleIncrement = (id: string) => (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -27,6 +27,16 @@ const CartSidebar = () => {
                 removeItem(id);
             } else {
                 updateQuantity(id, item.quantity - 1);
+            }
+        }
+    };
+
+    const handleClearCart = async () => {
+        if (confirm("هل تريد مسح جميع المنتجات من السلة؟")) {
+            try {
+                await clearCart(true);
+            } catch (error) {
+                console.error("Failed to clear cart:", error);
             }
         }
     };
@@ -143,6 +153,13 @@ const CartSidebar = () => {
 
                         {/* Buttons */}
                         <div className="space-y-2">
+                            <button
+                                onClick={handleClearCart}
+                                className="w-full flex items-center justify-center gap-2 bg-red-500 text-white py-3 rounded-lg font-semibold hover:bg-red-600 transition"
+                            >
+                                <Trash2 size={18} />
+                                مسح السلة
+                            </button>
                             <Link
                                 href="/cart"
                                 onClick={closeCart}

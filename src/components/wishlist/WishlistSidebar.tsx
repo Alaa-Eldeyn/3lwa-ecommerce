@@ -13,7 +13,7 @@ import { useCartStore } from "@/src/store/cartStore";
 const WishlistSidebar = () => {
   const t = useTranslations("wishlist");
   const { isWishlistOpen, closeWishlist } = useHeaderStore();
-  const { items, removeItem, loadWishlistFromServer, clearAllItems, isLoading } =
+  const { items, removeItem, clearAllItems, isLoading } =
     useWishlistStore();
   const { user } = useUserStore();
   const { addItem: addToCart } = useCartStore();
@@ -22,12 +22,6 @@ const WishlistSidebar = () => {
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
-  useEffect(() => {
-    if (user && isWishlistOpen && isMounted) {
-      loadWishlistFromServer();
-    }
-  }, [user, isWishlistOpen, loadWishlistFromServer, isMounted]);
 
   const handleRemove = async (itemCombinationId: string) => {
     try {

@@ -429,7 +429,35 @@
     "faqs": "الأسئلة الشائعة",
     "productDetails": "تفاصيل المنتج",
     "productInformation": "معلومات المنتج",
+    "vendorsAvailable": "عروض متاحة",
+    "otherOffers": "عروض أخرى",
+    "viewAllOffers": "عرض جميع العروض",
+    "bestOffer": "⭐ أفضل عرض",
+    "inStock": "متوفر",
+    "limitedStock": "كمية محدودة",
+    "outOfStock": "غير متوفر",
+    "freeShipping": "شحن مجاني",
+    "paidShipping": "شحن مدفوع",
+    "deliveryIn": "التوصيل خلال",
+    "day": "يوم",
+    "days": "أيام",
+    "warranty": "الضمان",
+    "returnPolicy": "سياسة الإرجاع",
+    "minOrder": "الحد الأدنى للطلب:",
+    "maxOrder": "الحد الأقصى للطلب:",
+    "details": "التفاصيل",
+    "loading": "جاري التحميل...",
+    "errorLoadingOffers": "حدث خطأ أثناء تحميل العروض",
+    "noOffersAvailable": "لا توجد عروض متاحة",
+    "addedToCart": "تم إضافة المنتج للسلة!",
+    "adding": "جاري الإضافة...",
     "features": {
+      "premiumCotton": "قطن فاخر 100%",
+      "machineWashable": "قابل للغسل في الغسالة",
+      "comfortableFit": "مقاس مريح",
+      "durable": "متين وطويل الأمد",
+      "multipleOptions": "متوفر بألوان ومقاسات متعددة"
+    },
       "premiumCotton": "قطن فاخر 100%",
       "machineWashable": "قابل للغسل في الغسالة",
       "comfortableFit": "مقاس مريح",
@@ -443,8 +471,8 @@
       "returnAnswer": "نقدم سياسة إرجاع لمدة 30 يومًا. يجب أن تكون المنتجات غير مستخدمة وغير مغسولة وفي حالتها الأصلية مع الملصقات المرفقة.",
       "shippingQuestion": "كم يستغرق الشحن؟",
       "shippingAnswer": "الشحن القياسي يستغرق من 5 إلى 7 أيام عمل. الشحن السريع متاح ويستغرق من 2 إلى 3 أيام عمل."
-    }
-  },
+    },
+  
   "home": {
     "hero": {
       "title": "مصمم لترقية علامتك التجارية",
