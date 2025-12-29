@@ -77,9 +77,9 @@ const QuantityController = ({
         title={isLastItem ? "Remove from cart" : "Decrease quantity"}
       >
         {isLastItem && showDeleteIcon ? (
-          <Trash2 size={styles.iconSize} className="text-white" />
+          <Trash2 size={styles.iconSize} className="text-primary dark:text-white" />
         ) : (
-          <Minus size={styles.iconSize} className="text-white" />
+          <Minus size={styles.iconSize} className="text-primary dark:text-white" />
         )}
       </button>
       <span className={styles.text}>{quantity}</span>
@@ -88,7 +88,7 @@ const QuantityController = ({
         className={styles.button}
         title="Increase quantity"
       >
-        <Plus size={styles.iconSize} className="text-white" />
+        <Plus size={styles.iconSize} className="text-primary dark:text-white" />
       </button>
     </div>
   );

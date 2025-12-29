@@ -77,6 +77,12 @@ export interface Testimonial {
   verified?: boolean;
 }
 
+interface Badge {
+  textAr: string;
+  textEn: string;
+  type: string;
+  variant: string;
+}
 export interface Product {
   itemId: string;
   itemCombinationId: string;
@@ -117,6 +123,15 @@ export interface Product {
   seoTitle: string;
   seoDescription: string;
   seoMetaTags: string;
+    price?: number;
+  salesPrice?: number;
+  itemRating?: number;
+  badges?: Badge[];
+  brandNameAr?: string;
+  brandNameEn?: string;
+  stockStatus?: string;
+  availableQuantity?: number;
+  isFreeShipping?: boolean;
 }
 
 export interface ProductsResponse {

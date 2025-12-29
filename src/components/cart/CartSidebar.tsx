@@ -117,7 +117,7 @@ const CartSidebar = () => {
                                                 onIncrement={handleIncrement(item.id)}
                                                 onDecrement={handleDecrement(item.id)}
                                                 variant="default"
-                                                className="bg-white! dark:bg-gray-700! text-gray-900! dark:text-white!"
+                                                className="bg-white! dark:bg-gray-700! text-gray-900! "
                                                 showDeleteIcon={false}
                                             />
 

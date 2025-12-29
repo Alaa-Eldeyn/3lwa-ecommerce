@@ -492,7 +492,7 @@ const ProductInfo = ({product, onProductUpdate}: {product: ProductDetails, onPro
       })}
 
       {/* Quantity and Actions */}
-      <div className="flex items-center gap-4 flex-wrap">
+      <div className="flex items-center gap-4 flex-wrap ">
         {/* Quantity */}
         <div className="flex items-center gap-4 bg-gray-50 dark:bg-gray-800 rounded-full">
           <button
@@ -552,7 +552,7 @@ const ProductInfo = ({product, onProductUpdate}: {product: ProductDetails, onPro
         {product?.isMultiVendor && (
           <button
             onClick={() => setIsVendorsSidebarOpen(true)}
-            className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full text-sm font-medium text-gray-900 dark:text-white soft"
+            className="flex items-center gap-2 px-3 py-1.5 mt-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full text-sm font-medium text-gray-900 dark:text-white soft"
           >
             <Store size={16} />
             <span>

@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart, Heart, Star, Truck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -26,11 +26,20 @@ const ProductCard = ({
   shortDescriptionAr,
   descriptionEn,
   descriptionAr,
+  price,
+  salesPrice,
   basePrice,
   minimumPrice,
   maximumPrice,
   categoryTitle,
   brandTitle,
+  brandNameAr,
+  brandNameEn,
+  itemRating,
+  badges,
+  stockStatus,
+  availableQuantity,
+  isFreeShipping,
   variant = "minimal",
 }: ProductCardProps) => {
   const router = useRouter();
@@ -57,13 +66,16 @@ const ProductCard = ({
   const displayCategory = isArabic
     ? (categoryTitle || "")
     : (categoryTitle || "");
+  const displayBrand = isArabic ? (brandNameAr || brandTitle || "") : (brandNameEn || brandTitle || "");
   
-  const price = basePrice || minimumPrice || 0;
-  const oldPrice = maximumPrice && maximumPrice > price ? maximumPrice : undefined;
-  const discount = oldPrice ? Math.round(((oldPrice - price) / oldPrice) * 100) : undefined;
+  const currentPrice = salesPrice || price || basePrice || minimumPrice || 0;
+  // السعر الأصلي (قبل الخصم)
+  const originalPrice = price && salesPrice && price > salesPrice ? price : (maximumPrice && maximumPrice > currentPrice ? maximumPrice : undefined);
+  // نسبة الخصم
+  const discount = originalPrice ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100) : undefined;
 
   // Find if product exists in cart
-  const cartItem = useMemo(() => items.find((item) => item.id === itemId), [items, itemId]);
+  const cartItem = useMemo(() => items.find((item) => item.id === itemCombinationId), [items, itemCombinationId]);
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -75,7 +87,7 @@ const ProductCard = ({
         id: itemCombinationId,
         itemId: itemId,
         name: displayTitle,
-        price: price,
+        price: currentPrice,
         image: image,
         offerCombinationPricingId: itemCombinationId,
       }, isAuthenticated());
@@ -142,7 +154,7 @@ const ProductCard = ({
 
   if (variant === "minimal") {
     return (
-      <div className="cursor-pointer group soft rounded-lg overflow-hidden border border-primary/10 bg-white dark:bg-gray-800 hover:-translate-y-1 hover:border-primary/40">
+      <div className="h-full cursor-pointer group soft rounded-lg overflow-hidden border border-primary/10 bg-white dark:bg-gray-800 hover:-translate-y-1 hover:border-primary/40 flex flex-col">
         {/* IMG */}
         <div
           onClick={() => router.push(`/${locale}/products/product-details/${itemCombinationId}`)}
@@ -156,47 +168,96 @@ const ProductCard = ({
 
           {/* Discount Badge */}
           {discount && (
-            <div className="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-md shadow-md">
-              جديد
+            <div className="absolute top-3 right-3 bg-primary text-white text-xs font-bold px-3 py-1 rounded-md shadow-md">
+              {discount}%-
+            </div>
+          )}
+
+          {/* Stock Status Badge */}
+          {stockStatus === "OutOfStock" && (
+            <div className="absolute top-3 left-3 bg-red-400 text-white text-xs font-bold px-3 py-1 rounded-md shadow-md">
+              {isArabic ? "نفذ من المخزن" : "Out of Stock"}
             </div>
           )}
         </div>
 
         {/* Content */}
-        <div className="p-4 bg-white dark:bg-gray-800">
-          {/* Category */}
-          {displayCategory && (
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1 font-medium">
-              {displayCategory}
-            </div>
-          )}
+        <div className="p-4 bg-white dark:bg-gray-800 flex flex-col flex-1">
+          {/* Category and Brand */}
+          <div className="flex items-center justify-between mb-1">
+            {displayCategory && (
+              <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                {displayCategory}
+              </div>
+            )}
+            {displayBrand && (
+              <div className="text-xs text-primary dark:text-primary font-bold">
+                {displayBrand}
+              </div>
+            )}
+          </div>
 
           {/* Title */}
           <Link
             href={`/${locale}/products/product-details/${itemCombinationId}`}
-            className="!block! text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 leading-tight group-hover:text-primary soft">
+            className="!block! text-sm md:text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 leading-tight group-hover:text-primary soft">
             {displayTitle}
           </Link>
 
           {/* Description */}
           {displayDescription && (
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 line-clamp-1">
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1 line-clamp-1">
               {displayDescription}
             </p>
           )}
 
+          {/* Rating and Free Shipping */}
+          <div className="flex items-center gap-2 mb-1">
+            {itemRating && (
+              <div className="flex items-center gap-1 text-xs text-yellow-500">
+                <Star size={14} className="fill-yellow-500" />
+                <span className="font-semibold">{itemRating.toFixed(1)}</span>
+              </div>
+            )}
+            {isFreeShipping && (
+              <div className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
+                <Truck size={14} />
+                <span className="font-medium">{isArabic ? "شحن مجاني" : "Free Shipping"}</span>
+              </div>
+            )}
+          </div>
+
           {/* Prices */}
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">${price}</span>
+            <span className="text-base md:text-xl font-bold text-gray-900 dark:text-white">${currentPrice.toFixed(2)}</span>
 
-            {oldPrice && (
-              <span className="text-sm line-through text-gray-400 dark:text-gray-500">
-                ${oldPrice}
+            {originalPrice && (
+              <span className="text-xs md:text-sm line-through text-gray-400 dark:text-gray-500">
+                ${originalPrice.toFixed(2)}
               </span>
             )}
           </div>
 
-          <div className="flex gap-2">
+          {/* Badges */}
+          {badges && badges.length > 0 && (
+            <div className="flex gap-2 mb-3 flex-wrap flex-1">
+              {badges.map((badge, index) => (
+                <span
+                  key={index}
+                  className={`text-xs px-2 py-1 rounded-md font-medium ${
+                    badge.variant === "success"
+                      ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                      : badge.variant === "warning"
+                      ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                      : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                  }`}>
+                  {isArabic ? badge.textAr : badge.textEn}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="flex gap-2 mt-auto">
             {cartItem ? (
               <QuantityController
                 quantity={cartItem.quantity}
@@ -208,9 +269,10 @@ const ProductCard = ({
             ) : (
               <button
                 onClick={handleAddToCart}
-                className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg center soft p-3.5 font-medium shadow-sm hover:shadow-md"
+                disabled={stockStatus === "OutOfStock"}
+                className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg center soft p-2.5 md:p-3.5 font-medium shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Add to cart">
-                <span className="lg:mx-2 text-sm">أضف للسلة</span>
+                <span className="lg:mx-2 text-xs md:text-sm">{isArabic ? "أضف للسلة" : "Add to Cart"}</span>
                 <ShoppingCart size={18} className="hidden lg:block" />
               </button>
             )}
@@ -234,7 +296,7 @@ const ProductCard = ({
 
   if (variant === "default") {
     return (
-      <div className="cursor-pointer group soft rounded-2xl">
+      <div className="h-full cursor-pointer group soft rounded-2xl flex flex-col">
         {/* IMG */}
         <div
           onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
@@ -280,7 +342,7 @@ const ProductCard = ({
         </div>
 
         {/* Content */}
-        <div className="py-4 ">
+        <div className="py-4 flex flex-col flex-1">
           {/* Title */}
           <Link
             href={`/${locale}/products/product-details/${itemCombinationId}`}
@@ -297,18 +359,18 @@ const ProductCard = ({
 
           {/* Prices */}
           <div className="flex items-center gap-2">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">${price}</span>
+            <span className="text-base md:text-xl font-bold text-gray-900 dark:text-white">${currentPrice.toFixed(2)}</span>
 
-            {oldPrice && (
+            {originalPrice && (
               <>
-                <span className="text-base font-bold line-through text-gray-400 dark:text-gray-500">
-                  ${oldPrice}
+                <span className="text-sm md:text-base font-bold line-through text-gray-400 dark:text-gray-500">
+                  ${originalPrice.toFixed(2)}
                 </span>
               </>
             )}
 
             {discount && (
-              <span className="text-xs bg-secondary/20  text-secondary px-3 py-1 rounded-full font-medium">
+              <span className="text-[10px] md:text-xs bg-secondary/20  text-secondary px-2 md:px-3 py-0.5 md:py-1 rounded-full font-medium">
                 -{discount}%
               </span>
             )}
@@ -320,7 +382,7 @@ const ProductCard = ({
 
   if (variant === "bordered") {
     return (
-      <div className="cursor-pointer group soft rounded-3xl p-4 border border-gray-200 dark:border-gray-700">
+      <div className="h-full cursor-pointer group soft rounded-3xl p-4 border border-gray-200 dark:border-gray-700 flex flex-col">
         {/* IMG */}
         <div
           onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
@@ -348,7 +410,7 @@ const ProductCard = ({
         </div>
 
         {/* Content */}
-        <div className="pt-4 ">
+        <div className="pt-4 flex flex-col flex-1">
           {/* Title */}
           <Link
             href={`/${locale}/products/product-details/${itemCombinationId}`}
@@ -366,19 +428,19 @@ const ProductCard = ({
           {/* Prices */}
           <div className="flex items-center gap-2">
             <span className="text-base lg:text-lg font-bold text-gray-900 dark:text-white">
-              ${price}
+              ${currentPrice.toFixed(2)}
             </span>
 
-            {oldPrice && (
+            {originalPrice && (
               <>
                 <span className="text-sm font-bold line-through text-gray-400 dark:text-gray-500">
-                  ${oldPrice}
+                  ${originalPrice.toFixed(2)}
                 </span>
               </>
             )}
 
             {discount && (
-              <span className="text-xs bg-secondary/20  text-secondary lg:px-3 px-2 py-0.5 lg:py-1 rounded-full font-medium">
+              <span className="text-[10px] md:text-xs bg-secondary/20  text-secondary lg:px-3 px-2 py-0.5 lg:py-1 rounded-full font-medium">
                 -{discount}%
               </span>
             )}
@@ -395,9 +457,9 @@ const ProductCard = ({
           ) : (
             <button
               onClick={handleAddToCart}
-              className="w-full  bg-secondary text-white rounded-2xl center soft p-3 mt-4 hover:bg-primary text-sm lg:text-base"
+              className="w-full  bg-secondary text-white rounded-2xl center soft p-2.5 md:p-3 mt-4 hover:bg-primary text-xs md:text-sm lg:text-base"
               title="Add to cart">
-              <span className="mx-2">Add to Cart</span>
+              <span className="mx-1 md:mx-2">Add to Cart</span>
               <ShoppingCart size={20} className="text-white dark:text-primary" />
             </button>
           )}
@@ -408,7 +470,7 @@ const ProductCard = ({
 
   if (variant === "homz") {
     return (
-      <div className="cursor-pointer group rounded-2xl overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-lg border border-gray-100 dark:border-gray-700">
+      <div className="h-full cursor-pointer group rounded-2xl overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col">
         {/* IMG */}
         <div
           onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
@@ -431,22 +493,22 @@ const ProductCard = ({
         </div>
 
         {/* Content */}
-        <div className="p-4">
+        <div className="p-4 flex flex-col flex-1">
           {/* Title */}
           <Link
             href={`/products/product-details/${itemCombinationId}`}
-            className="block text-base font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-relaxed">
+            className="block text-sm md:text-base font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-relaxed">
             {displayTitle}
           </Link>
 
           {/* Prices and Discount */}
           <div className="flex items-center justify-start gap-2 mb-3">
-            <span className="text-2xl font-bold text-gray-900 dark:text-white">
-              {price.toLocaleString()}
-              <span className="text-sm font-normal">جنيه</span>
+            <span className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">
+              {currentPrice.toLocaleString()}
+              <span className="text-xs md:text-sm font-normal">جنيه</span>
             </span>
-            <span className="line-through text-gray-400 dark:text-gray-500">{oldPrice}</span>
-            {discount && <span className="font-bold text-green-500">{discount}%-</span>}
+            {originalPrice && <span className="line-through text-xs md:text-sm text-gray-400 dark:text-gray-500">${originalPrice.toFixed(2)}</span>}
+            {discount && <span className="font-bold text-sm md:text-base text-green-500">{discount}%-</span>}
           </div>
 
           {cartItem ? (
@@ -460,9 +522,9 @@ const ProductCard = ({
           ) : (
             <button
               onClick={handleAddToCart}
-              className="w-full bg-gray-100 rounded-lg px-4 py-2.5 text-center center soft p-3 mt-4 hover:bg-primary hover:text-white text-sm lg:text-base"
+              className="w-full bg-gray-100 rounded-lg px-3 md:px-4 py-2 md:py-2.5 text-center center soft mt-4 hover:bg-primary hover:text-white text-xs md:text-sm lg:text-base"
               title="Add to cart">
-              <span className="mx-2">Add to Cart</span>
+              <span className="mx-1 md:mx-2">Add to Cart</span>
               <ShoppingCart size={20} />
             </button>
           )}
@@ -506,13 +568,13 @@ const ProductCard = ({
           {/* Title */}
           <Link
             href={`/products/product-details/${itemCombinationId}`}
-            className="block text-base font-bold text-gray-900 dark:text-white mb-1 line-clamp-1 group-hover:text-primary transition-colors">
+            className="block text-sm md:text-base font-bold text-gray-900 dark:text-white mb-1 line-clamp-1 group-hover:text-primary transition-colors">
             {displayTitle}
           </Link>
 
           {/* Description */}
           {displayDescription && (
-            <p className="flex-1 text-xs text-gray-600 dark:text-gray-400 mb-5 line-clamp-2 leading-relaxed">
+            <p className="flex-1 text-[10px] md:text-xs text-gray-600 dark:text-gray-400 mb-5 line-clamp-2 leading-relaxed">
               {displayDescription}
             </p>
           )}
@@ -524,13 +586,13 @@ const ProductCard = ({
               <div className="text-[10px] text-gray-500 dark:text-gray-400 mb-0.5 uppercase tracking-wide">
                 Price
               </div>
-              {oldPrice && (
-                <div className="text-xs line-through text-gray-400 dark:text-gray-500 mb-0.5">
-                  ${oldPrice.toFixed(2)}
+              {originalPrice && (
+                <div className="text-[10px] md:text-xs line-through text-gray-400 dark:text-gray-500 mb-0.5">
+                  ${originalPrice.toFixed(2)}
                 </div>
               )}
-              <div className="text-xl font-bold text-gray-900 dark:text-white">
-                ${price.toFixed(2)}
+              <div className="text-base md:text-xl font-bold text-gray-900 dark:text-white">
+                ${currentPrice.toFixed(2)}
               </div>
             </div>
 
@@ -546,7 +608,7 @@ const ProductCard = ({
             ) : (
               <button
                 onClick={handleAddToCart}
-                className="w-fit px-4! bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 text-white rounded-2xl center soft py-3 font-semibold text-sm shadow-md hover:shadow-lg"
+                className="w-fit px-3 md:px-4 bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 text-white rounded-2xl center soft py-2 md:py-3 font-semibold text-xs md:text-sm shadow-md hover:shadow-lg"
                 title="Add to cart">
                 Add to cart
               </button>
@@ -559,7 +621,7 @@ const ProductCard = ({
 
   if (variant === "clean") {
     return (
-      <div className="cursor-pointer group rounded-3xl overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700">
+      <div className="h-full cursor-pointer group rounded-3xl overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 flex flex-col">
         {/* Image Section */}
         <div
           onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
@@ -587,16 +649,16 @@ const ProductCard = ({
         </div>
 
         {/* Content Section */}
-        <div className="p-4">
+        <div className="p-4 flex flex-col flex-1">
           {/* Title and Discount */}
           <div className="flex items-start justify-between gap-2 mb-3">
             <Link
               href={`/products/product-details/${itemCombinationId}`}
-              className="block text-base font-bold text-gray-900 dark:text-white line-clamp-2 leading-tight group-hover:text-primary transition-colors flex-1">
+              className="block text-sm md:text-base font-bold text-gray-900 dark:text-white line-clamp-2 leading-tight group-hover:text-primary transition-colors flex-1">
               {displayTitle}
             </Link>
             {discount && (
-              <span className="shrink-0 bg-teal-100 dark:bg-teal-900 text-teal-600 dark:text-teal-300 text-xs font-semibold px-2 py-1 rounded">
+              <span className="shrink-0 bg-teal-100 dark:bg-teal-900 text-teal-600 dark:text-teal-300 text-[10px] md:text-xs font-semibold px-1.5 md:px-2 py-0.5 md:py-1 rounded">
                 -{discount}%
               </span>
             )}
@@ -604,12 +666,12 @@ const ProductCard = ({
 
           {/* Prices */}
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
-              ${price.toFixed(2)}
+            <span className="text-base md:text-xl font-bold text-gray-900 dark:text-white">
+              ${currentPrice.toFixed(2)}
             </span>
-            {oldPrice && (
-              <span className="text-sm line-through text-gray-400 dark:text-gray-500">
-                ${oldPrice.toFixed(2)}
+            {originalPrice && (
+              <span className="text-xs md:text-sm line-through text-gray-400 dark:text-gray-500">
+                ${originalPrice.toFixed(2)}
               </span>
             )}
           </div>
@@ -626,9 +688,9 @@ const ProductCard = ({
           ) : (
             <button
               onClick={handleAddToCart}
-              className="w-full bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-xl center soft py-3 font-medium text-sm shadow-sm hover:shadow-md transition-all"
+              className="w-full bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-xl center soft py-2 md:py-3 font-medium text-xs md:text-sm shadow-sm hover:shadow-md transition-all"
               title="Add to cart">
-              <ShoppingCart size={16} className="me-2" />
+              <ShoppingCart size={14} className="me-1 md:me-2 md:w-4 md:h-4" />
               Add to Cart
             </button>
           )}
@@ -672,7 +734,7 @@ const ProductCard = ({
 
             {/* Discount Badge - Top Left */}
             {discount && (
-              <div className="bg-red-500 text-white text-sm font-bold px-3 py-2 rounded-full shadow-lg">
+              <div className="bg-red-500 text-white text-xs md:text-sm font-bold px-2 md:px-3 py-1 md:py-2 rounded-full shadow-lg">
                 -{discount}%
               </div>
             )}
@@ -683,16 +745,16 @@ const ProductCard = ({
             {/* Title */}
             <Link
               href={`/products/product-details/${itemCombinationId}`}
-              className="block text-lg font-bold text-white line-clamp-2 leading-tight drop-shadow-lg">
+              className="block text-sm md:text-lg font-bold text-white line-clamp-2 leading-tight drop-shadow-lg">
               {displayTitle}
             </Link>
 
             {/* Prices */}
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-xl font-bold text-white drop-shadow-lg">${price}</span>
-              {oldPrice && (
-                <span className="text-sm line-through text-white/70 drop-shadow-lg">
-                  ${oldPrice}
+              <span className="text-base md:text-xl font-bold text-white drop-shadow-lg">${currentPrice.toFixed(2)}</span>
+              {originalPrice && (
+                <span className="text-xs md:text-sm line-through text-white/70 drop-shadow-lg">
+                  ${originalPrice.toFixed(2)}
                 </span>
               )}
             </div>
@@ -709,9 +771,9 @@ const ProductCard = ({
             ) : (
               <button
                 onClick={handleAddToCart}
-                className="w-full bg-primary text-white rounded-xl center soft py-3 font-semibold text-sm transition-all"
+                className="w-full bg-primary text-white rounded-xl center soft py-2 md:py-3 font-semibold text-xs md:text-sm transition-all"
                 title="Add to cart">
-                <ShoppingCart size={16} className="mr-2" />
+                <ShoppingCart size={14} className="mr-1 md:mr-2 md:w-4 md:h-4" />
                 Add to Cart
               </button>
             )}
