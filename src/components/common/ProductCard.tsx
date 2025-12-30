@@ -158,12 +158,12 @@ const ProductCard = ({
         {/* IMG */}
         <div
           onClick={() => router.push(`/${locale}/products/product-details/${itemCombinationId}`)}
-          className="w-full aspect-square relative bg-linear-to-br from-accent/30 to-accent/10 dark:from-primary/10 dark:to-primary/5 center overflow-hidden">
+          className="w-full aspect-[3/2] relative bg-linear-to-br from-accent/30 to-accent/10 dark:from-primary/10 dark:to-primary/5 center overflow-hidden">
           <Image
-            src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}/${image}`}
             alt={displayTitle}
             fill
-            className="object-contain scale-110 group-hover:scale-115 soft"
+            className="object-cover scale-110 group-hover:scale-115 soft"
           />
 
           {/* Discount Badge */}
@@ -302,7 +302,7 @@ const ProductCard = ({
           onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
           className="w-full aspect-square relative bg-[#F0EEED] dark:bg-gray-700 center rounded-3xl overflow-hidden">
           <Image
-            src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}/${image}`}
             alt={displayTitle}
             fill
             className="object-fill rounded-2xl overflow-hidden group-hover:scale-105 soft"
@@ -388,7 +388,7 @@ const ProductCard = ({
           onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
           className="w-full aspect-square relative bg-[#F0EEED] dark:bg-gray-700 center rounded-2xl overflow-hidden">
           <Image
-            src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}/${image}`}
             alt={displayTitle}
             fill
             className="object-fill rounded-2xl overflow-hidden group-hover:scale-105 soft"
@@ -475,7 +475,7 @@ const ProductCard = ({
         <div
           onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
           className="w-full aspect-square relative bg-gray-50 dark:bg-gray-700 overflow-hidden">
-          <Image src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`} alt={displayTitle} fill className="object-cover group-hover:scale-105 soft" />
+          <Image src={`${process.env.NEXT_PUBLIC_DOMAIN}/${image}`} alt={displayTitle} fill className="object-cover group-hover:scale-105 soft" />
 
           {/* Favorite Button - Top Left */}
           <button
@@ -541,7 +541,7 @@ const ProductCard = ({
           onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
           className="relative w-full aspect-square flex items-center justify-center overflow-hidden scale-105">
           <Image
-            src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}/${image}`}
             alt={displayTitle}
             fill
             className="object-contain group-hover:scale-105 transition-transform duration-500"
@@ -627,7 +627,7 @@ const ProductCard = ({
           onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
           className="relative w-full aspect-square bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
           <Image
-            src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}/${image}`}
             alt={displayTitle}
             fill
             className="object-contain p-8 group-hover:scale-105 transition-transform duration-500"
@@ -705,7 +705,7 @@ const ProductCard = ({
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
-            src={`${process.env.NEXT_PUBLIC_DOMAIN}${image}`}
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}/${image}`}
             alt={displayTitle}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-500"
