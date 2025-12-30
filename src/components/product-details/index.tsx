@@ -82,32 +82,25 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
     refetchOnWindowFocus: false,
   });
   
-  // Try different response paths - API might return data in different structures
-  const initialProductDetails: ProductDetails | undefined = 
-    product?.data?.data || 
-    product?.data?.result ||
-    (product?.data && typeof product.data === 'object' && 'id' in product.data ? product.data : undefined) ||
-    undefined;
-  
+  const { data: reviews, isLoading: reviewsLoading, error: reviewsError } = useQuery({
+    queryKey: ["reviews", id],
+    queryFn: () => axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/ItemReview/reviews-by-Item/${id}`),
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+  });
+  console.log("Reviews:", reviews);
+
   // State to hold updated product details (when attributes change)
-  const [productDetails, setProductDetails] = useState<ProductDetails | undefined>(initialProductDetails);
+  const [productDetails, setProductDetails] = useState<ProductDetails | undefined>();
   
-  // Update productDetails when initial data changes
-  if (initialProductDetails && (!productDetails || productDetails.id !== initialProductDetails.id)) {
-    setProductDetails(initialProductDetails);
-  }
-  
-  // Debug logging
+  // Update productDetails when API response changes
   useEffect(() => {
-    if (product) {
-      console.log("Full API Response:", product);
-      console.log("Response Data:", product?.data);
-      console.log("Product Details:", productDetails);
+    if (product?.data) {
+      const productData = product.data;
+      setProductDetails(productData as ProductDetails);
     }
-    if (error) {
-      console.error("API Error:", error);
-    }
-  }, [product, productDetails, error]);
+  }, [product]);
+
 
   const locale = useLocale();
   const isArabic = locale === "ar";
@@ -115,21 +108,6 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
     ? productDetails?.titleAr || ""
     : productDetails?.titleEn || "";
 
-  // Extract images from generalImages and currentCombination
-  const productImages = useMemo(() => {
-    if (!productDetails) return [];
-    
-    // Combine generalImages and currentCombination images
-    const generalImages = productDetails.generalImages?.map(img => img.path) || [];
-    const combinationImages = productDetails.currentCombination?.images?.map(img => img.path) || [];
-    
-    // Remove duplicates and combine
-    const allImages = [...generalImages, ...combinationImages];
-    const uniqueImages = Array.from(new Set(allImages));
-    
-    // If no images, use thumbnail
-    return uniqueImages.length > 0 ? uniqueImages : [productDetails.thumbnailImage];
-  }, [productDetails]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -143,29 +121,37 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
     );
   }
 
-  if (error) {
+  if (!productDetails) {
     return (
       <div className="container py-16 text-center">
-        <p className="text-red-600 dark:text-red-400">Error loading product: {error instanceof Error ? error.message : "Unknown error"}</p>
+        <p className="text-gray-600 dark:text-gray-400">Product not found</p>
       </div>
     );
   }
 
-  if (!productDetails || !productDetails.id) {
-    return (
-      <div className="container py-16 text-center">
-        <p className="text-gray-600 dark:text-gray-400">Product not found</p>
-        {product && (
-          <div className="mt-4 text-sm text-gray-500">
-            <p>Debug: Response received but product details not found</p>
-            <pre className="mt-2 text-left bg-gray-100 dark:bg-gray-800 p-4 rounded overflow-auto max-h-96">
-              {JSON.stringify(product?.data, null, 2)}
-            </pre>
-          </div>
-        )}
-      </div>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <div className="container py-16 text-center">
+  //       <p className="text-red-600 dark:text-red-400">Error loading product: {error instanceof Error ? error.message : "Unknown error"}</p>
+  //     </div>
+  //   );
+  // }
+
+  // if (!productDetails || !productDetails.id) {
+  //   return (
+  //     <div className="container py-16 text-center">
+  //       <p className="text-gray-600 dark:text-gray-400">Product not found</p>
+  //       {product && (
+  //         <div className="mt-4 text-sm text-gray-500">
+  //           <p>Debug: Response received but product details not found</p>
+  //           <pre className="mt-2 text-left bg-gray-100 dark:bg-gray-800 p-4 rounded overflow-auto max-h-96">
+  //             {JSON.stringify(product?.data, null, 2)}
+  //           </pre>
+  //         </div>
+  //       )}
+  //     </div>
+  //   );
+  // }
 
   return (
     <section className="">
@@ -176,7 +162,13 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
           {/* Images Gallery */}
           <ImageGallery
-            images={productImages}
+            images={
+              productDetails.generalImages && productDetails.generalImages.length > 0
+                ? productDetails.generalImages.map(img => img.path)
+                : productDetails.thumbnailImage
+                  ? [productDetails.thumbnailImage]
+                  : []
+            }
             productTitle={title}
           />
 
@@ -195,7 +187,7 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
                 ? productDetails.descriptionAr || productDetails.shortDescriptionAr || ""
                 : productDetails.descriptionEn || productDetails.shortDescriptionEn || ""
             }
-            reviews={reviews}
+            reviews={reviews?.data?.data || []}
             totalReviews={0}
           />
         ) : (
@@ -208,7 +200,7 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
               }
             />
             <ReviewsSection
-              reviews={reviews}
+              reviews={reviews?.data?.data || []}
               totalReviews={productDetails.averageRating || 0}
             />
             <FAQsSection />
