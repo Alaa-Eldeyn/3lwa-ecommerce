@@ -1,24 +1,41 @@
 "use client";
 
-import { StarIcon, Check } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { Star, Check } from "lucide-react";
 
 interface ReviewCardProps {
-  name: string;
+  id: string;
+  reviewNumber: number;
+  itemID: string;
+  customerID: string;
   rating: number;
-  verified?: boolean;
-  date: string;
-  review: string;
+  reviewTitle: string;
+  reviewText: string;
 }
 
-const ReviewCard = ({ name, rating, verified, date, review }: ReviewCardProps) => {
-  const t = useTranslations("productDetails");
+const ReviewCard = ({ 
+  id,
+  reviewNumber,
+  rating, 
+  reviewTitle, 
+  reviewText,
+  customerID 
+}: ReviewCardProps) => {
+  // استخراج اسم العميل من customerID أو استخدام قيمة افتراضية
+  const customerName = customerID ? `Customer ${customerID.slice(0, 8)}` : "Anonymous";
+  
+  // تنسيق التاريخ - يمكنك تعديله حسب الحاجة
+  const formattedDate = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
   return (
     <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
       {/* Rating */}
       <div className="flex items-center gap-1 mb-3">
         {[...Array(5)].map((_, i) => (
-          <StarIcon
+          <Star
             key={i}
             size={16}
             className={`${
@@ -32,23 +49,33 @@ const ReviewCard = ({ name, rating, verified, date, review }: ReviewCardProps) =
         ))}
       </div>
 
-      {/* Name and Verified */}
+      {/* Review Title */}
+      {reviewTitle && (
+        <h3 className="font-bold text-gray-900 dark:text-white mb-2">
+          {reviewTitle}
+        </h3>
+      )}
+
+      {/* Customer Name */}
       <div className="flex items-center gap-2 mb-3">
-        <h4 className="font-bold text-gray-900 dark:text-white">{name}</h4>
-        {verified && (
-          <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
-            <Check size={16} />
-          </span>
-        )}
+        <h4 className="font-semibold text-gray-700 dark:text-gray-300 text-sm">
+          {customerName}
+        </h4>
+        <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
+          <Check size={14} />
+        </span>
       </div>
 
       {/* Review Text */}
       <p className="text-gray-600 dark:text-gray-400 mb-3 leading-relaxed">
-        {review}
+        {reviewText}
       </p>
 
-      {/* Date */}
-      <p className="text-sm text-gray-500">{t("postedOn")} {date}</p>
+      {/* Date and Review Number */}
+      <div className="flex items-center justify-between text-sm text-gray-500">
+        <span>Posted on {formattedDate}</span>
+        <span className="text-xs">#{reviewNumber}</span>
+      </div>
     </div>
   );
 };

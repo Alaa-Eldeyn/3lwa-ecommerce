@@ -9,22 +9,14 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-// interface Review {
-//   id: string,
-//   reviewNumber: number,
-//   itemID: string,
-//   customerID: string,
-//   rating: number,
-//   reviewTitle: string,
-//   reviewText: string,
-// }
 interface Review {
-  id: number;
-  name: string;
-  rating: number;
-  verified: boolean;
-  date: string;
-  review: string;
+  id: string,
+  reviewNumber: number,
+  itemID: string,
+  customerID: string,
+  rating: number,
+  reviewTitle: string,
+  reviewText: string,
 }
 
 interface ReviewsSectionProps {
