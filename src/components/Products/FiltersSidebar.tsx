@@ -234,7 +234,7 @@ const FiltersSidebar = ({
         />
 
         {/* Dynamic Features Filters */}
-        {dynamicFilters?.features && (
+        {/* {dynamicFilters?.features && (
           <FeaturesFilter
             features={dynamicFilters.features}
             freeShippingOnly={freeShippingOnly}
@@ -244,7 +244,7 @@ const FiltersSidebar = ({
             onWithWarrantyChange={setWithWarrantyOnly}
             onInStockChange={setInStockOnly}
           />
-        )}
+        )} */}
 
         <VendorSaleOptionsFilter
           verifiedVendorsOnly={verifiedVendorsOnly}

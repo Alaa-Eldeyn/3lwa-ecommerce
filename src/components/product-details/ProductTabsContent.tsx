@@ -5,12 +5,13 @@ import { useTranslations } from "next-intl";
 import ReviewCard from "./ReviewCard";
 
 interface Review {
-  id: number;
-  name: string;
-  rating: number;
-  verified: boolean;
-  date: string;
-  review: string;
+  id: string,
+  reviewNumber: number,
+  itemID: string,
+  customerID: string,
+  rating: number,
+  reviewTitle: string,
+  reviewText: string,
 }
 
 interface ProductTabsContentProps {

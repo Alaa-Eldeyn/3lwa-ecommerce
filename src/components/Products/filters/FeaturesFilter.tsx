@@ -1,8 +1,8 @@
-import { FeaturesData } from "./types";
+
 import { useTranslations } from "next-intl";
 
 interface FeaturesFilterProps {
-  features: FeaturesData;
+  features: any;
   freeShippingOnly: boolean;
   withWarrantyOnly: boolean;
   inStockOnly: boolean;
