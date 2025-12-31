@@ -1,16 +1,23 @@
 "use client";
 
-import { ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart, Heart, Star, Truck } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
+import { useLocale } from "next-intl";
 import { useCartStore } from "@/src/store/cartStore";
+import { useWishlistStore } from "@/src/store/wishlistStore";
 import { useUserStore } from "@/src/store/userStore";
 import QuantityController from "./QuantityController";
 import { Product } from "@/src/types/types";
-import { useLocale } from "next-intl";
+
+interface ProductRowCardProps extends Partial<Product> {
+  variant?: "default" | "bordered";
+}
 
 const ProductRowCard = ({
-    thumbnailImage,
+  thumbnailImage,
   titleAr,
   titleEn,
   itemId,
@@ -19,51 +26,64 @@ const ProductRowCard = ({
   shortDescriptionAr,
   descriptionEn,
   descriptionAr,
+  price,
+  salesPrice,
   basePrice,
   minimumPrice,
   maximumPrice,
   categoryTitle,
   brandTitle,
-}: Product) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const { items, addItem, updateQuantity, removeItem } = useCartStore();
-  const { isAuthenticated } = useUserStore();
+  brandNameAr,
+  brandNameEn,
+  itemRating,
+  badges,
+  stockStatus,
+  availableQuantity,
+  isFreeShipping,
+  variant = "default",
+}: ProductRowCardProps) => {
+  const router = useRouter();
   const locale = useLocale();
+  const { items, addItem, updateQuantity, removeItem } = useCartStore();
+  const { items: wishlistItems, addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore();
+  const { isAuthenticated, user } = useUserStore();
+  const [isWishlistLoading, setIsWishlistLoading] = useState(false);
+
   const isArabic = locale === "ar";
   
+  // Check if product is in wishlist
+  const isFavorite = useMemo(() => {
+    if (!itemCombinationId) return false;
+    return isInWishlist(itemCombinationId);
+  }, [wishlistItems, itemCombinationId, isInWishlist]);
 
   const image = thumbnailImage || "";
   const displayTitle = isArabic ? (titleAr || "") : (titleEn || "");
   const displayDescription = isArabic 
-    ? (descriptionAr || "")
-    : (descriptionEn || "");
+    ? (shortDescriptionAr || descriptionAr || "")
+    : (shortDescriptionEn || descriptionEn || "");
   const displayCategory = isArabic
     ? (categoryTitle || "")
     : (categoryTitle || "");
+  const displayBrand = isArabic ? (brandNameAr || brandTitle || "") : (brandNameEn || brandTitle || "");
   
-  const price = basePrice || minimumPrice || 0;
-  const oldPrice = maximumPrice && maximumPrice > price ? maximumPrice : undefined;
-  const discount = oldPrice ? Math.round(((oldPrice - price) / oldPrice) * 100) : undefined;
-
-  // Use itemCombinationId as the product ID, fallback to itemId or generated ID
-  const productId = itemCombinationId || itemId || `${displayTitle}-${price}`.toLowerCase().replace(/\s+/g, '-');
-  const productItemId = itemId || productId;
+  // Price Logic (Copied from ProductCard)
+  const currentPrice = salesPrice || price || basePrice || minimumPrice || 0;
+  const originalPrice = price && salesPrice && price > salesPrice ? price : (maximumPrice && maximumPrice > currentPrice ? maximumPrice : undefined);
+  const discount = originalPrice ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100) : undefined;
 
   // Find if product exists in cart
-  const cartItem = useMemo(() => 
-    items.find((item) => item.id === productId),
-    [items, productId]
-  );
+  const cartItem = useMemo(() => items.find((item) => item.id === itemCombinationId), [items, itemCombinationId]);
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!productItemId || !itemCombinationId) return;
+    if (!itemId || !itemCombinationId) return;
     try {
       await addItem({
-        id: productId,
-        itemId: productItemId,
+        id: itemCombinationId,
+        itemId: itemId,
         name: displayTitle,
-        price: price,
+        price: currentPrice,
         image: image,
         offerCombinationPricingId: itemCombinationId,
       }, isAuthenticated());
@@ -74,9 +94,10 @@ const ProductRowCard = ({
 
   const handleIncrement = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!itemId || !itemCombinationId) return;
     if (cartItem) {
       try {
-        await updateQuantity(productId, cartItem.quantity + 1, isAuthenticated());
+        await updateQuantity(itemCombinationId, cartItem.quantity + 1, isAuthenticated());
       } catch (error) {
         console.error("Failed to update quantity:", error);
       }
@@ -85,12 +106,13 @@ const ProductRowCard = ({
 
   const handleDecrement = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!itemId || !itemCombinationId) return;
     if (cartItem) {
       try {
         if (cartItem.quantity === 1) {
-          await removeItem(productId, isAuthenticated());
+          await removeItem(itemCombinationId, isAuthenticated());
         } else {
-          await updateQuantity(productId, cartItem.quantity - 1, isAuthenticated());
+          await updateQuantity(itemCombinationId, cartItem.quantity - 1, isAuthenticated());
         }
       } catch (error) {
         console.error("Failed to update quantity:", error);
@@ -98,92 +120,167 @@ const ProductRowCard = ({
     }
   };
 
+  const toggleWishlist = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (!itemCombinationId) {
+      console.error("itemCombinationId is required");
+      return;
+    }
+
+    if (!user) {
+      alert("Please login to add items to wishlist");
+      return;
+    }
+
+    setIsWishlistLoading(true);
+    try {
+      if (isFavorite) {
+        await removeFromWishlist(itemCombinationId, true);
+      } else {
+        await addToWishlist(itemCombinationId, true);
+      }
+    } catch (error) {
+      console.error("Failed to update wishlist:", error);
+    } finally {
+      setIsWishlistLoading(false);
+    }
+  }
+
+  // Render Layout
   return (
-    <div className="cursor-pointer group soft rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-lg p-4 max-w-68 sm:max-w-none w-full mx-auto">
-      <div className="flex flex-col lg:flex-row gap-4">
-        {/* Image */}
-        <div className="w-58 h-58 relative bg-[#F0EEED] dark:bg-gray-700 center rounded-2xl overflow-hidden shrink-0 mx-auto">
-          <Image
-            src={image}
-            alt={displayTitle}
-            fill
-            className="object-fill rounded-2xl overflow-hidden group-hover:scale-105 soft"
+    <div 
+      className={`cursor-pointer group soft rounded-2xl flex flex-col sm:flex-row overflow-hidden transition-all duration-300 ${
+        variant === "bordered" 
+          ? "border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 gap-4" 
+          : "bg-white dark:bg-gray-800 shadow-sm hover:shadow-md"
+      }`}
+    >
+      {/* Image Section */}
+      <div
+        onClick={() => router.push(`/${locale}/products/product-details/${itemCombinationId}`)}
+        className="relative w-full sm:w-40 sm:h-40 lg:w-52 lg:h-52 flex-shrink-0 bg-[#F0EEED] dark:bg-gray-700 center overflow-hidden"
+      >
+        <Image
+          src={`${process.env.NEXT_PUBLIC_DOMAIN}/${image}`}
+          alt={displayTitle}
+          fill
+          className="object-cover group-hover:scale-105 soft"
+        />
+
+        {/* Discount Badge (Absolute on Image) */}
+        {discount && (
+          <div className="absolute top-2 right-2 bg-primary text-white text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-md shadow-md z-10">
+            {discount}%-
+          </div>
+        )}
+
+        {/* Out of Stock Badge */}
+        {stockStatus === "OutOfStock" && (
+          <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-md shadow-md z-10">
+            {isArabic ? "نفذت الكمية" : "Out of Stock"}
+          </div>
+        )}
+
+        {/* Wishlist Button - Overlaid on Image */}
+        <button
+          onClick={toggleWishlist}
+          disabled={isWishlistLoading}
+          className={`absolute top-2 left-2 w-8 h-8 bg-white dark:bg-gray-800 rounded-full center shadow-md hover:scale-110 soft z-10 disabled:opacity-50 disabled:cursor-not-allowed`}
+          title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
+          <Heart
+            size={16}
+            className={`${
+              isFavorite ? "fill-red-500 text-red-500" : "text-gray-600 dark:text-gray-300"
+            } soft`}
           />
-          
-          {/* Favorite Button - Top Left */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsFavorite(!isFavorite);
-            }}
-            className="absolute top-2 left-2 w-8 h-8 bg-white dark:bg-gray-800 rounded-full center shadow-md hover:scale-110 soft z-10"
-            title={isFavorite ? "Remove from favorites" : "Add to favorites"}
-          >
-            <Heart
-              size={16}
-              className={`${
-                isFavorite
-                  ? "fill-red-500 text-red-500"
-                  : "text-gray-600 dark:text-gray-300"
-              } soft`}
-            />
-          </button>
-        </div>
+        </button>
+      </div>
 
-        {/* Content */}
-        <div className="flex-1 flex flex-col justify-between min-w-0">
-          <div>
-            {/* Title */}
-            <h3 className="text-xl font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
-              {displayTitle}
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4 max-w-xl line-clamp-2 lg:line-clamp-3">
-            {displayDescription}
-            </p>
-
-            {/* Rating */}
-            {/* <div className="flex items-center gap-1 mb-2">
-              {[...Array(5)].map((_, i) => (
-                <StarIcon
-                  key={i}
-                  size={14}
-                  className={`${
-                    i < Math.floor(rating)
-                      ? "fill-yellow-400 text-yellow-400"
-                      : i < rating
-                      ? "fill-yellow-400 text-yellow-400 opacity-50"
-                      : "fill-gray-300 text-gray-300"
-                  }`}
-                />
-              ))}
-              <span className="text-gray-900 dark:text-gray-300 ml-1 text-sm font-normal">
-                {rating}/5
-              </span>
-            </div> */}
+      {/* Content Section */}
+      <div className="flex-1 flex flex-col justify-between p-0 pb-4 pt-4 sm:py-2 sm:px-4 min-w-0">
+        
+        {/* Top Section: Title, Meta, Description */}
+        <div className="min-w-0">
+          {/* Category & Brand */}
+          <div className="flex items-center gap-2 mb-1">
+            {displayCategory && (
+              <div className="text-[10px] md:text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">
+                {displayCategory}
+              </div>
+            )}
+            {displayBrand && (
+              <div className="text-[10px] md:text-xs text-primary dark:text-primary font-bold">
+                {displayBrand}
+              </div>
+            )}
           </div>
 
-          {/* Bottom Section */}
-          <div className="flex items-center justify-between gap-4">
-            {/* Prices */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                ${price}
+          {/* Title */}
+          <Link
+            href={`/${locale}/products/product-details/${itemCombinationId}`}
+            className="text-base md:text-lg font-bold text-gray-900 dark:text-white mb-1 line-clamp-1 leading-tight group-hover:text-primary soft"
+          >
+            {displayTitle}
+          </Link>
+
+          {/* Description */}
+          {displayDescription && (
+            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mb-2">
+              {displayDescription}
+            </p>
+          )}
+
+          {/* Rating & Shipping */}
+          <div className="flex items-center gap-3 mb-2">
+            {itemRating && (
+              <div className="flex items-center gap-1 text-xs text-yellow-500">
+                <Star size={12} className="fill-yellow-500" />
+                <span className="font-semibold">{itemRating.toFixed(1)}</span>
+              </div>
+            )}
+            {isFreeShipping && (
+              <div className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
+                <Truck size={12} />
+                <span className="font-medium">{isArabic ? "شحن مجاني" : "Free Ship"}</span>
+              </div>
+            )}
+            {badges && badges.length > 0 && (
+               <div className="flex gap-1 flex-wrap">
+                {badges.slice(0, 2).map((badge, index) => (
+                  <span
+                    key={index}
+                    className={`text-[10px] px-1.5 py-0.5 rounded font-medium h-fit ${
+                      badge.variant === "success"
+                        ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                        : badge.variant === "warning"
+                        ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                        : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                    }`}>
+                    {isArabic ? badge.textAr : badge.textEn}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Bottom Section: Price & Actions */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+          {/* Price */}
+          <div className="flex items-baseline gap-2">
+            <span className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
+              ${currentPrice.toFixed(2)}
+            </span>
+            {originalPrice && (
+              <span className="text-xs md:text-sm line-through text-gray-400 dark:text-gray-500">
+                ${originalPrice.toFixed(2)}
               </span>
+            )}
+          </div>
 
-              {oldPrice && (
-                <span className="text-base font-bold line-through text-gray-400 dark:text-gray-500">
-                  ${oldPrice}
-                </span>
-              )}
-
-              {discount && (
-                <span className="text-xs bg-secondary/20 text-secondary px-3 py-1 rounded-full font-medium">
-                  -{discount}%
-                </span>
-              )}
-            </div>
-
-            {/* Add to Cart Button */}
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2 ms-auto">
             {cartItem ? (
               <QuantityController
                 quantity={cartItem.quantity}
@@ -195,11 +292,11 @@ const ProductRowCard = ({
             ) : (
               <button
                 onClick={handleAddToCart}
-                className="px-6 py-2 bg-primary dark:bg-white text-white dark:text-primary rounded-full font-medium hover:bg-secondary dark:hover:bg-gray-200 soft center gap-2 shrink-0"
-                title="Add to cart"
-              >
-                <ShoppingCart size={18} />
-                <span className="hidden sm:inline">Add to Cart</span>
+                disabled={stockStatus === "OutOfStock"}
+                className="bg-primary hover:bg-primary/90 text-white dark:bg-white dark:text-primary dark:hover:bg-gray-200 rounded-full px-4 py-2 center soft font-medium text-xs md:text-sm shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all whitespace-nowrap"
+                title="Add to cart">
+                <ShoppingCart size={16} className="me-2"/>
+                <span>{isArabic ? "أضف للسلة" : "Add to Cart"}</span>
               </button>
             )}
           </div>

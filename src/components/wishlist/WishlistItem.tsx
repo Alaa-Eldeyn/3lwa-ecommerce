@@ -9,6 +9,8 @@ interface WishlistItemProps {
   itemCombinationId: string;
   itemTitleAr: string;
   itemTitleEn: string;
+  itemShortDescriptionAr: string;
+  itemShortDescriptionEn: string;
   thumbnailImage: string;
   price: number;
   salesPrice: number;
@@ -20,6 +22,8 @@ const WishlistItem = ({
   itemCombinationId,
   itemTitleAr,
   itemTitleEn,
+  itemShortDescriptionAr,
+  itemShortDescriptionEn,
   thumbnailImage,
   price,
   salesPrice,
@@ -37,7 +41,7 @@ const WishlistItem = ({
       {/* Image */}
       <div className="relative h-64 bg-gray-100 dark:bg-gray-700 overflow-hidden">
         <Image
-          src={thumbnailImage}
+          src={`${process.env.NEXT_PUBLIC_DOMAIN}/${thumbnailImage}`}
           alt={title}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -58,9 +62,12 @@ const WishlistItem = ({
 
       {/* Details */}
       <div className="p-4">
-        <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-3 line-clamp-2 min-h-[56px]">
+        <h3 className="font-semibold text-lg text-gray-900 dark:text-white line-clamp-2 mb-2">
           {title}
         </h3>
+        <p className="text-xs text-gray-600 dark:text-gray-400 mb-1 line-clamp-1">
+          {locale === "ar" ? itemShortDescriptionAr : itemShortDescriptionEn}
+        </p>
 
         {/* Price */}
         <div className="flex items-center gap-2 mb-4">

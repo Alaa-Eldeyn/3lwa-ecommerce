@@ -12,6 +12,7 @@ import { useCartStore } from "@/src/store/cartStore";
 const WishlistPage = () => {
   const t = useTranslations("wishlist");
   const { items, removeItem, clearAllItems, isLoading } = useWishlistStore();
+  // console.log(items);
   const { user } = useUserStore();
   const { addItem: addToCart } = useCartStore();
 
