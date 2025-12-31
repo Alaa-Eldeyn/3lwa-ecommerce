@@ -68,6 +68,7 @@ const ProductCard = ({
     : (categoryTitle || "");
   const displayBrand = isArabic ? (brandNameAr || brandTitle || "") : (brandNameEn || brandTitle || "");
   
+  // TODO: Review
   const currentPrice = salesPrice || price || basePrice || minimumPrice || 0;
   // السعر الأصلي (قبل الخصم)
   const originalPrice = price && salesPrice && price > salesPrice ? price : (maximumPrice && maximumPrice > currentPrice ? maximumPrice : undefined);
