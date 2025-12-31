@@ -92,7 +92,7 @@ const CartSidebar = () => {
                                     {/* Image */}
                                     <div className="relative w-20 h-20 shrink-0 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                                         <Image
-                                            src={item.image}
+                                            src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
                                             alt={item.name}
                                             fill
                                             className="object-cover"

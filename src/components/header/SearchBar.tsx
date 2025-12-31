@@ -13,44 +13,52 @@ const SearchBar = () => {
   const isArabic = locale === "ar"
   const searchParams = useSearchParams()
   const router = useRouter()
-  const pathname = usePathname()
   const categoryId = searchParams.get("c")
   
   const [q, setQ] = useState("")
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(categoryId || "")
   const dropdownRef = useRef<HTMLDivElement>(null)
 
+  // Sync state with URL params on mount or URL change
   useEffect(() => {
     if (categoryId) {
-      
       setSelectedCategoryId(categoryId)
     }
   }, [categoryId])
 
   const handleSearch = () => {
-    
     const params = new URLSearchParams(searchParams.toString())
     
-    // إضافة السيرش تيرم لو موجود
+    // Add Search Term if exists
     if (q.trim()) {
       params.set("t", q.trim())
     } else {
       params.delete("t")
     }
     
-    // إضافة الكاتيجوري لو موجود
+    // Add Category if exists
     if (selectedCategoryId) {
       params.set("c", selectedCategoryId)
     } else {
       params.delete("c")
     }
     
-    router.push(`${pathname}?${params.toString()}`)
+    router.push(`/products?${params.toString()}`)
   }
 
-  const handleCategoryChange = (catId: string) => {
+  // 1. NEW: Handle Enter key press in the input
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  }
+
+  // 2. UPDATED: Trigger URL update immediately when category changes
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const catId = e.target.value
     setSelectedCategoryId(catId)
     
+    // Update logic moved here to execute immediately
     const params = new URLSearchParams(searchParams.toString())
     
     if (catId) {
@@ -59,9 +67,11 @@ const SearchBar = () => {
       params.delete("c")
     }
     
-    router.push(`${pathname}?${params.toString()}`)
-    console.log("Search Term:", q)
-    console.log("Selected Category ID:", selectedCategoryId)
+    // Note: We keep the existing search term 't' if it exists in the URL
+    // If you want to keep the local 'q' state, you should add it here:
+    // if (q.trim()) params.set("t", q.trim())
+
+    router.push(`/products?${params.toString()}`)
   }
 
   const { data: categories } = useQuery({
@@ -74,8 +84,6 @@ const SearchBar = () => {
     (cat: Category) => cat.isMainCategory
   ) || []
 
-
-
   return (
     <div className="relative w-full pb-1 lg:pb-0">
       <div className="flex items-center h-10 lg:h-12">
@@ -84,11 +92,9 @@ const SearchBar = () => {
         <div ref={dropdownRef} className="relative">
           <select 
             value={selectedCategoryId}
-            onChange={(e) => {
-              const catId = e.target.value
-              setSelectedCategoryId(catId)
-            }}
-            className="flex items-center gap-2 px-2 lg:px-4 h-10 lg:h-12 bg-white border border-gray-300 rounded-s-lg text-gray-700 hover:bg-gray-50 transition whitespace-nowrap"
+            // 3. UPDATED: Use the new handler
+            onChange={handleCategoryChange}
+            className="flex items-center gap-2 px-2 lg:px-4 h-10 lg:h-12 bg-white border border-gray-300 rounded-s-lg text-gray-700 hover:bg-gray-50 transition whitespace-nowrap appearance-none cursor-pointer" // Added appearance-none for better styling if needed
           >
             <option value="">{t("allCategories") || "الكل"}</option>
             {mainCategories.map((category: Category) => (
@@ -109,6 +115,7 @@ const SearchBar = () => {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
+          onKeyDown={handleKeyDown} // 4. NEW: Added Enter key support
           placeholder="بحث في Basyit.com"
           className="flex-1 h-full px-2 lg:px-4 text-gray-700 border-t border-b border-gray-300 bg-white focus:outline-none"
         />

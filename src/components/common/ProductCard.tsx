@@ -240,11 +240,11 @@ const ProductCard = ({
 
           {/* Badges */}
           {badges && badges.length > 0 && (
-            <div className="flex gap-2 mb-3 flex-wrap flex-1">
+            <div className="flex gap-2 mb-3 flex-wrap flex-1 h-fit">
               {badges.map((badge, index) => (
                 <span
                   key={index}
-                  className={`text-xs px-2 py-1 rounded-md font-medium ${
+                  className={`text-xs px-2 py-1 rounded-md font-medium h-fit ${
                     badge.variant === "success"
                       ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
                       : badge.variant === "warning"

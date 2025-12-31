@@ -1,3 +1,4 @@
+"use client"
 import { AttributeItem } from "./types";
 import { useTranslations } from "next-intl";
 
@@ -9,19 +10,21 @@ interface AttributesFilterProps {
 
 const AttributesFilter = ({ attributes, selectedAttributes, onChange }: AttributesFilterProps) => {
   const t = useTranslations("filters");
-  const handleToggle = (attrName: string, value: string) => {
-    const current = selectedAttributes[attrName] || [];
+
+  const handleToggle = (attributeId: string, valueId: string) => {
+    // Use attributeId (from API) instead of name
+    const current = selectedAttributes[attributeId] || [];
     let updated: string[];
     
-    if (current.includes(value)) {
-      updated = current.filter((v) => v !== value);
+    if (current.includes(valueId)) {
+      updated = current.filter((v) => v !== valueId);
     } else {
-      updated = [...current, value];
+      updated = [...current, valueId];
     }
     
     onChange({
       ...selectedAttributes,
-      [attrName]: updated,
+      [attributeId]: updated, // Update state using the ID
     });
   };
 
@@ -31,22 +34,24 @@ const AttributesFilter = ({ attributes, selectedAttributes, onChange }: Attribut
         {t("attributes")}
       </h3>
       <div className="space-y-3">
-        {attributes.map((attr, index) => (
-          <div key={index}>
+        {attributes.map((attr) => (
+          <div key={attr.attributeId}>
             <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">
-              {attr.name}
+              {attr.nameEn || attr.nameAr || "Attribute"}
             </h4>
             <div className="space-y-1 ml-2">
-              {attr.values?.map((value, vIndex) => (
-                <label key={vIndex} className="flex items-center gap-2 cursor-pointer">
+              {attr.values?.map((val) => (
+                <label key={val.valueId} className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={selectedAttributes[attr.name]?.includes(value) || false}
-                    onChange={() => handleToggle(attr.name, value)}
+                    // Use attributeId to look up selected values
+                    checked={selectedAttributes[attr.attributeId]?.includes(val.valueId) || false}
+                    onChange={() => handleToggle(attr.attributeId, val.valueId)}
                     className="w-4 h-4 rounded border-gray-300 dark:border-gray-600"
                   />
                   <span className="text-xs text-gray-600 dark:text-gray-400">
-                    {value}
+                    {/* Fallback to ID if name is missing or a GUID */}
+                    {val.valueEn && val.valueEn.length < 20 ? val.valueEn : val.valueId}
                   </span>
                 </label>
               ))}

@@ -8,6 +8,7 @@ import { useUserStore } from "@/src/store/userStore";
 import { ProductDetails, ProductAttribute, SelectedValueId, CombinationResponse } from "@/src/types/types";
 import axios from "axios";
 import VendorsSidebar from "./VendorsSidebar";
+import Link from "next/link";
 
 const ProductInfo = ({product, onProductUpdate}: {product: ProductDetails, onProductUpdate: (updatedProduct: ProductDetails) => void}) => {
   const t = useTranslations("productDetails");
@@ -18,6 +19,7 @@ const ProductInfo = ({product, onProductUpdate}: {product: ProductDetails, onPro
   // Extract dynamic data from product
   const title = locale === 'ar' ? product.titleAr : product.titleEn;
   const description = locale === 'ar' ? product.descriptionAr : product.descriptionEn;
+  const brand = locale === 'ar' ? product?.brand?.nameAr : product?.brand?.nameEn;
   
   // Get pricing from bestOffer
   const bestOffer = product.pricing?.bestOffer;
@@ -348,6 +350,7 @@ const ProductInfo = ({product, onProductUpdate}: {product: ProductDetails, onPro
 
   return (
     <div>
+    <Link href={`/brand/${product?.brand?.id}`} className=" text-gray-500 dark:text-gray-400 mb-3 block">{brand}</Link>
       <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-3">
         {title}
       </h1>

@@ -15,6 +15,10 @@ const PriceRangeFilter = ({ min, max, value, onChange }: PriceRangeFilterProps) 
   const [isOpen, setIsOpen] = useState(true);
   const t = useTranslations("filters");
 
+  // Safety check for min/max
+  const safeMin = min ?? 0;
+  const safeMax = max ?? 10000;
+
   return (
     <div className="border-b border-gray-200 dark:border-gray-700 pb-2 mb-4">
       <button
@@ -36,19 +40,17 @@ const PriceRangeFilter = ({ min, max, value, onChange }: PriceRangeFilterProps) 
         <div dir="ltr" className="px-2 pb-4">
           <div className="mb-6">
             <RangeSlider
-              min={min}
-              max={max}
+              min={safeMin}
+              max={safeMax}
               value={value}
               onInput={(nextValue: number[] | [number, number]) => {
-                // normalize to tuple [number, number]
                 const v = Array.isArray(nextValue) ? nextValue : [nextValue[0], nextValue[1]];
-                onChange([Math.max(min, Math.min(v[0], v[1])), Math.min(max, Math.max(v[0], v[1]))]);
+                onChange([Math.max(safeMin, Math.min(v[0], v[1])), Math.min(safeMax, Math.max(v[0], v[1]))]);
               }}
               step={1}
             />
           </div>
 
-          {/* Price Display */}
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-gray-900 dark:text-white">
               ${value[0]}

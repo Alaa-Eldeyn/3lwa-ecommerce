@@ -145,7 +145,7 @@ const CategoriesSidebar = () => {
                   {selectedCategory.children.map((subcategory) => (
                     <div key={subcategory.id}>
                       <Link
-                        href={`/products?s=${subcategory.id}`}
+                        href={`/products?c=${subcategory.id}`}
                         onClick={handleClose}
                         className="block text-sm font-medium text-gray-900 dark:text-white hover:text-primary dark:hover:text-primary transition-colors py-2 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded"
                       >

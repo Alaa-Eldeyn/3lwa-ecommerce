@@ -5,31 +5,29 @@ export interface FilterItem {
   count: number;
 }
 
-export interface AttributeItem {
-  name: string;
-  values: string[];
+export interface AttributeValue {
+  valueId: string;
+  valueAr: string;
+  valueEn: string;
+  count: number;
 }
 
-export interface FeaturesData {
-  freeShippingCount: number;
-  hasFreeShipping: boolean;
-  withWarrantyCount: number;
-  hasWarranty: boolean;
-  inStockCount: number;
-  hasInStock: boolean;
-  totalItems: number;
+export interface AttributeItem {
+  attributeId: string; // Fixed: was 'id'
+  nameAr: string;
+  nameEn: string;
+  displayOrder: number;
+  values: AttributeValue[];
 }
 
 export interface DynamicFilters {
-  categories?: FilterItem[];
-  brands?: FilterItem[];
-  vendors?: FilterItem[];
-  conditions?: FilterItem[];
-  attributes?: AttributeItem[];
-  features?: FeaturesData;
-  priceRange?: {
+  categories: any[];
+  brands: any[];
+  vendors: any[];
+  attributes: AttributeItem[];
+  conditions: any[];
+  priceRange: {
     minPrice: number;
     maxPrice: number;
-    avgPrice: number;
   };
 }
