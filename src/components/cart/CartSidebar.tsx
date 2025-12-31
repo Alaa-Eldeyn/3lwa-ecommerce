@@ -45,7 +45,7 @@ const CartSidebar = () => {
     const confirmClearCart = async () => {
         try {
             await clearCart(isAuthenticated());
-            setIsClearModalOpen(false); // Close modal on success
+            setIsClearModalOpen(false); 
         } catch (error) {
             console.error("Failed to clear cart:", error);
         }
@@ -60,7 +60,6 @@ const CartSidebar = () => {
                 onClick={closeCart}
             />
 
-            {/* 2. Clear Confirmation Modal (Independent Fixed Element - z-[60] to be on top of Sidebar) */}
             {isClearModalOpen && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
                     {/* Backdrop */}

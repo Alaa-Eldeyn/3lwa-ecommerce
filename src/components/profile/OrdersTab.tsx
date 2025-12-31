@@ -1,14 +1,21 @@
 import { Package } from "lucide-react";
 import { Order } from "@/src/types/types";
+import { useEffect, useState } from "react";
+import { customAxios } from "@/src/utils/customAxios";
+import { useTranslations } from "next-intl";
+import router from "next/router";
 
-interface OrdersTabProps {
-  orders: Order[];
-  t: (key: string) => string;
-  onViewDetails?: (orderId: string) => void;
-  onStartShopping?: () => void;
-}
 
-const OrdersTab = ({ orders, t, onViewDetails, onStartShopping }: OrdersTabProps) => {
+const OrdersTab = () => {
+  const t = useTranslations("profile");
+  const [orders,setOrders] = useState<any[]>([]);
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const response = await customAxios.get("/Order/my-orders");
+      setOrders(response.data.data);
+    };
+    fetchOrders();
+  }, []);
   const getStatusColor = (status: Order["status"]) => {
     const colors = {
       pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
@@ -38,7 +45,7 @@ const OrdersTab = ({ orders, t, onViewDetails, onStartShopping }: OrdersTabProps
             {t("orders.noOrders")}
           </p>
           <button 
-            onClick={onStartShopping}
+            onClick={() => router.push("/products")}
             className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 soft"
           >
             {t("orders.startShopping")}
@@ -70,7 +77,7 @@ const OrdersTab = ({ orders, t, onViewDetails, onStartShopping }: OrdersTabProps
                   {t("orders.total")}: ${order.total.toFixed(2)}
                 </p>
                 <button 
-                  onClick={() => onViewDetails?.(order.id)}
+                  // onClick={() => onViewDetails?.(order.id)}
                   className="px-4 py-2 text-primary border border-primary rounded-xl hover:bg-primary hover:text-white soft"
                 >
                   {t("orders.viewDetails")}

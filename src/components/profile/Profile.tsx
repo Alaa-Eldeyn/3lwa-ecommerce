@@ -56,24 +56,7 @@ const Profile = () => {
 
 
   // Mock orders data
-  const [orders] = useState<Order[]>([
-    {
-      id: "1",
-      orderNumber: "ORD-2024-001",
-      date: "2024-11-15",
-      total: 299.99,
-      status: "delivered",
-      items: [],
-    },
-    {
-      id: "2",
-      orderNumber: "ORD-2024-002",
-      date: "2024-11-10",
-      total: 149.99,
-      status: "shipped",
-      items: [],
-    },
-  ]);
+
 
   const onSubmitProfile = async (data: ProfileFormData) => {
     setIsLoading(true);
@@ -169,10 +152,7 @@ const Profile = () => {
               )}
 
               {activeTab === "orders" && (
-                <OrdersTab
-                  orders={orders}
-                  t={t}
-                />
+                <OrdersTab />
               )}
 
               {activeTab === "security" && (
