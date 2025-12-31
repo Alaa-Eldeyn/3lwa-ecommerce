@@ -32,7 +32,7 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
     enabled: !!id,
     refetchOnWindowFocus: false,
   });
-  console.log("Reviews:", reviews);
+  // console.log("Reviews:", reviews);
 
   // State to hold updated product details (when attributes change)
   const [productDetails, setProductDetails] = useState<ProductDetails | undefined>();
