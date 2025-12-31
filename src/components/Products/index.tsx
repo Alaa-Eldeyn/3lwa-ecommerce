@@ -108,6 +108,7 @@ const Products = () => {
       pageNumber,
       pageSize,
       sortBy,
+      categoryIdFromUrl
     ],
     queryFn: async () => {
       // Check if any filters are active
