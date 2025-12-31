@@ -1,15 +1,20 @@
 "use client";
 
-import { X, ShoppingBag, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { X, ShoppingBag, Trash2, AlertTriangle } from "lucide-react";
 import { useHeaderStore } from "@/src/store/headerStore";
 import { useCartStore } from "@/src/store/cartStore";
 import Link from "next/link";
 import Image from "next/image";
 import QuantityController from "../common/QuantityController";
+import { isAuthenticated } from "@/src/utils/auth";
 
 const CartSidebar = () => {
     const { isCartOpen, closeCart } = useHeaderStore();
     const { items, updateQuantity, removeItem, clearCart, getTotalPrice } = useCartStore();
+
+    // State to control the Clear Confirmation Modal
+    const [isClearModalOpen, setIsClearModalOpen] = useState(false);
 
     const handleIncrement = (id: string) => (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -31,26 +36,74 @@ const CartSidebar = () => {
         }
     };
 
-    const handleClearCart = async () => {
-        if (confirm("هل تريد مسح جميع المنتجات من السلة؟")) {
-            try {
-                await clearCart(true);
-            } catch (error) {
-                console.error("Failed to clear cart:", error);
-            }
+    // Function to open the modal
+    const askToClearCart = () => {
+        setIsClearModalOpen(true);
+    };
+
+    // Function to confirm clearing the cart
+    const confirmClearCart = async () => {
+        try {
+            await clearCart(isAuthenticated());
+            setIsClearModalOpen(false); // Close modal on success
+        } catch (error) {
+            console.error("Failed to clear cart:", error);
         }
     };
 
     return (
         <>
-            {/* Overlay */}
+            {/* 1. Main Overlay for Cart Sidebar (z-50) */}
             <div
                 className={`fixed inset-0 bg-black/50 z-50 transition-opacity duration-300 ${isCartOpen ? "opacity-100" : "opacity-0 pointer-events-none"
                     }`}
                 onClick={closeCart}
             />
 
-            {/* Sidebar */}
+            {/* 2. Clear Confirmation Modal (Independent Fixed Element - z-[60] to be on top of Sidebar) */}
+            {isClearModalOpen && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+                    {/* Backdrop */}
+                    <div 
+                        className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity opacity-100"
+                        onClick={() => setIsClearModalOpen(false)}
+                    />
+                    
+                    {/* Modal Content Box */}
+                    <div className="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all duration-300 scale-100 opacity-100">
+                        {/* Header */}
+                        <div className="p-6 flex flex-col items-center text-center">
+                            <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4 animate-bounce-short">
+                                <AlertTriangle className="text-red-600 dark:text-red-400" size={32} />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                                مسح السلة؟
+                            </h3>
+                            <p className="text-gray-500 dark:text-gray-400">
+                                هل أنت متأكد أنك تريد إزالة جميع المنتجات من السلة؟ لا يمكن التراجع عن هذا الإجراء.
+                            </p>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="grid grid-cols-2 gap-3 p-4 pt-0 bg-gray-50 dark:bg-gray-800/50">
+                            <button
+                                onClick={() => setIsClearModalOpen(false)}
+                                className="w-full py-2.5 px-4 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                            >
+                                إلغاء
+                            </button>
+                            <button
+                                onClick={confirmClearCart}
+                                className="w-full py-2.5 px-4 rounded-xl bg-red-600 text-white font-medium hover:bg-red-700 hover:shadow-lg hover:shadow-red-600/30 transition-all"
+                            >
+                                نعم، امسحها
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 3. Sidebar (z-50 - Lower than Modal) */}
             <div
                 className={`fixed top-0 right-0 rtl:right-auto rtl:left-0 h-full w-[85vw] sm:w-96 bg-white dark:bg-gray-900 shadow-2xl z-50 flex flex-col transition-transform duration-300 ${isCartOpen
                         ? "translate-x-0"
@@ -154,7 +207,7 @@ const CartSidebar = () => {
                         {/* Buttons */}
                         <div className="space-y-2">
                             <button
-                                onClick={handleClearCart}
+                                onClick={askToClearCart}
                                 className="w-full flex items-center justify-center gap-2 bg-red-500 text-white py-3 rounded-lg font-semibold hover:bg-red-600 transition"
                             >
                                 <Trash2 size={18} />
