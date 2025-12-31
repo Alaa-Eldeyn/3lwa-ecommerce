@@ -25,7 +25,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
     const fetchItems = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("");
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/HomePageSlider/all`);
         if (response?.data?.data) {
           setBanners(response.data.data);
         }
@@ -42,7 +42,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
   // Default variant - Full width
   if (variant === "default") {
     return (
-      <div className="w-full h-72 lg:h-[400px] lg:aspect-8/2 banner-carousel !z-0">
+      <div className="w-full h-72 lg:h-[400px] banner-carousel !z-0">
         <Swiper
           modules={[Autoplay, Pagination, Navigation]}
           spaceBetween={0}
@@ -55,14 +55,14 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
           }}
           loop={true}
           className="h-full hide-nav-mobile">
-          {banners.map((banner, index) => (
+          {banners.map((banner: any, index) => (
             <SwiperSlide key={index}>
               <div className="relative w-full h-full">
                 <Image
                   fill
-                  src={banner}
+                  src={`${process.env.NEXT_PUBLIC_DOMAIN}/${banner?.imageUrl}`}
                   alt={`banner ${index + 1}`}
-                  className="object-cover object-[30%_45%]"
+                  className="object-cover object-top"
                   priority={index === 0}
                 />
               </div>
