@@ -427,13 +427,13 @@ const Products = () => {
           ) : layoutMode === "grid" ? (
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
               {products.map((product: Product, index: number) => (
-                <ProductCard key={product.itemId || index} {...product} />
+                <ProductCard key={index} {...product} />
               ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
               {products.map((product: Product, index: number) => (
-                <ProductRowCard key={product.itemId || index} {...product} />
+                <ProductRowCard key={index} {...product} />
               ))}
             </div>
           )}

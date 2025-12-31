@@ -9,6 +9,7 @@ import { ProductDetails, ProductAttribute, SelectedValueId, CombinationResponse 
 import axios from "axios";
 import VendorsSidebar from "./VendorsSidebar";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 const ProductInfo = ({product, onProductUpdate}: {product: ProductDetails, onProductUpdate: (updatedProduct: ProductDetails) => void}) => {
   const t = useTranslations("productDetails");
@@ -339,10 +340,10 @@ const ProductInfo = ({product, onProductUpdate}: {product: ProductDetails, onPro
         isAuthenticated()
       );
       // Success notification
-      alert(t("addedToCart") || "تم إضافة المنتج للسلة!");
+      toast.success(t("addedToCart") || "تم إضافة المنتج للسلة!");
     } catch (error) {
       console.error("Failed to add to cart:", error);
-      alert("Failed to add product to cart");
+      toast.error("Failed to add product to cart");
     } finally {
       setIsAddingToCart(false);
     }

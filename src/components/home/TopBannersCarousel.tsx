@@ -50,7 +50,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
           navigation
           pagination={{ clickable: true }}
           autoplay={{
-            delay: 5000,
+            delay: 3500,
             disableOnInteraction: false,
           }}
           loop={true}
@@ -63,7 +63,6 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
                   src={`${process.env.NEXT_PUBLIC_DOMAIN}/${banner?.imageUrl}`}
                   alt={`banner ${index + 1}`}
                   className="object-cover object-top"
-                  priority={index === 0}
                 />
               </div>
             </SwiperSlide>
