@@ -1,10 +1,10 @@
 import HeaderActions from "./HeaderActions";
-import Logo from "../common/Logo";
-import CartSidebar from "../cart/CartSidebar";
-import CategoriesSidebar from "../common/CategoriesSidebar";
+import Logo from "../Logo";
+import CartSidebar from "../../cart/CartSidebar";
+import CategoriesSidebar from "../CategoriesSidebar";
 import CategoriesNav from "./CategoriesNav";
 import SearchBar from "./SearchBar";
-import CategoriesToggle from "../common/CategoriesToggle";
+import CategoriesToggle from "../CategoriesToggle";
 
 const Header = () => {
   return (

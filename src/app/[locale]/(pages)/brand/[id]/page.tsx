@@ -1,4 +1,4 @@
-import BrandPage from "@/src/components/brand/brandPage"
+import BrandPage from "@/src/components/brand"
 
 const page = () => {
   return (

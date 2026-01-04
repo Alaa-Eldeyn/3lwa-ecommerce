@@ -2,7 +2,7 @@
 import { Link } from "@/src/i18n/routing";
 import NewsLetter from "./NewsLetter";
 import { socialLinks } from "@/src/data/data";
-import Logo from "../common/Logo";
+import Logo from "../Logo";
 import { useTranslations } from "next-intl";
 
 

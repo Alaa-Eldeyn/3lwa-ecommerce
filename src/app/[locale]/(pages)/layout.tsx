@@ -1,5 +1,5 @@
-import Footer from "@/src/components/footer";
-import Header from "@/src/components/header";
+import Footer from "@/src/components/common/footer";
+import Header from "@/src/components/common/header";
 import { Suspense } from "react";
 import Loading from "../loading";
 
