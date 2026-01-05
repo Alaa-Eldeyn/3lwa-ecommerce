@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { ChevronDown } from "lucide-react";
 
 const FAQsSection = () => {
   const t = useTranslations("productDetails.faq");
@@ -28,42 +29,37 @@ const FAQsSection = () => {
   };
 
   return (
-    <div className="py-8">
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{tMain("faqs")}</h2>
+    <section id="faq-section" className="py-8 max-w-4xl mx-auto">
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+        {tMain("faqs")}
+      </h2>
+
       <div className="space-y-4">
         {faqs.map((faq, index) => (
           <div
             key={index}
-            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
+            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
             <button
               onClick={() => toggleFAQ(index)}
-              className="w-full flex items-center justify-between py-4 px-6 text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-              <h4 className="font-bold text-gray-900 dark:text-white pr-4">{faq.question}</h4>
-              <svg
-                className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ${
+              className="w-full flex items-center justify-between p-4 text-left rtl:text-right font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+              <span className="flex-1 pr-4">{faq.question}</span>
+              <ChevronDown
+                size={20}
+                className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 shrink-0 ${
                   openIndex === index ? "rotate-180" : ""
                 }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
+              />
             </button>
             <div
               className={`transition-all duration-300 ease-in-out ${
-                openIndex === index ? "max-h-96 opacity-100 pt-3" : "max-h-0 opacity-0"
+                openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
               } overflow-hidden`}>
-              <p className="text-gray-600 dark:text-gray-400 px-6 pb-6">{faq.answer}</p>
+              <p className="text-gray-600 dark:text-gray-400 px-4 pt-2 pb-4">{faq.answer}</p>
             </div>
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
