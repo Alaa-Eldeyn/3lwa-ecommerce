@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { usePathname } from "next/navigation";
 import { Link } from "@/src/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
@@ -14,18 +14,29 @@ const Breadcrumb = ({ className }: { className?: string }) => {
   const t = useTranslations("breadcrumb");
 
   const pathWithoutLocale = pathname.replace(`/${locale}`, "");
-  
+
   const pathSegments = pathWithoutLocale.split("/").filter((segment) => segment);
 
-  const breadcrumbItems: BreadcrumbItem[] = pathSegments.map((segment, index) => {
-    const href = "/" + pathSegments.slice(0, index + 1).join("/");
-    const formattedLabel = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
+  // Helper function to check if a segment is a UUID or ID
+  const isIdSegment = (segment: string): boolean => {
+    // Check for UUID pattern (8-4-4-4-12 format)
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    // Check for other ID patterns (long alphanumeric strings)
+    const idPattern = /^[0-9a-f]{20,}$/i;
 
-    const label =
-      index < 2 ? t(segment, { default: formattedLabel }) : formattedLabel;
+    return uuidPattern.test(segment) || idPattern.test(segment);
+  };
 
-    return { label, href };
-  });
+  const breadcrumbItems: BreadcrumbItem[] = pathSegments
+    .filter((segment) => !isIdSegment(segment)) // Filter out ID segments
+    .map((segment, index) => {
+      const href = "/" + pathSegments.slice(0, pathSegments.indexOf(segment) + 1).join("/");
+      const formattedLabel = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
+
+      const label = index < 2 ? t(segment, { default: formattedLabel }) : formattedLabel;
+
+      return { label, href };
+    });
 
   if (pathSegments.length === 0) {
     return null;
@@ -37,15 +48,13 @@ const Breadcrumb = ({ className }: { className?: string }) => {
         <li className="inline-flex items-center">
           <Link
             href="/"
-            className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-secondary dark:text-gray-400 dark:hover:text-white"
-          >
+            className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-secondary dark:text-gray-400 dark:hover:text-white">
             <svg
               className="w-3 h-3 me-2.5"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
-              viewBox="0 0 20 20"
-            >
+              viewBox="0 0 20 20">
               <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
             </svg>
             {t("home", { default: "Home" })}
@@ -63,8 +72,7 @@ const Breadcrumb = ({ className }: { className?: string }) => {
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
-                  viewBox="0 0 6 10"
-                >
+                  viewBox="0 0 6 10">
                   <path
                     stroke="currentColor"
                     strokeLinecap="round"
@@ -76,8 +84,7 @@ const Breadcrumb = ({ className }: { className?: string }) => {
                 {isLink ? (
                   <Link
                     href={item.href}
-                    className="ms-1 text-sm font-medium text-gray-700 hover:text-secondary md:ms-2 dark:text-gray-400 dark:hover:text-white"
-                  >
+                    className="ms-1 text-sm font-medium text-gray-700 hover:text-secondary md:ms-2 dark:text-gray-400 dark:hover:text-white">
                     {item.label}
                   </Link>
                 ) : (

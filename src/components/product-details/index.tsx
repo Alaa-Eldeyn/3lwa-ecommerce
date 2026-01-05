@@ -1,34 +1,44 @@
 "use client";
 
 import Breadcrumb from "../common/Breadcrumb";
-import ProductCard from "../common/ProductCard";
-import { newArrivals } from "@/src/data/data";
 import ImageGallery from "./ImageGallery";
 import ProductInfo from "./ProductInfo";
 import ProductTabsContent from "./ProductTabsContent";
 import ProductDetailsSection from "./ProductDetailsSection";
 import ReviewsSection from "./ReviewsSection";
 import FAQsSection from "./FAQsSection";
-import { useEffect, useMemo, useState } from "react";
+import RelatedProducts from "./RelatedProducts";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useLocale } from "next-intl";
 import type { ProductDetails } from "@/src/types/types";
 
-
 const ProductDetails = ({ variant }: { variant?: string }) => {
   const { id } = useParams();
-  const { data: product, isLoading, error } = useQuery({
+
+  // Product Details
+  const {
+    data: product,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["product", id],
     queryFn: () => axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/ItemDetails/${id}`),
     enabled: !!id,
     refetchOnWindowFocus: false,
   });
-  
-  const { data: reviews, isLoading: reviewsLoading, error: reviewsError } = useQuery({
+
+  // Reviews
+  const {
+    data: reviews,
+    isLoading: reviewsLoading,
+    error: reviewsError,
+  } = useQuery({
     queryKey: ["reviews", id],
-    queryFn: () => axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/ItemReview/reviews-by-Item/${id}`),
+    queryFn: () =>
+      axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/ItemReview/reviews-by-Item/${id}`),
     enabled: !!id,
     refetchOnWindowFocus: false,
   });
@@ -36,7 +46,7 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
 
   // State to hold updated product details (when attributes change)
   const [productDetails, setProductDetails] = useState<ProductDetails | undefined>();
-  
+
   // Update productDetails when API response changes
   useEffect(() => {
     if (product?.data) {
@@ -45,13 +55,9 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
     }
   }, [product]);
 
-
   const locale = useLocale();
   const isArabic = locale === "ar";
-  const title = isArabic
-    ? productDetails?.titleAr || ""
-    : productDetails?.titleEn || "";
-
+  const title = isArabic ? productDetails?.titleAr || "" : productDetails?.titleEn || "";
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -108,19 +114,16 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
           <ImageGallery
             images={
               productDetails.generalImages && productDetails.generalImages.length > 0
-                ? productDetails.generalImages.map(img => img.path)
+                ? productDetails.generalImages.map((img) => img.path)
                 : productDetails.thumbnailImage
-                  ? [productDetails.thumbnailImage]
-                  : []
+                ? [productDetails.thumbnailImage]
+                : []
             }
             productTitle={title}
           />
 
           {/* Product Info */}
-          <ProductInfo
-            product={productDetails}
-            onProductUpdate={setProductDetails}
-          />
+          <ProductInfo product={productDetails} onProductUpdate={setProductDetails} />
         </div>
 
         {/* Tabs Section */}
@@ -147,21 +150,10 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
               reviews={reviews?.data?.data || []}
               totalReviews={productDetails.averageRating || 0}
             />
+            <RelatedProducts />
             <FAQsSection />
           </>
         )}
-
-        {/* You Might Also Like */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-            YOU MIGHT ALSO LIKE
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {newArrivals.slice(0, 4).map((product, index) => (
-              <ProductCard key={index} {...product} />
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );

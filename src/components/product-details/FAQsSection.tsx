@@ -29,30 +29,23 @@ const FAQsSection = () => {
 
   return (
     <div className="py-8">
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-        {tMain("faqs")}
-      </h2>
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{tMain("faqs")}</h2>
       <div className="space-y-4">
         {faqs.map((faq, index) => (
           <div
             key={index}
-            className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden"
-          >
+            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
             <button
               onClick={() => toggleFAQ(index)}
-              className="w-full flex items-center justify-between py-4 px-6 text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
-            >
-              <h4 className="font-bold text-gray-900 dark:text-white pr-4">
-                {faq.question}
-              </h4>
+              className="w-full flex items-center justify-between py-4 px-6 text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+              <h4 className="font-bold text-gray-900 dark:text-white pr-4">{faq.question}</h4>
               <svg
                 className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform duration-300 flex-shrink-0 ${
                   openIndex === index ? "rotate-180" : ""
                 }`}
                 fill="none"
                 stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+                viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -63,14 +56,9 @@ const FAQsSection = () => {
             </button>
             <div
               className={`transition-all duration-300 ease-in-out ${
-                openIndex === index
-                  ? "max-h-96 opacity-100 pt-3"
-                  : "max-h-0 opacity-0"
-              } overflow-hidden`}
-            >
-              <p className="text-gray-600 dark:text-gray-400 px-6 pb-6">
-                {faq.answer}
-              </p>
+                openIndex === index ? "max-h-96 opacity-100 pt-3" : "max-h-0 opacity-0"
+              } overflow-hidden`}>
+              <p className="text-gray-600 dark:text-gray-400 px-6 pb-6">{faq.answer}</p>
             </div>
           </div>
         ))}
