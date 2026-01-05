@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ReviewCard from "./ReviewCard";
+import ReviewCard from "@/src/components/product-details/components/ReviewCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { useTranslations } from "next-intl";

@@ -2,28 +2,28 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import ReviewCard from "./ReviewCard";
+import ReviewCard from "./components/ReviewCard";
 
 interface Review {
-  id: string,
-  reviewNumber: number,
-  itemID: string,
-  customerID: string,
-  rating: number,
-  reviewTitle: string,
-  reviewText: string,
+  id: string;
+  reviewNumber: number;
+  itemID: string;
+  customerID: string;
+  rating: number;
+  reviewTitle: string;
+  reviewText: string;
 }
 
-interface ProductTabsContentProps {
+interface TabsVariationProps {
   description: string;
   reviews: Review[];
   totalReviews: number;
 }
 
-const ProductTabsContent = ({ description, reviews, totalReviews }: ProductTabsContentProps) => {
+const TabsVariation = ({ description, reviews, totalReviews }: TabsVariationProps) => {
   const t = useTranslations("productDetails");
   const tFeatures = useTranslations("productDetails.features");
-  const [activeTab, setActiveTab] = useState<"details" | "reviews" | "faqs">("reviews");
+  const [activeTab, setActiveTab] = useState<"details" | "reviews">("reviews");
   const [visibleReviews, setVisibleReviews] = useState(6);
 
   const loadMoreReviews = () => {
@@ -40,8 +40,7 @@ const ProductTabsContent = ({ description, reviews, totalReviews }: ProductTabsC
             activeTab === "details"
               ? "text-gray-900 dark:text-white"
               : "text-gray-500 dark:text-gray-400"
-          }`}
-        >
+          }`}>
           {t("productDetails")}
           {activeTab === "details" && (
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary dark:bg-white" />
@@ -53,23 +52,9 @@ const ProductTabsContent = ({ description, reviews, totalReviews }: ProductTabsC
             activeTab === "reviews"
               ? "text-gray-900 dark:text-white"
               : "text-gray-500 dark:text-gray-400"
-          }`}
-        >
+          }`}>
           {t("ratingAndReviews")}
           {activeTab === "reviews" && (
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary dark:bg-white" />
-          )}
-        </button>
-        <button
-          onClick={() => setActiveTab("faqs")}
-          className={`pb-4 font-medium soft relative whitespace-nowrap ${
-            activeTab === "faqs"
-              ? "text-gray-900 dark:text-white"
-              : "text-gray-500 dark:text-gray-400"
-          }`}
-        >
-          {t("faqs")}
-          {activeTab === "faqs" && (
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary dark:bg-white" />
           )}
         </button>
@@ -116,48 +101,15 @@ const ProductTabsContent = ({ description, reviews, totalReviews }: ProductTabsC
             <div className="text-center">
               <button
                 onClick={loadMoreReviews}
-                className="px-8 py-3 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-full font-medium hover:bg-gray-100 dark:hover:bg-gray-800 soft"
-              >
+                className="px-8 py-3 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-full font-medium hover:bg-gray-100 dark:hover:bg-gray-800 soft">
                 {t("loadMoreReviews")}
               </button>
             </div>
           )}
         </div>
       )}
-
-      {activeTab === "faqs" && (
-        <div className="space-y-4 animate-fadeIn">
-          <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
-            <h4 className="font-bold text-gray-900 dark:text-white mb-2">
-              How do I choose the right size?
-            </h4>
-            <p className="text-gray-600 dark:text-gray-400">
-              Please refer to our size guide for detailed measurements. We recommend
-              measuring your current favorite t-shirt and comparing it with our size chart.
-            </p>
-          </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
-            <h4 className="font-bold text-gray-900 dark:text-white mb-2">
-              What is the return policy?
-            </h4>
-            <p className="text-gray-600 dark:text-gray-400">
-              We offer a 30-day return policy. Items must be unworn, unwashed, and in their
-              original condition with tags attached.
-            </p>
-          </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
-            <h4 className="font-bold text-gray-900 dark:text-white mb-2">
-              How long does shipping take?
-            </h4>
-            <p className="text-gray-600 dark:text-gray-400">
-              Standard shipping takes 5-7 business days. Express shipping is available and
-              takes 2-3 business days.
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default ProductTabsContent;
+export default TabsVariation;

@@ -1,13 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X, Star, Truck, ShieldCheck, Store, ChevronDown, ChevronUp, Package, ShoppingCart } from "lucide-react";
+import {
+  X,
+  Star,
+  Truck,
+  ShieldCheck,
+  Store,
+  ChevronDown,
+  ChevronUp,
+  ShoppingCart,
+} from "lucide-react";
 import { useLocale } from "next-intl";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useCartStore } from "@/src/store/cartStore";
 import { useUserStore } from "@/src/store/userStore";
-import QuantityController from "../common/QuantityController";
+import QuantityController from "@/src/components/common/QuantityController";
 
 // 1. تحديد الـ Interfaces بناءً على الـ API الفعلي
 interface VendorItem {
@@ -46,7 +55,12 @@ interface VendorsSidebarProps {
   productName: string;
 }
 
-const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: VendorsSidebarProps) => {
+const VendorsSidebar = ({
+  isOpen,
+  onClose,
+  itemCombinationId,
+  productName,
+}: VendorsSidebarProps) => {
   const locale = useLocale();
   const [expandedVendor, setExpandedVendor] = useState<string | null>(null);
 
@@ -56,7 +70,11 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
   // -----------------------------------------------
 
   // Fetch vendors from API
-  const { data: vendorsData, isLoading, error } = useQuery<VendorsResponse, Error>({
+  const {
+    data: vendorsData,
+    isLoading,
+    error,
+  } = useQuery<VendorsResponse, Error>({
     queryKey: ["vendors", itemCombinationId],
     queryFn: async () => {
       const response = await axios.get(
@@ -93,19 +111,19 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
       return {
         text: locale === "ar" ? "متوفر" : "In Stock",
         colorClass: "text-green-600 dark:text-green-400",
-        iconColor: "text-green-600 dark:text-green-400"
+        iconColor: "text-green-600 dark:text-green-400",
       };
     } else if (s.includes("limited") || s.includes("low")) {
       return {
         text: locale === "ar" ? "كمية محدودة" : "Limited Stock",
         colorClass: "text-orange-600 dark:text-orange-400",
-        iconColor: "text-orange-600 dark:text-orange-400"
+        iconColor: "text-orange-600 dark:text-orange-400",
       };
     } else {
       return {
         text: locale === "ar" ? "غير متوفر" : "Out of Stock",
         colorClass: "text-red-600 dark:text-red-400",
-        iconColor: "text-red-600 dark:text-red-400"
+        iconColor: "text-red-600 dark:text-red-400",
       };
     }
   };
@@ -128,8 +146,7 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
       <div
         className={`fixed ${
           locale === "ar" ? "left-0" : "right-0"
-        } top-0 h-full w-full max-w-md bg-white dark:bg-gray-900 z-50 shadow-2xl overflow-y-auto transition-transform duration-300`}
-      >
+        } top-0 h-full w-full max-w-md bg-white dark:bg-gray-900 z-50 shadow-2xl overflow-y-auto transition-transform duration-300`}>
         {/* Header */}
         <div className="sticky top-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur border-b border-gray-200 dark:border-gray-800 p-4 z-10">
           <div className="flex items-center justify-between mb-2">
@@ -138,18 +155,14 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
             </h2>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
-            >
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
               <X size={24} className="text-gray-600 dark:text-gray-400" />
             </button>
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">
-            {productName}
-          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">{productName}</p>
           {vendors.length > 0 && (
             <p className="text-sm text-gray-500 dark:text-gray-500 mt-1 font-medium">
-              {vendors.length}{" "}
-              {locale === "ar" ? "عرض متاح من البائعين" : "offers available"}
+              {vendors.length} {locale === "ar" ? "عرض متاح من البائعين" : "offers available"}
             </p>
           )}
         </div>
@@ -168,9 +181,7 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
           {error ? (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-center">
               <p className="text-red-600 dark:text-red-400">
-                {locale === "ar"
-                  ? "حدث خطأ أثناء تحميل العروض"
-                  : "Error loading offers"}
+                {locale === "ar" ? "حدث خطأ أثناء تحميل العروض" : "Error loading offers"}
               </p>
             </div>
           ) : null}
@@ -189,17 +200,21 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
             {vendors.map((vendor) => {
               const isExpanded = expandedVendor === vendor.vendorItemId;
               const statusInfo = getStockStatusInfo(vendor.stockStatus);
-              
+
               // حساب نسبة الخصم
-              const discountPercentage = vendor.price > vendor.salesPrice 
-                ? Math.round(((vendor.price - vendor.salesPrice) / vendor.price) * 100) 
-                : 0;
+              const discountPercentage =
+                vendor.price > vendor.salesPrice
+                  ? Math.round(((vendor.price - vendor.salesPrice) / vendor.price) * 100)
+                  : 0;
 
               // تجهيز الصورة (مع إضافة الدومين)
-              const imagePath = vendor.itemCombinationImages && vendor.itemCombinationImages.length > 0
-                ? formatImagePath(vendor.itemCombinationImages[0].path)
-                : null;
-              const fullImageUrl = imagePath ? `${process.env.NEXT_PUBLIC_DOMAIN}/${imagePath}` : "/placeholder.png";
+              const imagePath =
+                vendor.itemCombinationImages && vendor.itemCombinationImages.length > 0
+                  ? formatImagePath(vendor.itemCombinationImages[0].path)
+                  : null;
+              const fullImageUrl = imagePath
+                ? `${process.env.NEXT_PUBLIC_DOMAIN}/${imagePath}`
+                : "/placeholder.png";
 
               // --- Cart Logic: هل المنتج موجود بالفعل في السلة؟ ---
               // نستخدم itemCombinationId لمعرفة العرض المحدد
@@ -211,14 +226,17 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
               const handleAddToCart = async (e: React.MouseEvent) => {
                 e.stopPropagation();
                 try {
-                  await addItem({
-                    id: vendor.itemCombinationId,
-                    itemId: vendor.itemId,
-                    name: locale === "ar" ? vendor.itemTitleAr : vendor.itemTitleEn,
-                    price: vendor.salesPrice,
-                    image: fullImageUrl,
-                    offerCombinationPricingId: vendor.itemCombinationId,
-                  }, isAuthenticated());
+                  await addItem(
+                    {
+                      id: vendor.itemCombinationId,
+                      itemId: vendor.itemId,
+                      name: locale === "ar" ? vendor.itemTitleAr : vendor.itemTitleEn,
+                      price: vendor.salesPrice,
+                      image: fullImageUrl,
+                      offerCombinationPricingId: vendor.itemCombinationId,
+                    },
+                    isAuthenticated()
+                  );
                 } catch (error) {
                   console.error("Failed to add item:", error);
                 }
@@ -228,7 +246,11 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
                 e.stopPropagation();
                 if (cartItem) {
                   try {
-                    await updateQuantity(vendor.itemCombinationId, cartItem.quantity + 1, isAuthenticated());
+                    await updateQuantity(
+                      vendor.itemCombinationId,
+                      cartItem.quantity + 1,
+                      isAuthenticated()
+                    );
                   } catch (error) {
                     console.error("Failed to update quantity:", error);
                   }
@@ -242,7 +264,11 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
                     if (cartItem.quantity === 1) {
                       await removeItem(vendor.itemCombinationId, isAuthenticated());
                     } else {
-                      await updateQuantity(vendor.itemCombinationId, cartItem.quantity - 1, isAuthenticated());
+                      await updateQuantity(
+                        vendor.itemCombinationId,
+                        cartItem.quantity - 1,
+                        isAuthenticated()
+                      );
                     }
                   } catch (error) {
                     console.error("Failed to update quantity:", error);
@@ -257,8 +283,7 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
                     vendor.isBuyBoxWinner
                       ? "border-primary dark:border-primary ring-1 ring-primary shadow-md"
                       : "border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700"
-                  } bg-white dark:bg-gray-900`}
-                >
+                  } bg-white dark:bg-gray-900`}>
                   {/* Buy Box Winner Badge */}
                   {vendor.isBuyBoxWinner && (
                     <div className="bg-primary text-white text-xs font-bold px-3 py-1.5 flex items-center justify-center gap-1">
@@ -271,12 +296,12 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
                     <div className="flex gap-4">
                       {/* Product Image */}
                       <div className="w-20 h-20 flex-shrink-0 rounded-lg bg-gray-100 dark:bg-gray-800 overflow-hidden border border-gray-200 dark:border-gray-700">
-                        <img 
-                          src={fullImageUrl} 
-                          alt="Product" 
+                        <img
+                          src={fullImageUrl}
+                          alt="Product"
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                              (e.target as HTMLImageElement).src = "/placeholder.png";
+                            (e.target as HTMLImageElement).src = "/placeholder.png";
                           }}
                         />
                       </div>
@@ -291,20 +316,20 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
                                 {vendor.vendorFullName}
                               </h3>
                             </div>
-                            
+
                             {/* Attributes */}
-                            {vendor.conbinationAttributes && vendor.conbinationAttributes.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mb-2">
-                                {vendor.conbinationAttributes.map((attr, idx) => (
-                                  <span 
-                                    key={idx} 
-                                    className="text-[10px] bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-1.5 py-0.5 rounded"
-                                  >
-                                    {locale === "ar" ? attr.valueAr : attr.valueEn}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
+                            {vendor.conbinationAttributes &&
+                              vendor.conbinationAttributes.length > 0 && (
+                                <div className="flex flex-wrap gap-1 mb-2">
+                                  {vendor.conbinationAttributes.map((attr, idx) => (
+                                    <span
+                                      key={idx}
+                                      className="text-[10px] bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-1.5 py-0.5 rounded">
+                                      {locale === "ar" ? attr.valueAr : attr.valueEn}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
                           </div>
 
                           {/* Price Section */}
@@ -343,8 +368,7 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
                             <Truck size={14} />
                             <span>
                               {locale === "ar" ? "توصيل خلال" : "Delivery"}{" "}
-                              {vendor.handlingTimeInDays}{" "}
-                              {locale === "ar" ? "أيام" : "days"}
+                              {vendor.handlingTimeInDays} {locale === "ar" ? "أيام" : "days"}
                             </span>
                           </div>
                         </div>
@@ -368,26 +392,29 @@ const VendorsSidebar = ({ isOpen, onClose, itemCombinationId, productName }: Ven
                                   ? "bg-primary hover:bg-primary/90 text-white shadow-sm hover:shadow-md"
                                   : "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                               }`}
-                              title="Add to cart"
-                            >
+                              title="Add to cart">
                               <ShoppingCart size={16} />
-                              {isInStock 
-                                ? (locale === "ar" ? "إضافة للعربة" : "Add to Cart")
-                                : (locale === "ar" ? "غير متوفر" : "Out of Stock")
-                              }
+                              {isInStock
+                                ? locale === "ar"
+                                  ? "إضافة للعربة"
+                                  : "Add to Cart"
+                                : locale === "ar"
+                                ? "غير متوفر"
+                                : "Out of Stock"}
                             </button>
                           )}
                         </div>
 
                         {/* Expandable Details Toggle */}
-                        {(vendor.warrantyPolicy) && (
+                        {vendor.warrantyPolicy && (
                           <button
                             onClick={() =>
                               setExpandedVendor(isExpanded ? null : vendor.vendorItemId)
                             }
-                            className="w-full flex items-center justify-center gap-1 text-xs text-gray-500 dark:text-gray-400 mt-3 hover:text-primary transition-colors py-1"
-                          >
-                            {locale === "ar" ? "تفاصيل الضمان والسياسة" : "Warranty & Policy Details"}
+                            className="w-full flex items-center justify-center gap-1 text-xs text-gray-500 dark:text-gray-400 mt-3 hover:text-primary transition-colors py-1">
+                            {locale === "ar"
+                              ? "تفاصيل الضمان والسياسة"
+                              : "Warranty & Policy Details"}
                             {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                           </button>
                         )}

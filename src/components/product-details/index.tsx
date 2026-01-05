@@ -1,13 +1,11 @@
 "use client";
 
 import Breadcrumb from "../common/Breadcrumb";
-import ImageGallery from "./ImageGallery";
-import ProductInfo from "./ProductInfo";
-import ProductTabsContent from "./ProductTabsContent";
-import ProductDetailsSection from "./ProductDetailsSection";
-import ReviewsSection from "./ReviewsSection";
-import FAQsSection from "./FAQsSection";
-import RelatedProducts from "./RelatedProducts";
+import ProductSection from "./sections/ProductSection";
+import TabsVariation from "./TabsVariation";
+import SectionsVariation from "./SectionsVariation";
+import FAQsSection from "./sections/FAQsSection";
+import RelatedSection from "./sections/RelatedSection";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -18,7 +16,7 @@ import type { ProductDetails } from "@/src/types/types";
 const ProductDetails = ({ variant }: { variant?: string }) => {
   const { id } = useParams();
 
-  // Product Details
+  // Product Details              '
   const {
     data: product,
     isLoading,
@@ -109,26 +107,15 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
 
       <div className="container">
         {/* Product Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          {/* Images Gallery */}
-          <ImageGallery
-            images={
-              productDetails.generalImages && productDetails.generalImages.length > 0
-                ? productDetails.generalImages.map((img) => img.path)
-                : productDetails.thumbnailImage
-                ? [productDetails.thumbnailImage]
-                : []
-            }
-            productTitle={title}
-          />
+        <ProductSection
+          productDetails={productDetails}
+          title={title}
+          setProductDetails={setProductDetails}
+        />
 
-          {/* Product Info */}
-          <ProductInfo product={productDetails} onProductUpdate={setProductDetails} />
-        </div>
-
-        {/* Tabs Section */}
-        {variant === "tabs" ? (
-          <ProductTabsContent
+        {/* Tabs Variation */}
+        {variant === "tabs" && (
+          <TabsVariation
             description={
               isArabic
                 ? productDetails.descriptionAr || productDetails.shortDescriptionAr || ""
@@ -137,23 +124,26 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
             reviews={reviews?.data?.data || []}
             totalReviews={0}
           />
-        ) : (
-          <>
-            <ProductDetailsSection
-              description={
-                isArabic
-                  ? productDetails.descriptionAr || productDetails.shortDescriptionAr || ""
-                  : productDetails.descriptionEn || productDetails.shortDescriptionEn || ""
-              }
-            />
-            <ReviewsSection
-              reviews={reviews?.data?.data || []}
-              totalReviews={productDetails.averageRating || 0}
-            />
-            <RelatedProducts />
-            <FAQsSection />
-          </>
         )}
+
+        {/* Sections Variation */}
+        {variant === "sections" && (
+          <SectionsVariation
+            description={
+              isArabic
+                ? productDetails.descriptionAr || productDetails.shortDescriptionAr || ""
+                : productDetails.descriptionEn || productDetails.shortDescriptionEn || ""
+            }
+            reviews={reviews?.data?.data || []}
+            totalReviews={productDetails.averageRating || 0}
+          />
+        )}
+
+        {/* Related Section */}
+        <RelatedSection />
+
+        {/* FAQs Section */}
+        <FAQsSection />
       </div>
     </section>
   );
