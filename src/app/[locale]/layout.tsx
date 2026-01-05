@@ -14,7 +14,7 @@ const cairoFont = Cairo({
 });
 
 export const metadata: Metadata = {
-  title: "3lwa's E-commerce",
+  title: "Basit",
   description: "Generalized e-commerce platform for all your needs.",
   authors: [{ name: "Alaa Eldeyn", url: "https://3lwa88.vercel.app/" }],
 };

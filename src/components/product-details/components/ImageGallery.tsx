@@ -2,16 +2,19 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Heart, Share2 } from "lucide-react";
 
 interface ImageGalleryProps {
   images: string[];
   productTitle: string;
+  discountPercentage?: number;
 }
 
-const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
+const ImageGallery = ({ images, productTitle, discountPercentage }: ImageGalleryProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+
   const handlePrevious = () => {
     setSelectedImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
@@ -30,47 +33,54 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
 
   return (
     <>
-      <div className="flex flex-col-reverse lg:flex-row gap-4">
-        {/* Thumbnails */}
-        <div className="flex lg:flex-col gap-3 overflow-x-auto lg:overflow-y-auto">
-          {images.map((img, index) => (
-            <button
-              key={index}
-              onClick={() => setSelectedImage(index)}
-              className={`w-20 h-20 lg:w-24 lg:h-24 shrink-0 rounded-2xl overflow-hidden border-2 soft ${
-                selectedImage === index
-                  ? "border-primary dark:border-white"
-                  : "border-gray-200 dark:border-gray-700"
-              }`}
-            >
-              <Image
-                src={`${process.env.NEXT_PUBLIC_DOMAIN}/${img}`}
-                alt={`${productTitle} ${index + 1}`}
-                width={100}
-                height={100}
-                className="w-full h-full object-cover"
-              />
-            </button>
-          ))}
-        </div>
-
+      <div className="sticky top-4">
         {/* Main Image */}
-        <div
-          onClick={openFullScreen}
-          className="flex-1 relative aspect-square bg-[#F0EEED] dark:bg-gray-800 rounded-3xl overflow-hidden cursor-zoom-in group"
-        >
+        <div className="w-full h-[500px] bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden relative group mb-4 flex items-center justify-center">
+          {discountPercentage && discountPercentage > 0 && (
+            <span dir="ltr" className="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
+              -{discountPercentage}% OFF
+            </span>
+          )}
+          <div className="absolute top-4 right-4 z-10 space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              onClick={() => setIsFavorite(!isFavorite)}
+              className="w-10 h-10 bg-white dark:bg-gray-800 rounded-full shadow-md flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+              <Heart size={18} className={isFavorite ? "fill-red-500 text-red-500" : ""} />
+            </button>
+            <button className="w-10 h-10 bg-white dark:bg-gray-800 rounded-full shadow-md flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+              <Share2 size={18} />
+            </button>
+          </div>
           <Image
             src={`${process.env.NEXT_PUBLIC_DOMAIN}/${images[selectedImage]}`}
             alt={productTitle}
             fill
-            className="object-cover group-hover:scale-105 soft"
+            className="object-contain p-8 transform group-hover:scale-105 transition-transform duration-500"
             priority
+            onClick={openFullScreen}
           />
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 soft center">
-            <span className="opacity-0 group-hover:opacity-100 soft bg-white/90 dark:bg-gray-800/90 px-4 py-2 rounded-full text-sm font-medium text-gray-900 dark:text-white">
-              Click to view full size
-            </span>
-          </div>
+        </div>
+
+        {/* Thumbnails */}
+        <div className="flex gap-4 overflow-x-auto pb-2">
+          {images.map((img, index) => (
+            <button
+              key={index}
+              onClick={() => setSelectedImage(index)}
+              className={`w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden cursor-pointer p-1 bg-white dark:bg-gray-800 transition-colors ${
+                selectedImage === index
+                  ? "border-2 border-primary dark:border-primary"
+                  : "border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary"
+              }`}>
+              <Image
+                src={`${process.env.NEXT_PUBLIC_DOMAIN}/${img}`}
+                alt={`${productTitle} ${index + 1}`}
+                width={96}
+                height={96}
+                className="w-full h-full object-contain"
+              />
+            </button>
+          ))}
         </div>
       </div>
 
@@ -80,8 +90,7 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
           {/* Close Button */}
           <button
             onClick={closeFullScreen}
-            className="absolute top-4 right-4 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full center soft text-white z-10"
-          >
+            className="absolute top-4 right-4 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full center soft text-white z-10">
             <X size={24} />
           </button>
 
@@ -93,8 +102,7 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
           {/* Previous Button */}
           <button
             onClick={handlePrevious}
-            className="absolute left-4 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full center soft text-white"
-          >
+            className="absolute left-4 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full center soft text-white">
             <ChevronLeft size={24} />
           </button>
 
@@ -112,8 +120,7 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
           {/* Next Button */}
           <button
             onClick={handleNext}
-            className="absolute right-4 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full center soft text-white"
-          >
+            className="absolute right-4 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full center soft text-white">
             <ChevronRight size={24} />
           </button>
 
@@ -124,11 +131,8 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
                 key={index}
                 onClick={() => setSelectedImage(index)}
                 className={`w-16 h-16 shrink-0 rounded-lg overflow-hidden border-2 soft ${
-                  selectedImage === index
-                    ? "border-white"
-                    : "border-white/30"
-                }`}
-              >
+                  selectedImage === index ? "border-white" : "border-white/30"
+                }`}>
                 <Image
                   src={`${process.env.NEXT_PUBLIC_DOMAIN}/${img}`}
                   alt={`Thumbnail ${index + 1}`}

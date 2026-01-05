@@ -335,7 +335,7 @@ const VendorsSidebar = ({
                           {/* Price Section */}
                           <div className="text-right">
                             {discountPercentage > 0 && (
-                              <span className="block text-xs text-green-600 dark:text-green-400 font-medium mb-0.5">
+                              <span dir="ltr" className="block text-xs text-green-600 dark:text-green-400 font-medium mb-0.5">
                                 -{discountPercentage}%
                               </span>
                             )}
