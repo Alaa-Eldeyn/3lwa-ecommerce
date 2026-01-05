@@ -13,7 +13,11 @@ import { useParams } from "next/navigation";
 import { useLocale } from "next-intl";
 import type { ProductDetails } from "@/src/types/types";
 
-const ProductDetails = ({ variant }: { variant?: string }) => {
+interface ProductDetailsProps {
+  variant?: "tabs" | "sections";
+}
+
+const ProductDetails = ({ variant = "tabs" }: ProductDetailsProps) => {
   const { id } = useParams();
 
   // Product Details              '
@@ -122,7 +126,8 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
                 : productDetails.descriptionEn || productDetails.shortDescriptionEn || ""
             }
             reviews={reviews?.data?.data || []}
-            totalReviews={0}
+            totalReviews={reviews?.data?.data?.length || 0}
+            product={productDetails}
           />
         )}
 
