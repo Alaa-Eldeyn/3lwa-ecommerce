@@ -59,7 +59,7 @@ const Cart = () => {
   if (isInitialLoading) {
     return (
       <section className="pt-20 pb-px bg-white dark:bg-gray-900">
-        <Breadcrumb className="my-4" />
+        <Breadcrumb />
         <div className="container">
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center">
@@ -76,7 +76,7 @@ const Cart = () => {
   if (items.length === 0) {
     return (
       <section className="pt-20 pb-px bg-white dark:bg-gray-900">
-        <Breadcrumb className="my-4" />
+        <Breadcrumb />
         <div className="container">
           <EmptyCart />
         </div>
