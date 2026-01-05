@@ -86,7 +86,7 @@ const Cart = () => {
 
   return (
     <section className="pt-20 pb-px bg-white dark:bg-gray-900">
-      <Breadcrumb className="my-4" />
+      <Breadcrumb />
       
       <div className="container">
         <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-8">

@@ -270,7 +270,7 @@ const Products = () => {
   return (
     <section className="">
       <ScrollToTop />
-      <Breadcrumb className="my-4" />
+      <Breadcrumb />
 
       {/* Mobile Filter Toggle Button */}
       <div className="container lg:hidden mb-4">

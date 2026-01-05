@@ -105,7 +105,7 @@ const ProductDetails = ({ variant }: { variant?: string }) => {
 
   return (
     <section className="">
-      <Breadcrumb className="my-4" />
+      <Breadcrumb />
 
       <div className="container">
         {/* Product Section */}
