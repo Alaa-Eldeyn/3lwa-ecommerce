@@ -39,7 +39,7 @@ const sizes = [
   { id: "9", name: "4X-Large" },
 ];
 
-const Products = () => {
+const ProductsPage = () => {
   const t = useTranslations("filters");
   const searchParams = useSearchParams();
   const searchTermFromUrl = searchParams.get("t");
@@ -456,4 +456,4 @@ const Products = () => {
     </section>
   );
 };
-export default Products;
+export default ProductsPage;

@@ -1,8 +1,8 @@
-import Products from "@/src/components/products"
+import ProductsPage from "@/src/components/products"
 
 const page = () => {
   return (
-    <Products />
+    <ProductsPage />
   )
 }
 export default page
