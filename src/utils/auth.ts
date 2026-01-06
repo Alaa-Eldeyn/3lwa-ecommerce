@@ -1,11 +1,7 @@
 import axios from "axios";
 import { setCookie, getCookie, deleteCookie } from "cookies-next";
-import {
-  LoginFormData,
-  RegisterFormData,
-  User,
-  AuthResponse,
-} from "../types/types";
+import toast from "react-hot-toast";
+import { LoginFormData, RegisterFormData, User, AuthResponse } from "../types/types";
 import { customAxios } from "./customAxios";
 
 const COOKIE_NAME = "basitUser";
@@ -125,10 +121,15 @@ export const loginUser = async (data: LoginFormData): Promise<User> => {
 
     return handleAuthSuccess(response.data);
   } catch (error) {
-    console.error("Login failed:", error);
     const errorMessage = axios.isAxiosError(error)
       ? error.response?.data?.message || "فشل تسجيل الدخول"
       : "فشل تسجيل الدخول";
+
+    // Show toast notification if in browser context
+    if (typeof window !== "undefined") {
+      toast.error(errorMessage);
+    }
+
     throw new Error(errorMessage);
   }
 };

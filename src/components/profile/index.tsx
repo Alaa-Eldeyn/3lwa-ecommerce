@@ -193,7 +193,7 @@ const Profile = () => {
   const onSubmitPassword = async (data: PasswordUpdateFormData) => {
     setIsLoading(true);
     try {
-      const response = await customAxios.put("/Password/change-password", {
+      const response = await customAxios.post("/UserAuthentication/change-password", {
         currentPassword: data.currentPassword,
         newPassword: data.newPassword,
         passwordConfirmation: data.confirmNewPassword,
