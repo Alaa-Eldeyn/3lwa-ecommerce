@@ -40,6 +40,7 @@ const Profile = () => {
   }, [tabParam]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchingProfile, setIsFetchingProfile] = useState(true);
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [profileData, setProfileData] = useState<{
     phone?: string;
     phoneCode?: string;
@@ -109,13 +110,81 @@ const Profile = () => {
   const onSubmitProfile = async (data: ProfileFormData) => {
     setIsLoading(true);
     try {
-      // API call would go here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success("Profile updated successfully!");
-      console.log("Profile data:", data);
+      // Convert image file to base64 string if available
+      let profileImageString = "";
+      if (profileImageFile) {
+        profileImageString = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64String = reader.result as string;
+            // Remove data:image/...;base64, prefix to get only the base64 string
+            const base64Only = base64String.includes(",")
+              ? base64String.split(",")[1]
+              : base64String;
+            resolve(base64Only);
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(profileImageFile);
+        });
+      }
+
+      // Prepare request payload
+      const payload: {
+        firstName: string;
+        lastName: string;
+        profileImage?: string;
+      } = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+      };
+
+      // Only include profileImage if a new image was selected
+      if (profileImageString) {
+        payload.profileImage = profileImageString;
+      }
+
+      // Send to API
+      const response = await customAxios.post("/UserProfile/profile", payload);
+
+      if (response?.data?.success) {
+        // Update user store with new data
+        if (response.data.data) {
+          const apiData = response.data.data;
+          updateUser({
+            firstName: apiData.firstName || data.firstName,
+            lastName: apiData.lastName || data.lastName,
+            profileImagePath: apiData.profileImagePath || user?.profileImagePath || "",
+          });
+        }
+
+        // Clear the image file state after successful upload
+        setProfileImageFile(null);
+
+        toast.success(response.data.message || "Profile updated successfully!");
+
+        // Reload profile data to get latest from server
+        const profileResponse = await customAxios.get("/UserProfile/profile");
+        if (profileResponse?.data?.success && profileResponse.data.data) {
+          const apiData = profileResponse.data.data;
+          updateUser({
+            id: apiData.userId || user?.id || null,
+            firstName: apiData.firstName || "",
+            lastName: apiData.lastName || "",
+            email: apiData.email || "",
+            profileImagePath: apiData.profileImagePath || "",
+          });
+        }
+      } else {
+        toast.error(response.data.message || "Failed to update profile");
+      }
     } catch (error) {
-      toast.error("Failed to update profile");
-      console.error(error);
+      console.error("Profile update error:", error);
+      let errorMessage = "Failed to update profile";
+      if (axios.isAxiosError(error)) {
+        errorMessage =
+          error.response?.data?.message || error.response?.data?.errors?.[0] || errorMessage;
+      }
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -176,8 +245,7 @@ const Profile = () => {
               tabs={tabs}
               onTabChange={(tabId: string) => setActiveTab(tabId as TabType)}
               onImageChange={(file: File) => {
-                console.log("Image file:", file);
-                toast.success("Profile image updated!");
+                setProfileImageFile(file);
               }}
               t={t}
             />

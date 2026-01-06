@@ -118,7 +118,7 @@ const ProfileImageUpload = ({
                 onClick={() => fileInputRef.current?.click()}
                 className="w-full flex items-center gap-3 px-6 py-4 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 soft border-2 border-dashed border-primary/30">
                 <Upload size={24} />
-                <div className="text-left">
+                <div className="rtl:text-right ltr:text-left">
                   <p className="font-semibold">{t("personalInfo.uploadPhoto") || "Upload Photo"}</p>
                   <p className="text-xs opacity-70">
                     {t("personalInfo.maxSize") || "Max size: 5MB"}
@@ -127,14 +127,14 @@ const ProfileImageUpload = ({
               </button>
 
               {/* Remove Button */}
-              {displayImage && (
+              {/* {displayImage && (
                 <button
                   onClick={handleRemoveImage}
                   className="w-full flex items-center gap-3 px-6 py-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 soft">
                   <X size={24} />
                   <p className="font-semibold">{t("personalInfo.removePhoto") || "Remove Photo"}</p>
                 </button>
-              )}
+              )} */}
             </div>
 
             <input
