@@ -33,9 +33,7 @@ const PersonalInfoTab = ({ userData, isLoading, onSubmit, t, tAuth }: PersonalIn
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
           {t("personalInfo.title")}
         </h2>
-        <p className="text-gray-600 dark:text-gray-400">
-          {t("personalInfo.description")}
-        </p>
+        <p className="text-gray-600 dark:text-gray-400">{t("personalInfo.description")}</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -52,9 +50,7 @@ const PersonalInfoTab = ({ userData, isLoading, onSubmit, t, tAuth }: PersonalIn
               placeholder={tAuth("firstNamePlaceholder")}
             />
             {errors.firstName && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.firstName.message}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
             )}
           </div>
 
@@ -70,9 +66,7 @@ const PersonalInfoTab = ({ userData, isLoading, onSubmit, t, tAuth }: PersonalIn
               placeholder={tAuth("lastNamePlaceholder")}
             />
             {errors.lastName && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.lastName.message}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
             )}
           </div>
         </div>
@@ -94,11 +88,7 @@ const PersonalInfoTab = ({ userData, isLoading, onSubmit, t, tAuth }: PersonalIn
               placeholder={tAuth("emailPlaceholder")}
             />
           </div>
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.email.message}
-            </p>
-          )}
+          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
         </div>
 
         {/* Phone */}
@@ -116,10 +106,12 @@ const PersonalInfoTab = ({ userData, isLoading, onSubmit, t, tAuth }: PersonalIn
                 onChange={onChange}
                 inputClassName="!w-full !px-4 !py-3 !bg-gray-50 dark:!bg-gray-900 !rounded-r-xl !text-gray-900 dark:!text-white focus:!outline-none"
                 countrySelectorStyleProps={{
-                  buttonClassName: "!bg-gray-50 !px-2 dark:!bg-gray-900 !border !border-gray-200 dark:!border-gray-700 !rounded-l-xl",
+                  buttonClassName:
+                    "!bg-gray-50 !px-2 dark:!bg-gray-900 !border !border-gray-200 dark:!border-gray-700 !rounded-l-xl",
                   dropdownStyleProps: {
-                    className: "!bg-white dark:!bg-gray-800 !border !border-gray-200 dark:!border-gray-700 !rounded-xl !shadow-lg"
-                  }
+                    className:
+                      "!bg-white dark:!bg-gray-800 !border !border-gray-200 dark:!border-gray-700 !rounded-xl !shadow-lg",
+                  },
                 }}
               />
             )}
@@ -152,8 +144,7 @@ const PersonalInfoTab = ({ userData, isLoading, onSubmit, t, tAuth }: PersonalIn
             </label>
             <select
               {...register("gender")}
-              className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary soft"
-            >
+              className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary soft">
               <option value="male">{t("personalInfo.male")}</option>
               <option value="female">{t("personalInfo.female")}</option>
             </select>
@@ -163,8 +154,7 @@ const PersonalInfoTab = ({ userData, isLoading, onSubmit, t, tAuth }: PersonalIn
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full md:w-auto px-8 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-xl soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50"
-        >
+          className="w-full md:w-auto px-8 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-xl soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50">
           {isLoading ? t("personalInfo.saving") : t("personalInfo.saveChanges")}
         </button>
       </form>

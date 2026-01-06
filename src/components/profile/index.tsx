@@ -9,11 +9,11 @@ import { useUserStore } from "@/src/store/userStore";
 import { customAxios } from "@/src/utils/customAxios";
 import axios from "axios";
 import toast from "react-hot-toast";
-import ProfileSidebar from "./ProfileSidebar";
-import PersonalInfoTab from "./PersonalInfoTab";
-import OrdersTab from "./OrdersTab";
-import SecurityTab from "./SecurityTab";
-import AddressesTab from "./AddressesTab";
+import ProfileSidebar from "./components/ProfileSidebar";
+import PersonalInfoTab from "./components/PersonalInfoTab";
+import OrdersTab from "./components/OrdersTab";
+import SecurityTab from "./components/SecurityTab";
+import AddressesTab from "./components/AddressesTab";
 
 type TabType = "personalInfo" | "orders" | "security" | "address";
 
@@ -54,9 +54,7 @@ const Profile = () => {
     gender: "male" as const,
   };
 
-
   // Mock orders data
-
 
   const onSubmitProfile = async (data: ProfileFormData) => {
     setIsLoading(true);
@@ -92,9 +90,8 @@ const Profile = () => {
 
       let errorMessage = "Failed to update password";
       if (axios.isAxiosError(error)) {
-        errorMessage = error.response?.data?.message ||
-          error.response?.data?.errors?.[0] ||
-          errorMessage;
+        errorMessage =
+          error.response?.data?.message || error.response?.data?.errors?.[0] || errorMessage;
       }
 
       toast.error(errorMessage);
@@ -115,9 +112,7 @@ const Profile = () => {
       <div className="container">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-            {t("title")}
-          </h1>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">{t("title")}</h1>
           <p className="text-gray-600 dark:text-gray-400">{t("subtitle")}</p>
         </div>
 
@@ -129,8 +124,8 @@ const Profile = () => {
               profileImagePath={user?.profileImagePath}
               activeTab={activeTab}
               tabs={tabs}
-              onTabChange={(tabId) => setActiveTab(tabId as TabType)}
-              onImageChange={(file) => {
+              onTabChange={(tabId: string) => setActiveTab(tabId as TabType)}
+              onImageChange={(file: File) => {
                 console.log("Image file:", file);
                 toast.success("Profile image updated!");
               }}
@@ -151,22 +146,12 @@ const Profile = () => {
                 />
               )}
 
-              {activeTab === "orders" && (
-                <OrdersTab />
-              )}
+              {activeTab === "orders" && <OrdersTab />}
 
               {activeTab === "security" && (
-                <SecurityTab
-                  isLoading={isLoading}
-                  onSubmit={onSubmitPassword}
-                  t={t}
-                />
+                <SecurityTab isLoading={isLoading} onSubmit={onSubmitPassword} t={t} />
               )}
-              {activeTab === "address" && (
-                <AddressesTab
-                  t={t}
-                />
-              )}
+              {activeTab === "address" && <AddressesTab t={t} />}
             </div>
           </div>
         </div>

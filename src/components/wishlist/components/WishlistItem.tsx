@@ -54,8 +54,7 @@ const WishlistItem = ({
         <button
           onClick={() => onRemove(itemCombinationId)}
           className="absolute top-3 right-3 rtl:right-auto rtl:left-3 p-2 bg-white dark:bg-gray-800 text-red-500 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors shadow-md"
-          aria-label={t("remove")}
-        >
+          aria-label={t("remove")}>
           <Trash2 size={20} />
         </button>
       </div>
@@ -84,8 +83,7 @@ const WishlistItem = ({
         {/* Action Button */}
         <button
           onClick={() => onMoveToCart(itemCombinationId)}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-secondary transition-colors font-medium"
-        >
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-secondary transition-colors font-medium">
           <ShoppingCart size={20} />
           {t("moveToCart")}
         </button>

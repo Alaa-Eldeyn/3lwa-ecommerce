@@ -1,25 +1,25 @@
-"use client"
+"use client";
 import { newArrivals } from "@/src/data/data";
-import ProductCard from "../common/ProductCard";
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Autoplay } from "swiper/modules"
-import "swiper/css"
-import "./carousel.css"
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
+import "./carousel.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { useTranslations } from 'next-intl';
-import DummyProductCard from "../common/DummyProductCard";
+import { useTranslations } from "next-intl";
+import ProductCard from "@/src/components/common/ProductCard";
+import DummyProductCard from "@/src/components/common/DummyProductCard";
 
 interface NewArrivalsProps {
   cardVariant?: "default" | "bordered" | "minimal" | "homz" | "nike" | "clean" | "gradient";
 }
 
 const NewArrivals = ({ cardVariant }: NewArrivalsProps) => {
-  const t = useTranslations('home.newArrivals');
+  const t = useTranslations("home.newArrivals");
   const [products, setProducts] = useState<any>({
     items: newArrivals,
-    totalRecords: newArrivals.length
+    totalRecords: newArrivals.length,
   });
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -49,7 +49,7 @@ const NewArrivals = ({ cardVariant }: NewArrivalsProps) => {
       <div className="container mx-auto">
         {/* Title */}
         <h2 className="text-center text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
-          <span className="text-primary">{t('title')}</span> {t('titleHighlight')}
+          <span className="text-primary">{t("title")}</span> {t("titleHighlight")}
         </h2>
 
         {/* Products Carousel */}
@@ -90,9 +90,8 @@ const NewArrivals = ({ cardVariant }: NewArrivalsProps) => {
                 slidesPerView: 5,
                 spaceBetween: 20,
               },
-            }}
-          >
-            {products?.items?.map((item:any, i:number) => (
+            }}>
+            {products?.items?.map((item: any, i: number) => (
               <SwiperSlide key={i} className="py-2">
                 <DummyProductCard {...item} variant={cardVariant} />
               </SwiperSlide>
@@ -103,10 +102,9 @@ const NewArrivals = ({ cardVariant }: NewArrivalsProps) => {
         {/* Button */}
         <Link href="/products" className="flex justify-center mt-3">
           <button className="px-10 py-2 border border-gray-400 rounded-xl text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-            {t('viewAll')}
+            {t("viewAll")}
           </button>
         </Link>
-
       </div>
     </section>
   );

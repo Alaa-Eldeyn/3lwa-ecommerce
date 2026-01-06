@@ -6,15 +6,14 @@ import { useWishlistStore } from "@/src/store/wishlistStore";
 import { useUserStore } from "@/src/store/userStore";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import WishlistItem from "./WishlistItem";
-import EmptyWishlist from "./EmptyWishlist";
+import WishlistItem from "./components/WishlistItem";
+import EmptyWishlist from "./components/EmptyWishlist";
 import { useCartStore } from "@/src/store/cartStore";
 
 const WishlistSidebar = () => {
   const t = useTranslations("wishlist");
   const { isWishlistOpen, closeWishlist } = useHeaderStore();
-  const { items, removeItem, clearAllItems, isLoading } =
-    useWishlistStore();
+  const { items, removeItem, clearAllItems, isLoading } = useWishlistStore();
   const { user } = useUserStore();
   const { addItem: addToCart } = useCartStore();
   const [isMounted, setIsMounted] = useState(false);
@@ -82,11 +81,8 @@ const WishlistSidebar = () => {
       {/* Sidebar */}
       <div
         className={`fixed top-0 right-0 rtl:right-auto rtl:left-0 h-full w-[85vw] sm:w-96 bg-white dark:bg-gray-900 shadow-2xl z-50 flex flex-col transition-transform duration-300 ${
-          isWishlistOpen
-            ? "translate-x-0"
-            : "translate-x-full rtl:-translate-x-full"
-        }`}
-      >
+          isWishlistOpen ? "translate-x-0" : "translate-x-full rtl:-translate-x-full"
+        }`}>
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
           <div className="flex items-center gap-2">
@@ -97,8 +93,7 @@ const WishlistSidebar = () => {
           </div>
           <button
             onClick={closeWishlist}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
-          >
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition">
             <X size={24} className="text-gray-600 dark:text-gray-400" />
           </button>
         </div>
@@ -112,9 +107,7 @@ const WishlistSidebar = () => {
           ) : items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <Heart size={64} className="text-gray-300 dark:text-gray-700 mb-4" />
-              <p className="text-gray-500 dark:text-gray-400 text-lg">
-                {t("emptyTitle")}
-              </p>
+              <p className="text-gray-500 dark:text-gray-400 text-lg">{t("emptyTitle")}</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -135,8 +128,7 @@ const WishlistSidebar = () => {
           <div className="p-4 border-t dark:border-gray-700">
             <button
               onClick={handleClearAll}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium"
-            >
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium">
               <Trash2 size={18} />
               {t("clearAll")}
             </button>

@@ -9,11 +9,16 @@ interface ProfileImageUploadProps {
   t: (key: string) => string;
 }
 
-const ProfileImageUpload = ({ currentImage, userName, onImageChange, t }: ProfileImageUploadProps) => {
+const ProfileImageUpload = ({
+  currentImage,
+  userName,
+  onImageChange,
+  t,
+}: ProfileImageUploadProps) => {
   // بناء URL الصورة الكامل
   const getImageUrl = (imagePath?: string) => {
     if (!imagePath) return null;
-    if (imagePath.startsWith('http')) return imagePath;
+    if (imagePath.startsWith("http")) return imagePath;
     return `${process.env.NEXT_PUBLIC_DOMAIN}/${imagePath}`;
   };
 
@@ -60,7 +65,11 @@ const ProfileImageUpload = ({ currentImage, userName, onImageChange, t }: Profil
   };
 
   const getInitials = () => {
-    return userName.split(" ").map(n => n[0]).join("").toUpperCase();
+    return userName
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
   };
 
   return (
@@ -79,12 +88,11 @@ const ProfileImageUpload = ({ currentImage, userName, onImageChange, t }: Profil
             <span>{getInitials()}</span>
           )}
         </div>
-        
+
         <button
           type="button"
           onClick={() => setShowModal(true)}
-          className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg hover:bg-primary/90 soft border-4 border-white dark:border-gray-800"
-        >
+          className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg hover:bg-primary/90 soft border-4 border-white dark:border-gray-800">
           <Camera size={20} />
         </button>
       </div>
@@ -99,8 +107,7 @@ const ProfileImageUpload = ({ currentImage, userName, onImageChange, t }: Profil
               </h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-              >
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                 <X size={24} />
               </button>
             </div>
@@ -109,12 +116,13 @@ const ProfileImageUpload = ({ currentImage, userName, onImageChange, t }: Profil
               {/* Upload Button */}
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full flex items-center gap-3 px-6 py-4 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 soft border-2 border-dashed border-primary/30"
-              >
+                className="w-full flex items-center gap-3 px-6 py-4 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 soft border-2 border-dashed border-primary/30">
                 <Upload size={24} />
                 <div className="text-left">
                   <p className="font-semibold">{t("personalInfo.uploadPhoto") || "Upload Photo"}</p>
-                  <p className="text-xs opacity-70">{t("personalInfo.maxSize") || "Max size: 5MB"}</p>
+                  <p className="text-xs opacity-70">
+                    {t("personalInfo.maxSize") || "Max size: 5MB"}
+                  </p>
                 </div>
               </button>
 
@@ -122,8 +130,7 @@ const ProfileImageUpload = ({ currentImage, userName, onImageChange, t }: Profil
               {displayImage && (
                 <button
                   onClick={handleRemoveImage}
-                  className="w-full flex items-center gap-3 px-6 py-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 soft"
-                >
+                  className="w-full flex items-center gap-3 px-6 py-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 soft">
                   <X size={24} />
                   <p className="font-semibold">{t("personalInfo.removePhoto") || "Remove Photo"}</p>
                 </button>

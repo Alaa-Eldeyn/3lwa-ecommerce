@@ -49,26 +49,21 @@ const CartItem = ({
       <div className="flex-1 flex flex-col justify-between">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h3 className="font-bold text-gray-900 dark:text-white mb-1">
-              {title}
-            </h3>
+            <h3 className="font-bold text-gray-900 dark:text-white mb-1">{title}</h3>
           </div>
 
           {/* Remove Button */}
           <button
             onClick={() => onRemove(id)}
             className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg soft"
-            aria-label="Remove item"
-          >
+            aria-label="Remove item">
             <Trash2 size={20} />
           </button>
         </div>
 
         {/* Price and Quantity */}
         <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-gray-900 dark:text-white">
-            ${price}
-          </span>
+          <span className="text-xl font-bold text-gray-900 dark:text-white">${price}</span>
 
           {/* Quantity Controls */}
           <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800 rounded-full">
@@ -76,8 +71,7 @@ const CartItem = ({
               onClick={handleDecrement}
               disabled={quantity === 1}
               className="p-2 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full soft disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="Decrease quantity"
-            >
+              aria-label="Decrease quantity">
               <Minus size={16} />
             </button>
             <span className="text-sm font-medium text-gray-900 dark:text-white w-8 text-center">
@@ -86,8 +80,7 @@ const CartItem = ({
             <button
               onClick={handleIncrement}
               className="p-2 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full soft"
-              aria-label="Increase quantity"
-            >
+              aria-label="Increase quantity">
               <Plus size={16} />
             </button>
           </div>

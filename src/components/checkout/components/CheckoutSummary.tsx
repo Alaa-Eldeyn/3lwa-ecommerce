@@ -15,30 +15,18 @@ interface CheckoutSummaryProps {
   total: number;
 }
 
-const CheckoutSummary = ({
-  items,
-  subtotal,
-  shipping,
-  tax,
-  total,
-}: CheckoutSummaryProps) => {
+const CheckoutSummary = ({ items, subtotal, shipping, tax, total }: CheckoutSummaryProps) => {
   return (
     <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 border border-gray-200 dark:border-gray-700 sticky top-24">
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-        Order Summary
-      </h2>
+      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Order Summary</h2>
 
       {/* Order Items */}
       <div className="space-y-4 mb-6">
         {items.map((item) => (
           <div key={item.id} className="flex justify-between items-center">
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">
-                {item.name}
-              </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Qty: {item.quantity}
-              </p>
+              <p className="font-medium text-gray-900 dark:text-white">{item.name}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Qty: {item.quantity}</p>
             </div>
             <p className="font-semibold text-gray-900 dark:text-white">
               ${item.price * item.quantity}
@@ -69,24 +57,16 @@ const CheckoutSummary = ({
 
       {/* Total */}
       <div className="flex justify-between items-center mb-6">
-        <span className="text-lg font-semibold text-gray-900 dark:text-white">
-          Total
-        </span>
-        <span className="text-2xl font-bold text-primary">
-          ${total.toFixed(2)}
-        </span>
+        <span className="text-lg font-semibold text-gray-900 dark:text-white">Total</span>
+        <span className="text-2xl font-bold text-primary">${total.toFixed(2)}</span>
       </div>
 
       {/* Place Order Button */}
       <button
         type="submit"
-        className="w-full bg-primary hover:bg-secondary text-white font-semibold py-4 rounded-full transition-colors flex items-center justify-center gap-2 group"
-      >
+        className="w-full bg-primary hover:bg-secondary text-white font-semibold py-4 rounded-full transition-colors flex items-center justify-center gap-2 group">
         Place Order
-        <ChevronRight
-          size={20}
-          className="group-hover:translate-x-1 transition-transform"
-        />
+        <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
       </button>
 
       {/* Security Note */}

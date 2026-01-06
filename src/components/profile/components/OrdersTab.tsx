@@ -5,10 +5,9 @@ import { customAxios } from "@/src/utils/customAxios";
 import { useTranslations } from "next-intl";
 import router from "next/router";
 
-
 const OrdersTab = () => {
   const t = useTranslations("profile");
-  const [orders,setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
   useEffect(() => {
     const fetchOrders = async () => {
       const response = await customAxios.get("/Order/my-orders");
@@ -33,21 +32,16 @@ const OrdersTab = () => {
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
           {t("orders.title")}
         </h2>
-        <p className="text-gray-600 dark:text-gray-400">
-          {t("orders.description")}
-        </p>
+        <p className="text-gray-600 dark:text-gray-400">{t("orders.description")}</p>
       </div>
 
       {orders.length === 0 ? (
         <div className="text-center py-12">
           <Package size={48} className="mx-auto mb-4 text-gray-400" />
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            {t("orders.noOrders")}
-          </p>
-          <button 
+          <p className="text-gray-600 dark:text-gray-400 mb-4">{t("orders.noOrders")}</p>
+          <button
             onClick={() => router.push("/products")}
-            className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 soft"
-          >
+            className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 soft">
             {t("orders.startShopping")}
           </button>
         </div>
@@ -56,8 +50,7 @@ const OrdersTab = () => {
           {orders.map((order) => (
             <div
               key={order.id}
-              className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary soft"
-            >
+              className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary soft">
               <div className="flex flex-wrap justify-between items-start gap-4 mb-3">
                 <div>
                   <p className="font-semibold text-gray-900 dark:text-white">
@@ -68,7 +61,10 @@ const OrdersTab = () => {
                     {t("orders.date")}: {new Date(order.date).toLocaleDateString()}
                   </p>
                 </div>
-                <span className={`px-3 py-1 rounded-lg text-sm font-medium ${getStatusColor(order.status)}`}>
+                <span
+                  className={`px-3 py-1 rounded-lg text-sm font-medium ${getStatusColor(
+                    order.status
+                  )}`}>
                   {t(`orders.${order.status}`)}
                 </span>
               </div>
@@ -76,10 +72,9 @@ const OrdersTab = () => {
                 <p className="text-lg font-bold text-gray-900 dark:text-white">
                   {t("orders.total")}: ${order.total.toFixed(2)}
                 </p>
-                <button 
+                <button
                   // onClick={() => onViewDetails?.(order.id)}
-                  className="px-4 py-2 text-primary border border-primary rounded-xl hover:bg-primary hover:text-white soft"
-                >
+                  className="px-4 py-2 text-primary border border-primary rounded-xl hover:bg-primary hover:text-white soft">
                   {t("orders.viewDetails")}
                 </button>
               </div>

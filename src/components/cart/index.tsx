@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from "react";
 import Breadcrumb from "../common/Breadcrumb";
-import CartItem from "./CartItem";
-import OrderSummary from "./OrderSummary";
-import EmptyCart from "./EmptyCart";
+import CartItem from "./components/CartItem";
+import OrderSummary from "./components/OrderSummary";
+import EmptyCart from "./components/EmptyCart";
 import { useCartStore } from "@/src/store/cartStore";
 import { useUserStore } from "@/src/store/userStore";
 
 const Cart = () => {
-  const { items, updateQuantity, removeItem, getTotalPrice, isLoading, loadCartFromServer } = useCartStore();
+  const { items, updateQuantity, removeItem, getTotalPrice, isLoading, loadCartFromServer } =
+    useCartStore();
   const { isAuthenticated } = useUserStore();
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
@@ -87,7 +88,7 @@ const Cart = () => {
   return (
     <section className="pt-20 pb-px bg-white dark:bg-gray-900">
       <Breadcrumb />
-      
+
       <div className="container">
         <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-8">
           YOUR CART

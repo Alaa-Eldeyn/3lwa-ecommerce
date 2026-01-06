@@ -63,10 +63,7 @@ const ContactInformation = ({ register, errors }: ContactInformationProps) => {
             Email *
           </label>
           <div className="relative">
-            <Mail
-              size={20}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            />
+            <Mail size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="email"
               {...register("email")}
@@ -84,10 +81,7 @@ const ContactInformation = ({ register, errors }: ContactInformationProps) => {
             Phone *
           </label>
           <div className="relative">
-            <Phone
-              size={20}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            />
+            <Phone size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="tel"
               {...register("phone")}

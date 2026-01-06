@@ -1,22 +1,22 @@
 "use client";
 import { topSellers } from "@/src/data/data";
-import ProductCard from "../common/ProductCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import { useTranslations } from 'next-intl';
-import DummyProductCard from "../common/DummyProductCard";
+import { useTranslations } from "next-intl";
+import ProductCard from "@/src/components/common/ProductCard";
+import DummyProductCard from "@/src/components/common/DummyProductCard";
 
 interface TopSellersProps {
   cardVariant?: "default" | "bordered" | "minimal" | "homz" | "nike" | "clean" | "gradient";
 }
 
 const TopSellers = ({ cardVariant }: TopSellersProps) => {
-  const t = useTranslations('home.topSellers');
+  const t = useTranslations("home.topSellers");
   const [products, setProducts] = useState({
     items: topSellers,
-    totalRecords: topSellers.length
+    totalRecords: topSellers.length,
   });
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -46,7 +46,7 @@ const TopSellers = ({ cardVariant }: TopSellersProps) => {
       <div className="container mx-auto">
         {/* Title */}
         <h2 className="text-center text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
-          <span className="text-primary">{t('title')}</span> {t('titleHighlight')}
+          <span className="text-primary">{t("title")}</span> {t("titleHighlight")}
         </h2>
 
         {/* Products Grid */}
@@ -72,10 +72,9 @@ const TopSellers = ({ cardVariant }: TopSellersProps) => {
         {/* Button */}
         <Link href="/products" className="flex justify-center mt-3">
           <button className="px-10 py-2 border border-gray-400 rounded-xl text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-            {t('viewAll')}
+            {t("viewAll")}
           </button>
         </Link>
-
       </div>
     </section>
   );

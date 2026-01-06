@@ -14,12 +14,7 @@ const AddressesTab = ({ t }: AddressesTabProps) => {
   const [showModal, setShowModal] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
 
-  const {
-    addresses,
-    handleDeleteAddress,
-    handleSetDefault,
-    refetchAddresses,
-  } = useAddresses();
+  const { addresses, handleDeleteAddress, handleSetDefault, refetchAddresses } = useAddresses();
 
   const handleAddNew = () => {
     setEditingAddress(null);
@@ -44,14 +39,11 @@ const AddressesTab = ({ t }: AddressesTabProps) => {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             {t("addresses.title")}
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">
-            {t("addresses.description")}
-          </p>
+          <p className="text-gray-600 dark:text-gray-400">{t("addresses.description")}</p>
         </div>
-        <button 
+        <button
           onClick={handleAddNew}
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 soft"
-        >
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 soft">
           <Plus size={20} />
           {t("addresses.addNew")}
         </button>

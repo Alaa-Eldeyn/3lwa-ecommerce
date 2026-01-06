@@ -17,22 +17,22 @@ const ContactForm = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     console.log("Form submitted:", formData);
     setIsSubmitting(false);
-    
+
     // Reset form
     setFormData({
       name: "",
@@ -47,7 +47,9 @@ const ContactForm = () => {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Name */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           {t("name")}
         </label>
         <div className="relative">
@@ -67,7 +69,9 @@ const ContactForm = () => {
 
       {/* Email */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           {t("email")}
         </label>
         <div className="relative">
@@ -87,7 +91,9 @@ const ContactForm = () => {
 
       {/* Phone */}
       <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label
+          htmlFor="phone"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           {t("phone")}
         </label>
         <div className="relative">
@@ -106,7 +112,9 @@ const ContactForm = () => {
 
       {/* Subject */}
       <div>
-        <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label
+          htmlFor="subject"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           {t("subject")}
         </label>
         <div className="relative">
@@ -126,7 +134,9 @@ const ContactForm = () => {
 
       {/* Message */}
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label
+          htmlFor="message"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           {t("message")}
         </label>
         <textarea
@@ -145,8 +155,7 @@ const ContactForm = () => {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-primary hover:bg-secondary text-white font-semibold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-      >
+        className="w-full bg-primary hover:bg-secondary text-white font-semibold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
         {isSubmitting ? t("sending") : t("submit")}
       </button>
     </form>

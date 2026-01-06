@@ -1,8 +1,6 @@
-import { WishlistPage } from "@/src/components/wishlist"
+import WishlistPage from "@/src/components/wishlist";
 
 const page = () => {
-  return (
-    <WishlistPage />
-  )
-}
-export default page
+  return <WishlistPage />;
+};
+export default page;

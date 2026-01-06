@@ -20,8 +20,7 @@ const PaymentMethod = ({ selectedMethod, onChange }: PaymentMethodProps) => {
             selectedMethod === "card"
               ? "border-primary bg-primary/5"
               : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
-          }`}
-        >
+          }`}>
           <input
             type="radio"
             name="payment"
@@ -35,9 +34,7 @@ const PaymentMethod = ({ selectedMethod, onChange }: PaymentMethodProps) => {
               <CreditCard size={24} className="text-primary" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900 dark:text-white">
-                Credit / Debit Card
-              </p>
+              <p className="font-semibold text-gray-900 dark:text-white">Credit / Debit Card</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 Pay securely with your card
               </p>
@@ -51,8 +48,7 @@ const PaymentMethod = ({ selectedMethod, onChange }: PaymentMethodProps) => {
             selectedMethod === "wallet"
               ? "border-primary bg-primary/5"
               : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
-          }`}
-        >
+          }`}>
           <input
             type="radio"
             name="payment"
@@ -66,9 +62,7 @@ const PaymentMethod = ({ selectedMethod, onChange }: PaymentMethodProps) => {
               <Wallet size={24} className="text-purple-600 dark:text-purple-400" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900 dark:text-white">
-                Digital Wallet
-              </p>
+              <p className="font-semibold text-gray-900 dark:text-white">Digital Wallet</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 Apple Pay, Google Pay, PayPal
               </p>
@@ -82,8 +76,7 @@ const PaymentMethod = ({ selectedMethod, onChange }: PaymentMethodProps) => {
             selectedMethod === "cash"
               ? "border-primary bg-primary/5"
               : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
-          }`}
-        >
+          }`}>
           <input
             type="radio"
             name="payment"
@@ -97,12 +90,8 @@ const PaymentMethod = ({ selectedMethod, onChange }: PaymentMethodProps) => {
               <Banknote size={24} className="text-green-600 dark:text-green-400" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900 dark:text-white">
-                Cash on Delivery
-              </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Pay when you receive
-              </p>
+              <p className="font-semibold text-gray-900 dark:text-white">Cash on Delivery</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Pay when you receive</p>
             </div>
           </div>
         </label>

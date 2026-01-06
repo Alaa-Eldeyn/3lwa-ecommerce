@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useState } from "react";
-import ContactInformation from "./ContactInformation";
-import ShippingAddress from "./ShippingAddress";
-import PaymentMethod from "./PaymentMethod";
-import CheckoutSummary from "./CheckoutSummary";
+import ContactInformation from "./components/ContactInformation";
+import ShippingAddress from "./components/ShippingAddress";
+import PaymentMethod from "./components/PaymentMethod";
+import CheckoutSummary from "./components/CheckoutSummary";
 
 const checkoutSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -33,9 +33,7 @@ const Checkout = () => {
     resolver: zodResolver(checkoutSchema),
   });
 
-  const [paymentMethod, setPaymentMethod] = useState<
-    "card" | "cash" | "wallet"
-  >("card");
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "cash" | "wallet">("card");
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
 
   const onSubmit = (data: CheckoutFormData) => {
@@ -65,10 +63,7 @@ const Checkout = () => {
     { id: 1, name: "T-shirt", price: 25, quantity: 2 },
     { id: 2, name: "Jeans", price: 55, quantity: 1 },
   ];
-  const subtotal = orderItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const subtotal = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping = 15;
   const tax = subtotal * 0.1;
   const total = subtotal + shipping + tax;
@@ -76,9 +71,7 @@ const Checkout = () => {
   return (
     <div className="bg-gray-50 dark:bg-gray-950 py-12">
       <div className="container">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
-          Checkout
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Checkout</h1>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -86,16 +79,13 @@ const Checkout = () => {
             <div className="lg:col-span-2 space-y-6">
               <ContactInformation register={register} errors={errors} />
 
-              <ShippingAddress 
-                register={register} 
-                errors={errors} 
+              <ShippingAddress
+                register={register}
+                errors={errors}
                 onAddressChange={setSelectedAddress}
               />
 
-              <PaymentMethod
-                selectedMethod={paymentMethod}
-                onChange={setPaymentMethod}
-              />
+              <PaymentMethod selectedMethod={paymentMethod} onChange={setPaymentMethod} />
             </div>
 
             {/* Right Side - Order Summary */}

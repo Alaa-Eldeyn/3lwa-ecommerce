@@ -1,17 +1,17 @@
 import React from "react";
-import BrandsMarquee from "./BrandsMarquee";
-import CategoriesBentoGrid from "./CategoriesBentoGrid";
-import CategoriesCarousel from "./CategoriesCarousel";
-import FlashDeals from "./FlashDeals";
-import Hero from "./Hero";
-import NewArrivals from "./NewArrival";
-import Testimonials from "./Testimonials";
-import TopBanner from "./TopBanner";
-import TopBannersCarousel from "./TopBannersCarousel";
-import TopSellers from "./TopSellers";
-import NewArrivalBanner from "./NewArrivalBanner";
-import TopSellersBanner from "./TopSellersBanner";
-import HeroCards from "./HeroCards";
+import BrandsMarquee from "./sections/BrandsMarquee";
+import CategoriesBentoGrid from "./sections/CategoriesBentoGrid";
+import CategoriesCarousel from "./sections/CategoriesCarousel";
+import FlashDeals from "./sections/FlashDeals";
+import Hero from "./sections/Hero";
+import NewArrivals from "./sections/NewArrival";
+import Testimonials from "./sections/Testimonials";
+import TopBanner from "./sections/TopBanner";
+import TopBannersCarousel from "./sections/TopBannersCarousel";
+import TopSellers from "./sections/TopSellers";
+import NewArrivalBanner from "./sections/NewArrivalBanner";
+import TopSellersBanner from "./sections/TopSellersBanner";
+import HeroCards from "./sections/HeroCards";
 
 interface HomeProps {
   variant?: "default" | "no-banners" | "alt-hero" | "simple" | "custom";
@@ -78,7 +78,7 @@ export default function Home({ variant = "simple" }: HomeProps) {
             <HeroCards />
           </div>
         </section>
-        
+
         <TopBanner />
         <CategoriesCarousel variant="card" />
         <FlashDeals cardVariant="bordered" />
@@ -86,7 +86,7 @@ export default function Home({ variant = "simple" }: HomeProps) {
         <NewArrivals cardVariant="bordered" />
         <TopSellersBanner />
         <TopSellers cardVariant="bordered" />
-        <CategoriesBentoGrid variant="row"/>
+        <CategoriesBentoGrid variant="row" />
       </main>
     );
   }
