@@ -3,108 +3,117 @@
 import { useState, useMemo, useEffect } from "react";
 import { StarIcon, Check } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
-import { ProductDetails, ProductAttribute, SelectedValueId, CombinationResponse } from "@/src/types/types";
+import {
+  ProductDetails,
+  PricingAttribute,
+  SelectedValueId,
+  CombinationResponse,
+} from "@/src/types/types";
 import axios from "axios";
 import Link from "next/link";
 
 interface ProductInfoProps {
   product: ProductDetails;
   onProductUpdate: (updatedProduct: ProductDetails) => void;
-  onSelectedAttributesChange?: (attributes: Record<string, { value: string; combinationValueId: string }>) => void;
+  onSelectedAttributesChange?: (
+    attributes: Record<string, { value: string; combinationValueId: string }>
+  ) => void;
 }
 
-const ProductInfo = ({product, onProductUpdate, onSelectedAttributesChange}: ProductInfoProps) => {
+const ProductInfo = ({
+  product,
+  onProductUpdate,
+  onSelectedAttributesChange,
+}: ProductInfoProps) => {
   const t = useTranslations("productDetails");
   const locale = useLocale();
 
   // Extract dynamic data from product
-  const title = locale === 'ar' ? product.titleAr : product.titleEn;
-  const description = locale === 'ar' ? product.descriptionAr : product.descriptionEn;
-  const brand = locale === 'ar' ? product?.brand?.nameAr : product?.brand?.nameEn;
-  
+  const title = locale === "ar" ? product.titleAr : product.titleEn;
+  const description = locale === "ar" ? product.descriptionAr : product.descriptionEn;
+  const brand = locale === "ar" ? product?.brand?.nameAr : product?.brand?.nameEn;
+
   // Get pricing from bestOffer
   const bestOffer = product.pricing?.bestOffer;
   const price = bestOffer?.salesPrice || bestOffer?.price || product.pricing?.minPrice || 0;
   const maxPrice = bestOffer?.price || product.pricing?.maxPrice;
-  const discount = bestOffer?.discountPercentage || (maxPrice && price ? Math.round(((maxPrice - price) / maxPrice) * 100) : null);
+  const discount =
+    bestOffer?.discountPercentage ||
+    (maxPrice && price ? Math.round(((maxPrice - price) / maxPrice) * 100) : null);
   const rating = product.averageRating || 0;
-  const productImage = product.thumbnailImage || product.generalImages?.[0]?.path || "";
 
-  // Group attributes by attributeId and remove duplicates
-  const groupedAttributes = useMemo(() => {
-    const groups: Record<string, ProductAttribute[]> = {};
-    const seen = new Set<string>(); // Track seen attributeId + value combinations
-    
-    product.attributes?.forEach(attr => {
+  // Group pricingAttributes by attributeId and remove duplicates (for interactive selection)
+  const groupedPricingAttributes = useMemo(() => {
+    const groups: Record<string, PricingAttribute[]> = {};
+    const seen = new Set<string>(); // Track seen attributeId + combinationValueId combinations
+
+    product.currentCombination?.pricingAttributes?.forEach((attr) => {
       if (!groups[attr.attributeId]) {
         groups[attr.attributeId] = [];
       }
-      
-      // Create unique key for attributeId + valueAr + valueEn
-      const uniqueKey = `${attr.attributeId}-${attr.valueAr}-${attr.valueEn}`;
+
+      // Create unique key for attributeId + combinationValueId
+      const uniqueKey = `${attr.attributeId}-${attr.combinationValueId}`;
       if (!seen.has(uniqueKey)) {
         seen.add(uniqueKey);
         groups[attr.attributeId].push(attr);
       }
     });
-    
+
     return groups;
-  }, [product.attributes]);
+  }, [product.currentCombination?.pricingAttributes]);
 
   // Initialize selected attributes from currentCombination pricingAttributes
   // Store combinationValueId for each attribute
-  const [selectedAttributes, setSelectedAttributes] = useState<Record<string, { value: string; combinationValueId: string }>>(() => {
+  const [selectedAttributes, setSelectedAttributes] = useState<
+    Record<string, { value: string; combinationValueId: string }>
+  >(() => {
     const initial: Record<string, { value: string; combinationValueId: string }> = {};
-    
+
     // Use currentCombination pricingAttributes if available
     if (product.currentCombination?.pricingAttributes) {
-      product.currentCombination.pricingAttributes.forEach(attr => {
-        if (attr.isSelected) {
-          const value = locale === 'ar' ? attr.valueAr : attr.valueEn;
-          initial[attr.attributeId] = {
+      // Group by attributeId to get first value for each attribute
+      const attributeGroups: Record<string, PricingAttribute[]> = {};
+      product.currentCombination.pricingAttributes.forEach((attr) => {
+        if (!attributeGroups[attr.attributeId]) {
+          attributeGroups[attr.attributeId] = [];
+        }
+        attributeGroups[attr.attributeId].push(attr);
+      });
+
+      // Initialize with selected attributes, or first value if none selected
+      Object.keys(attributeGroups).forEach((attributeId) => {
+        const attrs = attributeGroups[attributeId];
+        const selectedAttr = attrs.find((attr) => attr.isSelected);
+        const attrToUse = selectedAttr || attrs[0];
+
+        if (attrToUse) {
+          const value = locale === "ar" ? attrToUse.valueAr : attrToUse.valueEn;
+          initial[attributeId] = {
             value,
-            combinationValueId: attr.combinationValueId
+            combinationValueId: attrToUse.combinationValueId,
           };
         }
       });
     }
-    
-    // Fallback to first attribute value if not set
-    Object.keys(groupedAttributes).forEach(attributeId => {
-      if (!initial[attributeId]) {
-        const firstAttr = groupedAttributes[attributeId][0];
-        if (firstAttr) {
-          const value = locale === 'ar' ? firstAttr.valueAr : firstAttr.valueEn;
-          // Try to find combinationValueId from currentCombination
-          const pricingAttr = product.currentCombination?.pricingAttributes?.find(
-            pa => pa.attributeId === attributeId && 
-            (pa.valueAr === firstAttr.valueAr || pa.valueEn === firstAttr.valueEn)
-          );
-          initial[attributeId] = {
-            value: value || "",
-            combinationValueId: pricingAttr?.combinationValueId || firstAttr.combinationValueId || ""
-          };
-        }
-      }
-    });
-    
+
     return initial;
   });
-  
+
   // Update selectedAttributes when product.currentCombination changes
   useEffect(() => {
     if (product.currentCombination?.pricingAttributes) {
       const updated: Record<string, { value: string; combinationValueId: string }> = {};
-      product.currentCombination.pricingAttributes.forEach(attr => {
+      product.currentCombination.pricingAttributes.forEach((attr) => {
         if (attr.isSelected) {
-          const value = locale === 'ar' ? attr.valueAr : attr.valueEn;
+          const value = locale === "ar" ? attr.valueAr : attr.valueEn;
           updated[attr.attributeId] = {
             value,
-            combinationValueId: attr.combinationValueId
+            combinationValueId: attr.combinationValueId,
           };
         }
       });
-      setSelectedAttributes(prev => ({ ...prev, ...updated }));
+      setSelectedAttributes((prev) => ({ ...prev, ...updated }));
     }
   }, [product.currentCombination, locale]);
 
@@ -121,55 +130,84 @@ const ProductInfo = ({product, onProductUpdate, onSelectedAttributesChange}: Pro
   function isColorValue(value: string): boolean {
     // Check if hex color
     if (value.match(/^#[0-9A-F]{6}$/i)) return true;
-    
+
     // Check if color name
-    const colorNames = ['أحمر', 'أزرق', 'أخضر', 'أصفر', 'أسود', 'أبيض', 'رمادي',
-                        'red', 'blue', 'green', 'yellow', 'black', 'white', 'gray',
-                        'orange', 'برتقالي', 'pink', 'وردي', 'purple', 'بنفسجي'];
-    return colorNames.some(c => value.toLowerCase().includes(c.toLowerCase()));
+    const colorNames = [
+      "أحمر",
+      "أزرق",
+      "أخضر",
+      "أصفر",
+      "أسود",
+      "أبيض",
+      "رمادي",
+      "red",
+      "blue",
+      "green",
+      "yellow",
+      "black",
+      "white",
+      "gray",
+      "orange",
+      "برتقالي",
+      "pink",
+      "وردي",
+      "purple",
+      "بنفسجي",
+    ];
+    return colorNames.some((c) => value.toLowerCase().includes(c.toLowerCase()));
   }
 
   // Helper function to get color hex code
   function getColorHex(colorName: string): string {
     const colorMap: Record<string, string> = {
-      'red': '#EF4444', 'أحمر': '#EF4444',
-      'blue': '#3B82F6', 'أزرق': '#3B82F6',
-      'green': '#10B981', 'أخضر': '#10B981',
-      'yellow': '#FBBF24', 'أصفر': '#FBBF24',
-      'black': '#000000', 'أسود': '#000000',
-      'white': '#FFFFFF', 'أبيض': '#FFFFFF',
-      'gray': '#6B7280', 'رمادي': '#6B7280',
-      'orange': '#F97316', 'برتقالي': '#F97316',
-      'pink': '#EC4899', 'وردي': '#EC4899',
-      'purple': '#A855F7', 'بنفسجي': '#A855F7',
+      red: "#EF4444",
+      أحمر: "#EF4444",
+      blue: "#3B82F6",
+      أزرق: "#3B82F6",
+      green: "#10B981",
+      أخضر: "#10B981",
+      yellow: "#FBBF24",
+      أصفر: "#FBBF24",
+      black: "#000000",
+      أسود: "#000000",
+      white: "#FFFFFF",
+      أبيض: "#FFFFFF",
+      gray: "#6B7280",
+      رمادي: "#6B7280",
+      orange: "#F97316",
+      برتقالي: "#F97316",
+      pink: "#EC4899",
+      وردي: "#EC4899",
+      purple: "#A855F7",
+      بنفسجي: "#A855F7",
     };
-    
+
     // If it's already a hex code, return it
     if (colorName.match(/^#[0-9A-F]{6}$/i)) return colorName;
-    
+
     // Find matching color
-    const matchedColor = Object.keys(colorMap).find(key => 
+    const matchedColor = Object.keys(colorMap).find((key) =>
       colorName.toLowerCase().includes(key.toLowerCase())
     );
-    
-    return matchedColor ? colorMap[matchedColor] : '#9CA3AF';
+
+    return matchedColor ? colorMap[matchedColor] : "#9CA3AF";
   }
 
   // Fetch combination by attributes
   const fetchCombinationByAttributes = async (selectedValueIds: SelectedValueId[]) => {
     if (!product.id || selectedValueIds.length === 0) return;
-    
+
     setIsLoadingCombination(true);
     try {
       const response = await axios.post<{ data: CombinationResponse }>(
         `${process.env.NEXT_PUBLIC_BASE_URL}/ItemDetails/combinations/by-attributes`,
         {
-          selectedValueIds
+          selectedValueIds,
         }
       );
-      
+
       const combinationData = response.data.data || response.data;
-      
+
       if (combinationData) {
         // Update product details with new combination data
         const updatedProduct: ProductDetails = {
@@ -180,53 +218,56 @@ const ProductInfo = ({product, onProductUpdate, onSelectedAttributesChange}: Pro
             barcode: combinationData.barcode,
             isDefault: false,
             pricingAttributes: combinationData.pricingAttributes,
-            images: combinationData.images.map(img => ({
+            images: combinationData.images.map((img) => ({
               id: img.id,
               path: img.path,
               order: img.order,
-              isDefault: img.isNew || false
-            }))
+              isDefault: img.isNew || false,
+            })),
           },
           pricing: {
             vendorCount: combinationData.summary.totalVendors,
             minPrice: combinationData.summary.minPrice,
             maxPrice: combinationData.summary.maxPrice,
-            bestOffer: combinationData.offers && combinationData.offers.length > 0 ? {
-              offerId: combinationData.offers[0].offerId,
-              vendorId: combinationData.offers[0].vendorId,
-              vendorName: combinationData.offers[0].vendorName,
-              vendorRating: combinationData.offers[0].vendorRating,
-              price: combinationData.offers[0].price,
-              salesPrice: combinationData.offers[0].salesPrice,
-              discountPercentage: combinationData.offers[0].discountPercentage,
-              availableQuantity: combinationData.offers[0].availableQuantity,
-              stockStatus: combinationData.offers[0].stockStatus,
-              isFreeShipping: combinationData.offers[0].isFreeShipping,
-              estimatedDeliveryDays: combinationData.offers[0].estimatedDeliveryDays,
-              isBuyBoxWinner: combinationData.offers[0].isBuyBoxWinner,
-              minOrderQuantity: combinationData.offers[0].minOrderQuantity,
-              maxOrderQuantity: combinationData.offers[0].maxOrderQuantity,
-              quantityTiers: combinationData.offers[0].quantityTiers
-            } : product.pricing?.bestOffer || {
-              offerId: "",
-              vendorId: "",
-              vendorName: "",
-              vendorRating: 0,
-              price: 0,
-              salesPrice: 0,
-              discountPercentage: 0,
-              availableQuantity: 0,
-              stockStatus: 0,
-              isFreeShipping: false,
-              estimatedDeliveryDays: 0,
-              isBuyBoxWinner: false,
-              minOrderQuantity: 0,
-              maxOrderQuantity: 0,
-              quantityTiers: []
-            }
-          }
+            bestOffer:
+              combinationData.offers && combinationData.offers.length > 0
+                ? {
+                    offerId: combinationData.offers[0].offerId,
+                    vendorId: combinationData.offers[0].vendorId,
+                    vendorName: combinationData.offers[0].vendorName,
+                    vendorRating: combinationData.offers[0].vendorRating,
+                    price: combinationData.offers[0].price,
+                    salesPrice: combinationData.offers[0].salesPrice,
+                    discountPercentage: combinationData.offers[0].discountPercentage,
+                    availableQuantity: combinationData.offers[0].availableQuantity,
+                    stockStatus: combinationData.offers[0].stockStatus,
+                    isFreeShipping: combinationData.offers[0].isFreeShipping,
+                    estimatedDeliveryDays: combinationData.offers[0].estimatedDeliveryDays,
+                    isBuyBoxWinner: combinationData.offers[0].isBuyBoxWinner,
+                    minOrderQuantity: combinationData.offers[0].minOrderQuantity,
+                    maxOrderQuantity: combinationData.offers[0].maxOrderQuantity,
+                    quantityTiers: combinationData.offers[0].quantityTiers,
+                  }
+                : product.pricing?.bestOffer || {
+                    offerId: "",
+                    vendorId: "",
+                    vendorName: "",
+                    vendorRating: 0,
+                    price: 0,
+                    salesPrice: 0,
+                    discountPercentage: 0,
+                    availableQuantity: 0,
+                    stockStatus: 0,
+                    isFreeShipping: false,
+                    estimatedDeliveryDays: 0,
+                    isBuyBoxWinner: false,
+                    minOrderQuantity: 0,
+                    maxOrderQuantity: 0,
+                    quantityTiers: [],
+                  },
+          },
         };
-        
+
         // Update parent component
         onProductUpdate(updatedProduct);
       }
@@ -239,38 +280,44 @@ const ProductInfo = ({product, onProductUpdate, onSelectedAttributesChange}: Pro
 
   // Find combinationValueId for a given attribute value
   // We need to search in pricingAttributes because attributes don't have combinationValueId
-  const findCombinationValueId = (attributeId: string, valueAr: string, valueEn: string): string => {
+  const findCombinationValueId = (
+    attributeId: string,
+    valueAr: string,
+    valueEn: string
+  ): string => {
     // First, try to find in current combination pricingAttributes
     // Match by both valueAr and valueEn to be more accurate
     const pricingAttr = product.currentCombination?.pricingAttributes?.find(
-      attr => attr.attributeId === attributeId && 
-      (attr.valueAr === valueAr || attr.valueEn === valueEn || 
-       (attr.valueAr === valueAr && attr.valueEn === valueEn))
+      (attr) =>
+        attr.attributeId === attributeId &&
+        (attr.valueAr === valueAr ||
+          attr.valueEn === valueEn ||
+          (attr.valueAr === valueAr && attr.valueEn === valueEn))
     );
     if (pricingAttr?.combinationValueId) return pricingAttr.combinationValueId;
-    
+
     // Try to find in all pricingAttributes (not just selected ones)
     // This helps when user selects a different value that exists in other combinations
     const allPricingAttrs = product.currentCombination?.pricingAttributes?.filter(
-      attr => attr.attributeId === attributeId
+      (attr) => attr.attributeId === attributeId
     );
     if (allPricingAttrs) {
       const matchingAttr = allPricingAttrs.find(
-        attr => attr.valueAr === valueAr || attr.valueEn === valueEn
+        (attr) => attr.valueAr === valueAr || attr.valueEn === valueEn
       );
       if (matchingAttr?.combinationValueId) return matchingAttr.combinationValueId;
     }
-    
+
     // Try to find in selectedAttributes (might have been set from previous selection)
     const selectedAttr = selectedAttributes[attributeId];
     if (selectedAttr) {
-      const selectedValue = locale === 'ar' ? selectedAttr.value : selectedAttr.value;
-      const currentValue = locale === 'ar' ? valueAr : valueEn;
+      const selectedValue = locale === "ar" ? selectedAttr.value : selectedAttr.value;
+      const currentValue = locale === "ar" ? valueAr : valueEn;
       if (selectedValue === currentValue && selectedAttr.combinationValueId) {
         return selectedAttr.combinationValueId;
       }
     }
-    
+
     // If not found, return empty string - will be set after API response
     // The API will return the correct combinationValueId in the response
     return "";
@@ -278,36 +325,48 @@ const ProductInfo = ({product, onProductUpdate, onSelectedAttributesChange}: Pro
 
   // Update selected attribute
   const handleAttributeSelect = async (attributeId: string, valueAr: string, valueEn: string) => {
-    const value = locale === 'ar' ? valueAr : valueEn;
-    
-    // Find combinationValueId
-    let combinationValueId = findCombinationValueId(attributeId, valueAr, valueEn);
-    
-    // If not found, keep the existing one or use empty string
+    const value = locale === "ar" ? valueAr : valueEn;
+
+    // Get combinationValueId directly from pricingAttributes
+    const pricingAttr = product.currentCombination?.pricingAttributes?.find(
+      (attr) =>
+        attr.attributeId === attributeId && (attr.valueAr === valueAr || attr.valueEn === valueEn)
+    );
+
+    let combinationValueId = pricingAttr?.combinationValueId || "";
+
+    // If not found, try findCombinationValueId as fallback
+    if (!combinationValueId) {
+      combinationValueId = findCombinationValueId(attributeId, valueAr, valueEn);
+    }
+
+    // If still not found, keep the existing one or use empty string
     if (!combinationValueId && selectedAttributes[attributeId]) {
       combinationValueId = selectedAttributes[attributeId].combinationValueId;
     }
-    
+
     // Update local state immediately
     const updatedAttributes = {
       ...selectedAttributes,
-      [attributeId]: { value, combinationValueId }
+      [attributeId]: { value, combinationValueId },
     };
     setSelectedAttributes(updatedAttributes);
-    
+
     // Build selectedValueIds array for API
     const selectedValueIds: SelectedValueId[] = Object.entries(updatedAttributes)
       .filter(([, attr]) => attr.combinationValueId) // Only include if we have combinationValueId
       .map(([, attr], index, array) => ({
         combinationAttributeValueId: attr.combinationValueId,
-        isLastSelected: index === array.length - 1 // Last selected attribute
+        isLastSelected: index === array.length - 1, // Last selected attribute
       }));
-    
+
     // If we have combinationValueIds, fetch new combination
     if (selectedValueIds.length > 0) {
       await fetchCombinationByAttributes(selectedValueIds);
     } else {
-      console.warn("No combinationValueIds available for selected attributes. Waiting for initial combination data.");
+      console.warn(
+        "No combinationValueIds available for selected attributes. Waiting for initial combination data."
+      );
     }
   };
 
@@ -358,7 +417,7 @@ const ProductInfo = ({product, onProductUpdate, onSelectedAttributesChange}: Pro
             </Link>
           )}
         </div>
-  
+
         {/* Short Description */}
         {description && (
           <div className="prose prose-sm text-gray-600 dark:text-gray-400">
@@ -411,12 +470,15 @@ const ProductInfo = ({product, onProductUpdate, onSelectedAttributesChange}: Pro
           </div>
         )}
 
-        {/* Dynamic Attributes Selection */}
-        {Object.entries(groupedAttributes).map(([attributeId, attributes]) => {
-          if (attributes.length === 0) return null;
+        {/* Dynamic Pricing Attributes Selection (Interactive) */}
+        {Object.entries(groupedPricingAttributes).map(([attributeId, pricingAttributes]) => {
+          if (pricingAttributes.length === 0) return null;
 
-          const attributeName = locale === "ar" ? attributes[0]?.nameAr : attributes[0]?.nameEn;
-          const isColor = attributes.some((attr) => {
+          const attributeName =
+            locale === "ar"
+              ? pricingAttributes[0]?.attributeNameAr
+              : pricingAttributes[0]?.attributeNameEn;
+          const isColor = pricingAttributes.some((attr) => {
             const value = locale === "ar" ? attr.valueAr : attr.valueEn;
             return isColorValue(value);
           });
@@ -428,27 +490,39 @@ const ProductInfo = ({product, onProductUpdate, onSelectedAttributesChange}: Pro
               {isColor ? (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    {attributeName}: <span className="text-gray-900 dark:text-white font-bold">{selectedValueText}</span>
+                    {attributeName}:{" "}
+                    <span className="text-gray-900 dark:text-white font-bold">
+                      {selectedValueText}
+                    </span>
                   </label>
                   <div className="flex gap-3">
-                    {attributes.map((attr, index) => {
+                    {pricingAttributes.map((attr, index) => {
                       const value = locale === "ar" ? attr.valueAr : attr.valueEn;
                       const isSelectedValue = selectedValueText === value;
                       return (
                         <button
-                          key={`${attr.attributeId}-${index}`}
-                          onClick={() => handleAttributeSelect(attributeId, attr.valueAr, attr.valueEn)}
+                          key={`${attr.attributeId}-${attr.combinationValueId}-${index}`}
+                          onClick={() =>
+                            handleAttributeSelect(attributeId, attr.valueAr, attr.valueEn)
+                          }
                           disabled={isLoadingCombination}
                           className={`w-10 h-10 rounded-full border-2 relative transition-transform ${
                             isSelectedValue
                               ? "border-primary dark:border-primary ring-2 ring-offset-2 ring-primary/30"
                               : "border-gray-200 dark:border-gray-600 hover:scale-110"
-                          } ${isLoadingCombination ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                          } ${
+                            isLoadingCombination
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
                           style={{ backgroundColor: getColorHex(value) }}
                           title={value}
                           aria-label={value}>
                           {isSelectedValue && (
-                            <Check size={12} className="absolute inset-0 m-auto text-white drop-shadow-lg" />
+                            <Check
+                              size={12}
+                              className="absolute inset-0 m-auto text-white drop-shadow-lg"
+                            />
                           )}
                         </button>
                       );
@@ -459,26 +533,40 @@ const ProductInfo = ({product, onProductUpdate, onSelectedAttributesChange}: Pro
                 <div>
                   <div className="flex justify-between items-center mb-2">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {attributeName}: <span className="text-gray-900 dark:text-white font-bold">{selectedValueText}</span>
+                      {attributeName}:{" "}
+                      <span className="text-gray-900 dark:text-white font-bold">
+                        {selectedValueText}
+                      </span>
                     </label>
                     {attributeName?.toLowerCase().includes("size") && (
                       <button className="text-xs text-primary dark:text-primary hover:underline flex items-center gap-1">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                        <svg
+                          className="w-3 h-3"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                          />
                         </svg>
                         {locale === "ar" ? "دليل المقاسات" : "Size Guide"}
                       </button>
                     )}
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {attributes.map((attr, index) => {
+                    {pricingAttributes.map((attr, index) => {
                       const value = locale === "ar" ? attr.valueAr : attr.valueEn;
                       const isSelectedValue = selectedValueText === value;
                       const isDisabled = false; // You can add logic to check if variant is disabled
                       return (
                         <button
-                          key={`${attr.attributeId}-${index}`}
-                          onClick={() => handleAttributeSelect(attributeId, attr.valueAr, attr.valueEn)}
+                          key={`${attr.attributeId}-${attr.combinationValueId}-${index}`}
+                          onClick={() =>
+                            handleAttributeSelect(attributeId, attr.valueAr, attr.valueEn)
+                          }
                           disabled={isLoadingCombination || isDisabled}
                           className={`px-4 py-2 border rounded-md text-sm transition-colors ${
                             isSelectedValue
@@ -498,15 +586,25 @@ const ProductInfo = ({product, onProductUpdate, onSelectedAttributesChange}: Pro
           );
         })}
 
-        {/* Material (Read-only attribute example) */}
+        {/* Display-only Attributes (Read-only) */}
         {product.attributes && product.attributes.length > 0 && (
-          <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-100 dark:border-gray-700">
-            <span className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">
-              {locale === "ar" ? "المادة" : "Material"}
-            </span>
-            <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
-              {locale === "ar" ? "متنوع" : "Various"}
-            </p>
+          <div className="space-y-2">
+            {product.attributes.map((attr, index) => {
+              const attributeName = locale === "ar" ? attr.nameAr : attr.nameEn;
+              const attributeValue = locale === "ar" ? attr.valueAr : attr.valueEn;
+              return (
+                <div
+                  key={`${attr.attributeId}-${index}`}
+                  className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-100 dark:border-gray-700">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">
+                    {attributeName}
+                  </span>
+                  <p className="text-sm font-medium text-gray-800 dark:text-gray-200 mt-1">
+                    {attributeValue}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
