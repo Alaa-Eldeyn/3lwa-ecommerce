@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { User, Package, Shield, MapPin } from "lucide-react";
-import { ProfileFormData, PasswordUpdateFormData, Order } from "@/src/types/types";
+import { ProfileFormData, PasswordUpdateFormData } from "@/src/types/types";
 import { useUserStore } from "@/src/store/userStore";
 import { customAxios } from "@/src/utils/customAxios";
+import { getUserFromCookie } from "@/src/utils/auth";
 import axios from "axios";
 import toast from "react-hot-toast";
 import ProfileSidebar from "./components/ProfileSidebar";
@@ -38,23 +39,72 @@ const Profile = () => {
     }
   }, [tabParam]);
   const [isLoading, setIsLoading] = useState(false);
-  const { user, initUser } = useUserStore();
+  const [isFetchingProfile, setIsFetchingProfile] = useState(true);
+  const [profileData, setProfileData] = useState<{
+    phone?: string;
+    phoneCode?: string;
+  }>({});
+  const { user, initUser, updateUser } = useUserStore();
 
   useEffect(() => {
     initUser();
   }, [initUser]);
 
-  // Mock user data - replace with actual data from API
+  // Fetch user profile from API on mount
+  useEffect(() => {
+    const loadUserProfile = async () => {
+      setIsFetchingProfile(true);
+      try {
+        // Fetch profile data from API - single call
+        const response = await customAxios.get("/UserProfile/profile");
+        if (response?.data?.success && response.data.data) {
+          const apiData = response.data.data;
+          const currentUser = user || getUserFromCookie();
+
+          // Update user store with user data (preserving tokens)
+          updateUser({
+            id: apiData.userId || currentUser?.id || null,
+            firstName: apiData.firstName || "",
+            lastName: apiData.lastName || "",
+            email: apiData.email || "",
+            profileImagePath: apiData.profileImagePath || "",
+          });
+
+          // Store additional profile fields that aren't in User type
+          setProfileData({
+            phone: apiData.phone || "",
+            phoneCode: apiData.phoneCode || "",
+          });
+        }
+      } catch (error) {
+        console.error("Error loading user profile:", error);
+      } finally {
+        setIsFetchingProfile(false);
+      }
+    };
+
+    const currentUser = user || getUserFromCookie();
+    if (currentUser?.token) {
+      loadUserProfile();
+    } else {
+      setIsFetchingProfile(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
+
+  // User data for forms - combines store data with API profile data
+  // Combine phoneCode and phone for PhoneInput component
+  const fullPhone =
+    profileData.phoneCode && profileData.phone
+      ? `${profileData.phoneCode}${profileData.phone}`
+      : profileData.phone || "";
+
   const userData = {
-    firstName: user?.firstName || "User",
+    firstName: user?.firstName || "",
     lastName: user?.lastName || "",
     email: user?.email || "",
-    phone: "",
-    dateOfBirth: "",
-    gender: "male" as const,
+    phone: fullPhone,
   };
-
-  // Mock orders data
 
   const onSubmitProfile = async (data: ProfileFormData) => {
     setIsLoading(true);
@@ -108,11 +158,11 @@ const Profile = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-24">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-8">
       <div className="container">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">{t("title")}</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t("title")}</h1>
           <p className="text-gray-600 dark:text-gray-400">{t("subtitle")}</p>
         </div>
 
@@ -134,25 +184,28 @@ const Profile = () => {
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-3">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-              {activeTab === "personalInfo" && (
-                <PersonalInfoTab
-                  userData={userData}
-                  isLoading={isLoading}
-                  onSubmit={onSubmitProfile}
-                  t={t}
-                  tAuth={tAuth}
-                />
-              )}
+          <div className="lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+            {/* Personal Info */}
+            {activeTab === "personalInfo" && (
+              <PersonalInfoTab
+                userData={userData}
+                isLoading={isLoading}
+                onSubmit={onSubmitProfile}
+                t={t}
+                tAuth={tAuth}
+              />
+            )}
 
-              {activeTab === "orders" && <OrdersTab />}
+            {/* Orders */}
+            {activeTab === "orders" && <OrdersTab />}
 
-              {activeTab === "security" && (
-                <SecurityTab isLoading={isLoading} onSubmit={onSubmitPassword} t={t} />
-              )}
-              {activeTab === "address" && <AddressesTab t={t} />}
-            </div>
+            {/* Security */}
+            {activeTab === "security" && (
+              <SecurityTab isLoading={isLoading} onSubmit={onSubmitPassword} t={t} />
+            )}
+
+            {/* Addresses */}
+            {activeTab === "address" && <AddressesTab t={t} />}
           </div>
         </div>
       </div>

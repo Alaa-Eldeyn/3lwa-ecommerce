@@ -343,7 +343,7 @@
     "title": "My Profile",
     "subtitle": "Manage your account information",
     "tabs": {
-      "personalInfo": "Personal Information",
+      "personalInfo": "Profile",
       "addresses": "Addresses",
       "orders": "Order History",
       "security": "Security"

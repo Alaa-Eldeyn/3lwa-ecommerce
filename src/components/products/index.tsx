@@ -337,7 +337,7 @@ const Products = () => {
           onApplyFilters={handleApplyFilters}
         />
 
-        <section className="flex-1 bg-white dark:bg-gray-900 p-5 rounded-3xl border border-gray-200 dark:border-gray-700">
+        <section className="flex-1 bg-white dark:bg-gray-900 p-5 rounded-xl border border-gray-200 dark:border-gray-700">
           <div className="flex-between flex-col lg:flex-row gap-2 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
             <p className="hidden lg:block text-gray-600 dark:text-gray-400">
               Showing {totalRecords} products

@@ -37,7 +37,7 @@ const ProfileSidebar = ({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
       <div className="flex flex-col items-center mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
         <div className="mb-3">
           <ProfileImageUpload
@@ -50,7 +50,6 @@ const ProfileSidebar = ({
         <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
           {userData.firstName} {userData.lastName}
         </h3>
-        <p className="text-sm text-gray-500 dark:text-gray-400">{userData.email}</p>
       </div>
 
       <nav className="space-y-2">

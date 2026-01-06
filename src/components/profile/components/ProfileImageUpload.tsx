@@ -75,11 +75,11 @@ const ProfileImageUpload = ({
   return (
     <>
       <div className="relative group">
-        <div className="w-32 h-32 rounded-full overflow-hidden bg-linear-to-br from-primary to-primary/60 flex items-center justify-center text-white text-4xl font-bold border-4 border-white dark:border-gray-800 shadow-lg">
+        <div className="w-32 h-32 rounded-full overflow-hidden bg-linear-to-br from-primary to-primary/60 flex items-center justify-center text-white text-xl font-bold border-4 border-white dark:border-gray-800 shadow-lg">
           {displayImage ? (
             <Image
               src={displayImage}
-              alt={userName}
+              alt=""
               width={128}
               height={128}
               className="w-full h-full object-cover"
