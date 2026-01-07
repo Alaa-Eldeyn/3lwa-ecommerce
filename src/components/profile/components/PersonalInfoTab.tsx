@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale } from "next-intl";
 import { Mail, Edit2, Phone } from "lucide-react";
 import { PhoneInput } from "react-international-phone";
+import { removeDialCode } from "react-international-phone";
 import { createPortal } from "react-dom";
 import "react-international-phone/style.css";
 import { profileSchema } from "@/src/schemas/schemas";
@@ -162,30 +163,12 @@ const PersonalInfoTab = ({
     await handleSendCode(newEmail);
   };
 
-  // Parse phone number to extract phoneCode and phoneNumber
-  const parsePhoneNumber = (phone: string) => {
-    if (!phone) return { phoneCode: "", phoneNumber: "" };
-
-    // PhoneInput returns format like "+201234567890"
-    // Extract country code (usually 1-3 digits after +)
-    const match = phone.match(/^(\+\d{1,3})(.+)$/);
-    if (match) {
-      return {
-        phoneCode: match[1],
-        phoneNumber: match[2],
-      };
-    }
-    return { phoneCode: "", phoneNumber: phone };
-  };
-
   // Send verification code to the new phone
-  const handleSendPhoneCode = async (phone: string) => {
+  const handleSendPhoneCode = async (phoneCode: string, phoneNumber: string) => {
     setIsSendingPhoneCode(true);
     try {
-      const { phoneCode, phoneNumber } = parsePhoneNumber(phone);
-
       if (!phoneCode || !phoneNumber) {
-        toast.error(t("personalInfo.invalidPhone") || "Invalid phone number");
+        toast.error(t("personalInfo.invalidPhone"));
         setIsSendingPhoneCode(false);
         return;
       }
@@ -197,11 +180,12 @@ const PersonalInfoTab = ({
 
       if (response?.data?.success) {
         // Store phone in session storage
+        const fullPhone = `${phoneCode}${phoneNumber}`;
         if (typeof window !== "undefined") {
-          sessionStorage.setItem("pendingPhoneChange", phone);
+          sessionStorage.setItem("pendingPhoneChange", fullPhone);
           sessionStorage.setItem("pendingPhoneCode", phoneCode);
         }
-        setNewPhone(phone);
+        setNewPhone(fullPhone);
         setNewPhoneCode(phoneCode);
         setNewPhoneNumber(phoneNumber);
         setShowChangePhoneModal(false);
@@ -280,7 +264,7 @@ const PersonalInfoTab = ({
 
   // Resend the verification code to the new phone
   const handleResendPhoneCode = async () => {
-    await handleSendPhoneCode(newPhone);
+    await handleSendPhoneCode(newPhoneCode, newPhoneNumber);
   };
 
   return (
@@ -407,7 +391,6 @@ const PersonalInfoTab = ({
           document.body
         )}
 
-      
       {/* Verify Email Modal */}
       {showVerifyEmailModal &&
         typeof window !== "undefined" &&
@@ -663,7 +646,7 @@ interface ChangePhoneModalProps {
   currentPhone: string;
   isOpen: boolean;
   onClose: () => void;
-  onSendCode: (phone: string) => void;
+  onSendCode: (phoneCode: string, phoneNumber: string) => void;
   isLoading: boolean;
   t: (key: string) => string;
   tAuth: (key: string) => string;
@@ -679,13 +662,29 @@ const ChangePhoneModal = ({
   tAuth,
 }: ChangePhoneModalProps) => {
   const [phone, setPhone] = useState("");
+  const [phoneCode, setPhoneCode] = useState("");
   const locale = useLocale();
   const isRTL = locale === "ar";
 
+  const handlePhoneChange = (
+    phoneValue: string,
+    meta: { country: { dialCode: string }; inputValue: string }
+  ) => {
+    setPhone(phoneValue);
+    if (meta?.country?.dialCode) {
+      setPhoneCode(`+${meta.country.dialCode}`);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (phone && phone !== currentPhone) {
-      onSendCode(phone);
+    if (phone && phone !== currentPhone && phoneCode) {
+      const phoneNumber = removeDialCode({
+        phone: phone,
+        dialCode: phoneCode.replace("+", ""),
+        prefix: "+",
+      });
+      onSendCode(phoneCode, phoneNumber);
     }
   };
 
@@ -714,7 +713,7 @@ const ChangePhoneModal = ({
             <PhoneInput
               defaultCountry="eg"
               value={phone}
-              onChange={setPhone}
+              onChange={handlePhoneChange}
               inputClassName="!w-full !px-4 !py-3 !bg-gray-50 dark:!bg-gray-900 !rounded-r-xl !text-gray-900 dark:!text-white focus:!outline-none"
               countrySelectorStyleProps={{
                 buttonClassName:
@@ -730,7 +729,7 @@ const ChangePhoneModal = ({
           <div className={`flex gap-4 mt-6 ${isRTL ? "flex-row-reverse" : ""}`}>
             <button
               type="submit"
-              disabled={isLoading || !phone || phone === currentPhone}
+              disabled={isLoading || !phone || !phoneCode || phone === currentPhone}
               className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
               {isLoading ? t("personalInfo.sending") : t("personalInfo.sendCode")}
             </button>
@@ -775,7 +774,7 @@ const VerifyPhoneModal = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (code.length >= 4) {
+    if (code.length === 6) {
       onVerify(code);
     }
   };
@@ -796,7 +795,9 @@ const VerifyPhoneModal = ({
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 text-right rtl:text-right ltr:text-left">
           {t("personalInfo.verifyPhoneDescription")}
         </p>
-        <p dir="ltr" className="text-sm font-medium text-primary mb-6 text-right rtl:text-right ltr:text-left break-all">
+        <p
+          dir="ltr"
+          className="text-sm font-medium text-primary mb-6 text-right rtl:text-right ltr:text-left break-all">
           {newPhone}
         </p>
 
