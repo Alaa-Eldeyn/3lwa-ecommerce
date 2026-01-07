@@ -11,14 +11,14 @@ import { getUserFromCookie } from "@/src/utils/auth";
 import axios from "axios";
 import toast from "react-hot-toast";
 import ProfileSidebar from "./components/ProfileSidebar";
-import PersonalInfoTab from "./components/PersonalInfoTab";
-import OrdersTab from "./components/OrdersTab";
-import SecurityTab from "./components/SecurityTab";
-import AddressesTab from "./components/AddressesTab";
+import PersonalInfoTab from "./tabs/PersonalInfoTab";
+import OrdersTab from "./tabs/OrdersTab";
+import SecurityTab from "./tabs/SecurityTab";
+import AddressesTab from "./tabs/AddressesTab";
 
-type TabType = "personalInfo" | "orders" | "security" | "address";
+type TabType = "personalInfo" | "address" | "orders" | "security";
 
-const validTabs: TabType[] = ["personalInfo", "orders", "security", "address"];
+const validTabs: TabType[] = ["personalInfo", "address", "orders", "security"];
 
 const Profile = () => {
   const t = useTranslations("profile");
@@ -34,9 +34,9 @@ const Profile = () => {
   // Tabs for the profile page
   const tabs = [
     { id: "personalInfo" as TabType, label: t("tabs.personalInfo"), icon: User },
+    { id: "address" as TabType, label: t("tabs.addresses"), icon: MapPin },
     { id: "orders" as TabType, label: t("tabs.orders"), icon: Package },
     { id: "security" as TabType, label: t("tabs.security"), icon: Shield },
-    { id: "address" as TabType, label: t("tabs.addresses"), icon: MapPin },
   ];
 
   // Reload profile data to get latest from server

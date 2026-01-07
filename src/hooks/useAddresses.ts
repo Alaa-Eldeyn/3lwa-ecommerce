@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { customAxios } from "@/src/utils/customAxios";
 import toast from "react-hot-toast";
-import { Address } from "@/src/components/common/AddressModal";
+import { Address, AddressFormData } from "@/src/components/profile/components/AddressModal";
 
 export const useAddresses = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -12,18 +12,50 @@ export const useAddresses = () => {
   const { refetch: refetchAddresses, isLoading } = useQuery({
     queryKey: ["myAddresses"],
     queryFn: async () => {
-      const res = await customAxios(`/CustomerAddress`);
+      const res = await customAxios.get(`/CustomerAddress`);
       const data = res.data.data as Address[];
       setAddresses(data);
-      
+
       // Auto-select default or first address
       const defaultAddress = data.find((addr) => addr.isDefault);
       const firstAddress = data[0];
       setSelectedAddressId(defaultAddress?.id || firstAddress?.id || "");
-      
+
       return data;
     },
     refetchOnWindowFocus: false,
+  });
+
+  // Add address mutation
+  const addAddressMutation = useMutation({
+    mutationFn: async (data: AddressFormData) => {
+      return await customAxios.post(`/CustomerAddress`, data);
+    },
+    onSuccess: () => {
+      toast.success("تم إضافة العنوان بنجاح");
+      refetchAddresses();
+    },
+    onError: (error: any) => {
+      const errorMessage =
+        error?.response?.data?.message || error?.response?.data?.errors?.[0] || "فشل إضافة العنوان";
+      toast.error(errorMessage);
+    },
+  });
+
+  // Update address mutation
+  const updateAddressMutation = useMutation({
+    mutationFn: async ({ addressId, data }: { addressId: string; data: AddressFormData }) => {
+      return await customAxios.put(`/CustomerAddress/${addressId}`, data);
+    },
+    onSuccess: () => {
+      toast.success("تم تحديث العنوان بنجاح");
+      refetchAddresses();
+    },
+    onError: (error: any) => {
+      const errorMessage =
+        error?.response?.data?.message || error?.response?.data?.errors?.[0] || "فشل تحديث العنوان";
+      toast.error(errorMessage);
+    },
   });
 
   // Delete address mutation
@@ -35,28 +67,28 @@ export const useAddresses = () => {
       toast.success("تم حذف العنوان بنجاح");
       refetchAddresses();
     },
-    onError: () => {
-      toast.error("فشل حذف العنوان");
+    onError: (error: any) => {
+      const errorMessage =
+        error?.response?.data?.message || error?.response?.data?.errors?.[0] || "فشل حذف العنوان";
+      toast.error(errorMessage);
     },
   });
 
   // Set default address mutation
   const setDefaultAddressMutation = useMutation({
     mutationFn: async (addressId: string) => {
-      const address = addresses.find(a => a.id === addressId);
-      if (!address) return;
-      
-      return await customAxios.put(`/CustomerAddress/${addressId}`, {
-        ...address,
-        setAsDefault: true,
-      });
+      return await customAxios.put(`/CustomerAddress/${addressId}/set-default`);
     },
     onSuccess: () => {
       toast.success("تم تعيين العنوان كافتراضي");
       refetchAddresses();
     },
-    onError: () => {
-      toast.error("فشل تعيين العنوان كافتراضي");
+    onError: (error: any) => {
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.response?.data?.errors?.[0] ||
+        "فشل تعيين العنوان كافتراضي";
+      toast.error(errorMessage);
     },
   });
 
@@ -74,6 +106,14 @@ export const useAddresses = () => {
     setDefaultAddressMutation.mutate(addressId);
   };
 
+  const handleAddAddress = (data: AddressFormData) => {
+    addAddressMutation.mutate(data);
+  };
+
+  const handleUpdateAddress = (addressId: string, data: AddressFormData) => {
+    updateAddressMutation.mutate({ addressId, data });
+  };
+
   const getSelectedAddress = () => {
     return addresses.find((addr) => addr.id === selectedAddressId) || null;
   };
@@ -85,7 +125,13 @@ export const useAddresses = () => {
     handleSelectAddress,
     handleDeleteAddress,
     handleSetDefault,
+    handleAddAddress,
+    handleUpdateAddress,
     getSelectedAddress,
     refetchAddresses,
+    addAddressMutation,
+    updateAddressMutation,
+    deleteAddressMutation,
+    setDefaultAddressMutation,
   };
 };

@@ -2,8 +2,8 @@
 
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import AddressModal, { Address } from "@/src/components/common/AddressModal";
-import AddressList from "@/src/components/common/AddressList";
+import AddressModal, { Address } from "@/src/components/profile/components/AddressModal";
+import AddressList from "@/src/components/profile/components/AddressList";
 import { useAddresses } from "@/src/hooks/useAddresses";
 
 interface AddressesTabProps {
@@ -36,7 +36,7 @@ const AddressesTab = ({ t }: AddressesTabProps) => {
     <div>
       <div className="flex justify-between items-start mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
             {t("addresses.title")}
           </h2>
           <p className="text-gray-600 dark:text-gray-400">{t("addresses.description")}</p>
@@ -56,6 +56,7 @@ const AddressesTab = ({ t }: AddressesTabProps) => {
         onSetDefault={handleSetDefault}
         selectable={false}
         showActions={true}
+        t={t}
       />
 
       <AddressModal

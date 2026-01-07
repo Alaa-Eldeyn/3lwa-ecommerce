@@ -2,8 +2,8 @@
 import { MapPin, Plus } from "lucide-react";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { useState } from "react";
-import AddressModal, { Address } from "@/src/components/common/AddressModal";
-import AddressList from "@/src/components/common/AddressList";
+import AddressModal, { Address } from "@/src/components/profile/components/AddressModal";
+import AddressList from "@/src/components/profile/components/AddressList";
 import { useAddresses } from "@/src/hooks/useAddresses";
 import { useEffect } from "react";
 

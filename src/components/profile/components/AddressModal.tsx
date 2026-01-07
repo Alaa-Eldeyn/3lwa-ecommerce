@@ -27,6 +27,11 @@ export interface Address {
   setAsDefault: boolean;
   isDefault?: boolean;
   city?: City;
+  address?: string;
+  cityName?: string;
+  stateName?: string;
+  countryName?: string;
+  createdDate?: string;
 }
 
 interface AddressModalProps {
@@ -55,12 +60,12 @@ export interface AddressFormData {
   setAsDefault: boolean;
 }
 
-const AddressModal = ({ 
-  isOpen, 
-  onClose, 
-  editingAddress, 
+const AddressModal = ({
+  isOpen,
+  onClose,
+  editingAddress,
   onSuccess,
-  isFirstAddress = false 
+  isFirstAddress = false,
 }: AddressModalProps) => {
   const {
     control,
@@ -127,10 +132,10 @@ const AddressModal = ({
   const onSubmitForm = (formData: AddressFormSchema, e?: React.BaseSyntheticEvent) => {
     e?.preventDefault();
     e?.stopPropagation();
-    
+
     let phoneCode = "20";
     let phoneNumber = "";
-    
+
     if (formData.phone) {
       try {
         const parsed = parsePhoneNumber(formData.phone);
@@ -154,28 +159,25 @@ const AddressModal = ({
     saveAddressMutation.mutate(dataToSend);
   };
 
-  if (!isOpen || typeof window === 'undefined') return null;
+  if (!isOpen || typeof window === "undefined") return null;
 
   return createPortal(
-    <div 
+    <div
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-      onClick={onClose}
-    >
-      <div 
+      onClick={onClose}>
+      <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white dark:bg-gray-900 rounded-3xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-      >
+        className="bg-white dark:bg-gray-900 rounded-3xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
           {editingAddress ? "تعديل العنوان" : "إضافة عنوان جديد"}
         </h3>
 
-        <form 
+        <form
           onSubmit={(e) => {
             e.stopPropagation();
             handleSubmit(onSubmitForm)(e);
-          }} 
-          className="space-y-4"
-        >
+          }}
+          className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               اسم المستلم *
@@ -207,8 +209,7 @@ const AddressModal = ({
               render={({ field }) => (
                 <select
                   {...field}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                >
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
                   <option value="">اختر المدينة</option>
                   {cities.map((city) => (
                     <option key={city.id} value={city.id}>
@@ -241,7 +242,9 @@ const AddressModal = ({
               )}
             />
             {formErrors.phone && (
-              <p dir="rtl" className="text-red-500 text-sm mt-1">{formErrors.phone.message}</p>
+              <p dir="rtl" className="text-red-500 text-sm mt-1">
+                {formErrors.phone.message}
+              </p>
             )}
           </div>
 
@@ -261,8 +264,7 @@ const AddressModal = ({
             />
             <label
               htmlFor="setAsDefault"
-              className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer"
-            >
+              className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
               تعيين كعنوان افتراضي
             </label>
           </div>
@@ -271,8 +273,7 @@ const AddressModal = ({
             <button
               type="submit"
               disabled={saveAddressMutation.isPending}
-              className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+              className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
               {saveAddressMutation.isPending
                 ? "جاري الحفظ..."
                 : editingAddress
@@ -282,8 +283,7 @@ const AddressModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
-            >
+              className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium">
               إلغاء
             </button>
           </div>
