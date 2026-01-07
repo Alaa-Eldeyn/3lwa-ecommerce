@@ -247,7 +247,7 @@ const Profile = () => {
           // Update profile data with new phone
           setProfileData({
             phone: apiData.phone || phoneNumber,
-            phoneCode: apiData.phoneCode || phoneCode.replace("+", ""),
+            phoneCode: apiData.phoneCode || phoneCode,
           });
         }
       } catch (error) {
