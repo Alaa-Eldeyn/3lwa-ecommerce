@@ -377,7 +377,16 @@
       "verifying": "جاري التحقق...",
       "verifyUpdate": "التحقق والتحديث",
       "resending": "جاري إعادة الإرسال...",
-      "resendCode": "إعادة إرسال الرمز"
+      "resendCode": "إعادة إرسال الرمز",
+      "changePhone": "تغيير رقم الهاتف",
+      "changePhoneDescription": "أدخل رقم هاتفك الجديد. سنرسل رمز التحقق للتأكيد.",
+      "verifyPhone": "التحقق من رقم الهاتف",
+      "verifyPhoneDescription": "لقد أرسلنا رمز التحقق إلى",
+      "phoneCodeSent": "تم إرسال رمز التحقق إلى رقم هاتفك الجديد",
+      "phoneUpdated": "تم تحديث رقم الهاتف بنجاح!",
+      "failedToSendPhoneCode": "فشل إرسال رمز التحقق",
+      "failedToVerifyPhone": "فشل التحقق من رقم الهاتف",
+      "invalidPhone": "رقم الهاتف غير صحيح"
     },
     "addresses": {
       "title": "العناوين المحفوظة",

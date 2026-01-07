@@ -377,7 +377,16 @@
       "verifying": "Verifying...",
       "verifyUpdate": "Verify & Update",
       "resending": "Resending...",
-      "resendCode": "Resend Code"
+      "resendCode": "Resend Code",
+      "changePhone": "Change Phone Number",
+      "changePhoneDescription": "Enter your new phone number. We'll send a verification code to confirm.",
+      "verifyPhone": "Verify Phone Number",
+      "verifyPhoneDescription": "We've sent a verification code to",
+      "phoneCodeSent": "Verification code sent to your new phone",
+      "phoneUpdated": "Phone updated successfully!",
+      "failedToSendPhoneCode": "Failed to send verification code",
+      "failedToVerifyPhone": "Failed to verify phone",
+      "invalidPhone": "Invalid phone number"
     },
     "addresses": {
       "title": "Saved Addresses",

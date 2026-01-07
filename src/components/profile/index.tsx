@@ -104,10 +104,12 @@ const Profile = () => {
 
   // User data for forms - combines store data with API profile data
   // Combine phoneCode and phone for PhoneInput component
+  // TODO: Add phone code to the profile data
   const fullPhone =
     profileData.phoneCode && profileData.phone
       ? `${profileData.phoneCode}${profileData.phone}`
-      : profileData.phone || "";
+      // : profileData.phone || "";
+      : "+20" + profileData.phone || "";
 
   // Update the user data with the phone code
   const userData = {
@@ -226,6 +228,35 @@ const Profile = () => {
     loadUserProfile();
   };
 
+  // Update the phone of the user
+  const onPhoneUpdate = async (phoneCode: string, phoneNumber: string) => {
+    // Reload profile data to get latest from server
+    const loadUserProfile = async () => {
+      try {
+        const response = await customAxios.get("/UserProfile/profile");
+        if (response?.data?.success && response.data.data) {
+          const apiData = response.data.data;
+          updateUser({
+            id: apiData.userId || user?.id || null,
+            firstName: apiData.firstName || "",
+            lastName: apiData.lastName || "",
+            email: apiData.email || "",
+            profileImagePath: apiData.profileImagePath || "",
+          });
+          
+          // Update profile data with new phone
+          setProfileData({
+            phone: apiData.phone || phoneNumber,
+            phoneCode: apiData.phoneCode || phoneCode.replace("+", ""),
+          });
+        }
+      } catch (error) {
+        console.error("Error reloading profile:", error);
+      }
+    };
+    loadUserProfile();
+  };
+
   // Update the password of the user
   const onSubmitPassword = async (data: PasswordUpdateFormData) => {
     setIsLoading(true);
@@ -292,6 +323,7 @@ const Profile = () => {
                 t={t}
                 tAuth={tAuth}
                 onEmailUpdate={onEmailUpdate}
+                onPhoneUpdate={onPhoneUpdate}
               />
             )}
 
