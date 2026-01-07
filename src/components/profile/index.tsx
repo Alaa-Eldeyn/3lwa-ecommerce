@@ -108,8 +108,9 @@ const Profile = () => {
   const fullPhone =
     profileData.phoneCode && profileData.phone
       ? `${profileData.phoneCode}${profileData.phone}`
-      // : profileData.phone || "";
-      : "+20" + profileData.phone || "";
+      : profileData.phone
+      ? "+20" + profileData.phone
+      : "";
 
   // Update the user data with the phone code
   const userData = {
@@ -243,7 +244,7 @@ const Profile = () => {
             email: apiData.email || "",
             profileImagePath: apiData.profileImagePath || "",
           });
-          
+
           // Update profile data with new phone
           setProfileData({
             phone: apiData.phone || phoneNumber,
