@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { createPortal } from "react-dom";
+import { useLocale } from "next-intl";
 import {
   MapPin,
   Star,
@@ -36,12 +39,16 @@ const AddressList = ({
   showActions = true,
   t,
 }: AddressListProps) => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [addressToDelete, setAddressToDelete] = useState<string | null>(null);
+  const locale = useLocale();
+
   // Format date helper
   const formatDate = (dateString?: string) => {
     if (!dateString) return "";
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString("ar-EG", {
+      return date.toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -182,15 +189,18 @@ const AddressList = ({
                   </div>
                 )}
 
-                 {/* City not specified */}
-                 {!address.cityName && !address.stateName && !address.countryName && (
-                   <div className="flex items-center gap-1.5">
-                     <Building2 className="text-secondary" size={10} />
-                     <span className="text-gray-700 dark:text-gray-300 font-medium">
-                       {address.city?.titleAr || address.city?.titleEn || t?.("addresses.cityNotSpecified") || "City not specified"}
-                     </span>
-                   </div>
-                 )}
+                {/* City not specified */}
+                {!address.cityName && !address.stateName && !address.countryName && (
+                  <div className="flex items-center gap-1.5">
+                    <Building2 className="text-secondary" size={10} />
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">
+                      {address.city?.titleAr ||
+                        address.city?.titleEn ||
+                        t?.("addresses.cityNotSpecified") ||
+                        "City not specified"}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -226,7 +236,8 @@ const AddressList = ({
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
-                        onDelete(address.id);
+                        setAddressToDelete(address.id);
+                        setShowDeleteModal(true);
                       }}
                       className="bg-gray-200 dark:bg-gray-700 hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 px-3 py-1.5 rounded-lg transition-all duration-300 flex items-center gap-1.5 font-medium text-xs">
                       <Trash2 size={10} />
@@ -239,6 +250,82 @@ const AddressList = ({
           </div>
         );
       })}
+
+      {/* Delete Address Confirmation Modal */}
+      {showDeleteModal &&
+        typeof window !== "undefined" &&
+        createPortal(
+          <DeleteAddressModal
+            isOpen={showDeleteModal}
+            onClose={() => {
+              setShowDeleteModal(false);
+              setAddressToDelete(null);
+            }}
+            onConfirm={() => {
+              if (addressToDelete && onDelete) {
+                onDelete(addressToDelete);
+              }
+              setShowDeleteModal(false);
+              setAddressToDelete(null);
+            }}
+            t={t}
+          />,
+          document.body
+        )}
+    </div>
+  );
+};
+
+// Delete Address Confirmation Modal Component
+interface DeleteAddressModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  t?: (key: string) => string;
+}
+
+const DeleteAddressModal = ({ isOpen, onClose, onConfirm, t }: DeleteAddressModalProps) => {
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+      dir={isRTL ? "rtl" : "ltr"}>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full shadow-2xl">
+        <div className="mb-6">
+          <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4 mx-auto">
+            <Trash2 className="text-red-600 dark:text-red-400" size={24} />
+          </div>
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 text-center">
+            {t?.("addresses.deleteConfirm") || "Delete Address?"}
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
+            {t?.("addresses.deleteWarning") ||
+              "Are you sure you want to delete this address? This action cannot be undone."}
+          </p>
+        </div>
+
+        <div className={`flex gap-4 ${isRTL ? "flex-row-reverse" : ""}`}>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="flex-1 py-3 bg-error hover:bg-error-hover text-white rounded-xl transition-colors font-medium">
+            {t?.("addresses.confirmDelete") || "Yes, Delete"}
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium">
+            {t?.("addresses.cancel") || "Cancel"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

@@ -97,9 +97,7 @@ export const useAddresses = () => {
   };
 
   const handleDeleteAddress = (addressId: string) => {
-    if (confirm("هل أنت متأكد من حذف هذا العنوان؟")) {
-      deleteAddressMutation.mutate(addressId);
-    }
+    deleteAddressMutation.mutate(addressId);
   };
 
   const handleSetDefault = (addressId: string) => {
