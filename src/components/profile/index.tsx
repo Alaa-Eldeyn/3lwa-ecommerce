@@ -39,6 +39,34 @@ const Profile = () => {
     { id: "address" as TabType, label: t("tabs.addresses"), icon: MapPin },
   ];
 
+  // Reload profile data to get latest from server
+  const loadUserProfile = async (phoneNumber?: string, phoneCode?: string) => {
+    setIsFetchingProfile(true);
+    try {
+      const response = await customAxios.get("/UserProfile/profile");
+      if (response?.data?.success && response.data.data) {
+        const apiData = response.data.data;
+        updateUser({
+          id: apiData.userId || user?.id || null,
+          firstName: apiData.firstName || "",
+          lastName: apiData.lastName || "",
+          email: apiData.email || "",
+          profileImagePath: apiData.profileImagePath || "",
+        });
+
+        // Store additional profile fields that aren't in User type
+        setProfileData({
+          phone: apiData.phone || phoneNumber || "",
+          phoneCode: apiData.phoneCode || phoneCode || "",
+        });
+      }
+    } catch (error) {
+      console.error("Error reloading profile:", error);
+    } finally {
+      setIsFetchingProfile(false);
+    }
+  };
+
   // Initialize user store on mount
   useEffect(() => {
     initUser();
@@ -62,37 +90,6 @@ const Profile = () => {
 
   // Fetch user profile from API on mount
   useEffect(() => {
-    const loadUserProfile = async () => {
-      setIsFetchingProfile(true);
-      try {
-        // Fetch profile data from API - single call
-        const response = await customAxios.get("/UserProfile/profile");
-        if (response?.data?.success && response.data.data) {
-          const apiData = response.data.data;
-          const currentUser = user || getUserFromCookie();
-
-          // Update user store with user data (preserving tokens)
-          updateUser({
-            id: apiData.userId || currentUser?.id || null,
-            firstName: apiData.firstName || "",
-            lastName: apiData.lastName || "",
-            email: apiData.email || "",
-            profileImagePath: apiData.profileImagePath || "",
-          });
-
-          // Store additional profile fields that aren't in User type
-          setProfileData({
-            phone: apiData.phone || "",
-            phoneCode: apiData.phoneCode || "",
-          });
-        }
-      } catch (error) {
-        console.error("Error loading user profile:", error);
-      } finally {
-        setIsFetchingProfile(false);
-      }
-    };
-
     const currentUser = user || getUserFromCookie();
     if (currentUser?.token) {
       loadUserProfile();
@@ -208,54 +205,12 @@ const Profile = () => {
   const onEmailUpdate = async (newEmail: string) => {
     // Update user store with new email
     updateUser({ email: newEmail });
-    // Reload profile data to get latest from server
-    const loadUserProfile = async () => {
-      try {
-        const response = await customAxios.get("/UserProfile/profile");
-        if (response?.data?.success && response.data.data) {
-          const apiData = response.data.data;
-          updateUser({
-            id: apiData.userId || user?.id || null,
-            firstName: apiData.firstName || "",
-            lastName: apiData.lastName || "",
-            email: apiData.email || "",
-            profileImagePath: apiData.profileImagePath || "",
-          });
-        }
-      } catch (error) {
-        console.error("Error reloading profile:", error);
-      }
-    };
     loadUserProfile();
   };
 
   // Update the phone of the user
   const onPhoneUpdate = async (phoneCode: string, phoneNumber: string) => {
-    // Reload profile data to get latest from server
-    const loadUserProfile = async () => {
-      try {
-        const response = await customAxios.get("/UserProfile/profile");
-        if (response?.data?.success && response.data.data) {
-          const apiData = response.data.data;
-          updateUser({
-            id: apiData.userId || user?.id || null,
-            firstName: apiData.firstName || "",
-            lastName: apiData.lastName || "",
-            email: apiData.email || "",
-            profileImagePath: apiData.profileImagePath || "",
-          });
-
-          // Update profile data with new phone
-          setProfileData({
-            phone: apiData.phone || phoneNumber,
-            phoneCode: apiData.phoneCode || phoneCode,
-          });
-        }
-      } catch (error) {
-        console.error("Error reloading profile:", error);
-      }
-    };
-    loadUserProfile();
+    loadUserProfile(phoneNumber, phoneCode);
   };
 
   // Update the password of the user

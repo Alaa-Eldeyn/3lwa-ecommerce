@@ -570,7 +570,7 @@ const VerifyEmailModal = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (code.length >= 4) {
+    if (code.length === 6) {
       onVerify(code);
     }
   };
@@ -614,7 +614,7 @@ const VerifyEmailModal = ({
           <div className={`flex gap-4 mt-6 ${isRTL ? "flex-row-reverse" : ""}`}>
             <button
               type="submit"
-              disabled={isLoading || code.length < 4}
+              disabled={isLoading || code.length !== 6}
               className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
               {isLoading ? t("personalInfo.verifying") : t("personalInfo.verifyUpdate")}
             </button>
@@ -820,7 +820,7 @@ const VerifyPhoneModal = ({
           <div className={`flex gap-4 mt-6 ${isRTL ? "flex-row-reverse" : ""}`}>
             <button
               type="submit"
-              disabled={isLoading || code.length < 4}
+              disabled={isLoading || code.length !== 6}
               className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
               {isLoading ? t("personalInfo.verifying") : t("personalInfo.verifyUpdate")}
             </button>
