@@ -435,7 +435,17 @@
       "enable": "Enable",
       "disable": "Disable",
       "enabled": "Enabled",
-      "disabled": "Disabled"
+      "disabled": "Disabled",
+      "deleteAccount": "Delete Account",
+      "deleteAccountDescription": "Once you delete your account, there is no going back. Please be certain.",
+      "deleteAccountButton": "Delete Account",
+      "deleteAccountConfirm": "Delete Account?",
+      "deleteAccountWarning": "This action cannot be undone. This will permanently delete your account and remove all your data from our servers.",
+      "confirmDelete": "Yes, Delete Account",
+      "deleting": "Deleting...",
+      "accountDeleted": "Account deleted successfully",
+      "failedToDeleteAccount": "Failed to delete account",
+      "cancel": "Cancel"
     }
   },
   "productDetails": {

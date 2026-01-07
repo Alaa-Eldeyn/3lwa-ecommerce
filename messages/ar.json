@@ -435,7 +435,17 @@
       "enable": "تفعيل",
       "disable": "تعطيل",
       "enabled": "مفعّل",
-      "disabled": "معطّل"
+      "disabled": "معطّل",
+      "deleteAccount": "حذف الحساب",
+      "deleteAccountDescription": "بمجرد حذف حسابك، لا يمكن التراجع عن ذلك. يرجى التأكد.",
+      "deleteAccountButton": "حذف الحساب",
+      "deleteAccountConfirm": "حذف الحساب؟",
+      "deleteAccountWarning": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف حسابك بشكل دائم وإزالة جميع بياناتك من خوادمنا.",
+      "confirmDelete": "نعم، احذف الحساب",
+      "deleting": "جاري الحذف...",
+      "accountDeleted": "تم حذف الحساب بنجاح",
+      "failedToDeleteAccount": "فشل حذف الحساب",
+      "cancel": "إلغاء"
     }
   },
   "productDetails": {
