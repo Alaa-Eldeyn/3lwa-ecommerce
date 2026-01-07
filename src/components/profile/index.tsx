@@ -25,12 +25,26 @@ const Profile = () => {
   const tAuth = useTranslations("auth");
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab") as TabType | null;
+  const { user, initUser, updateUser } = useUserStore();
 
   // التحقق من صحة tab parameter وإلا استخدام personalInfo كافتراضي
   const initialTab = tabParam && validTabs.includes(tabParam) ? tabParam : "personalInfo";
-
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
 
+  // Tabs for the profile page
+  const tabs = [
+    { id: "personalInfo" as TabType, label: t("tabs.personalInfo"), icon: User },
+    { id: "orders" as TabType, label: t("tabs.orders"), icon: Package },
+    { id: "security" as TabType, label: t("tabs.security"), icon: Shield },
+    { id: "address" as TabType, label: t("tabs.addresses"), icon: MapPin },
+  ];
+
+  // Initialize user store on mount
+  useEffect(() => {
+    initUser();
+  }, [initUser]);
+
+  // Update the active tab when the tab parameter changes
   useEffect(() => {
     if (tabParam && validTabs.includes(tabParam)) {
       setActiveTab(tabParam);
@@ -45,11 +59,6 @@ const Profile = () => {
     phone?: string;
     phoneCode?: string;
   }>({});
-  const { user, initUser, updateUser } = useUserStore();
-
-  useEffect(() => {
-    initUser();
-  }, [initUser]);
 
   // Fetch user profile from API on mount
   useEffect(() => {
@@ -100,6 +109,7 @@ const Profile = () => {
       ? `${profileData.phoneCode}${profileData.phone}`
       : profileData.phone || "";
 
+  // Update the user data with the phone code
   const userData = {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
@@ -107,6 +117,7 @@ const Profile = () => {
     phone: fullPhone,
   };
 
+  // Update the profile of the user (name, image)
   const onSubmitProfile = async (data: ProfileFormData) => {
     setIsLoading(true);
     try {
@@ -190,6 +201,32 @@ const Profile = () => {
     }
   };
 
+  // Update the email of the user
+  const onEmailUpdate = async (newEmail: string) => {
+    // Update user store with new email
+    updateUser({ email: newEmail });
+    // Reload profile data to get latest from server
+    const loadUserProfile = async () => {
+      try {
+        const response = await customAxios.get("/UserProfile/profile");
+        if (response?.data?.success && response.data.data) {
+          const apiData = response.data.data;
+          updateUser({
+            id: apiData.userId || user?.id || null,
+            firstName: apiData.firstName || "",
+            lastName: apiData.lastName || "",
+            email: apiData.email || "",
+            profileImagePath: apiData.profileImagePath || "",
+          });
+        }
+      } catch (error) {
+        console.error("Error reloading profile:", error);
+      }
+    };
+    loadUserProfile();
+  };
+
+  // Update the password of the user
   const onSubmitPassword = async (data: PasswordUpdateFormData) => {
     setIsLoading(true);
     try {
@@ -218,13 +255,6 @@ const Profile = () => {
       setIsLoading(false);
     }
   };
-
-  const tabs = [
-    { id: "personalInfo" as TabType, label: t("tabs.personalInfo"), icon: User },
-    { id: "orders" as TabType, label: t("tabs.orders"), icon: Package },
-    { id: "security" as TabType, label: t("tabs.security"), icon: Shield },
-    { id: "address" as TabType, label: t("tabs.addresses"), icon: MapPin },
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-8">
@@ -261,6 +291,7 @@ const Profile = () => {
                 onSubmit={onSubmitProfile}
                 t={t}
                 tAuth={tAuth}
+                onEmailUpdate={onEmailUpdate}
               />
             )}
 

@@ -364,7 +364,20 @@
       "changePhoto": "Change Profile Photo",
       "uploadPhoto": "Upload Photo",
       "removePhoto": "Remove Photo",
-      "maxSize": "Max size: 5MB"
+      "maxSize": "Max size: 5MB",
+      "change": "Change",
+      "changeEmail": "Change Email",
+      "changeEmailDescription": "Enter your new email address. We'll send a verification code to confirm.",
+      "sending": "Sending...",
+      "sendCode": "Send Code",
+      "cancel": "Cancel",
+      "verifyEmail": "Verify Email",
+      "verifyEmailDescription": "We've sent a verification code to",
+      "verificationCode": "Verification Code",
+      "verifying": "Verifying...",
+      "verifyUpdate": "Verify & Update",
+      "resending": "Resending...",
+      "resendCode": "Resend Code"
     },
     "addresses": {
       "title": "Saved Addresses",

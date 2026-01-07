@@ -364,7 +364,20 @@
       "changePhoto": "تغيير صورة الملف الشخصي",
       "uploadPhoto": "رفع صورة",
       "removePhoto": "حذف الصورة",
-      "maxSize": "الحد الأقصى: 5 ميجابايت"
+      "maxSize": "الحد الأقصى: 5 ميجابايت",
+      "change": "تغيير",
+      "changeEmail": "تغيير البريد الإلكتروني",
+      "changeEmailDescription": "أدخل عنوان بريدك الإلكتروني الجديد. سنرسل رمز التحقق للتأكيد.",
+      "sending": "جاري الإرسال...",
+      "sendCode": "إرسال الرمز",
+      "cancel": "إلغاء",
+      "verifyEmail": "التحقق من البريد الإلكتروني",
+      "verifyEmailDescription": "لقد أرسلنا رمز التحقق إلى",
+      "verificationCode": "رمز التحقق",
+      "verifying": "جاري التحقق...",
+      "verifyUpdate": "التحقق والتحديث",
+      "resending": "جاري إعادة الإرسال...",
+      "resendCode": "إعادة إرسال الرمز"
     },
     "addresses": {
       "title": "العناوين المحفوظة",
