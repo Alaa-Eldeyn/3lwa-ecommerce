@@ -49,7 +49,7 @@ const FlashDeals = ({ cardVariant }: FlashDealsProps) => {
   }, []);
 
   return (
-    <section className="pb-5 bg-white dark:bg-gray-900">
+    <section className="py-5 bg-white dark:bg-gray-900">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-3">
           <div>

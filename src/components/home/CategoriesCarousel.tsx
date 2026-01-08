@@ -83,7 +83,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
   // Circular variant
   if (variant === "rounded") {
     return (
-      <section className="py-3 bg-white dark:bg-gray-900">
+      <section className="py-3 bg-white dark:bg-gray-900 border-b-3 border-gray-300 shadow-[0_2px_8px_-2px] shadow-primary/30 dark:border-gray-600 dark:shadow-gray-600/30">
         <div className="container mx-auto px-4">
           <div className="relative px-12">
             <Swiper
@@ -178,7 +178,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
   // Card variant
   if (variant === "card") {
     return (
-      <section className="py-5 bg-white dark:bg-gray-900">
+      <section className="py-5 bg-white dark:bg-primary border-b-3 border-gray-300 shadow-[0_2px_8px_-2px] shadow-primary/30 dark:border-gray-600 dark:shadow-gray-600/30">
         <div className="container mx-auto px-4">
           <div className="relative lg:px-10">
             <Swiper
@@ -273,7 +273,7 @@ const CategoriesCarousel = ({ variant = "gradient" }: CategoriesCarouselProps) =
   // Gradient variant
   if (variant === "gradient") {
     return (
-      <section className="py-3 bg-gray-50 dark:bg-gray-900">
+      <section className="py-3 bg-gray-50 dark:bg-primary border-b-3 border-gray-300 shadow-[0_2px_8px_-2px] shadow-primary/30 dark:border-gray-600 dark:shadow-gray-600/30">
         <div className="container mx-auto px-4">
           <div className="relative px-12">
             <Swiper
