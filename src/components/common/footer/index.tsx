@@ -40,7 +40,7 @@ const Footer = () => {
   return (
     <footer className="bg-white dark:bg-gray-900">
       {/* Newsletter Section */}
-      <NewsLetter/>
+      {/* <NewsLetter/> */}
 
       {/* Main Footer Content */}
 

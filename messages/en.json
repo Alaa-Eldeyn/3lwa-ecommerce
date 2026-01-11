@@ -306,8 +306,9 @@
     "description": "We have clothes that suits your style and which you're proud to wear. From women to men.",
     "newsletter": {
       "title": "Stay up to date about our latest offers",
-      "placeholder": "Enter your email address",
-      "button": "Subscribe"
+      "description": "Subscribe to our newsletter and get exclusive discounts and instant updates on new products.",
+      "placeholder": "Your email",
+      "button": "Subscribe Now"
     },
     "company": {
       "title": "Company",
@@ -626,5 +627,12 @@
     "itemsPerPage": "Items per page",
     "goToPage": "Go to page {page}",
     "pageInfo": "Page {current} of {total}"
+  },
+  "brand": {
+    "products": {
+      "title": "Products",
+      "description": "Discover our products from {brandName}",
+      "viewAll": "View All Products"
+    }
   }
 }

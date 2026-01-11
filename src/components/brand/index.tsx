@@ -1,29 +1,61 @@
 "use client";
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Heart, Globe, Calendar, ArrowLeft, Loader2, ShoppingCart, Star } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { customAxios } from '@/src/utils/customAxios';
+import { useQuery } from "@tanstack/react-query";
+import { Heart, Globe, Calendar, Loader2, ExternalLink, ArrowLeft, ArrowRight } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { customAxios } from "@/src/utils/customAxios";
+import { useLocale, useTranslations } from "next-intl";
+import ProductCard from "../common/ProductCard";
+import { Product } from "@/src/types/types";
+import axios from "axios";
 
 const BrandPage = () => {
   const { id } = useParams();
-  
-  const { data: response, isLoading, isError, error } = useQuery({
-    queryKey: ['brand', id],
+  const router = useRouter();
+  const locale = useLocale();
+  const isArabic = locale === "ar";
+  const t = useTranslations("brand.products");
+
+  const {
+    data: response,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["brand", id],
     queryFn: async () => {
       const { data } = await customAxios.get(`/Brand/${id}`);
       return data;
     },
-    enabled: !!id
+    enabled: !!id,
   });
 
   const brandData = response?.data;
 
+  // Fetch brand products
+  const { data: productsResponse, isLoading: isLoadingProducts } = useQuery({
+    queryKey: ["brand-products", id],
+    queryFn: async () => {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/ItemAdvancedSearch/search`,
+        {
+          brandId: id,
+          pageNumber: 0,
+          pageSize: 4, // Show 4 featured products
+        }
+      );
+      return res?.data?.data;
+    },
+    enabled: !!id && !!brandData,
+  });
+
+  const products: Product[] = productsResponse?.items ?? [];
+  const totalProducts = productsResponse?.totalRecords ?? 0;
+
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ar-EG', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString(isArabic ? "ar-EG" : "en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -31,8 +63,10 @@ const BrandPage = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-          <p className="text-slate-600 text-lg font-medium">جاري تحميل البيانات...</p>
+          <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
+          <p className="text-slate-600 text-lg font-medium">
+            {isArabic ? "جاري تحميل البيانات..." : "Loading data..."}
+          </p>
         </div>
       </div>
     );
@@ -45,15 +79,17 @@ const BrandPage = () => {
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">❌</span>
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">حدث خطأ</h2>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">
+            {isArabic ? "حدث خطأ" : "Error occurred"}
+          </h2>
           <p className="text-slate-600 mb-4">
-            {(error as any)?.response?.data?.message || 'فشل تحميل بيانات العلامة التجارية'}
+            {(error as any)?.response?.data?.message ||
+              (isArabic ? "فشل تحميل بيانات العلامة التجارية" : "Failed to load brand data")}
           </p>
-          <button 
-            onClick={() => window.location.href = '/brands'}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors"
-          >
-            العودة للعلامات التجارية
+          <button
+            onClick={() => router.push("/brands")}
+            className="px-6 py-3 bg-primary hover:bg-headerDark text-white font-semibold rounded-xl transition-colors">
+            {isArabic ? "العودة للعلامات التجارية" : "Back to Brands"}
           </button>
         </div>
       </div>
@@ -64,163 +100,164 @@ const BrandPage = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-slate-600 text-lg">لا توجد بيانات للعرض</p>
+          <p className="text-slate-600 text-lg">
+            {isArabic ? "لا توجد بيانات للعرض" : "No data available"}
+          </p>
         </div>
       </div>
     );
   }
 
+  const displayName = isArabic ? brandData.nameAr : brandData.nameEn;
+  const displayTitle = isArabic ? brandData.titleAr : brandData.titleEn;
+  const displayDescription = isArabic ? brandData.descriptionAr : brandData.descriptionEn;
+
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
-      {/* Top Header */}
-      <div className="bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-2">
-          <button 
-            onClick={() => window.history.back()}
-            className="flex items-center gap-2 text-white hover:text-orange-400 transition-colors text-sm"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>العودة للنتائج</span>
-          </button>
+    <div
+      className="min-h-screen bg-background text-foreground font-cairo space-y-8 pb-8"
+      dir={isArabic ? "rtl" : "ltr"}>
+      {/* Brand Hero Section */}
+      <section
+        id="brand-hero-section"
+        className="bg-gradient-to-br from-primary to-headerDark relative overflow-hidden h-[340px]">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
         </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid md:grid-cols-12 gap-8">
-          {/* Right Side - Brand Image */}
-          <div className="md:col-span-4">
-            <div className="sticky top-6">
-              <div className="bg-white border border-gray-300 rounded-lg p-8 mb-4">
-                <div className="aspect-square flex items-center justify-center bg-gray-50 rounded-lg overflow-hidden">
+        <div className="max-w-[1440px] mx-auto px-8 h-full relative z-10">
+          <div className="flex items-center justify-between h-full">
+            <div className="flex-1">
+              <div className="flex items-center gap-6 mb-6">
+                <div className="bg-white rounded-2xl p-6 shadow-2xl">
                   {brandData.logoPath ? (
-                    <img 
-                      src={`${process.env.NEXT_PUBLIC_DOMAIN}${brandData.logoPath}`} 
-                      alt={brandData.nameAr}
-                      className="w-full h-full object-contain"
+                    <img
+                      className="w-32 h-32 object-contain"
+                      src={`${process.env.NEXT_PUBLIC_DOMAIN}${brandData.logoPath}`}
+                      alt={displayName}
                     />
-                  ) : <div className="w-full h-full flex items-center justify-center text-8xl font-bold text-gray-300">
-                  {brandData.nameAr?.charAt(0) || brandData.nameEn?.charAt(0)}
-                </div>}
-                  
+                  ) : (
+                    <div className="w-32 h-32 flex items-center justify-center text-6xl font-bold text-gray-300">
+                      {displayName?.charAt(0) || "B"}
+                    </div>
+                  )}
                 </div>
-              </div>
-
-              {/* Quick Actions */}
-              <div className="space-y-3">
-                <button className="w-full bg-orange-400 hover:bg-orange-500 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
-                  <ShoppingCart className="w-5 h-5" />
-                  تصفح المنتجات
-                </button>
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <h1 className="text-4xl font-bold text-white">{displayName}</h1>
+                    <button className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-lg transition-all flex items-center gap-2">
+                      <Heart className={`w-5 h-5 ${brandData.isFavorite ? "fill-white" : ""}`} />
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-4 text-white/90">
+                    <span className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4" />
+                      <span>
+                        {isArabic ? "تاريخ التأسيس:" : "Established:"}{" "}
+                        {formatDate(brandData.createdDateUtc)}
+                      </span>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Left Side - Brand Details */}
-          <div className="md:col-span-8">
-            {/* Brand Title */}
-            <div className="mb-4">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{brandData.nameAr}</h1>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <span className="text-orange-500 font-medium">العلامة التجارية:</span>
-                <span>{brandData.titleAr}</span>
-              </div>
-            </div>
+      {/* Brand Info Section */}
+      <section
+        id="brand-info-section"
+        className="bg-white max-w-[1440px] mx-auto px-8 grid grid-cols-3 gap-8">
+        {/* About & Statistics */}
+        <div className="col-span-2">
+          <div className="bg-white rounded-2xl border-2 border-gray-100 p-8 shadow-sm">
+            <h2 className="text-3xl font-bold text-foreground mb-6">
+              {isArabic ? `نبذة عن ${displayName}` : `About ${displayName}`}
+            </h2>
+            <p className="text-gray-700 text-lg leading-relaxed mb-6">
+              {displayDescription || (isArabic ? "لا يوجد وصف متاح" : "No description available")}
+            </p>
+          </div>
+        </div>
 
-            {/* Rating Section */}
-            <div className="flex items-center gap-4 pb-4 mb-4 border-b border-gray-300">
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} className="w-5 h-5 fill-orange-400 text-orange-400" />
-                ))}
-              </div>
-              <span className="text-blue-600 hover:text-orange-600 cursor-pointer text-sm">
-                4.8 من 5 نجوم
-              </span>
-              <span className="text-gray-600 text-sm">|</span>
-              <span className="text-gray-600 text-sm">1,284 تقييم</span>
-            </div>
+        {/* Brand Information Sidebar */}
+        <div className="col-span-1">
+          <div className="bg-white rounded-2xl border-2 border-gray-100 p-8 shadow-sm sticky top-24">
+            <h3 className="text-2xl font-bold text-foreground mb-6">
+              {isArabic ? "معلومات العلامة التجارية" : "Brand Information"}
+            </h3>
 
-            {/* Description */}
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-3">نبذة عن العلامة التجارية</h2>
-              <p className="text-gray-700 leading-relaxed text-base">
-                {brandData.descriptionAr}
-              </p>
-            </div>
-
-            {/* Key Information */}
-            <div className="bg-gray-50 border border-gray-300 rounded-lg p-6 mb-6">
-              <h3 className="font-bold text-gray-900 mb-4">التفاصيل</h3>
-              <div className="space-y-3">
-                <div className="flex">
-                  <span className="text-gray-600 w-40 flex-shrink-0">الاسم بالإنجليزية</span>
-                  <span className="text-gray-900 font-medium">{brandData.nameEn}</span>
-                </div>
-                <div className="flex">
-                  <span className="text-gray-600 w-40 flex-shrink-0">العنوان</span>
-                  <span className="text-gray-900 font-medium">{brandData.titleEn}</span>
-                </div>
-                <div className="flex">
-                  <span className="text-gray-600 w-40 flex-shrink-0">الوصف</span>
-                  <span className="text-gray-900 font-medium">{brandData.descriptionEn}</span>
-                </div>
-                {brandData.websiteUrl && (
-                  <div className="flex">
-                    <span className="text-gray-600 w-40 flex-shrink-0 flex items-center gap-2">
-                      <Globe className="w-4 h-4" />
-                      الموقع الإلكتروني
-                    </span>
-                    <a 
+            <div className="space-y-6">
+              {brandData.websiteUrl && (
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Globe className="text-primary text-xl" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-600 mb-1">
+                      {isArabic ? "الموقع الرسمي" : "Official Website"}
+                    </div>
+                    <a
                       href={brandData.websiteUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-orange-600 hover:underline font-medium"
-                    >
-                      {brandData.websiteUrl}
+                      className="text-primary hover:text-headerDark font-semibold flex items-center gap-2 transition-colors">
+                      {brandData.websiteUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                      <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
-                )}
-                <div className="flex">
-                  <span className="text-gray-600 w-40 flex-shrink-0 flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    تاريخ الإضافة
-                  </span>
-                  <span className="text-gray-900 font-medium">{formatDate(brandData.createdDateUtc)}</span>
                 </div>
-                <div className="flex">
-                  <span className="text-gray-600 w-40 flex-shrink-0">ترتيب العرض</span>
-                  <span className="inline-block bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-bold">
-                    #{brandData.displayOrder}
-                  </span>
+              )}
+
+              <div className="flex items-start gap-4">
+                <div className="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Calendar className="text-primary text-xl" />
+                </div>
+                <div>
+                  <div className="text-sm text-gray-600 mb-1">
+                    {isArabic ? "تاريخ التأسيس" : "Established Date"}
+                  </div>
+                  <div className="font-semibold text-foreground">
+                    {formatDate(brandData.createdDateUtc)}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Additional Info Section */}
-            <div className="border border-gray-300 rounded-lg p-6">
-              <h3 className="font-bold text-gray-900 mb-3">معلومات إضافية</h3>
-              <div className="space-y-2 text-sm text-gray-700">
-                <p>• منتجات عالية الجودة ومضمونة</p>
-                <p>• شحن سريع ومجاني للطلبات فوق 200 جنيه</p>
-                <p>• إمكانية الإرجاع خلال 30 يوم</p>
-                <p>• ضمان رسمي على جميع المنتجات</p>
-              </div>
-            </div>
-
-            {/* Action Bar */}
-            <div className="mt-6 pt-6 border-t border-gray-300">
-              <div className="flex gap-3">
-                <button className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg transition-colors">
-                  تعديل البيانات
-                </button>
-                <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
-                  إدارة المنتجات
-                </button>
-              </div>
+              {brandData.isFavorite && (
+                <div className="pt-4">
+                  <button className="w-full bg-white hover:bg-gray-50 text-foreground font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-3 border-2 border-gray-200">
+                    <Heart className="w-4 h-4" />
+                    <span>{isArabic ? "إزالة من المفضلة" : "Remove from Favorites"}</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Products Section */}
+      {products.length > 0 && (
+        <section id="products-section" className="bg-white max-w-[1440px] mx-auto px-8">
+          <div className="flex items-center justify-between mb-12">
+            <div>
+              <h2 className="text-4xl font-bold text-foreground mb-3">{t("title")}</h2>
+            </div>
+            <button
+              onClick={() => router.push(`/products?b=${id}`)}
+              className="bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-8 rounded-xl transition-colors flex items-center gap-2">
+              <span>{t("viewAll")}</span>
+              {isArabic ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-4 gap-6">
+            {products.map((product) => (
+              <ProductCard key={product.itemCombinationId} variant="minimal" {...product} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 };
