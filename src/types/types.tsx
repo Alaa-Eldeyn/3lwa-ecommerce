@@ -49,6 +49,8 @@ export interface User {
   token: string;
   refreshToken: string;
   role: string;
+  phoneNumber?: string;
+  phoneCode?: string;
 }
 
 export interface AuthResponse {

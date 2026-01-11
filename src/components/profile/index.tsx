@@ -52,11 +52,7 @@ const Profile = () => {
           lastName: apiData.lastName || "",
           email: apiData.email || "",
           profileImagePath: apiData.profileImagePath || "",
-        });
-
-        // Store additional profile fields that aren't in User type
-        setProfileData({
-          phone: apiData.phone || phoneNumber || "",
+          phoneNumber: apiData.phoneNumber || phoneNumber || "",
           phoneCode: apiData.phoneCode || phoneCode || "",
         });
       }
@@ -83,10 +79,6 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchingProfile, setIsFetchingProfile] = useState(true);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
-  const [profileData, setProfileData] = useState<{
-    phone?: string;
-    phoneCode?: string;
-  }>({});
 
   // Fetch user profile from API on mount
   useEffect(() => {
@@ -100,21 +92,12 @@ const Profile = () => {
   }, []); // Only run once on mount
 
   // User data for forms - combines store data with API profile data
-  // Combine phoneCode and phone for PhoneInput component
-  // TODO: Add phone code to the profile data
-  const fullPhone =
-    profileData.phoneCode && profileData.phone
-      ? `${profileData.phoneCode}${profileData.phone}`
-      : profileData.phone
-      ? "+20" + profileData.phone
-      : "";
-
-  // Update the user data with the phone code
   const userData = {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
     email: user?.email || "",
-    phone: fullPhone,
+    phoneNumber: user?.phoneNumber || "",
+    phoneCode: user?.phoneCode || "",
   };
 
   // Update the profile of the user (name, image)

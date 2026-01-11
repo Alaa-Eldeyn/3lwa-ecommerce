@@ -5,13 +5,13 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale } from "next-intl";
 import { Mail, Edit2, Phone } from "lucide-react";
-import { PhoneInput } from "react-international-phone";
-import { removeDialCode } from "react-international-phone";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { parsePhoneNumber } from "libphonenumber-js";
 import { createPortal } from "react-dom";
-import "react-international-phone/style.css";
 import { profileSchema } from "@/src/schemas/schemas";
 import { ProfileFormData } from "@/src/types/types";
-import { customAxiosEmail, customAxios } from "@/src/utils/customAxios";
+import { customAxios } from "@/src/utils/customAxios";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -34,6 +34,9 @@ const PersonalInfoTab = ({
   onEmailUpdate,
   onPhoneUpdate,
 }: PersonalInfoTabProps) => {
+  // Combine phone code and phone number
+  const fullPhone = userData.phoneNumber ? userData.phoneCode + " " + userData.phoneNumber : "";
+
   // Email change states
   const [showChangeEmailModal, setShowChangeEmailModal] = useState(false);
   const [showVerifyEmailModal, setShowVerifyEmailModal] = useState(false);
@@ -91,7 +94,7 @@ const PersonalInfoTab = ({
   const handleSendCode = async (email: string) => {
     setIsSendingCode(true);
     try {
-      const response = await customAxiosEmail.post("/Email/change-email", {
+      const response = await customAxios.post("/Email/change-email", {
         newEmail: email,
       });
 
@@ -124,7 +127,7 @@ const PersonalInfoTab = ({
   const handleVerifyEmail = async (code: string) => {
     setIsVerifying(true);
     try {
-      const response = await customAxiosEmail.post("/Email/verify-new-email", {
+      const response = await customAxios.post("/Email/verify-new-email", {
         newEmail: newEmail,
         code: code,
       });
@@ -351,10 +354,10 @@ const PersonalInfoTab = ({
             />
             <input
               type="tel"
-              value={userData.phone || ""}
+              value={fullPhone}
               readOnly
               className="w-full px-10 rtl:text-right py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none cursor-not-allowed"
-              placeholder={tAuth("phonePlaceholder")}
+              placeholder={tAuth("phoneNumberPlaceholder")}
               dir="ltr"
             />
             <button
@@ -419,7 +422,7 @@ const PersonalInfoTab = ({
         typeof window !== "undefined" &&
         createPortal(
           <ChangePhoneModal
-            currentPhone={userData.phone || ""}
+            currentPhone={fullPhone}
             isOpen={showChangePhoneModal}
             onClose={() => setShowChangePhoneModal(false)}
             onSendCode={handleSendPhoneCode}
@@ -662,29 +665,31 @@ const ChangePhoneModal = ({
   tAuth,
 }: ChangePhoneModalProps) => {
   const [phone, setPhone] = useState("");
-  const [phoneCode, setPhoneCode] = useState("");
   const locale = useLocale();
   const isRTL = locale === "ar";
 
-  const handlePhoneChange = (
-    phoneValue: string,
-    meta: { country: { dialCode: string }; inputValue: string }
-  ) => {
-    setPhone(phoneValue);
-    if (meta?.country?.dialCode) {
-      setPhoneCode(`+${meta.country.dialCode}`);
-    }
+  const handlePhoneChange = (phoneValue: string | undefined) => {
+    setPhone(phoneValue || "");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (phone && phone !== currentPhone && phoneCode) {
-      const phoneNumber = removeDialCode({
-        phone: phone,
-        dialCode: phoneCode.replace("+", ""),
-        prefix: "+",
-      });
-      onSendCode(phoneCode, phoneNumber);
+    if (!phone || phone === currentPhone) {
+      return;
+    }
+
+    try {
+      const parsed = parsePhoneNumber(phone);
+      if (parsed) {
+        const phoneCode = "+" + parsed.countryCallingCode;
+        const phoneNumber = parsed.nationalNumber;
+        onSendCode(phoneCode, phoneNumber);
+      } else {
+        toast.error(t("personalInfo.invalidPhone"));
+      }
+    } catch (error) {
+      console.error("Phone parsing error:", error);
+      toast.error(t("personalInfo.invalidPhone"));
     }
   };
 
@@ -708,20 +713,17 @@ const ChangePhoneModal = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div dir="ltr">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 text-right rtl:text-right ltr:text-left">
-              {tAuth("phone")} *
+              {tAuth("phoneNumber")} *
             </label>
             <PhoneInput
-              defaultCountry="eg"
+              international
+              defaultCountry="EG"
               value={phone}
               onChange={handlePhoneChange}
-              inputClassName="!w-full !px-4 !py-3 !bg-gray-50 dark:!bg-gray-900 !rounded-r-xl !text-gray-900 dark:!text-white focus:!outline-none"
-              countrySelectorStyleProps={{
-                buttonClassName:
-                  "!bg-gray-50 !px-2 dark:!bg-gray-900 !border !border-gray-200 dark:!border-gray-700 !rounded-l-xl",
-                dropdownStyleProps: {
-                  className:
-                    "!bg-white dark:!bg-gray-800 !border !border-gray-200 dark:!border-gray-700 !rounded-xl !shadow-lg",
-                },
+              className="w-full"
+              numberInputProps={{
+                className:
+                  "w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary",
               }}
             />
           </div>
@@ -729,7 +731,7 @@ const ChangePhoneModal = ({
           <div className={`flex gap-4 mt-6 ${isRTL ? "flex-row-reverse" : ""}`}>
             <button
               type="submit"
-              disabled={isLoading || !phone || !phoneCode || phone === currentPhone}
+              disabled={isLoading || !phone || phone === currentPhone}
               className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
               {isLoading ? t("personalInfo.sending") : t("personalInfo.sendCode")}
             </button>
