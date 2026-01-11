@@ -68,8 +68,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
           price: price,
           image: productImage,
           quantity: quantity,
-          attributes: selectedAttrsData,
-          offerCombinationPricingId: product.currentCombination?.combinationId,
+          offerCombinationPricingId: bestOffer?.offerPricingId,
         },
         isAuthenticated()
       );

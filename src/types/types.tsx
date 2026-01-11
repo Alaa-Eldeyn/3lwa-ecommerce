@@ -258,6 +258,7 @@ export interface QuantityTier {
 
 export interface BestOffer {
   offerId: string;
+  offerPricingId: string;
   vendorId: string;
   vendorName: string;
   vendorRating: number;
