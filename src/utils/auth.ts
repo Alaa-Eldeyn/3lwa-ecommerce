@@ -114,7 +114,8 @@ export const loginUser = async (data: LoginFormData): Promise<User> => {
     const response = await axios.post<AuthResponse>(
       `${process.env.NEXT_PUBLIC_BASE_URL}/Auth/login-customer`,
       {
-        identifier: data.email,
+        phoneCode: data.phoneCode,
+        phoneNumber: data.phoneNumber,
         password: data.password,
       }
     );
@@ -140,7 +141,7 @@ export const loginUser = async (data: LoginFormData): Promise<User> => {
 export const registerUser = async (data: RegisterFormData): Promise<User> => {
   try {
     const response = await axios.post<AuthResponse>(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/Auth/register-customer`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/UserRegistration/register-customer`,
       {
         email: data.email,
         password: data.password,

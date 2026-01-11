@@ -8,7 +8,7 @@ import "react-phone-number-input/style.css";
 import { parsePhoneNumber } from "libphonenumber-js";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { registerSchema } from "@/src/schemas/schemas";
 import { RegisterFormData } from "@/src/types/types";
 import { registerUser } from "@/src/utils/auth";
@@ -24,7 +24,8 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [secureAnimation, setSecureAnimation] = useState<object | null>(null);
-
+  const locale = useLocale();
+  
   useEffect(() => {
     fetch("/animation/secure.json")
       .then((res) => res.json())
@@ -172,8 +173,8 @@ const Register = () => {
 
               {/* Phone Field */}
               <div dir="ltr">
-                <label className="block text-right text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {t("phone")}
+                <label dir={locale === "ar" ? "rtl" : "ltr"} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t("phoneNumber")} *
                 </label>
                 <Controller
                   name="phone"
@@ -184,7 +185,11 @@ const Register = () => {
                       defaultCountry="EG"
                       value={value || ""}
                       onChange={onChange}
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full"
+                      numberInputProps={{
+                        className:
+                          "w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary",
+                      }}
                     />
                   )}
                 />

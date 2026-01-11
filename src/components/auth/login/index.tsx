@@ -1,11 +1,14 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Lock, Eye, EyeOff } from "lucide-react";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { parsePhoneNumber } from "libphonenumber-js";
 import Link from "next/link";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { loginSchema } from "@/src/schemas/schemas";
 import { LoginFormData } from "@/src/types/types";
 import { loginUser } from "@/src/utils/auth";
@@ -23,6 +26,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [secureAnimation, setSecureAnimation] = useState<object | null>(null);
+  const locale = useLocale();
 
   useEffect(() => {
     fetch("/animation/secure.json")
@@ -34,6 +38,7 @@ const Login = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -42,12 +47,32 @@ const Login = () => {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      const user = await loginUser(data);
+      let phoneCode = "";
+      let phoneNumber = "";
+      if (data.phone) {
+        try {
+          const parsed = parsePhoneNumber(data.phone);
+          if (parsed) {
+            phoneCode = "+" + parsed.countryCallingCode;
+            phoneNumber = parsed.nationalNumber;
+          }
+        } catch (error) {
+          console.error("Phone parsing error:", error);
+        }
+      }
+
+      const loginData = {
+        ...data,
+        phoneCode,
+        phoneNumber,
+      };
+
+      const user = await loginUser(loginData);
       setUser(user);
-      
+
       // مزامنة الـ cart المحلي مع الـ server بعد تسجيل الدخول
       await syncWithServer();
-      
+
       router.push("/");
     } catch (error) {
       console.error("Login error:", error);
@@ -63,9 +88,7 @@ const Login = () => {
         {/* Left Side - Animation (Sticky) */}
         <div className="hidden lg:flex flex-col items-center justify-center sticky top-10 h-[calc(100vh-5rem)] overflow-hidden">
           <div className="w-full max-w-lg center h-full overflow-hidden">
-            {secureAnimation && (
-              <Lottie animationData={secureAnimation} loop={true} />
-            )}
+            {secureAnimation && <Lottie animationData={secureAnimation} loop={true} />}
           </div>
         </div>
 
@@ -73,38 +96,39 @@ const Login = () => {
         <div className="w-full space-y-5 py-10 lg:py-5 xl:py-24">
           {/* Header */}
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-              {t("welcomeBack")}
-            </h2>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
-              {t("loginSubtitle")}
-            </p>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">{t("welcomeBack")}</h2>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">{t("loginSubtitle")}</p>
           </div>
 
           {/* Form */}
           <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 max-w-lg mx-auto">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              {/* Email Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {t("email")} *
+              {/* Phone Field */}
+              <div dir="ltr">
+                <label
+                  dir={locale === "ar" ? "rtl" : "ltr"}
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t("phoneNumber")} *
                 </label>
-                <div className="relative">
-                  <Mail
-                    size={20}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                  />
-                  <input
-                    type="email"
-                    {...register("email")}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary soft"
-                    placeholder={t("emailPlaceholder")}
-                  />
-                </div>
-                {errors.email && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.email.message}
-                  </p>
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <PhoneInput
+                      international
+                      defaultCountry="EG"
+                      value={value || ""}
+                      onChange={onChange}
+                      className="w-full"
+                      numberInputProps={{
+                        className:
+                          "w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary",
+                      }}
+                    />
+                  )}
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
                 )}
               </div>
 
@@ -127,31 +151,26 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 soft"
-                  >
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 soft">
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.password.message}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
                 )}
               </div>
 
               <Link
-                  href="/forget-password"
-                  className="text-sm text-primary hover:text-primary/80 soft block"
-                >
-                  {t("forgotPassword")}
-                </Link>
+                href="/forget-password"
+                className="text-sm text-primary hover:text-primary/80 soft block">
+                {t("forgotPassword")}
+              </Link>
 
               {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 px-4 bg-primary hover:bg-primary/90 text-white font-medium rounded-xl soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+                className="w-full py-3 px-4 bg-primary hover:bg-primary/90 text-white font-medium rounded-xl soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed">
                 {isLoading ? t("loggingIn") : t("loginButton")}
               </button>
             </form>
@@ -216,8 +235,7 @@ const Login = () => {
                 {t("dontHaveAccount")}{" "}
                 <Link
                   href="/register"
-                  className="font-medium text-primary hover:text-primary/80 soft"
-                >
+                  className="font-medium text-primary hover:text-primary/80 soft">
                   {t("signUpNow")}
                 </Link>
               </p>
