@@ -145,7 +145,7 @@ const ProductDetails = ({ variant = "tabs" }: ProductDetailsProps) => {
         )}
 
         {/* Related Section */}
-        <RelatedSection />
+        {/* <RelatedSection /> */}
 
         {/* FAQs Section */}
         <FAQsSection />
