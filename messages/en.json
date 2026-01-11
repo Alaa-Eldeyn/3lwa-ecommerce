@@ -609,6 +609,8 @@
     "remove": "Remove",
     "clearAll": "Clear All",
     "confirmClear": "Are you sure you want to clear all items from your wishlist?",
+    "cancel": "Cancel",
+    "clearing": "Clearing...",
     "currency": "EGP",
     "addedToWishlist": "Added to wishlist",
     "removedFromWishlist": "Removed from wishlist",

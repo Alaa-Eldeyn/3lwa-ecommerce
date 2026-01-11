@@ -207,7 +207,7 @@ const Products = () => {
   // Derive products list and pagination info from react-query data
   const products: Product[] = productsData?.items ?? [];
   const totalPages = productsData?.totalPages ?? 1;
-  const totalRecords = productsData?.totalRecords ?? 0;
+  const totalRecords = productsData?.totalCount ?? 0;
 
   // Use filtersData directly
   const dynamicFilters: DynamicFilters | undefined = filtersData;

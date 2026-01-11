@@ -61,7 +61,7 @@ const WishlistItem = ({
 
       {/* Details */}
       <div className="p-4">
-        <h3 className="font-semibold text-lg text-gray-900 dark:text-white line-clamp-2 mb-2">
+        <h3 className="font-semibold text-lg text-gray-900 dark:text-white line-clamp-2">
           {title}
         </h3>
         <p className="text-xs text-gray-600 dark:text-gray-400 mb-1 line-clamp-1">
