@@ -6,13 +6,12 @@ export interface CartItem {
   id: string;
   itemId: string;
   name: string;
+  nameAr?: string;
+  nameEn?: string;
   price: number;
   image: string;
   quantity: number;
   offerCombinationPricingId?: string;
-  size?: string;
-  color?: string;
-  attributes?: Record<string, string>;
 }
 
 interface CartState {
@@ -184,15 +183,15 @@ export const useCartStore = create<CartState>()(
           
           // نحول الـ response للـ format بتاعنا
           const serverItems: CartItem[] = cartData.items?.map((item: any) => ({
-            id: item.cartItemId || item.id,
-            itemId: item.itemId || item.id,
-            name: item.itemName || item.name,
-            price: item.price,
-            image: item.imagePath || item.image,
+            id: item.id,
+            itemId: item.itemId,
+            name: item.itemNameEn || item.itemNameAr,
+            nameAr: item.itemNameAr,
+            nameEn: item.itemNameEn,
+            price: item.unitPrice,
+            image: item.imageUrl,
             quantity: item.quantity,
             offerCombinationPricingId: item.offerCombinationPricingId,
-            size: item.size,
-            color: item.color,
           })) || [];
 
           set({ items: serverItems });

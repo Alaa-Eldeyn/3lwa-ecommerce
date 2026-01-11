@@ -132,6 +132,7 @@ export interface Product {
   stockStatus?: string;
   availableQuantity?: number;
   isFreeShipping?: boolean;
+  offerCombinationPricingId?: string;
 }
 
 export interface ProductsResponse {

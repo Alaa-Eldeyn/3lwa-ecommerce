@@ -15,15 +15,22 @@ export interface UpdateCartItemRequest {
 }
 
 export interface CartItemResponse {
-  cartItemId: string;
+  id: string;
+  cartItemId?: string;
   itemId: string;
-  itemName: string;
-  price: number;
+  itemName?: string;
+  itemNameAr?: string;
+  itemNameEn?: string;
+  unitPrice: number;
+  price?: number;
   quantity: number;
-  imagePath: string;
+  imageUrl?: string;
+  imagePath?: string;
+  image?: string;
   offerCombinationPricingId?: string;
-  size?: string;
-  color?: string;
+  subTotal?: number;
+  isAvailable?: boolean;
+  sellerName?: string;
 }
 
 export interface CartSummaryResponse {

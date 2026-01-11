@@ -7,11 +7,14 @@ import OrderSummary from "./components/OrderSummary";
 import EmptyCart from "./components/EmptyCart";
 import { useCartStore } from "@/src/store/cartStore";
 import { useUserStore } from "@/src/store/userStore";
+import { useLocale } from "next-intl";
 
 const Cart = () => {
   const { items, updateQuantity, removeItem, getTotalPrice, isLoading, loadCartFromServer } =
     useCartStore();
   const { isAuthenticated } = useUserStore();
+  const locale = useLocale();
+  const isArabic = locale === "ar";
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   // تحميل الـ cart من الـ server لو اليوزر مسجل
@@ -101,8 +104,8 @@ const Cart = () => {
               <CartItem
                 key={item.id}
                 id={item.id}
-                image={item.image}
-                title={item.name}
+                image={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
+                title={isArabic ? (item.nameAr || item.name) : (item.nameEn || item.name)}
                 price={item.price}
                 quantity={item.quantity}
                 onQuantityChange={handleQuantityChange}

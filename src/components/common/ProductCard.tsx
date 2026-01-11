@@ -22,6 +22,7 @@ const ProductCard = ({
   titleEn,
   itemId,
   itemCombinationId,
+  offerCombinationPricingId,
   shortDescriptionEn,
   shortDescriptionAr,
   descriptionEn,
@@ -81,8 +82,13 @@ const ProductCard = ({
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!itemId || !itemCombinationId) return;
+    if (!offerCombinationPricingId) {
+      console.error("offerCombinationPricingId is required");
+      return;
+    }
     console.log("Adding to cart:", itemCombinationId);
     console.log("Adding to cart:", itemId);
+    console.log("Using offerCombinationPricingId:", offerCombinationPricingId);
     try {
       await addItem({
         id: itemCombinationId,
@@ -90,7 +96,7 @@ const ProductCard = ({
         name: displayTitle,
         price: currentPrice,
         image: image,
-        offerCombinationPricingId: itemCombinationId,
+        offerCombinationPricingId: offerCombinationPricingId,
       }, isAuthenticated());
     } catch (error) {
       console.error("Failed to add item to cart:", error);
