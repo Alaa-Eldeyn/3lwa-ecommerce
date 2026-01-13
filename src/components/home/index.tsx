@@ -7,18 +7,19 @@ import Hero from "./sections/Hero";
 import NewArrivals from "./sections/NewArrival";
 import Testimonials from "./sections/Testimonials";
 import TopBanner from "./sections/TopBanner";
-import TopBannersCarousel from "./sections/TopBannersCarousel";
+import TopBannersCarousel from "./components/TopBannersCarousel";
 import TopSellers from "./sections/TopSellers";
 import NewArrivalBanner from "./sections/NewArrivalBanner";
 import TopSellersBanner from "./sections/TopSellersBanner";
-import HeroCards from "./sections/HeroCards";
+import HomeBlocks from "./components/HomeBlocks";
+import SignInPrompt from "./components/SignInPrompt";
 
 interface HomeProps {
-  variant?: "default" | "no-banners" | "alt-hero" | "simple" | "custom";
+  variant?: "default" | "no-banners" | "alt-hero" | "simple" | "custom" | "amazon";
 }
 
-export default function Home({ variant = "simple" }: HomeProps) {
-  // Default
+export default function Home({ variant = "amazon" }: HomeProps) {
+  // Default (Home-1)
   if (variant === "default") {
     return (
       <main>
@@ -38,7 +39,7 @@ export default function Home({ variant = "simple" }: HomeProps) {
     );
   }
 
-  // No Banners variant
+  // No Banners variant (Home-2)
   else if (variant === "no-banners") {
     return (
       <main>
@@ -53,7 +54,7 @@ export default function Home({ variant = "simple" }: HomeProps) {
     );
   }
 
-  // Alt Hero variant (Homzmart)
+  // Alt Hero variant (Homzmart) (Home-3)
   else if (variant === "alt-hero") {
     return (
       <main>
@@ -67,18 +68,10 @@ export default function Home({ variant = "simple" }: HomeProps) {
     );
   }
 
-  // Simple variant
+  // Simple variant (Home-4)
   else if (variant === "simple") {
     return (
       <main>
-        {/* Hero Section with Overlapping Cards - Amazon Style */}
-        <section className="relative mb-8">
-          <TopBannersCarousel variant="default" />
-          <div className="relative -mt-24 lg:-mt-32 z-10">
-            <HeroCards />
-          </div>
-        </section>
-
         <TopBanner />
         <CategoriesCarousel variant="card" />
         <FlashDeals cardVariant="bordered" />
@@ -91,13 +84,39 @@ export default function Home({ variant = "simple" }: HomeProps) {
     );
   }
 
-  // Custom variant
+  // Custom variant (Home-5)
   else if (variant === "custom") {
     return (
       <main>
         <FlashDeals cardVariant="nike" />
         <NewArrivals cardVariant="clean" />
         <TopSellers cardVariant="gradient" />
+      </main>
+    );
+  }
+
+  // Amazon variant (Default)
+  else if (variant === "amazon") {
+    return (
+      <main className="bg-page-bg dark:bg-gray-900 min-h-screen relative pb-10">
+        {/* Background gradient */}
+        <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-white dark:from-gray-900 to-page-bg dark:to-gray-900 -z-10"></div>
+
+        {/* Hero Carousel */}
+        <TopBannersCarousel variant="default" />
+
+        {/* Main Content Container */}
+        <div className="container mx-auto px-4 -mt-64 relative z-10">
+
+          {/* Categories Carousel */}
+          {/* <CategoriesCarousel variant="card" /> */}
+
+          {/* Home Blocks */}
+          <HomeBlocks />
+
+          {/* Sign In Prompt */}
+          <SignInPrompt />
+        </div>
       </main>
     );
   }

@@ -1,0 +1,87 @@
+"use client";
+import React, { useState, useEffect, useMemo } from "react";
+import { useLocale } from "next-intl";
+import axios from "axios";
+import { Block } from "@/src/types/homeBlocksTypes";
+import SingleBlock from "./SingleBlock";
+import Link from "next/link";
+
+const HomeBlocks = () => {
+  const locale = useLocale();
+  const [loading, setLoading] = useState(true);
+  const [blocks, setBlocks] = useState<Block[]>([]);
+
+  // Fetch blocks from API
+  useEffect(() => {
+    const fetchBlocks = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/Homepage`);
+
+        if (response?.data?.success && response.data.data?.blocks) {
+          setBlocks(response.data.data.blocks);
+        }
+      } catch (error) {
+        console.error("Error fetching homepage blocks:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlocks();
+  }, []);
+
+  // Sort blocks by display order
+  const sortedBlocks = useMemo(() => {
+    return [...blocks].sort((a, b) => a.displayOrder - b.displayOrder);
+  }, [blocks]);
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="text-gray-500">Loading...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {sortedBlocks.map((block, index) => {
+        const isFullWidth = block.layout === "FullWidth" || block.layout === "Carousel";
+        const isFirstRowFourthBlock = index === 3;
+
+        // Special case: 4th block in first row with sign-in prompt
+        if (isFirstRowFourthBlock && !isFullWidth) {
+          return (
+            <div key={block.id} className="flex flex-col gap-6 h-[420px]">
+              <div className="bg-white dark:bg-gray-800 p-6 shadow-sm flex flex-col justify-center items-start gap-3 h-[140px]">
+                <h3 className="text-xl font-bold text-foreground dark:text-gray-200">
+                  Sign in for the best experience
+                </h3>
+                <button className="bg-accent dark:bg-accent/80 hover:bg-[#ffe0b3] dark:hover:bg-accent text-secondary dark:text-gray-900 font-bold py-2 px-8 rounded text-sm w-full shadow-sm border border-yellow-400 dark:border-yellow-500">
+                  <Link href="/login">Sign in securely</Link>
+                </button>
+              </div>
+              <SingleBlock block={block} locale={locale} />
+            </div>
+          );
+        }
+
+        // FullWidth or Carousel blocks span all 4 columns
+        if (isFullWidth) {
+          return (
+            <div key={block.id} className="lg:col-span-4">
+              <SingleBlock block={block} locale={locale} />
+            </div>
+          );
+        }
+
+        // Regular grid blocks span 1 column
+        return <SingleBlock key={block.id} block={block} locale={locale} />;
+      })}
+    </div>
+  );
+};
+
+export default HomeBlocks;

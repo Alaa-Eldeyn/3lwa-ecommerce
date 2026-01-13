@@ -16,6 +16,7 @@
   --color-accent: #ffefd6;
   --color-header: #0a5c4f;
   --color-header-hover: #3b7c71;
+  --color-page-bg: #eaeded;
   --color-error: #BE1D35;
   --color-error-hover: #9B182B;
   --breakpoint-sm: 576px;
@@ -96,6 +97,22 @@
 
   .animate-fadeIn {
     animation: fadeIn 0.3s ease-in;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   @keyframes fadeIn {

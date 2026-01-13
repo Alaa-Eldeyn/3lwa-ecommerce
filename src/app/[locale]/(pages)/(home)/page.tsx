@@ -1,5 +1,5 @@
 import Home from "@/src/components/home";
 
 export default function page() {
-  return <Home variant="simple"/>;
+  return <Home variant="amazon"/>;
 }

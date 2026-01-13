@@ -115,7 +115,7 @@ const VendorPage = () => {
     {
       id: 1,
       name: "Ahmed Hassan",
-      avatar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg",
+      avatar: "",
       rating: 5,
       date: "2 days ago",
       text: "Excellent service and product quality! Ordered a laptop and it arrived within 2 days, perfectly packaged. The seller was very responsive to my questions and provided detailed information about the product specifications. Highly recommend this vendor for anyone looking for reliable electronics.",
@@ -125,7 +125,7 @@ const VendorPage = () => {
     {
       id: 2,
       name: "Sarah Al-Mansouri",
-      avatar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg",
+      avatar: "",
       rating: 4,
       date: "5 days ago",
       text: "Good experience overall. The product matches the description and works perfectly. Delivery took a bit longer than expected (4 days instead of 2), but the quality makes up for it. Customer service was helpful when I had questions about warranty coverage. Would buy again.",
@@ -135,7 +135,7 @@ const VendorPage = () => {
     {
       id: 3,
       name: "Mohammed Khalid",
-      avatar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg",
+      avatar: "",
       rating: 5,
       date: "1 week ago",
       text: "Outstanding vendor! This is my third purchase from TechMart and they never disappoint. Products are always authentic, prices are competitive, and shipping is fast. The seller also includes helpful setup guides and responds quickly to any post-purchase questions. Definitely my go-to store for electronics.",
@@ -145,7 +145,7 @@ const VendorPage = () => {
     {
       id: 4,
       name: "Fatima Abdullah",
-      avatar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-7.jpg",
+      avatar: "",
       rating: 4.5,
       date: "2 weeks ago",
       text: "Very satisfied with my purchase. The smartphone I ordered came in original packaging with all accessories included. Price was better than retail stores. Only minor issue was that tracking information wasn't updated regularly, but the package arrived on time. Great vendor overall!",
@@ -155,7 +155,7 @@ const VendorPage = () => {
     {
       id: 5,
       name: "Youssef Ibrahim",
-      avatar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-8.jpg",
+      avatar: "",
       rating: 5,
       date: "3 weeks ago",
       text: "Exceptional service! Bought a gaming laptop and the seller provided detailed specs and answered all my technical questions before purchase. Product arrived well-protected with extra bubble wrap. Even followed up after delivery to ensure everything was working properly. This level of customer care is rare. Highly recommended!",
