@@ -1,42 +1,49 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useState } from "react";
-import ContactInformation from "./components/ContactInformation";
+import { useEffect, useState } from "react";
 import ShippingAddress from "./components/ShippingAddress";
 import PaymentMethod from "./components/PaymentMethod";
 import CheckoutSummary from "./components/CheckoutSummary";
-
-const checkoutSchema = z.object({
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  address: z.string().min(5, "Address must be at least 5 characters"),
-  city: z.string().min(2, "City is required"),
-  state: z.string().min(2, "State/Province is required"),
-  zipCode: z.string().min(3, "ZIP/Postal code is required"),
-  country: z.string().min(2, "Country is required"),
-  notes: z.string().optional(),
-});
-
-type CheckoutFormData = z.infer<typeof checkoutSchema>;
+import { useUserStore } from "@/src/store/userStore";
+import { useLocale } from "next-intl";
+import { useCartStore } from "@/src/store/cartStore";
 
 const Checkout = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CheckoutFormData>({
-    resolver: zodResolver(checkoutSchema),
-  });
+  const { handleSubmit } = useForm();
 
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "cash" | "wallet">("card");
+  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
+  const [promoCode, setPromoCode] = useState("");
 
-  const onSubmit = (data: CheckoutFormData) => {
+  const { items, isLoading, loadCartFromServer, getTotalPrice } = useCartStore();
+  const { isAuthenticated } = useUserStore();
+  const locale = useLocale();
+  const isArabic = locale === "ar";
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  // تحميل الـ cart من الـ server لو اليوزر مسجل
+  useEffect(() => {
+    const initializeCart = async () => {
+      if (isAuthenticated()) {
+        try {
+          await loadCartFromServer();
+        } catch (error) {
+          console.error("Failed to load cart:", error);
+        }
+      }
+      setIsInitialLoading(false);
+    };
+
+    initializeCart();
+  }, [isAuthenticated, loadCartFromServer]);
+
+  const handleApplyPromo = () => {
+    console.log("Applying promo code:", promoCode);
+    // Add promo code logic here
+  };
+
+  const onSubmit = (data: any) => {
     const orderData = {
       contactInfo: {
         firstName: data.firstName,
@@ -58,44 +65,38 @@ const Checkout = () => {
     // Handle form submission - send to backend
   };
 
-  // Sample order data - replace with actual cart data
-  const orderItems = [
-    { id: 1, name: "T-shirt", price: 25, quantity: 2 },
-    { id: 2, name: "Jeans", price: 55, quantity: 1 },
-  ];
-  const subtotal = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = 15;
-  const tax = subtotal * 0.1;
+  // Calculate pricing from cart store
+  const subtotal = getTotalPrice();
+  const shipping = 0; // TODO: Get from server or calculate based on address
+  const tax = 0; // TODO: Get from server or calculate
   const total = subtotal + shipping + tax;
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-950 py-12">
+    <div className="bg-gray-50 dark:bg-gray-950 py-8">
       <div className="container">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Checkout</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Checkout</h1>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Side - Forms */}
             <div className="lg:col-span-2 space-y-6">
-              <ContactInformation register={register} errors={errors} />
+              <ShippingAddress onAddressChange={setSelectedAddress} />
 
-              <ShippingAddress
-                register={register}
-                errors={errors}
-                onAddressChange={setSelectedAddress}
+              <PaymentMethod
+                selectedMethod={paymentMethod}
+                onChange={(methodId) => setPaymentMethod(methodId)}
               />
-
-              <PaymentMethod selectedMethod={paymentMethod} onChange={setPaymentMethod} />
             </div>
 
             {/* Right Side - Order Summary */}
             <div className="lg:col-span-1">
               <CheckoutSummary
-                items={orderItems}
+                items={items}
                 subtotal={subtotal}
                 shipping={shipping}
                 tax={tax}
                 total={total}
+                isLoading={isLoading || isInitialLoading}
               />
             </div>
           </div>

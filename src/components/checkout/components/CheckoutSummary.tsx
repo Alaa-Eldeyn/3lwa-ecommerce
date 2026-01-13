@@ -1,38 +1,93 @@
+"use client";
 import { ChevronRight } from "lucide-react";
-
-interface OrderItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-}
+import { useLocale } from "next-intl";
+import { CartItem } from "@/src/store/cartStore";
+import Image from "next/image";
 
 interface CheckoutSummaryProps {
-  items: OrderItem[];
+  items: CartItem[];
   subtotal: number;
   shipping: number;
   tax: number;
   total: number;
+  isLoading?: boolean;
 }
 
-const CheckoutSummary = ({ items, subtotal, shipping, tax, total }: CheckoutSummaryProps) => {
+const CheckoutSummary = ({
+  items,
+  subtotal,
+  shipping,
+  tax,
+  total,
+  isLoading = false,
+}: CheckoutSummaryProps) => {
+  const locale = useLocale();
+
+  if (isLoading) {
+    return (
+      <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700 sticky top-36">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+          {locale === "ar" ? "ملخص الطلب" : "Order Summary"}
+        </h2>
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+          {locale === "ar" ? "جاري التحميل..." : "Loading..."}
+        </div>
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700 sticky top-36">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+          {locale === "ar" ? "ملخص الطلب" : "Order Summary"}
+        </h2>
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+          {locale === "ar" ? "السلة فارغة" : "Cart is empty"}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 border border-gray-200 dark:border-gray-700 sticky top-24">
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Order Summary</h2>
+    <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700 sticky top-36">
+      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+        {locale === "ar" ? "ملخص الطلب" : "Order Summary"}
+      </h2>
 
       {/* Order Items */}
-      <div className="space-y-4 mb-6">
-        {items.map((item) => (
-          <div key={item.id} className="flex justify-between items-center">
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white">{item.name}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Qty: {item.quantity}</p>
+      <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
+        {items.map((item) => {
+          const itemName = locale === "ar" ? item.nameAr || item.name : item.nameEn || item.name;
+          const itemTotal = item.price * item.quantity;
+
+          return (
+            <div key={item.id} className="flex gap-3">
+              <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0">
+                {item.image && (
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
+                    alt={itemName}
+                    fill
+                    className="object-cover"
+                    sizes="64px"
+                  />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-gray-900 dark:text-white text-sm line-clamp-2">
+                  {itemName}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {locale === "ar" ? "الكمية" : "Qty"}: {item.quantity}
+                </p>
+              </div>
+              <p className="font-semibold text-gray-900 dark:text-white text-sm">
+                ${itemTotal.toFixed(2)}
+              </p>
             </div>
-            <p className="font-semibold text-gray-900 dark:text-white">
-              ${item.price * item.quantity}
-            </p>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="h-px bg-gray-200 dark:bg-gray-700 mb-6" />
@@ -40,24 +95,30 @@ const CheckoutSummary = ({ items, subtotal, shipping, tax, total }: CheckoutSumm
       {/* Price Breakdown */}
       <div className="space-y-3 mb-6">
         <div className="flex justify-between text-gray-600 dark:text-gray-400">
-          <span>Subtotal</span>
+          <span>{locale === "ar" ? "المجموع" : "Subtotal"}</span>
           <span>${subtotal.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-gray-600 dark:text-gray-400">
-          <span>Shipping</span>
-          <span>${shipping.toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between text-gray-600 dark:text-gray-400">
-          <span>Tax</span>
-          <span>${tax.toFixed(2)}</span>
-        </div>
+        {shipping > 0 && (
+          <div className="flex justify-between text-gray-600 dark:text-gray-400">
+            <span>{locale === "ar" ? "الشحن" : "Shipping"}</span>
+            <span>${shipping.toFixed(2)}</span>
+          </div>
+        )}
+        {tax > 0 && (
+          <div className="flex justify-between text-gray-600 dark:text-gray-400">
+            <span>{locale === "ar" ? "الضريبة" : "Tax"}</span>
+            <span>${tax.toFixed(2)}</span>
+          </div>
+        )}
       </div>
 
       <div className="h-px bg-gray-200 dark:bg-gray-700 mb-6" />
 
       {/* Total */}
       <div className="flex justify-between items-center mb-6">
-        <span className="text-lg font-semibold text-gray-900 dark:text-white">Total</span>
+        <span className="text-lg font-semibold text-gray-900 dark:text-white">
+          {locale === "ar" ? "المجموع الكلي" : "Total"}
+        </span>
         <span className="text-2xl font-bold text-primary">${total.toFixed(2)}</span>
       </div>
 
@@ -65,13 +126,20 @@ const CheckoutSummary = ({ items, subtotal, shipping, tax, total }: CheckoutSumm
       <button
         type="submit"
         className="w-full bg-primary hover:bg-secondary text-white font-semibold py-4 rounded-full transition-colors flex items-center justify-center gap-2 group">
-        Place Order
-        <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+        {locale === "ar" ? "تأكيد الطلب" : "Place Order"}
+        <ChevronRight
+          size={20}
+          className={`ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform ${
+            locale === "ar" ? "rotate-180" : ""
+          }`}
+        />
       </button>
 
       {/* Security Note */}
       <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-4">
-        🔒 Your payment information is secure and encrypted
+        {locale === "ar"
+          ? "🔒 معلومات الدفع الخاصة بك آمنة ومشفرة"
+          : "🔒 Your payment information is secure and encrypted"}
       </p>
     </div>
   );
