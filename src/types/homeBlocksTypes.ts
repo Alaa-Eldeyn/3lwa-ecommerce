@@ -21,7 +21,7 @@ export type Campaign = {
   Id: string;
   NameAr: string;
   NameEn: string;
-  IsFlashSale: boolean;
+  IsFlashSale: boolean; //TODO
   FlashSaleEndTime: Date;
   BadgeTextAr: string;
   BadgeTextEn: string;

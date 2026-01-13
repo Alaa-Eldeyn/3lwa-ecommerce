@@ -47,7 +47,7 @@ const Breadcrumb = () => {
     <div className="bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 mb-6">
       <div className="max-w-[1440px] mx-auto px-4 md:px-8 py-3">
         <nav className="flex text-sm text-gray-500 dark:text-gray-400" aria-label="Breadcrumb">
-          <ol className="inline-flex items-center space-x-1 md:space-x-3 rtl:space-x-reverse">
+          <ol className="inline-flex items-center space-x-1">
             <li className="inline-flex items-center">
               <Link
                 href="/"

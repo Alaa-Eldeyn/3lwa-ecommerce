@@ -33,7 +33,7 @@ const CartItem = ({
   };
 
   return (
-    <div className="flex gap-4 p-4 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700">
+    <div className="flex gap-4 p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
       {/* Image */}
       <div className="w-28 h-28 bg-[#F0EEED] dark:bg-gray-800 rounded-xl overflow-hidden shrink-0">
         <Image

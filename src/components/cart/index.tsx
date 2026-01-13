@@ -49,11 +49,6 @@ const Cart = () => {
     }
   };
 
-  const handleCheckout = () => {
-    console.log("Proceeding to checkout...");
-    // Add checkout logic here
-  };
-
   // Calculate totals
   const subtotal = getTotalPrice();
   const discount = Math.round(subtotal * 0.2); // 20% discount
@@ -62,7 +57,7 @@ const Cart = () => {
   // Loading state
   if (isInitialLoading) {
     return (
-      <section className="pt-20 pb-px bg-white dark:bg-gray-900">
+      <section className="pb-px bg-white dark:bg-gray-900">
         <Breadcrumb />
         <div className="container">
           <div className="flex items-center justify-center min-h-[400px]">
@@ -79,7 +74,7 @@ const Cart = () => {
   // Show empty cart if no items
   if (items.length === 0) {
     return (
-      <section className="pt-20 pb-px bg-white dark:bg-gray-900">
+      <section className="pb-px bg-white dark:bg-gray-900">
         <Breadcrumb />
         <div className="container">
           <EmptyCart />
@@ -89,12 +84,12 @@ const Cart = () => {
   }
 
   return (
-    <section className="pt-20 pb-px bg-white dark:bg-gray-900">
+    <section className="pb-8 bg-white dark:bg-gray-900">
       <Breadcrumb />
 
       <div className="container">
-        <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-8">
-          YOUR CART
+        <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+          {locale === "ar" ? "السلة" : "Your Cart"}
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -121,7 +116,6 @@ const Cart = () => {
                 subtotal={subtotal}
                 discount={discount}
                 deliveryFee={deliveryFee}
-                onCheckout={handleCheckout}
               />
             </div>
           </div>

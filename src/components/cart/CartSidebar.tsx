@@ -195,21 +195,15 @@ const CartSidebar = () => {
             <div className="space-y-2">
               <button
                 onClick={askToClearCart}
-                className="w-full flex items-center justify-center gap-2 bg-red-500 text-white py-3 rounded-lg font-semibold hover:bg-red-600 transition">
+                className="w-full flex items-center justify-center gap-2 bg-error text-white py-3 rounded-lg font-semibold hover:bg-error-hover transition">
                 <Trash2 size={18} />
                 مسح السلة
               </button>
               <Link
                 href="/cart"
                 onClick={closeCart}
-                className="block w-full text-center bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white py-3 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-700 transition">
+                className="block w-full text-center bg-primary dark:bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition">
                 عرض السلة
-              </Link>
-              <Link
-                href="/checkout"
-                onClick={closeCart}
-                className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition">
-                إتمام الشراء
               </Link>
             </div>
           </div>
