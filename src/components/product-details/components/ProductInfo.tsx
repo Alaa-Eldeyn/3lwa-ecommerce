@@ -233,6 +233,7 @@ const ProductInfo = ({
               combinationData.offers && combinationData.offers.length > 0
                 ? {
                     offerId: combinationData.offers[0].offerId,
+                    offerPricingId: combinationData.offers[0].offerPricingId,
                     vendorId: combinationData.offers[0].vendorId,
                     vendorName: combinationData.offers[0].vendorName,
                     vendorRating: combinationData.offers[0].vendorRating,
@@ -250,6 +251,7 @@ const ProductInfo = ({
                   }
                 : product.pricing?.bestOffer || {
                     offerId: "",
+                    offerPricingId: "",
                     vendorId: "",
                     vendorName: "",
                     vendorRating: 0,

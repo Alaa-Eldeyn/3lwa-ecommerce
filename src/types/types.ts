@@ -314,6 +314,7 @@ export interface SelectedValueId {
 
 export interface CombinationOffer {
   offerId: string;
+  offerPricingId: string;
   vendorId: string;
   vendorName: string;
   vendorNameAr?: string;
