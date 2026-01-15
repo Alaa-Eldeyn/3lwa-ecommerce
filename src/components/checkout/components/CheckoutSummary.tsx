@@ -1,15 +1,29 @@
 "use client";
 import { ChevronRight } from "lucide-react";
 import { useLocale } from "next-intl";
-import { CartItem } from "@/src/store/cartStore";
-import Image from "next/image";
+
+interface CheckoutItem {
+  itemId: string;
+  itemCombinationId: string;
+  offerCombinationPricingId: string;
+  vendorId: string;
+  itemName: string;
+  sellerName: string;
+  quantity: number;
+  unitPrice: number;
+  subTotal: number;
+  discountAmount: number;
+  taxAmount: number;
+  isAvailable: boolean;
+}
 
 interface CheckoutSummaryProps {
-  items: CartItem[];
+  items: CheckoutItem[];
   subtotal: number;
   shipping: number;
   tax: number;
   total: number;
+  discountAmount?: number;
   isLoading?: boolean;
 }
 
@@ -19,6 +33,7 @@ const CheckoutSummary = ({
   shipping,
   tax,
   total,
+  discountAmount = 0,
   isLoading = false,
 }: CheckoutSummaryProps) => {
   const locale = useLocale();
@@ -58,32 +73,23 @@ const CheckoutSummary = ({
       {/* Order Items */}
       <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
         {items.map((item) => {
-          const itemName = locale === "ar" ? item.nameAr || item.name : item.nameEn || item.name;
-          const itemTotal = item.price * item.quantity;
-
           return (
-            <div key={item.id} className="flex gap-3">
-              <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0">
-                {item.image && (
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-                    alt={itemName}
-                    fill
-                    className="object-cover"
-                    sizes="64px"
-                  />
-                )}
-              </div>
+            <div key={`${item.itemId}-${item.itemCombinationId}`} className="flex gap-3">
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-gray-900 dark:text-white text-sm line-clamp-2">
-                  {itemName}
+                  {item.itemName}
                 </p>
+                {item.sellerName && (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    {locale === "ar" ? "البائع" : "Seller"}: {item.sellerName}
+                  </p>
+                )}
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {locale === "ar" ? "الكمية" : "Qty"}: {item.quantity}
                 </p>
               </div>
               <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                ${itemTotal.toFixed(2)}
+                ${item.subTotal.toFixed(2)}
               </p>
             </div>
           );
@@ -98,6 +104,12 @@ const CheckoutSummary = ({
           <span>{locale === "ar" ? "المجموع" : "Subtotal"}</span>
           <span>${subtotal.toFixed(2)}</span>
         </div>
+        {discountAmount > 0 && (
+          <div className="flex justify-between text-green-600 dark:text-green-400">
+            <span>{locale === "ar" ? "الخصم" : "Discount"}</span>
+            <span>-${discountAmount.toFixed(2)}</span>
+          </div>
+        )}
         {shipping > 0 && (
           <div className="flex justify-between text-gray-600 dark:text-gray-400">
             <span>{locale === "ar" ? "الشحن" : "Shipping"}</span>
