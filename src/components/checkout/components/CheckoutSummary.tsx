@@ -1,6 +1,7 @@
 "use client";
 import { ChevronRight } from "lucide-react";
 import { useLocale } from "next-intl";
+import { useState } from "react";
 
 interface CheckoutItem {
   itemId: string;
@@ -25,6 +26,8 @@ interface CheckoutSummaryProps {
   total: number;
   discountAmount?: number;
   isLoading?: boolean;
+  onDeliveryNotesChange?: (notes: string) => void;
+  isSubmitting?: boolean;
 }
 
 const CheckoutSummary = ({
@@ -35,8 +38,17 @@ const CheckoutSummary = ({
   total,
   discountAmount = 0,
   isLoading = false,
+  onDeliveryNotesChange,
+  isSubmitting = false,
 }: CheckoutSummaryProps) => {
   const locale = useLocale();
+  const [deliveryNotes, setDeliveryNotes] = useState("");
+
+  const handleNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const notes = e.target.value;
+    setDeliveryNotes(notes);
+    onDeliveryNotesChange?.(notes);
+  };
 
   if (isLoading) {
     return (
@@ -134,17 +146,47 @@ const CheckoutSummary = ({
         <span className="text-2xl font-bold text-primary">${total.toFixed(2)}</span>
       </div>
 
+      {/* Delivery Notes */}
+      <div className="mb-6">
+        <label
+          htmlFor="delivery-notes"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {locale === "ar" ? "ملاحظات التوصيل" : "Delivery Notes"}
+        </label>
+        <textarea
+          id="delivery-notes"
+          value={deliveryNotes}
+          onChange={handleNotesChange}
+          placeholder={
+            locale === "ar"
+              ? "أضف أي ملاحظات خاصة للتوصيل (اختياري)"
+              : "Add any special delivery instructions (optional)"
+          }
+          rows={3}
+          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+        />
+      </div>
+
       {/* Place Order Button */}
       <button
         type="submit"
-        className="w-full bg-primary hover:bg-secondary text-white font-semibold py-4 rounded-full transition-colors flex items-center justify-center gap-2 group">
-        {locale === "ar" ? "تأكيد الطلب" : "Place Order"}
-        <ChevronRight
-          size={20}
-          className={`ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform ${
-            locale === "ar" ? "rotate-180" : ""
-          }`}
-        />
+        disabled={isSubmitting}
+        className="w-full bg-primary hover:bg-secondary text-white font-semibold py-4 rounded-full transition-colors flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed">
+        {isSubmitting
+          ? locale === "ar"
+            ? "جاري إنشاء الطلب..."
+            : "Creating Order..."
+          : locale === "ar"
+          ? "تأكيد الطلب"
+          : "Place Order"}
+        {!isSubmitting && (
+          <ChevronRight
+            size={20}
+            className={`ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform ${
+              locale === "ar" ? "rotate-180" : ""
+            }`}
+          />
+        )}
       </button>
 
       {/* Security Note */}

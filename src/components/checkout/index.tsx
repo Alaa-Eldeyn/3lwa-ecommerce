@@ -10,16 +10,20 @@ import { useLocale } from "next-intl";
 import { useCartStore } from "@/src/store/cartStore";
 import { Tag, X } from "lucide-react";
 import { customAxios } from "@/src/utils/customAxios";
+import toast from "react-hot-toast";
 
 const Checkout = () => {
   const { handleSubmit } = useForm();
 
-  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
+  const [paymentMethodId, setPaymentMethodId] = useState<string | null>(null);
+  const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromoCode, setAppliedPromoCode] = useState<string | null>(null);
   const [isApplyingPromo, setIsApplyingPromo] = useState(false);
   const [checkoutData, setCheckoutData] = useState<any>(null);
+  const [deliveryNotes, setDeliveryNotes] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { items, isLoading, loadCartFromServer, getTotalPrice } = useCartStore();
   const { isAuthenticated } = useUserStore();
@@ -93,26 +97,81 @@ const Checkout = () => {
     setPromoCode("");
   };
 
-  const onSubmit = (data: any) => {
-    const orderData = {
-      contactInfo: {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        phone: data.phone,
-      },
-      shippingAddress: selectedAddress || {
-        streetAddress: data.address,
-        city: data.city,
-        state: data.state,
-        zipCode: data.zipCode,
-        country: data.country,
-      },
-      paymentMethod,
-      notes: data.notes,
+  // Fetch payment methods to get methodType
+  useEffect(() => {
+    const fetchPaymentMethods = async () => {
+      try {
+        const response = await customAxios.get("/PaymentMethod");
+        if (response.data?.success && response.data?.data) {
+          const activeMethods = response.data.data.filter((method: any) => method.isActive);
+          setPaymentMethods(activeMethods);
+          // Auto-select first method if none selected
+          if (!paymentMethodId && activeMethods.length > 0) {
+            setPaymentMethodId(activeMethods[0].id);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching payment methods:", error);
+      }
     };
-    console.log("Order submitted:", orderData);
-    // Handle form submission - send to backend
+
+    if (isAuthenticated()) {
+      fetchPaymentMethods();
+    }
+  }, [isAuthenticated]);
+
+  const onSubmit = async (data: any) => {
+    if (!selectedAddress?.id) {
+      toast.error(
+        locale === "ar" ? "يرجى اختيار عنوان التوصيل" : "Please select a delivery address"
+      );
+      return;
+    }
+
+    if (!paymentMethodId) {
+      toast.error(locale === "ar" ? "يرجى اختيار طريقة الدفع" : "Please select a payment method");
+      return;
+    }
+
+    // Find the selected payment method to get methodType
+    const selectedPaymentMethod = paymentMethods.find((method) => method.id === paymentMethodId);
+
+    if (!selectedPaymentMethod) {
+      toast.error(locale === "ar" ? "طريقة الدفع غير صالحة" : "Invalid payment method");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const orderData = {
+        deliveryAddressId: selectedAddress.id,
+        paymentMethod: selectedPaymentMethod.methodType,
+        paymentMethodId: paymentMethodId,
+        couponCode: appliedPromoCode || null,
+        notes: deliveryNotes || null,
+      };
+
+      const response = await customAxios.post("/Order/create", orderData);
+
+      if (response.data?.success) {
+        // Handle success - redirect to order confirmation page
+        toast.success(locale === "ar" ? "تم إنشاء الطلب بنجاح" : "Order created successfully");
+        console.log("Order created successfully:", response.data);
+        // TODO: Redirect to order confirmation page
+        // router.push(`/orders/${response.data.data.orderId}`);
+      } else {
+        throw new Error(response.data?.message || "Failed to create order");
+      }
+    } catch (error: any) {
+      console.error("Failed to create order:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.errors?.[0] ||
+        (locale === "ar" ? "فشل إنشاء الطلب" : "Failed to create order");
+      toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Use pricing from API response, fallback to cart store calculations
@@ -190,8 +249,8 @@ const Checkout = () => {
               </div>
 
               <PaymentMethod
-                selectedMethod={paymentMethod}
-                onChange={(methodId) => setPaymentMethod(methodId)}
+                selectedMethod={paymentMethodId}
+                onChange={(methodId) => setPaymentMethodId(methodId)}
               />
             </div>
 
@@ -205,6 +264,8 @@ const Checkout = () => {
                 total={total}
                 discountAmount={checkoutData?.priceBreakdown?.discountAmount ?? 0}
                 isLoading={isLoading || isInitialLoading || !checkoutData}
+                onDeliveryNotesChange={setDeliveryNotes}
+                isSubmitting={isSubmitting}
               />
             </div>
           </div>
