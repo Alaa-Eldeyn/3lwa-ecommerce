@@ -417,9 +417,9 @@
     "orders": {
       "title": "سجل الطلبات",
       "description": "عرض وتتبع طلباتك",
-      "orderNumber": "رقم الطلب #",
+      "orderNumber": "رقم الطلب",
       "date": "التاريخ",
-      "total": "المجموع",
+      "total": "الإجمالي",
       "status": "الحالة",
       "viewDetails": "عرض التفاصيل",
       "noOrders": "لا توجد طلبات بعد",
