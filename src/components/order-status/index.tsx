@@ -2,39 +2,45 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { customAxios } from "@/src/utils/customAxios";
-import { OrderDetailItem } from "./types";
-import { Check, ShoppingCart, User, Instagram, Twitter, Facebook } from "lucide-react";
+import { Check, ShoppingCart } from "lucide-react";
 import { Loader2 } from "lucide-react";
+
+// Types
+interface OrderData {
+  number: string;
+  price: number;
+  shippingAmount: number;
+}
+
+interface OrderDetailItem {
+  orderDetailId: string;
+  itemName: string;
+  itemImageUrl: string;
+  vendorStoreName: string;
+  quantity: number;
+  unitPrice: number;
+  subTotal: number;
+}
 
 interface OrderStatusProps {
   id: string;
 }
 
-interface OrderItem {
-  id: string;
-  name: string;
-  image: string;
-  price: number;
-  quantity: number;
-  color?: string;
-}
-
 const OrderStatus = ({ id }: OrderStatusProps) => {
   const locale = useLocale();
-  const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
+  const isArabic = locale === "ar";
+
+  const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [orderItems, setOrderItems] = useState<OrderDetailItem[]>([]);
-  const [orderNumber, setOrderNumber] = useState<string>("");
-  const [totalAmount, setTotalAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchOrderDetails = async () => {
+    const fetchOrderData = async () => {
       if (!id) {
         setIsLoading(false);
         return;
@@ -44,29 +50,31 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
         setIsLoading(true);
         setError(null);
 
-        const response = await customAxios.get(`/Order/list-order-details/${id}`);
+        // Fetch both order info and order details in parallel
+        const [orderResponse, detailsResponse] = await Promise.all([
+          customAxios.get(`/Order/${id}`),
+          customAxios.get(`/Order/list-order-details/${id}`),
+        ]);
 
-        if (response.data?.success && response.data?.data) {
-          const items: OrderDetailItem[] = response.data.data;
-          setOrderItems(items);
+        // Handle order data
+        if (orderResponse.data?.success && orderResponse.data?.data) {
+          setOrderData(orderResponse.data.data);
+        }
 
-          // Calculate total
-          const total = items.reduce((sum, item) => sum + item.subTotal, 0);
-          setTotalAmount(total);
-
-          // Generate order number from ID
-          setOrderNumber(`ORD-${id.substring(0, 8).toUpperCase()}`);
+        // Handle order details
+        if (detailsResponse.data?.success && detailsResponse.data?.data) {
+          setOrderItems(detailsResponse.data.data);
         }
       } catch (err) {
-        console.error("Failed to fetch order details:", err);
-        setError("Failed to load order details");
+        console.error("Failed to fetch order data:", err);
+        setError(isArabic ? "فشل في تحميل تفاصيل الطلب" : "Failed to load order details");
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchOrderDetails();
-  }, [id]);
+    fetchOrderData();
+  }, [id, isArabic]);
 
   // Animation on load
   useEffect(() => {
@@ -93,12 +101,19 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
     return imageUrl;
   };
 
+  // Calculate subtotal from items
+  const itemsSubtotal = orderItems.reduce((sum, item) => sum + item.subTotal, 0);
+  const shippingAmount = orderData?.shippingAmount || 0;
+  const totalAmount = orderData?.price || itemsSubtotal + shippingAmount;
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-lg text-gray-600">Loading order details...</p>
+          <p className="text-lg text-gray-600">
+            {isArabic ? "جاري تحميل تفاصيل الطلب..." : "Loading order details..."}
+          </p>
         </div>
       </div>
     );
@@ -112,7 +127,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
           <button
             onClick={() => window.location.reload()}
             className="bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:bg-primaryDark transition-colors">
-            Try Again
+            {isArabic ? "حاول مرة أخرى" : "Try Again"}
           </button>
         </div>
       </div>
@@ -139,68 +154,97 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
 
         {/* Heading & Message */}
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-          Thank you for your purchase!
+          {isArabic ? "شكراً لطلبك!" : "Thank you for your purchase!"}
         </h1>
         <p className="text-gray-500 max-w-md mx-auto text-lg mb-4">
-          We've received your order and it will ship soon.
+          {isArabic
+            ? "لقد استلمنا طلبك وسيتم شحنه قريباً."
+            : "We've received your order and it will ship soon."}
         </p>
 
         {/* Order Number Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full border border-gray-200 mb-10">
-          <span className="text-gray-500 text-sm font-medium">Order Number:</span>
-          <span className="text-primary font-bold tracking-wide">
-            {orderNumber || "Loading..."}
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full border border-gray-200 mb-6">
+          <span className="text-gray-500 text-sm font-medium">
+            {isArabic ? "رقم الطلب:" : "Order Number:"}
           </span>
+          <span className="text-primary font-bold tracking-wide">{orderData?.number || "---"}</span>
         </div>
 
         {/* Order Summary Section */}
         <div className="bg-gray-50/80 rounded-2xl p-6 md:p-8 max-w-xl mx-auto border border-gray-100 text-left">
           <h2 className="text-lg font-bold text-gray-800 mb-6 border-b border-gray-200 pb-4">
-            Order Summary
+            {isArabic ? "ملخص الطلب" : "Order Summary"}
           </h2>
 
           {/* Items List */}
           <div className="space-y-6">
-            {orderItems.map((item) => (
-              <div key={item.orderDetailId} className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 bg-white flex-shrink-0 relative">
-                  {item.itemImageUrl ? (
-                    <Image
-                      src={getImageUrl(item.itemImageUrl)}
-                      alt={item.itemName}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                      <ShoppingCart className="w-6 h-6 text-gray-400" />
-                    </div>
-                  )}
+            {orderItems.length > 0 ? (
+              orderItems.map((item) => (
+                <div key={item.orderDetailId} className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 bg-white flex-shrink-0 relative">
+                    {item.itemImageUrl ? (
+                      <Image
+                        src={getImageUrl(item.itemImageUrl)}
+                        alt={item.itemName}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                        <ShoppingCart className="w-6 h-6 text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-grow">
+                    <h3 className="font-semibold text-gray-800 text-sm md:text-base">
+                      {item.itemName}
+                    </h3>
+                    <p className="text-gray-500 text-xs">
+                      {isArabic ? "الكمية:" : "Qty:"} {item.quantity}
+                      {item.vendorStoreName &&
+                        ` | ${isArabic ? "البائع:" : "Seller:"} ${item.vendorStoreName}`}
+                    </p>
+                  </div>
+                  <div className={`text-${isArabic ? "left" : "right"}`}>
+                    <p className="text-gray-500 text-xs">${item.unitPrice.toFixed(2)}</p>
+                    <p className="font-bold text-gray-800">${item.subTotal.toFixed(2)}</p>
+                  </div>
                 </div>
-                <div className="flex-grow">
-                  <h3 className="font-semibold text-gray-800 text-sm md:text-base">
-                    {item.itemName}
-                  </h3>
-                  <p className="text-gray-500 text-xs">
-                    Qty: {item.quantity}
-                    {item.vendorStoreName && ` | Seller: ${item.vendorStoreName}`}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-gray-500 text-xs">${item.unitPrice.toFixed(2)}</p>
-                  <p className="font-bold text-gray-800">${item.subTotal.toFixed(2)}</p>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-gray-500 text-center py-4">
+                {isArabic ? "لا توجد عناصر" : "No items"}
+              </p>
+            )}
           </div>
 
-          {/* Total Row */}
-          <div className="mt-6 pt-6 border-t border-gray-200 flex justify-between items-end">
-            <div>
-              <p className="text-gray-500 text-sm">Total Amount</p>
-              <p className="text-xs text-gray-400">Including Tax & Shipping</p>
+          {/* Subtotal, Shipping, Total */}
+          <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
+            {/* Subtotal */}
+            <div className="flex justify-between items-center">
+              <span className="text-gray-500 text-sm">
+                {isArabic ? "المجموع الفرعي" : "Subtotal"}
+              </span>
+              <span className="text-gray-800 font-medium">${itemsSubtotal.toFixed(2)}</span>
             </div>
-            <div className="text-2xl font-bold text-primary">${totalAmount.toFixed(2)}</div>
+
+            {/* Shipping */}
+            <div className="flex justify-between items-center">
+              <span className="text-gray-500 text-sm">{isArabic ? "الشحن" : "Shipping"}</span>
+              <span className="text-gray-800 font-medium">
+                {shippingAmount > 0 ? `$${shippingAmount.toFixed(2)}` : isArabic ? "مجاني" : "Free"}
+              </span>
+            </div>
+
+            {/* Total */}
+            <div className="flex justify-between items-end pt-3 border-t border-gray-200">
+              <div>
+                <p className="text-gray-500 text-sm">
+                  {isArabic ? "المجموع الكلي" : "Total Amount"}
+                </p>
+              </div>
+              <div className="text-2xl font-bold text-primary">${totalAmount.toFixed(2)}</div>
+            </div>
           </div>
         </div>
 
@@ -209,12 +253,12 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
           <Link
             href={`/${locale}`}
             className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-semibold rounded-xl text-white bg-primary hover:bg-primary/90 w-full sm:w-auto">
-            Continue Shopping
+            {isArabic ? "متابعة التسوق" : "Continue Shopping"}
           </Link>
           <Link
-            href={``}
+            href={`/${locale}/profile?tab=orders`}
             className="inline-flex items-center justify-center px-8 py-3.5 border border-gray-200 text-base font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 w-full sm:w-auto">
-            View Order Details
+            {isArabic ? "عرض طلباتي" : "View My Orders"}
           </Link>
         </div>
       </main>
