@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "../sections/carousel.css";
 import { useEffect, useState } from "react";
@@ -21,7 +20,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
     const fetchItems = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/HomePageSlider/all`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/HomePageSlider`);
         if (response?.data?.data) {
           setBanners(response.data.data);
         }
@@ -43,13 +42,12 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
   // Default variant - Full width
   if (variant === "default") {
     return (
-      <div className="w-full h-72 lg:h-[400px] banner-carousel !z-0">
+      <div className="w-full h-72 lg:h-[400px] banner-carousel z-0 relative">
         <Swiper
-          modules={[Autoplay, Pagination, Navigation]}
+          modules={[Autoplay, Navigation]}
           spaceBetween={0}
           slidesPerView={1}
           navigation
-          pagination={{ clickable: true }}
           autoplay={{
             delay: 3500,
             disableOnInteraction: false,
@@ -69,6 +67,8 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
             </SwiperSlide>
           ))}
         </Swiper>
+        {/* Gradient overlay at bottom */}
+        {/* <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-page-bg dark:from-gray-900 to-transparent z-10 pointer-events-none" /> */}
       </div>
     );
   }
@@ -80,14 +80,13 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
         <div className="container mx-auto px-4">
           <div className="relative">
             <Swiper
-              modules={[Autoplay, Pagination, Navigation]}
+              modules={[Autoplay, Navigation]}
               spaceBetween={24}
               slidesPerView={1}
               navigation={{
                 prevEl: ".banner-rounded-swiper-button-prev",
                 nextEl: ".banner-rounded-swiper-button-next",
               }}
-              pagination={{ clickable: true }}
               autoplay={{
                 delay: 5000,
                 disableOnInteraction: false,

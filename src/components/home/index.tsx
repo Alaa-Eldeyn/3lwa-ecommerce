@@ -99,9 +99,6 @@ export default function Home({ variant = "amazon" }: HomeProps) {
   else if (variant === "amazon") {
     return (
       <main className="bg-page-bg dark:bg-gray-900 min-h-screen relative pb-10">
-        {/* Background gradient */}
-        <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-white dark:from-gray-900 to-page-bg dark:to-gray-900 -z-10"></div>
-
         {/* Hero Carousel */}
         <TopBannersCarousel variant="default" />
 
