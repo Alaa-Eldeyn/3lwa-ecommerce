@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { Block } from "@/src/types/homeBlocksTypes";
 
@@ -15,6 +15,23 @@ type BlockItemUI = {
 };
 const SingleBlock = ({ block, locale }: { block: Block; locale: string }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [hasOverflow, setHasOverflow] = useState(false);
+
+  // Check if content overflows the container
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (scrollContainerRef.current) {
+        const { scrollWidth, clientWidth } = scrollContainerRef.current;
+        setHasOverflow(scrollWidth > clientWidth);
+      }
+    };
+
+    checkOverflow();
+
+    // Re-check on window resize
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [block.products, block.categories]);
   // Normalize items to have the same structure
   const items: BlockItemUI[] =
     block.products.length > 0
@@ -86,7 +103,7 @@ const SingleBlock = ({ block, locale }: { block: Block; locale: string }) => {
             </h3>
           )}
         </div>
-        
+
         {/* View all link */}
         {block.layout === "Carousel" && block.showViewAllLink && (
           <Link
@@ -204,16 +221,20 @@ const SingleBlock = ({ block, locale }: { block: Block; locale: string }) => {
             ))}
           </div>
 
-          <button
-            onClick={scrollLeft}
-            className="absolute top-1/2 left-0 -translate-y-1/2 h-24 w-12 bg-white/70 dark:bg-gray-800/90 shadow-md border-y border-r border-gray-200 dark:border-gray-700 flex items-center justify-center rounded-r hover:bg-white dark:hover:bg-gray-800 focus:outline-none opacity-0 group-hover:opacity-100 transition-opacity z-10">
-            <ChevronLeft className="w-8 h-8 text-gray-700 dark:text-gray-300" />
-          </button>
-          <button
-            onClick={scrollRight}
-            className="absolute top-1/2 right-0 -translate-y-1/2 h-24 w-12 bg-white/70 dark:bg-gray-800/90 shadow-md border-y border-l border-gray-200 dark:border-gray-700 flex items-center justify-center rounded-l hover:bg-white dark:hover:bg-gray-800 focus:outline-none opacity-0 group-hover:opacity-100 transition-opacity z-10">
-            <ChevronRight className="w-8 h-8 text-gray-700 dark:text-gray-300" />
-          </button>
+          {hasOverflow && (
+            <>
+              <button
+                onClick={scrollLeft}
+                className="absolute top-1/2 left-0 -translate-y-1/2 h-24 w-12 bg-white/70 dark:bg-gray-800/90 shadow-md border-y border-r border-gray-200 dark:border-gray-700 flex items-center justify-center rounded-r hover:bg-white dark:hover:bg-gray-800 focus:outline-none opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                <ChevronLeft className="w-8 h-8 text-gray-700 dark:text-gray-300" />
+              </button>
+              <button
+                onClick={scrollRight}
+                className="absolute top-1/2 right-0 -translate-y-1/2 h-24 w-12 bg-white/70 dark:bg-gray-800/90 shadow-md border-y border-l border-gray-200 dark:border-gray-700 flex items-center justify-center rounded-l hover:bg-white dark:hover:bg-gray-800 focus:outline-none opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                <ChevronRight className="w-8 h-8 text-gray-700 dark:text-gray-300" />
+              </button>
+            </>
+          )}
         </>
       )}
 

@@ -59,9 +59,11 @@ const HomeBlocks = () => {
                 <h3 className="text-xl font-bold text-foreground dark:text-gray-200">
                   Sign in for the best experience
                 </h3>
-                <button className="bg-accent dark:bg-accent/80 hover:bg-[#ffe0b3] dark:hover:bg-accent text-secondary dark:text-gray-900 font-bold py-2 px-8 rounded text-sm w-full shadow-sm border border-yellow-400 dark:border-yellow-500">
-                  <Link href="/login">Sign in securely</Link>
-                </button>
+                <Link
+                  className="bg-accent dark:bg-accent/80 hover:bg-[#ffe0b3] dark:hover:bg-accent text-secondary dark:text-gray-900 font-bold py-2 px-8 rounded text-sm w-full shadow-sm border border-yellow-400 dark:border-yellow-500 flex items-center justify-center"
+                  href="/login">
+                  Sign in securely
+                </Link>
               </div>
               <SingleBlock block={block} locale={locale} />
             </div>
