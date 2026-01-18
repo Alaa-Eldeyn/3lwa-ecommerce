@@ -172,7 +172,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
 
         {/* Order Summary Section */}
         <div className="bg-gray-50/80 rounded-2xl p-6 md:p-8 max-w-xl mx-auto border border-gray-100 text-left">
-          <h2 className="text-lg font-bold text-gray-800 mb-6 border-b border-gray-200 pb-4 rtl:text-right">
+          <h2 className="text-lg font-bold text-gray-800 mb-6 border-b border-gray-200 pb-4 text-start">
             {isArabic ? "ملخص الطلب" : "Order Summary"}
           </h2>
 
@@ -196,10 +196,10 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
                     )}
                   </div>
                   <div className="flex-grow">
-                    <h3 className="font-semibold text-gray-800 text-sm md:text-base rtl:text-right">
+                    <h3 className="font-semibold text-gray-800 text-sm md:text-base text-start">
                       {item.itemName}
                     </h3>
-                    <p className="text-gray-500 text-xs rtl:text-right">
+                    <p className="text-gray-500 text-xs text-start">    
                       {isArabic ? "الكمية:" : "Qty:"} {item.quantity}
                       {item.vendorStoreName &&
                         ` | ${isArabic ? "البائع:" : "Seller:"} ${item.vendorStoreName}`}
