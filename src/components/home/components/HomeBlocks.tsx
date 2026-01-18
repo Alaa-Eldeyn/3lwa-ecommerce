@@ -36,6 +36,23 @@ const HomeBlocks = () => {
     return [...blocks].sort((a, b) => a.displayOrder - b.displayOrder);
   }, [blocks]);
 
+  // Calculate which block occupies the 4th slot in the first row
+  const fourthSlotBlockIndex = useMemo(() => {
+    let slotCount = 0;
+    for (let i = 0; i < sortedBlocks.length; i++) {
+      const isFullWidth =
+        sortedBlocks[i].layout === "FullWidth" || sortedBlocks[i].layout === "Carousel";
+      if (isFullWidth) {
+        slotCount += 4; // Full-width blocks take entire row
+      } else {
+        slotCount += 1;
+        if (slotCount === 4) return i; // This block fills the 4th slot
+      }
+      if (slotCount >= 4) return -1; // 4th slot was passed or filled by full-width
+    }
+    return -1;
+  }, [sortedBlocks]);
+
   // Loading state
   if (loading) {
     return (
@@ -49,7 +66,7 @@ const HomeBlocks = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {sortedBlocks.map((block, index) => {
         const isFullWidth = block.layout === "FullWidth" || block.layout === "Carousel";
-        const isFirstRowFourthBlock = index === 3;
+        const isFirstRowFourthBlock = index === fourthSlotBlockIndex;
 
         // Special case: 4th block in first row with sign-in prompt
         if (isFirstRowFourthBlock && !isFullWidth) {
