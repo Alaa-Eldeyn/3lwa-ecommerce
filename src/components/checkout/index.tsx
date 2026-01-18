@@ -11,9 +11,11 @@ import { useCartStore } from "@/src/store/cartStore";
 import { Tag, X } from "lucide-react";
 import { customAxios } from "@/src/utils/customAxios";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const Checkout = () => {
   const { handleSubmit } = useForm();
+  const router = useRouter();
 
   const [paymentMethodId, setPaymentMethodId] = useState<string | null>(null);
   const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
@@ -25,7 +27,7 @@ const Checkout = () => {
   const [deliveryNotes, setDeliveryNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { items, isLoading, loadCartFromServer, getTotalPrice } = useCartStore();
+  const { items, isLoading, loadCartFromServer, getTotalPrice, clearCart } = useCartStore();
   const { isAuthenticated } = useUserStore();
   const locale = useLocale();
   const isArabic = locale === "ar";
@@ -153,12 +155,15 @@ const Checkout = () => {
 
       const response = await customAxios.post("/Order/create", orderData);
 
-      if (response.data?.success) {
+      if (response.data?.success && response.data?.data?.orderId) {
         // Handle success - redirect to order confirmation page
         toast.success(locale === "ar" ? "تم إنشاء الطلب بنجاح" : "Order created successfully");
-        console.log("Order created successfully:", response.data);
-        // TODO: Redirect to order confirmation page
-        // router.push(`/orders/${response.data.data.orderId}`);
+
+        // Clear the cart after successful order
+        await clearCart(true);
+
+        // Redirect to order status page with orderId
+        router.push(`/${locale}/order-status/${response.data.data.orderId}`);
       } else {
         throw new Error(response.data?.message || "Failed to create order");
       }
