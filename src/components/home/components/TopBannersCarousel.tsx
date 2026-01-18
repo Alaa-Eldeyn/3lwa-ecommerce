@@ -14,11 +14,7 @@ interface TopBannersCarouselProps {
 }
 
 const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) => {
-  const [banners, setBanners] = useState([
-    "/images/banners/m-banner1.png",
-    "/images/banners/m-banner2.png",
-    "/images/banners/m-banner3.png",
-  ]);
+  const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -38,6 +34,11 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
 
     fetchItems();
   }, []);
+
+  // Empty State
+  if (loading || !banners || banners.length === 0) {
+    return <div className="w-full h-72 lg:h-[320px] banner-carousel !z-0"></div>;
+  }
 
   // Default variant - Full width
   if (variant === "default") {
