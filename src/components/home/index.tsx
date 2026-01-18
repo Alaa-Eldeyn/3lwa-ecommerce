@@ -103,7 +103,7 @@ export default function Home({ variant = "amazon" }: HomeProps) {
         <TopBannersCarousel variant="default" />
 
         {/* Main Content Container */}
-        <div className="container mx-auto px-4 -mt-64 relative z-10">
+        <div className="container mx-auto px-4 -mt-30 relative z-10">
 
           {/* Categories Carousel */}
           {/* <CategoriesCarousel variant="card" /> */}

@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/navigation";
 import "../sections/carousel.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -36,7 +35,7 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
 
   // Empty State
   if (loading || !banners || banners.length === 0) {
-    return <div className="w-full h-72 lg:h-[320px] banner-carousel !z-0"></div>;
+    return <div className="w-full h-72 lg:h-[160px] banner-carousel !z-0"></div>;
   }
 
   // Default variant - Full width
@@ -44,11 +43,10 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
     return (
       <div className="w-full h-72 lg:h-[400px] banner-carousel z-0 relative">
         <Swiper
-          modules={[Autoplay, Navigation]}
+          modules={[Autoplay]}
           spaceBetween={0}
           slidesPerView={1}
-          navigation
-          autoplay={{
+          autoplay={{ 
             delay: 3500,
             disableOnInteraction: false,
           }}
@@ -80,13 +78,9 @@ const TopBannersCarousel = ({ variant = "default" }: TopBannersCarouselProps) =>
         <div className="container mx-auto px-4">
           <div className="relative">
             <Swiper
-              modules={[Autoplay, Navigation]}
+              modules={[Autoplay]}
               spaceBetween={24}
               slidesPerView={1}
-              navigation={{
-                prevEl: ".banner-rounded-swiper-button-prev",
-                nextEl: ".banner-rounded-swiper-button-next",
-              }}
               autoplay={{
                 delay: 5000,
                 disableOnInteraction: false,
