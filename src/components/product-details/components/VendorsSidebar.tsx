@@ -102,26 +102,26 @@ const VendorsSidebar = ({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  const isArabic = locale === "ar";
 
   // دالة لمعالجة حالة المخزون
   const getStockStatusInfo = (status: string) => {
     const s = status?.toLowerCase() || "";
     if (s === "instock") {
       return {
-        text: locale === "ar" ? "متوفر" : "In Stock",
+        text: isArabic ? "متوفر" : "In Stock",
         colorClass: "text-green-600 dark:text-green-400",
         iconColor: "text-green-600 dark:text-green-400",
       };
     } else if (s.includes("limited") || s.includes("low")) {
       return {
-        text: locale === "ar" ? "كمية محدودة" : "Limited Stock",
+        text: isArabic ? "كمية محدودة" : "Limited Stock",
         colorClass: "text-orange-600 dark:text-orange-400",
         iconColor: "text-orange-600 dark:text-orange-400",
       };
     } else {
       return {
-        text: locale === "ar" ? "غير متوفر" : "Out of Stock",
+        text: isArabic ? "غير متوفر" : "Out of Stock",
         colorClass: "text-red-600 dark:text-red-400",
         iconColor: "text-red-600 dark:text-red-400",
       };
@@ -138,42 +138,51 @@ const VendorsSidebar = ({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm transition-opacity"
+        className={`fixed inset-0 bg-black/50 z-50 transition-opacity duration-300 ${
+          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
         onClick={onClose}
       />
 
       {/* Sidebar */}
       <div
-        className={`fixed ${
-          locale === "ar" ? "left-0" : "right-0"
-        } top-0 h-full w-full max-w-md bg-white dark:bg-gray-900 z-50 shadow-2xl overflow-y-auto transition-transform duration-300`}>
+        className={`fixed top-0 ${
+          isArabic ? "left-0" : "right-0"
+        } h-full w-[85vw] sm:w-96 max-w-md bg-white dark:bg-gray-900 z-50 shadow-2xl flex flex-col transition-transform duration-300 ${
+          isOpen ? "translate-x-0" : isArabic ? "-translate-x-full" : "translate-x-full"
+        }`}>
         {/* Header */}
-        <div className="sticky top-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur border-b border-gray-200 dark:border-gray-800 p-4 z-10">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              {locale === "ar" ? "العروض المتاحة" : "Available Offers"}
-            </h2>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
-              <X size={24} className="text-gray-600 dark:text-gray-400" />
-            </button>
-          </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">{productName}</p>
-          {vendors.length > 0 && (
-            <p className="text-sm text-gray-500 dark:text-gray-500 mt-1 font-medium">
-              {vendors.length} {locale === "ar" ? "عرض متاح من البائعين" : "offers available"}
+        <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
+          <div>
+            <div className="flex items-center gap-2">
+              <Store size={24} className="text-primary" />
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                {isArabic ? "العروض المتاحة" : "Available Offers"}
+              </h2>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1 mt-1">
+              {productName}
             </p>
-          )}
+            {vendors.length > 0 && (
+              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                {vendors.length} {isArabic ? "عرض متاح من البائعين" : "offers available"}
+              </p>
+            )}
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition">
+            <X size={24} className="text-gray-600 dark:text-gray-400" />
+          </button>
         </div>
 
         {/* Content */}
-        <div className="p-4 pb-20">
+        <div className="flex-1 overflow-y-auto p-4">
           {isLoading && (
             <div className="flex flex-col items-center justify-center py-12 gap-3">
               <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
               <p className="text-gray-600 dark:text-gray-400">
-                {locale === "ar" ? "جاري تحميل العروض..." : "Loading offers..."}
+                {isArabic ? "جاري تحميل العروض..." : "Loading offers..."}
               </p>
             </div>
           )}
@@ -181,7 +190,7 @@ const VendorsSidebar = ({
           {error ? (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-center">
               <p className="text-red-600 dark:text-red-400">
-                {locale === "ar" ? "حدث خطأ أثناء تحميل العروض" : "Error loading offers"}
+                {isArabic ? "حدث خطأ أثناء تحميل العروض" : "Error loading offers"}
               </p>
             </div>
           ) : null}
@@ -190,7 +199,7 @@ const VendorsSidebar = ({
             <div className="text-center py-12">
               <Store size={48} className="mx-auto text-gray-400 mb-3" />
               <p className="text-gray-600 dark:text-gray-400">
-                {locale === "ar" ? "لا توجد عروض متاحة حالياً" : "No offers available"}
+                {isArabic ? "لا توجد عروض متاحة حالياً" : "No offers available"}
               </p>
             </div>
           )}
@@ -230,7 +239,7 @@ const VendorsSidebar = ({
                     {
                       id: vendor.itemCombinationId,
                       itemId: vendor.itemId,
-                      name: locale === "ar" ? vendor.itemTitleAr : vendor.itemTitleEn,
+                      name: isArabic ? vendor.itemTitleAr : vendor.itemTitleEn,
                       price: vendor.salesPrice,
                       image: fullImageUrl,
                       offerCombinationPricingId: vendor.itemCombinationId,
@@ -288,7 +297,7 @@ const VendorsSidebar = ({
                   {vendor.isBuyBoxWinner && (
                     <div className="bg-primary text-white text-xs font-bold px-3 py-1.5 flex items-center justify-center gap-1">
                       <Star size={12} fill="currentColor" />
-                      {locale === "ar" ? "أفضل عرض" : "Best Offer"}
+                      {isArabic ? "أفضل عرض" : "Best Offer"}
                     </div>
                   )}
 
@@ -325,7 +334,7 @@ const VendorsSidebar = ({
                                     <span
                                       key={idx}
                                       className="text-[10px] bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-1.5 py-0.5 rounded">
-                                      {locale === "ar" ? attr.valueAr : attr.valueEn}
+                                      {isArabic ? attr.valueAr : attr.valueEn}
                                     </span>
                                   ))}
                                 </div>
@@ -335,7 +344,9 @@ const VendorsSidebar = ({
                           {/* Price Section */}
                           <div className="text-right">
                             {discountPercentage > 0 && (
-                              <span dir="ltr" className="block text-xs text-green-600 dark:text-green-400 font-medium mb-0.5">
+                              <span
+                                dir="ltr"
+                                className="block text-xs text-green-600 dark:text-green-400 font-medium mb-0.5">
                                 -{discountPercentage}%
                               </span>
                             )}
@@ -367,8 +378,8 @@ const VendorsSidebar = ({
                           <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
                             <Truck size={14} />
                             <span>
-                              {locale === "ar" ? "توصيل خلال" : "Delivery"}{" "}
-                              {vendor.handlingTimeInDays} {locale === "ar" ? "أيام" : "days"}
+                              {isArabic ? "توصيل خلال" : "Delivery"} {vendor.handlingTimeInDays}{" "}
+                              {isArabic ? "أيام" : "days"}
                             </span>
                           </div>
                         </div>
@@ -395,10 +406,10 @@ const VendorsSidebar = ({
                               title="Add to cart">
                               <ShoppingCart size={16} />
                               {isInStock
-                                ? locale === "ar"
+                                ? isArabic
                                   ? "إضافة للعربة"
                                   : "Add to Cart"
-                                : locale === "ar"
+                                : isArabic
                                 ? "غير متوفر"
                                 : "Out of Stock"}
                             </button>
@@ -412,9 +423,7 @@ const VendorsSidebar = ({
                               setExpandedVendor(isExpanded ? null : vendor.vendorItemId)
                             }
                             className="w-full flex items-center justify-center gap-1 text-xs text-gray-500 dark:text-gray-400 mt-3 hover:text-primary transition-colors py-1">
-                            {locale === "ar"
-                              ? "تفاصيل الضمان والسياسة"
-                              : "Warranty & Policy Details"}
+                            {isArabic ? "تفاصيل الضمان والسياسة" : "Warranty & Policy Details"}
                             {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                           </button>
                         )}
@@ -425,7 +434,7 @@ const VendorsSidebar = ({
                             {vendor.warrantyPolicy && (
                               <div className="mb-2">
                                 <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                                  {locale === "ar" ? "الضمان" : "Warranty"}
+                                  {isArabic ? "الضمان" : "Warranty"}
                                 </h4>
                                 <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed whitespace-pre-line">
                                   {vendor.warrantyPolicy}
