@@ -241,7 +241,7 @@ const OrdersTab = () => {
                 </div>
 
                 {/* Item Details */}
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 space-y-2">
                   <p className="text-sm text-gray-700 dark:text-gray-300 truncate">
                     {isArabic ? order.items[0].itemNameAr : order.items[0].itemNameEn}
                     {order.items.length > 1 && (
@@ -253,11 +253,9 @@ const OrdersTab = () => {
                       </span>
                     )}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {isArabic
-                      ? `${order.totalItems} عنصر`
-                      : `${order.totalItems} ${order.totalItems === 1 ? "item" : "items"}`}
-                  </p>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded">
+                    {isArabic ? "الكمية:" : "Qty:"} {order.totalItems}
+                  </span>
                 </div>
               </div>
 
@@ -267,7 +265,7 @@ const OrdersTab = () => {
                   {t("orders.total")}: ${order.total.toFixed(2)}
                 </p>
                 <button
-                  onClick={() => router.push(`/order-status/${order.id}`)}
+                  onClick={() => router.push(`/order/${order.id}`)}
                   className="px-4 py-2 text-primary border border-primary rounded-lg hover:bg-primary hover:text-white">
                   {t("orders.viewDetails")}
                 </button>
