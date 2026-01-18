@@ -1,8 +1,15 @@
 "use client";
+import { useUserStore } from "@/src/store/userStore";
 import Link from "next/link";
 import React from "react";
 
 const SignInPrompt = () => {
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+
+  if (!isAuthenticated()) {
+    return null;
+  }
+
   return (
     <div className="border-t border-b border-gray-300 dark:border-gray-700 py-8 my-8 flex flex-col items-center justify-center bg-white dark:bg-gray-800 rounded shadow-sm">
       <div className="mb-2 text-sm text-gray-900 dark:text-gray-200">

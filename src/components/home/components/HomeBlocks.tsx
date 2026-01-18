@@ -5,9 +5,11 @@ import axios from "axios";
 import { Block } from "@/src/types/homeBlocksTypes";
 import SingleBlock from "./SingleBlock";
 import Link from "next/link";
+import { useUserStore } from "@/src/store/userStore";
 
 const HomeBlocks = () => {
   const locale = useLocale();
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
   const [loading, setLoading] = useState(true);
   const [blocks, setBlocks] = useState<Block[]>([]);
 
@@ -68,8 +70,8 @@ const HomeBlocks = () => {
         const isFullWidth = block.layout === "FullWidth" || block.layout === "Carousel";
         const isFirstRowFourthBlock = index === fourthSlotBlockIndex;
 
-        // Special case: 4th block in first row with sign-in prompt
-        if (isFirstRowFourthBlock && !isFullWidth) {
+        // Special case: 4th block in first row with sign-in prompt (only show if not logged in)
+        if (isFirstRowFourthBlock && !isFullWidth && !isAuthenticated()) {
           return (
             <div key={block.id} className="flex flex-col gap-6 h-[420px]">
               <div className="bg-white dark:bg-gray-800 p-6 shadow-sm flex flex-col justify-center items-start gap-3 h-[140px]">
