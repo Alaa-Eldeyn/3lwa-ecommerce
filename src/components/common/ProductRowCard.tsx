@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
 import { useLocale } from "next-intl";
+import toast from "react-hot-toast";
 import { useCartStore } from "@/src/store/cartStore";
 import { useWishlistStore } from "@/src/store/wishlistStore";
 import { useUserStore } from "@/src/store/userStore";
@@ -129,7 +130,7 @@ const ProductRowCard = ({
     }
 
     if (!user) {
-      alert("Please login to add items to wishlist");
+      toast.error(isArabic ? "يرجى تسجيل الدخول لإضافة المنتجات للمفضلة" : "Please login to add items to wishlist");
       return;
     }
 

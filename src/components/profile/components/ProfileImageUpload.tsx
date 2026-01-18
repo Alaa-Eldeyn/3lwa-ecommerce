@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { Camera, Upload, X } from "lucide-react";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 interface ProfileImageUploadProps {
   currentImage?: string;
@@ -33,13 +34,13 @@ const ProfileImageUpload = ({
     if (file) {
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        alert("File size should be less than 5MB");
+        toast.error(t("personalInfo.fileSizeError") || "File size should be less than 5MB");
         return;
       }
 
       // Validate file type
       if (!file.type.startsWith("image/")) {
-        alert("Please upload an image file");
+        toast.error(t("personalInfo.invalidFileType") || "Please upload an image file");
         return;
       }
 
