@@ -22,6 +22,7 @@ export interface CartItemResponse {
   itemNameAr?: string;
   itemNameEn?: string;
   unitPrice: number;
+  unitOriginalPrice?: number;
   price?: number;
   quantity: number;
   imageUrl?: string;
@@ -34,9 +35,13 @@ export interface CartItemResponse {
 }
 
 export interface CartSummaryResponse {
+  cartId: string;
   items: CartItemResponse[];
-  totalItems: number;
-  totalPrice: number;
+  subTotal: number;
+  shippingEstimate: number;
+  taxEstimate: number;
+  totalEstimate: number;
+  itemCount: number;
 }
 
 /**

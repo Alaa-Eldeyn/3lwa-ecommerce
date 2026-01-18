@@ -9,13 +9,24 @@ export interface CartItem {
   nameAr?: string;
   nameEn?: string;
   price: number;
+  originalPrice?: number;
   image: string;
   quantity: number;
   offerCombinationPricingId?: string;
+  isAvailable?: boolean;
+}
+
+export interface CartSummary {
+  subTotal: number;
+  shippingEstimate: number;
+  taxEstimate: number;
+  totalEstimate: number;
+  itemCount: number;
 }
 
 interface CartState {
   items: CartItem[];
+  summary: CartSummary;
   isLoading: boolean;
   isSyncing: boolean; // للتزامن مع API
   addItem: (item: Omit<CartItem, 'quantity'> & { quantity?: number }, isAuthenticated?: boolean) => Promise<void>;
@@ -28,12 +39,22 @@ interface CartState {
   getTotalPrice: () => number;
   getItemById: (id: string) => CartItem | undefined;
   setItems: (items: CartItem[]) => void;
+  getSummary: () => CartSummary;
 }
+
+const defaultSummary: CartSummary = {
+  subTotal: 0,
+  shippingEstimate: 0,
+  taxEstimate: 0,
+  totalEstimate: 0,
+  itemCount: 0,
+};
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      summary: defaultSummary,
       isLoading: false,
       isSyncing: false,
 
@@ -134,7 +155,7 @@ export const useCartStore = create<CartState>()(
           try {
             set({ isLoading: true });
             await clearCartApi();
-            set({ items: [] });
+            set({ items: [], summary: defaultSummary });
           } catch (error) {
             console.error("Failed to clear server cart:", error);
             throw error;
@@ -142,7 +163,7 @@ export const useCartStore = create<CartState>()(
             set({ isLoading: false });
           }
         } else {
-          set({ items: [] });
+          set({ items: [], summary: defaultSummary });
         }
       },
 
@@ -189,12 +210,23 @@ export const useCartStore = create<CartState>()(
             nameAr: item.itemNameAr,
             nameEn: item.itemNameEn,
             price: item.unitPrice,
+            originalPrice: item.unitOriginalPrice,
             image: item.imageUrl,
             quantity: item.quantity,
             offerCombinationPricingId: item.offerCombinationPricingId,
+            isAvailable: item.isAvailable,
           })) || [];
 
-          set({ items: serverItems });
+          // Store summary data from API
+          const summary: CartSummary = {
+            subTotal: cartData.subTotal || 0,
+            shippingEstimate: cartData.shippingEstimate || 0,
+            taxEstimate: cartData.taxEstimate || 0,
+            totalEstimate: cartData.totalEstimate || 0,
+            itemCount: cartData.itemCount || 0,
+          };
+
+          set({ items: serverItems, summary });
         } catch (error) {
           console.error("Failed to load cart from server:", error);
           throw error;
@@ -218,6 +250,10 @@ export const useCartStore = create<CartState>()(
 
       setItems: (items) => {
         set({ items });
+      },
+
+      getSummary: () => {
+        return get().summary;
       },
     }),
     {

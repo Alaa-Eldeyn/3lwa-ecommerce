@@ -10,7 +10,7 @@ import { useUserStore } from "@/src/store/userStore";
 import { useLocale } from "next-intl";
 
 const Cart = () => {
-  const { items, updateQuantity, removeItem, getTotalPrice, isLoading, loadCartFromServer } =
+  const { items, summary, updateQuantity, removeItem, getTotalPrice, isLoading, loadCartFromServer } =
     useCartStore();
   const { isAuthenticated } = useUserStore();
   const locale = useLocale();
@@ -49,10 +49,14 @@ const Cart = () => {
     }
   };
 
-  // Calculate totals
-  const subtotal = getTotalPrice();
-  const discount = Math.round(subtotal * 0.2); // 20% discount
-  const deliveryFee = 15;
+  // Use summary from API for authenticated users, calculate locally for guests
+  const isUserAuthenticated = isAuthenticated();
+  const subtotal = isUserAuthenticated ? summary.subTotal : getTotalPrice();
+  const shippingEstimate = isUserAuthenticated ? summary.shippingEstimate : 0;
+  const taxEstimate = isUserAuthenticated ? summary.taxEstimate : 0;
+  const totalEstimate = isUserAuthenticated
+    ? summary.totalEstimate
+    : subtotal + shippingEstimate + taxEstimate;
 
   // Loading state
   if (isInitialLoading) {
@@ -114,8 +118,9 @@ const Cart = () => {
             <div className="sticky top-24">
               <OrderSummary
                 subtotal={subtotal}
-                discount={discount}
-                deliveryFee={deliveryFee}
+                shippingEstimate={shippingEstimate}
+                taxEstimate={taxEstimate}
+                totalEstimate={totalEstimate}
               />
             </div>
           </div>
