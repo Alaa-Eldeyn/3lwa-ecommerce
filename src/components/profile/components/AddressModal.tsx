@@ -9,7 +9,14 @@ import "react-phone-number-input/style.css";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { customAxios } from "@/src/utils/customAxios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+interface State {
+  titleAr: string;
+  titleEn: string;
+  countryId: string;
+  id: string;
+}
 
 interface City {
   titleAr: string;
@@ -32,6 +39,7 @@ export interface Address {
   stateName?: string;
   countryName?: string;
   createdDate?: string;
+  stateId?: string;
 }
 
 interface AddressModalProps {
@@ -45,7 +53,9 @@ interface AddressModalProps {
 // Validation Schema
 const addressSchema = z.object({
   recipientName: z.string().min(2, "اسم المستلم يجب أن يكون حرفين على الأقل"),
+  stateId: z.string().min(1, "يرجى اختيار المحافظة"),
   cityId: z.string().min(1, "يرجى اختيار المدينة"),
+  address: z.string().min(5, "العنوان يجب أن يكون 5 أحرف على الأقل"),
   phone: z.string().min(10, "رقم الهاتف غير صحيح"),
   setAsDefault: z.boolean(),
 });
@@ -57,7 +67,8 @@ export interface AddressFormData {
   phoneCode: string;
   phoneNumber: string;
   recipientName: string;
-  setAsDefault: boolean;
+  address: string;
+  isDefault: boolean;
 }
 
 const AddressModal = ({
@@ -67,32 +78,62 @@ const AddressModal = ({
   onSuccess,
   isFirstAddress = false,
 }: AddressModalProps) => {
+  const [selectedStateId, setSelectedStateId] = useState<string>("");
+
   const {
     control,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors: formErrors },
   } = useForm<AddressFormSchema>({
     resolver: zodResolver(addressSchema),
     defaultValues: {
       recipientName: "",
+      stateId: "",
       cityId: "",
+      address: "",
       phone: "+20",
       setAsDefault: isFirstAddress,
     },
   });
 
-  // Fetch cities
-  const { data: citiesData } = useQuery({
-    queryKey: ["cities"],
+  const watchedStateId = watch("stateId");
+
+  // Fetch states
+  const { data: statesData } = useQuery({
+    queryKey: ["states"],
     queryFn: async () => {
-      const res = await customAxios(`/City`);
-      return res.data.data as City[];
+      const res = await customAxios(`/State`);
+      return res.data.data as State[];
     },
     refetchOnWindowFocus: false,
   });
 
+  const states = statesData || [];
+
+  // Fetch cities by state
+  const { data: citiesData, isLoading: citiesLoading } = useQuery({
+    queryKey: ["cities", selectedStateId],
+    queryFn: async () => {
+      const res = await customAxios(`/City/by-state/${selectedStateId}`);
+      return res.data.data as City[];
+    },
+    enabled: !!selectedStateId,
+    refetchOnWindowFocus: false,
+  });
+
   const cities = citiesData || [];
+
+  // Update selectedStateId when form stateId changes
+  useEffect(() => {
+    if (watchedStateId && watchedStateId !== selectedStateId) {
+      setSelectedStateId(watchedStateId);
+      // Reset city when state changes
+      setValue("cityId", "");
+    }
+  }, [watchedStateId, selectedStateId, setValue]);
 
   // Save address mutation
   const saveAddressMutation = useMutation({
@@ -106,6 +147,7 @@ const AddressModal = ({
       onSuccess?.();
       onClose();
       reset();
+      setSelectedStateId("");
     },
   });
 
@@ -113,19 +155,29 @@ const AddressModal = ({
   useEffect(() => {
     if (editingAddress) {
       const fullPhone = `+${editingAddress.phoneCode}${editingAddress.phoneNumber}`;
+      // Find the state for this city
+      const cityState = editingAddress.city?.stateId || editingAddress.stateId || "";
+      if (cityState) {
+        setSelectedStateId(cityState);
+      }
       reset({
         recipientName: editingAddress.recipientName,
+        stateId: cityState,
         cityId: editingAddress.cityId,
+        address: editingAddress.address || "",
         phone: fullPhone,
         setAsDefault: editingAddress.setAsDefault,
       });
     } else {
       reset({
         recipientName: "",
+        stateId: "",
         cityId: "",
+        address: "",
         phone: "+20",
         setAsDefault: isFirstAddress,
       });
+      setSelectedStateId("");
     }
   }, [editingAddress, isFirstAddress, reset]);
 
@@ -153,7 +205,8 @@ const AddressModal = ({
       phoneCode,
       phoneNumber,
       recipientName: formData.recipientName,
-      setAsDefault: formData.setAsDefault,
+      address: formData.address,
+      isDefault: formData.setAsDefault,
     };
 
     saveAddressMutation.mutate(dataToSend);
@@ -201,6 +254,31 @@ const AddressModal = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              المحافظة *
+            </label>
+            <Controller
+              name="stateId"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
+                  <option value="">اختر المحافظة</option>
+                  {states.map((state) => (
+                    <option key={state.id} value={state.id}>
+                      {state.titleAr}
+                    </option>
+                  ))}
+                </select>
+              )}
+            />
+            {formErrors.stateId && (
+              <p className="text-red-500 text-sm mt-1">{formErrors.stateId.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               المدينة *
             </label>
             <Controller
@@ -209,8 +287,15 @@ const AddressModal = ({
               render={({ field }) => (
                 <select
                   {...field}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                  <option value="">اختر المدينة</option>
+                  disabled={!selectedStateId || citiesLoading}
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                  <option value="">
+                    {!selectedStateId
+                      ? "اختر المحافظة أولاً"
+                      : citiesLoading
+                      ? "جاري التحميل..."
+                      : "اختر المدينة"}
+                  </option>
                   {cities.map((city) => (
                     <option key={city.id} value={city.id}>
                       {city.titleAr}
@@ -221,6 +306,27 @@ const AddressModal = ({
             />
             {formErrors.cityId && (
               <p className="text-red-500 text-sm mt-1">{formErrors.cityId.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              العنوان التفصيلي *
+            </label>
+            <Controller
+              name="address"
+              control={control}
+              render={({ field }) => (
+                <textarea
+                  {...field}
+                  rows={3}
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  placeholder="مثال: شارع الملك فهد، مبنى رقم 5، الطابق الثاني"
+                />
+              )}
+            />
+            {formErrors.address && (
+              <p className="text-red-500 text-sm mt-1">{formErrors.address.message}</p>
             )}
           </div>
 
