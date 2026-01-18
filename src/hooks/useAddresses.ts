@@ -77,7 +77,7 @@ export const useAddresses = () => {
   // Set default address mutation
   const setDefaultAddressMutation = useMutation({
     mutationFn: async (addressId: string) => {
-      return await customAxios.put(`/CustomerAddress/${addressId}/set-default`);
+      return await customAxios.put(`/CustomerAddress/${addressId}/default`);
     },
     onSuccess: () => {
       toast.success("تم تعيين العنوان كافتراضي");
