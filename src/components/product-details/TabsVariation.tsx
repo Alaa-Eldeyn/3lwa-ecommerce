@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import ReviewCard from "./components/ReviewCard";
 import { CheckCircle2 } from "lucide-react";
-import type { ProductDetails } from "@/src/types/types";
+import type { ProductDetails } from "@/src/types/product-details.types";
 
 interface Review {
   id: string;

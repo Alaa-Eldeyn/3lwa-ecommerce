@@ -61,6 +61,7 @@ export interface ProductAttribute {
 // Product Combination
 export interface ProductCombination {
   combinationId: string;
+  sku?: string;
   isDefault: boolean;
   pricingAttributes: PricingAttribute[];
   images: CombinationImage[];
