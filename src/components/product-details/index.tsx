@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useLocale } from "next-intl";
-import type { ProductDetails } from "@/src/types/types";
+import type { ProductDetails } from "@/src/types/product-details.types";
 
 interface ProductDetailsProps {
   variant?: "tabs" | "sections";

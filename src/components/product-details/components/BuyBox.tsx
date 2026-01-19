@@ -14,7 +14,7 @@ import {
 import { useTranslations, useLocale } from "next-intl";
 import { useCartStore } from "@/src/store/cartStore";
 import { useUserStore } from "@/src/store/userStore";
-import { ProductDetails } from "@/src/types/types";
+import { ProductDetails } from "@/src/types/product-details.types";
 import toast from "react-hot-toast";
 import Link from "next/link";
 
@@ -30,8 +30,8 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
   const { addItem } = useCartStore();
   const { isAuthenticated } = useUserStore();
 
-  const [quantity, setQuantity] = useState(1);
-  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  // Check if combination exists
+  const isCombinationAvailable = !!product.pricing;
 
   // Extract dynamic data from product
   const title = locale === "ar" ? product.titleAr : product.titleEn;
@@ -42,7 +42,10 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
 
   // Stock status
   const availableQuantity = bestOffer?.availableQuantity || 0;
-  const stockStatus = bestOffer?.stockStatus || 0;
+  const stockStatus = isCombinationAvailable ? bestOffer?.stockStatus || 0 : 3;
+
+  const [quantity, setQuantity] = useState(bestOffer?.minOrderQuantity || 1);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const handleQuantityChange = (type: "increment" | "decrement") => {
     if (type === "increment") {
@@ -91,15 +94,21 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
           <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
             {locale === "ar" ? "البائع" : "Sold by"}
           </span>
-          <Link
-            href={`/vendor/${bestOffer?.vendorId}`}
-            className="text-sm font-bold text-secondary dark:text-blue-400 hover:underline flex items-center gap-1">
-            {bestOffer?.vendorName || "Store"}
-            <ExternalLink size={12} />
-          </Link>
+          {isCombinationAvailable ? (
+            <Link
+              href={`/vendor/${bestOffer?.vendorId}`}
+              className="text-sm font-bold text-secondary dark:text-blue-400 hover:underline flex items-center gap-1">
+              {bestOffer?.vendorName || "Store"}
+              <ExternalLink size={12} />
+            </Link>
+          ) : (
+            <div className="text-sm font-bold text-gray-500 dark:text-gray-400">
+              {locale === "ar" ? "غير متوفر" : "Not available"}
+            </div>
+          )}
         </div>
 
-        {/* Stock Status */}
+        {/* Stock Status / Combination Unavailable */}
         <div className="mb-6">
           <div
             className={`flex items-center text-sm font-medium mb-1 ${
@@ -135,7 +144,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
             <div className="flex items-center gap-3">
               <button
                 onClick={() => handleQuantityChange("decrement")}
-                disabled={quantity === 1}
+                disabled={quantity === bestOffer?.minOrderQuantity || quantity === 1}
                 className="w-6 h-6 rounded bg-white dark:bg-gray-600 shadow-sm flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed">
                 <Minus size={12} />
               </button>
@@ -144,7 +153,12 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
               </span>
               <button
                 onClick={() => handleQuantityChange("increment")}
-                className="w-6 h-6 rounded bg-white dark:bg-gray-600 shadow-sm flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary">
+                disabled={
+                  quantity === bestOffer?.maxOrderQuantity ||
+                  quantity === availableQuantity ||
+                  !isCombinationAvailable
+                }
+                className="w-6 h-6 rounded bg-white dark:bg-gray-600 shadow-sm flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed">
                 <Plus size={12} />
               </button>
             </div>
@@ -153,7 +167,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
           {/* Add to Cart Button */}
           <button
             onClick={handleAddToCart}
-            disabled={isAddingToCart || stockStatus === 3}
+            disabled={isAddingToCart || stockStatus === 3 || !isCombinationAvailable}
             className="w-full bg-primary hover:bg-teal-700 dark:hover:bg-teal-600 text-white font-bold py-3.5 px-4 rounded-lg shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 text-sm disabled:cursor-not-allowed">
             {isAddingToCart ? (
               <>
@@ -170,7 +184,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
 
           {/* Buy Now Button */}
           <button
-            disabled={stockStatus === 3}
+            disabled={stockStatus === 3 || !isCombinationAvailable}
             className="w-full bg-secondary hover:bg-[#1e3a5c] dark:hover:bg-[#1e3a5c]/80 text-white font-bold py-3.5 px-4 rounded-lg shadow-sm hover:shadow-md transition-all text-sm disabled:opacity-50 disabled:cursor-not-allowed">
             {locale === "ar" ? "اشتري الآن" : "Buy Now"}
           </button>
@@ -224,7 +238,8 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
           className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-between group">
           <span className="flex items-center gap-2">
             <Tags size={18} className="text-primary" />
-            {vendorCount} {t("otherOffers")} {locale === "ar" ? "من" : "from"} {product.pricing?.minPrice.toFixed(2)}$
+            {vendorCount} {t("otherOffers")} {locale === "ar" ? "من" : "from"}{" "}
+            {product.pricing?.minPrice.toFixed(2)}$
           </span>
           <svg
             className="w-3 h-3 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300"

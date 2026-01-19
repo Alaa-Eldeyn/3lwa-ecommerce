@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useLocale } from "next-intl";
 import axios from "axios";
-import { Block } from "@/src/types/homeBlocksTypes";
+import { Block } from "@/src/types/home-blocks.types";
 import SingleBlock from "./SingleBlock";
 import Link from "next/link";
 import { useUserStore } from "@/src/store/userStore";

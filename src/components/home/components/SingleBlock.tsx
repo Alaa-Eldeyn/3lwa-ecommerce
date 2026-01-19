@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import { Block } from "@/src/types/homeBlocksTypes";
+import { Block } from "@/src/types/home-blocks.types";
 
 type BlockItemUI = {
   id: string;

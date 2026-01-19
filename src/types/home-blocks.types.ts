@@ -1,4 +1,4 @@
-// Block Type
+// Home Block
 export type Block = {
   id: string;
   titleAr: string;
@@ -16,7 +16,8 @@ export type Block = {
   categories: Array<Category>;
 };
 
-// Campaign Type
+/* ----------------------- Home Blocks - Nested Types ----------------------- */
+// Campaign
 export type Campaign = {
   Id: string;
   NameAr: string;
@@ -28,7 +29,7 @@ export type Campaign = {
   BadgeColor: string;
 };
 
-// Product Type
+// Product
 export type Product = {
   itemId: string;
   itemCombinationId: string;
@@ -42,7 +43,7 @@ export type Product = {
   campaignBadgeEn: string | null;
 };
 
-// Category Type
+// Category
 export type Category = {
   categoryId: string;
   nameAr: string;

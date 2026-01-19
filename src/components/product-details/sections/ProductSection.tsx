@@ -5,7 +5,7 @@ import ImageGallery from "../components/ImageGallery";
 import ProductInfo from "../components/ProductInfo";
 import BuyBox from "../components/BuyBox";
 import VendorsSidebar from "../components/VendorsSidebar";
-import { ProductDetails } from "@/src/types/types";
+import { ProductDetails } from "@/src/types/product-details.types";
 import { useLocale } from "next-intl";
 
 const ProductSection = ({

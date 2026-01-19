@@ -3,14 +3,10 @@
 import { useState, useMemo, useEffect } from "react";
 import { StarIcon, Check } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
-import {
-  ProductDetails,
-  PricingAttribute,
-  SelectedValueId,
-  CombinationResponse,
-} from "@/src/types/types";
+import { PricingAttribute, ProductDetails } from "@/src/types/product-details.types";
 import axios from "axios";
 import Link from "next/link";
+import { SelectedValueId } from "@/src/types/types";
 
 interface ProductInfoProps {
   product: ProductDetails;
@@ -199,78 +195,41 @@ const ProductInfo = ({
 
     setIsLoadingCombination(true);
     try {
-      const response = await axios.post<{ data: CombinationResponse }>(
+      const response = await axios.post<ProductDetails>(
         `${process.env.NEXT_PUBLIC_BASE_URL}/ItemDetails/combinations/by-attributes`,
         {
           selectedValueIds,
         }
       );
 
-      const combinationData = response.data.data || response.data;
+      const combinationData = response.data;
 
-      if (combinationData) {
-        // Update product details with new combination data
+      // Update product details with new combination data (or set to unavailable)
+      if (combinationData.currentCombination) {
         const updatedProduct: ProductDetails = {
           ...product,
           currentCombination: {
-            combinationId: combinationData.combinationId,
-            sku: combinationData.sku,
-            barcode: combinationData.barcode,
-            isDefault: false,
-            pricingAttributes: combinationData.pricingAttributes,
-            images: combinationData.images.map((img) => ({
-              id: img.id,
-              path: img.path,
-              order: img.order,
-              isDefault: img.isNew || false,
-            })),
+            combinationId: combinationData.currentCombination.combinationId,
+            isDefault: combinationData.currentCombination.isDefault,
+            pricingAttributes: combinationData.currentCombination.pricingAttributes,
+            images: combinationData.currentCombination.images,
           },
           pricing: {
-            vendorCount: combinationData.summary.totalVendors,
-            minPrice: combinationData.summary.minPrice,
-            maxPrice: combinationData.summary.maxPrice,
-            bestOffer:
-              combinationData.offers && combinationData.offers.length > 0
-                ? {
-                    offerId: combinationData.offers[0].offerId,
-                    offerPricingId: combinationData.offers[0].offerPricingId,
-                    vendorId: combinationData.offers[0].vendorId,
-                    vendorName: combinationData.offers[0].vendorName,
-                    vendorRating: combinationData.offers[0].vendorRating,
-                    price: combinationData.offers[0].price,
-                    salesPrice: combinationData.offers[0].salesPrice,
-                    discountPercentage: combinationData.offers[0].discountPercentage,
-                    availableQuantity: combinationData.offers[0].availableQuantity,
-                    stockStatus: combinationData.offers[0].stockStatus,
-                    isFreeShipping: combinationData.offers[0].isFreeShipping,
-                    estimatedDeliveryDays: combinationData.offers[0].estimatedDeliveryDays,
-                    isBuyBoxWinner: combinationData.offers[0].isBuyBoxWinner,
-                    minOrderQuantity: combinationData.offers[0].minOrderQuantity,
-                    maxOrderQuantity: combinationData.offers[0].maxOrderQuantity,
-                    quantityTiers: combinationData.offers[0].quantityTiers,
-                  }
-                : product.pricing?.bestOffer || {
-                    offerId: "",
-                    offerPricingId: "",
-                    vendorId: "",
-                    vendorName: "",
-                    vendorRating: 0,
-                    price: 0,
-                    salesPrice: 0,
-                    discountPercentage: 0,
-                    availableQuantity: 0,
-                    stockStatus: 0,
-                    isFreeShipping: false,
-                    estimatedDeliveryDays: 0,
-                    isBuyBoxWinner: false,
-                    minOrderQuantity: 0,
-                    maxOrderQuantity: 0,
-                    quantityTiers: [],
-                  },
+            vendorCount: combinationData.pricing?.vendorCount || 0,
+            minPrice: combinationData.pricing?.minPrice || 0,
+            maxPrice: combinationData.pricing?.maxPrice || 0,
+            bestOffer: combinationData.pricing?.bestOffer || undefined,
           },
         };
 
         // Update parent component
+        onProductUpdate(updatedProduct);
+      } else {
+        // Combination is unavailable - update product to reflect this
+        const updatedProduct: ProductDetails = {
+          ...product,
+          pricing: undefined,
+        };
         onProductUpdate(updatedProduct);
       }
     } catch (error) {
@@ -453,14 +412,6 @@ const ProductInfo = ({
           {locale === "ar" ? "جميع الأسعار شاملة ضريبة القيمة المضافة" : "All prices include VAT"}
         </p>
       </div>
-
-      {/* Loading indicator for combination */}
-      {isLoadingCombination && (
-        <div className="mb-4 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-          <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
-          <span>{t("loading") || "جاري التحديث..."}</span>
-        </div>
-      )}
 
       {/* Variants Selection */}
       <div className="space-y-4">

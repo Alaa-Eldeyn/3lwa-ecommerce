@@ -5,6 +5,7 @@ import {
   profileSchema,
   passwordUpdateSchema,
 } from "../schemas/schemas";
+import { QuantityTier } from "./product-details.types";
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;
@@ -125,7 +126,7 @@ export interface Product {
   seoTitle: string;
   seoDescription: string;
   seoMetaTags: string;
-    price?: number;
+  price?: number;
   salesPrice?: number;
   itemRating?: number;
   badges?: Badge[];
@@ -193,119 +194,6 @@ export interface WishlistResponse {
   hasNextPage: boolean;
 }
 
-// Product Details Types (New API Structure)
-export interface ProductCategory {
-  id: string;
-  nameAr: string;
-  nameEn: string;
-}
-
-export interface ProductBrand {
-  id: string;
-  nameAr: string;
-  nameEn: string;
-  logoUrl: string;
-}
-
-export interface ProductImage {
-  id: string;
-  path: string;
-  order: number;
-  itemId: string;
-  isNew: boolean;
-}
-
-export interface ProductAttribute {
-  attributeId: string;
-  nameAr: string;
-  nameEn: string;
-  fieldType: number;
-  displayOrder: number;
-  valueAr: string;
-  valueEn: string;
-  combinationValueId?: string; // Optional, may not be available in initial load
-}
-
-export interface PricingAttribute {
-  attributeId: string;
-  attributeNameAr: string;
-  attributeNameEn: string;
-  combinationValueId: string;
-  valueAr: string;
-  valueEn: string;
-  isSelected: boolean;
-}
-
-export interface CombinationImage {
-  id: string;
-  path: string;
-  order: number;
-  isDefault: boolean;
-}
-
-export interface ProductCombination {
-  combinationId: string;
-  sku: string;
-  barcode: string;
-  isDefault: boolean;
-  pricingAttributes: PricingAttribute[];
-  images: CombinationImage[];
-}
-
-export interface QuantityTier {
-  minQuantity: number;
-  maxQuantity: number;
-  unitPrice: number;
-}
-
-export interface BestOffer {
-  offerId: string;
-  offerPricingId: string;
-  vendorId: string;
-  vendorName: string;
-  vendorRating: number;
-  price: number;
-  salesPrice: number;
-  discountPercentage: number;
-  availableQuantity: number;
-  stockStatus: number;
-  isFreeShipping: boolean;
-  estimatedDeliveryDays: number;
-  isBuyBoxWinner: boolean;
-  minOrderQuantity: number;
-  maxOrderQuantity: number;
-  quantityTiers: QuantityTier[];
-}
-
-export interface ProductPricing {
-  vendorCount: number;
-  minPrice: number;
-  maxPrice: number;
-  bestOffer: BestOffer;
-}
-
-export interface ProductDetails {
-  id: string;
-  titleAr: string;
-  titleEn: string;
-  descriptionAr?: string;
-  descriptionEn?: string;
-  shortDescriptionAr?: string;
-  shortDescriptionEn?: string;
-  thumbnailImage: string;
-  category?: ProductCategory;
-  brand?: ProductBrand;
-  hasCombinations?: boolean;
-  isMultiVendor?: boolean;
-  pricingSystemType?: number;
-  pricingSystemName?: string;
-  averageRating?: number;
-  generalImages?: ProductImage[];
-  attributes?: ProductAttribute[];
-  currentCombination?: ProductCombination;
-  pricing?: ProductPricing;
-}
-
 // Combination API Types
 export interface SelectedValueId {
   combinationAttributeValueId: string;
@@ -355,17 +243,4 @@ export interface MissingAttribute {
   nameAr: string;
   nameEn: string;
   status: string;
-}
-
-export interface CombinationResponse {
-  combinationId: string;
-  sku: string;
-  barcode: string;
-  isAvailable: boolean;
-  message?: string;
-  pricingAttributes: PricingAttribute[];
-  images: ProductImage[];
-  offers: CombinationOffer[];
-  summary: CombinationSummary;
-  missingAttributes?: MissingAttribute[];
 }
