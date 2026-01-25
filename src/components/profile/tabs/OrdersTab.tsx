@@ -5,39 +5,26 @@ import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-// API response item type
-interface OrderItemResponse {
-  id: string;
-  orderNumber: string;
-  sellerName: string;
-  itemImageUrl: string;
-  itemNameAr: string;
-  itemNameEn: string;
-  quantityItem: number;
-  shipmentStatus: number;
-  price: number;
-  total: number;
-  orderStatus: string;
-  paymentStatus: string;
-  createdDate: string;
+// Order item summary type
+interface OrderItemSummary {
+  itemName: string;
+  thumbnailImage: string;
+  quantity: number;
 }
 
-// Grouped order type for display
-interface GroupedOrder {
-  id: string;
+// Order type from API
+interface Order {
+  orderId: string;
   orderNumber: string;
-  total: number;
-  orderStatus: string;
-  paymentStatus: string;
-  createdDate: string;
-  items: {
-    itemImageUrl: string;
-    itemNameAr: string;
-    itemNameEn: string;
-    quantityItem: number;
-    price: number;
-  }[];
+  orderDate: string;
+  totalAmount: number;
+  orderStatus: number;
+  paymentStatus: number;
+  shipmentStatus: number;
   totalItems: number;
+  itemsSummary: OrderItemSummary[];
+  canCancel: boolean;
+  isWithinRefundPeriod: boolean;
 }
 
 const OrdersTab = () => {
@@ -45,53 +32,17 @@ const OrdersTab = () => {
   const locale = useLocale();
   const router = useRouter();
   const isArabic = locale === "ar";
-  const [orders, setOrders] = useState<GroupedOrder[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         setLoading(true);
-        const response = await customAxios.get("/Order/my-orders");
-        const rawItems: OrderItemResponse[] = response.data.data || [];
+        const response = await customAxios.get("/customer/orders");
+        const ordersData: Order[] = response.data?.data?.items || [];
 
-        // Group items by order ID
-        const ordersMap = new Map<string, GroupedOrder>();
-
-        rawItems.forEach((item) => {
-          if (ordersMap.has(item.id)) {
-            const existingOrder = ordersMap.get(item.id)!;
-            existingOrder.items.push({
-              itemImageUrl: item.itemImageUrl,
-              itemNameAr: item.itemNameAr,
-              itemNameEn: item.itemNameEn,
-              quantityItem: item.quantityItem,
-              price: item.price,
-            });
-            existingOrder.totalItems += item.quantityItem;
-          } else {
-            ordersMap.set(item.id, {
-              id: item.id,
-              orderNumber: item.orderNumber,
-              total: item.total,
-              orderStatus: item.orderStatus,
-              paymentStatus: item.paymentStatus,
-              createdDate: item.createdDate,
-              items: [
-                {
-                  itemImageUrl: item.itemImageUrl,
-                  itemNameAr: item.itemNameAr,
-                  itemNameEn: item.itemNameEn,
-                  quantityItem: item.quantityItem,
-                  price: item.price,
-                },
-              ],
-              totalItems: item.quantityItem,
-            });
-          }
-        });
-
-        setOrders(Array.from(ordersMap.values()));
+        setOrders(ordersData);
       } catch (error) {
         console.error("Error fetching orders:", error);
       } finally {
@@ -113,32 +64,120 @@ const OrdersTab = () => {
     return imageUrl;
   };
 
-  const getStatusColor = (status: string) => {
-    const normalizedStatus = status.toLowerCase();
-    const colors: Record<string, string> = {
-      pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
-      processing: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
-      shipped: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
-      delivered: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
-      cancelled: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
-      paymentfailed: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
-      failed: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
-    };
-    return colors[normalizedStatus] || colors.pending;
-  };
+  // 0=Pending, 1=Processing, 2=Shipped, 3=Delivered, 4=Cancelled, 5=Failed, 6=Refunded, 7=PartiallyRefunded, 8=PartiallyPaid
+  const getOrderStatusInfo = (status: string | number) => {
+    const statusKey = typeof status === "number" ? status : parseInt(status) || status;
 
-  const getStatusLabel = (status: string) => {
-    const normalizedStatus = status.toLowerCase();
-    const statusMap: Record<string, string> = {
-      pending: "pending",
-      processing: "processing",
-      shipped: "shipped",
-      delivered: "delivered",
-      cancelled: "cancelled",
-      paymentfailed: "cancelled",
-      failed: "cancelled",
+    const statusConfig: Record<
+      string | number,
+      { label: string; labelAr: string; bgColor: string }
+    > = {
+      0: {
+        label: "Pending",
+        labelAr: "قيد الانتظار",
+        bgColor: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+      },
+      1: {
+        label: "Processing",
+        labelAr: "جاري المعالجة",
+        bgColor: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
+      },
+      2: {
+        label: "Shipped",
+        labelAr: "تم الشحن",
+        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
+      },
+      3: {
+        label: "Delivered",
+        labelAr: "تم التسليم",
+        bgColor: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+      },
+      4: {
+        label: "Cancelled",
+        labelAr: "ملغي",
+        bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300",
+      },
+      5: {
+        label: "Failed",
+        labelAr: "فشل",
+        bgColor: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
+      },
+      6: {
+        label: "Refunded",
+        labelAr: "مسترد",
+        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
+      },
+      7: {
+        label: "Partially Refunded",
+        labelAr: "مسترد جزئياً",
+        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
+      },
+      8: {
+        label: "Partially Paid",
+        labelAr: "مدفوع جزئياً",
+        bgColor: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
+      },
+      pending: {
+        label: "Pending",
+        labelAr: "قيد الانتظار",
+        bgColor: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+      },
+      processing: {
+        label: "Processing",
+        labelAr: "جاري المعالجة",
+        bgColor: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
+      },
+      shipped: {
+        label: "Shipped",
+        labelAr: "تم الشحن",
+        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
+      },
+      delivered: {
+        label: "Delivered",
+        labelAr: "تم التسليم",
+        bgColor: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+      },
+      cancelled: {
+        label: "Cancelled",
+        labelAr: "ملغي",
+        bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300",
+      },
+      failed: {
+        label: "Failed",
+        labelAr: "فشل",
+        bgColor: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
+      },
+      refunded: {
+        label: "Refunded",
+        labelAr: "مسترد",
+        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
+      },
+      partiallyrefunded: {
+        label: "Partially Refunded",
+        labelAr: "مسترد جزئياً",
+        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
+      },
+      partiallypaid: {
+        label: "Partially Paid",
+        labelAr: "مدفوع جزئياً",
+        bgColor: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
+      },
     };
-    return t(`orders.${statusMap[normalizedStatus] || "pending"}`);
+
+    const normalizedKey =
+      typeof statusKey === "number"
+        ? statusKey
+        : typeof statusKey === "string"
+        ? statusKey.toLowerCase()
+        : "";
+
+    return (
+      statusConfig[normalizedKey] || {
+        label: String(status),
+        labelAr: String(status),
+        bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300",
+      }
+    );
   };
 
   if (loading) {
@@ -189,7 +228,7 @@ const OrdersTab = () => {
         <div className="space-y-4">
           {orders.map((order) => (
             <div
-              key={order.id}
+              key={order.orderId}
               className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary soft">
               {/* Order Header */}
               <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
@@ -198,29 +237,32 @@ const OrdersTab = () => {
                     {t("orders.orderNumber")}: {order.orderNumber}
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {t("orders.date")}: {new Date(order.createdDate).toLocaleDateString(locale)}
+                    {t("orders.date")}: {new Date(order.orderDate).toLocaleDateString(locale)}
                   </p>
                 </div>
-                <span
-                  className={`px-3 py-1 rounded-lg text-sm font-medium ${getStatusColor(
-                    order.orderStatus
-                  )}`}>
-                  {getStatusLabel(order.orderStatus)}
-                </span>
+                {(() => {
+                  const statusInfo = getOrderStatusInfo(order.orderStatus);
+                  return (
+                    <span
+                      className={`px-3 py-1 rounded-lg text-sm font-medium ${statusInfo.bgColor}`}>
+                      {isArabic ? statusInfo.labelAr : statusInfo.label}
+                    </span>
+                  );
+                })()}
               </div>
 
               {/* Order Items Preview */}
               <div className="flex items-center gap-4 mb-4">
                 {/* Item Images - show up to 3 images */}
                 <div className="flex -space-x-2 rtl:space-x-reverse">
-                  {order.items.slice(0, 3).map((item, index) => (
+                  {order.itemsSummary.slice(0, 3).map((item, index) => (
                     <div
                       key={index}
                       className="relative w-16 h-16 rounded-lg border-2 border-white dark:border-gray-800 overflow-hidden bg-gray-100 dark:bg-gray-700">
-                      {item.itemImageUrl ? (
+                      {item.thumbnailImage ? (
                         <Image
-                          src={getImageUrl(item.itemImageUrl)}
-                          alt={isArabic ? item.itemNameAr : item.itemNameEn}
+                          src={getImageUrl(item.thumbnailImage)}
+                          alt={item.itemName}
                           fill
                           className="object-cover"
                         />
@@ -231,10 +273,10 @@ const OrdersTab = () => {
                       )}
                     </div>
                   ))}
-                  {order.items.length > 3 && (
+                  {order.itemsSummary.length > 3 && (
                     <div className="relative w-16 h-16 rounded-lg border-2 border-white dark:border-gray-800 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                       <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                        +{order.items.length - 3}
+                        +{order.itemsSummary.length - 3}
                       </span>
                     </div>
                   )}
@@ -243,13 +285,13 @@ const OrdersTab = () => {
                 {/* Item Details */}
                 <div className="flex-1 min-w-0 space-y-2">
                   <p className="text-sm text-gray-700 dark:text-gray-300 truncate">
-                    {isArabic ? order.items[0].itemNameAr : order.items[0].itemNameEn}
-                    {order.items.length > 1 && (
+                    {order.itemsSummary[0]?.itemName || ""}
+                    {order.itemsSummary.length > 1 && (
                       <span className="text-gray-500">
                         {" "}
                         {isArabic
-                          ? `و ${order.items.length - 1} منتجات أخرى`
-                          : `and ${order.items.length - 1} more`}
+                          ? `و ${order.itemsSummary.length - 1} منتجات أخرى`
+                          : `and ${order.itemsSummary.length - 1} more`}
                       </span>
                     )}
                   </p>
@@ -262,10 +304,10 @@ const OrdersTab = () => {
               {/* Order Footer */}
               <div className="flex flex-wrap justify-between items-center gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
                 <p className="text-lg font-bold text-gray-900 dark:text-white">
-                  {t("orders.total")}: ${order.total.toFixed(2)}
+                  {t("orders.total")}: ${order.totalAmount.toFixed(2)}
                 </p>
                 <button
-                  onClick={() => router.push(`/order/${order.id}`)}
+                  onClick={() => router.push(`/order/${order.orderId}`)}
                   className="px-4 py-2 text-primary border border-primary rounded-lg hover:bg-primary hover:text-white">
                   {t("orders.viewDetails")}
                 </button>

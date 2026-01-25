@@ -153,7 +153,7 @@ const Checkout = () => {
         notes: deliveryNotes || null,
       };
 
-      const response = await customAxios.post("/Order/create", orderData);
+      const response = await customAxios.post("/customer/orders/create", orderData);
 
       if (response.data?.success && response.data?.data?.orderId) {
         // Handle success - redirect to order confirmation page

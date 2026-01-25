@@ -7,23 +7,7 @@ import Image from "next/image";
 import { customAxios } from "@/src/utils/customAxios";
 import { Check, ShoppingCart } from "lucide-react";
 import { Loader2 } from "lucide-react";
-
-// Types
-interface OrderData {
-  number: string;
-  price: number;
-  shippingAmount: number;
-}
-
-interface OrderDetailItem {
-  orderDetailId: string;
-  itemName: string;
-  itemImageUrl: string;
-  vendorStoreName: string;
-  quantity: number;
-  unitPrice: number;
-  subTotal: number;
-}
+import { OrderData } from "@/src/types/order-details.types";
 
 interface OrderStatusProps {
   id: string;
@@ -35,7 +19,6 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
   const isArabic = locale === "ar";
 
   const [orderData, setOrderData] = useState<OrderData | null>(null);
-  const [orderItems, setOrderItems] = useState<OrderDetailItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,20 +33,12 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
         setIsLoading(true);
         setError(null);
 
-        // Fetch both order info and order details in parallel
-        const [orderResponse, detailsResponse] = await Promise.all([
-          customAxios.get(`/Order/${id}`),
-          customAxios.get(`/Order/list-order-details/${id}`),
-        ]);
+        // Fetch order data
+        const response = await customAxios.get(`/customer/orders/${id}`);
 
         // Handle order data
-        if (orderResponse.data?.success && orderResponse.data?.data) {
-          setOrderData(orderResponse.data.data);
-        }
-
-        // Handle order details
-        if (detailsResponse.data?.success && detailsResponse.data?.data) {
-          setOrderItems(detailsResponse.data.data);
+        if (response.data?.success && response.data?.data) {
+          setOrderData(response.data.data);
         }
       } catch (err) {
         console.error("Failed to fetch order data:", err);
@@ -101,10 +76,17 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
     return imageUrl;
   };
 
+  // Get order items from orderData
+  const orderItems = orderData?.items || [];
+
   // Calculate subtotal from items
-  const itemsSubtotal = orderItems.reduce((sum, item) => sum + item.subTotal, 0);
+  const itemsSubtotal =
+    orderData?.subTotal || orderItems.reduce((sum, item) => sum + item.subTotal, 0);
   const shippingAmount = orderData?.shippingAmount || 0;
-  const totalAmount = orderData?.price || itemsSubtotal + shippingAmount;
+  const taxAmount = orderData?.taxAmount || 0;
+  const discountAmount = orderData?.discountAmount || 0;
+  const totalAmount =
+    orderData?.totalAmount || itemsSubtotal + shippingAmount + taxAmount - discountAmount;
 
   if (isLoading) {
     return (
@@ -167,7 +149,9 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
           <span className="text-gray-500 text-sm font-medium">
             {isArabic ? "رقم الطلب:" : "Order Number:"}
           </span>
-          <span className="text-primary font-bold tracking-wide">{orderData?.number || "---"}</span>
+          <span className="text-primary font-bold tracking-wide">
+            {orderData?.orderNumber || "---"}
+          </span>
         </div>
 
         {/* Order Summary Section */}
@@ -182,9 +166,9 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
               orderItems.map((item) => (
                 <div key={item.orderDetailId} className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 bg-white flex-shrink-0 relative">
-                    {item.itemImageUrl ? (
+                    {item.itemImage ? (
                       <Image
-                        src={getImageUrl(item.itemImageUrl)}
+                        src={getImageUrl(item.itemImage)}
                         alt={item.itemName}
                         fill
                         className="object-cover"
@@ -199,10 +183,10 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
                     <h3 className="font-semibold text-gray-800 text-sm md:text-base text-start">
                       {item.itemName}
                     </h3>
-                    <p className="text-gray-500 text-xs text-start">    
+                    <p className="text-gray-500 text-xs text-start">
                       {isArabic ? "الكمية:" : "Qty:"} {item.quantity}
-                      {item.vendorStoreName &&
-                        ` | ${isArabic ? "البائع:" : "Seller:"} ${item.vendorStoreName}`}
+                      {item.vendorName &&
+                        ` | ${isArabic ? "البائع:" : "Seller:"} ${item.vendorName}`}
                     </p>
                   </div>
                   <div className={`text-${isArabic ? "left" : "right"}`}>
@@ -227,6 +211,22 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
               </span>
               <span className="text-gray-800 font-medium">${itemsSubtotal.toFixed(2)}</span>
             </div>
+
+            {/* Discount */}
+            {discountAmount > 0 && (
+              <div className="flex justify-between items-center">
+                <span className="text-gray-500 text-sm">{isArabic ? "الخصم" : "Discount"}</span>
+                <span className="text-green-600 font-medium">-${discountAmount.toFixed(2)}</span>
+              </div>
+            )}
+
+            {/* Tax */}
+            {taxAmount > 0 && (
+              <div className="flex justify-between items-center">
+                <span className="text-gray-500 text-sm">{isArabic ? "الضريبة" : "Tax"}</span>
+                <span className="text-gray-800 font-medium">${taxAmount.toFixed(2)}</span>
+              </div>
+            )}
 
             {/* Shipping */}
             <div className="flex justify-between items-center">

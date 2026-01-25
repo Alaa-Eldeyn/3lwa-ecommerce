@@ -6,34 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { customAxios } from "@/src/utils/customAxios";
 import { Package, Loader2, ArrowLeft, ArrowRight, XCircle, Truck, X } from "lucide-react";
-
-// Types
-interface OrderData {
-  id: string;
-  number: string;
-  price: number;
-  shippingAmount: number;
-  orderStatus: string;
-  paymentStatus: string;
-  createdDateUtc: string;
-  shippingAddress?: {
-    addressLine1?: string;
-    addressLine2?: string;
-    city?: string;
-    country?: string;
-    recipientName?: string;
-  };
-}
-
-interface OrderDetailItem {
-  orderDetailId: string;
-  itemName: string;
-  itemImageUrl: string;
-  vendorStoreName: string;
-  quantity: number;
-  unitPrice: number;
-  subTotal: number;
-}
+import { OrderData } from "@/src/types/order-details.types";
 
 interface OrderProps {
   id: string;
@@ -44,7 +17,6 @@ const Order = ({ id }: OrderProps) => {
   const isArabic = locale === "ar";
 
   const [orderData, setOrderData] = useState<OrderData | null>(null);
-  const [orderItems, setOrderItems] = useState<OrderDetailItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,20 +31,12 @@ const Order = ({ id }: OrderProps) => {
         setIsLoading(true);
         setError(null);
 
-        // Fetch both order info and order details in parallel
-        const [orderResponse, detailsResponse] = await Promise.all([
-          customAxios.get(`/Order/${id}`),
-          customAxios.get(`/Order/list-order-details/${id}`),
-        ]);
+        // Fetch order data
+        const response = await customAxios.get(`/customer/orders/${id}`);
 
         // Handle order data
-        if (orderResponse.data?.success && orderResponse.data?.data) {
-          setOrderData(orderResponse.data.data);
-        }
-
-        // Handle order details
-        if (detailsResponse.data?.success && detailsResponse.data?.data) {
-          setOrderItems(detailsResponse.data.data);
+        if (response.data?.success && response.data?.data) {
+          setOrderData(response.data.data);
         }
       } catch (err) {
         console.error("Failed to fetch order data:", err);
@@ -97,10 +61,17 @@ const Order = ({ id }: OrderProps) => {
     return imageUrl;
   };
 
+  // Get order items from orderData
+  const orderItems = orderData?.items || [];
+
   // Calculate subtotal from items
-  const itemsSubtotal = orderItems.reduce((sum, item) => sum + item.subTotal, 0);
+  const itemsSubtotal =
+    orderData?.subTotal || orderItems.reduce((sum, item) => sum + item.subTotal, 0);
   const shippingAmount = orderData?.shippingAmount || 0;
-  const totalAmount = orderData?.price || itemsSubtotal + shippingAmount;
+  const taxAmount = orderData?.taxAmount || 0;
+  const discountAmount = orderData?.discountAmount || 0;
+  const totalAmount =
+    orderData?.totalAmount || itemsSubtotal + shippingAmount + taxAmount - discountAmount;
 
   // 1=Pending, 2=Processing, 3=Completed, 4=Failed, 5=Cancelled, 6=Refunded, 7=PartiallyRefunded, 8=PartiallyPaid
   const getPaymentStatusInfo = (status: string | number) => {
@@ -267,12 +238,12 @@ const Order = ({ id }: OrderProps) => {
           </span>
         </div>
         <div className="flex gap-2 items-center text-gray-600">
-          <span className="font-semibold text-foreground">{orderData?.number || "---"}</span>
+          <span className="font-semibold text-foreground">{orderData?.orderNumber || "---"}</span>
           <span className="text-sm">•</span>
           <span className="text-sm">
             {isArabic ? "تم الطلب في " : "Placed on "}
-            {orderData?.createdDateUtc
-              ? new Date(orderData.createdDateUtc).toLocaleDateString(locale, {
+            {orderData?.orderDate
+              ? new Date(orderData.orderDate).toLocaleDateString(locale, {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
@@ -302,9 +273,9 @@ const Order = ({ id }: OrderProps) => {
                   }`}>
                   <div className="flex items-start gap-4">
                     <div className="h-20 w-20 overflow-hidden rounded-lg bg-gray-100 shrink-0 relative">
-                      {item.itemImageUrl ? (
+                      {item.itemImage ? (
                         <Image
-                          src={getImageUrl(item.itemImageUrl)}
+                          src={getImageUrl(item.itemImage)}
                           alt={item.itemName}
                           fill
                           className="object-cover"
@@ -319,10 +290,10 @@ const Order = ({ id }: OrderProps) => {
                       <h3 className="font-semibold text-xl text-foreground mb-1">
                         {item.itemName}
                       </h3>
-                      {item.vendorStoreName && (
+                      {item.vendorName && (
                         <p className="text-sm text-gray-600 mb-2">
                           {isArabic ? "البائع: " : "Seller: "}
-                          {item.vendorStoreName}
+                          {item.vendorName}
                         </p>
                       )}
                       <div className="flex items-center justify-between">
@@ -364,6 +335,18 @@ const Order = ({ id }: OrderProps) => {
                 <span>{isArabic ? "المجموع الفرعي" : "Subtotal"}</span>
                 <span>${itemsSubtotal.toFixed(2)}</span>
               </div>
+              {discountAmount > 0 && (
+                <div className="flex justify-between text-gray-600">
+                  <span>{isArabic ? "الخصم" : "Discount"}</span>
+                  <span className="text-green-600 font-medium">-${discountAmount.toFixed(2)}</span>
+                </div>
+              )}
+              {taxAmount > 0 && (
+                <div className="flex justify-between text-gray-600">
+                  <span>{isArabic ? "الضريبة" : "Tax"}</span>
+                  <span>${taxAmount.toFixed(2)}</span>
+                </div>
+              )}
               <div className="flex justify-between text-gray-600">
                 <span>{isArabic ? "الشحن" : "Shipping"}</span>
                 <span className={shippingAmount === 0 ? "text-green-600 font-medium" : ""}>
