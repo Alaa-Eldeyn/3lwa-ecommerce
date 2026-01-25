@@ -11,7 +11,7 @@ import { getCategoriesData } from "@/src/data/categoriesData"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
-import { logoutUser } from "@/src/utils/auth"
+import { logoutUser } from "@/src/auth/auth"
 
 const MobileMenu = () => {
   const t = useTranslations("header")

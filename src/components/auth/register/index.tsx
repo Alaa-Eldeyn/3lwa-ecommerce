@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { registerSchema } from "@/src/schemas/schemas";
 import { RegisterFormData } from "@/src/types/types";
-import { registerUser } from "@/src/utils/auth";
+import { registerUser } from "@/src/auth/auth";
 import { useUserStore } from "@/src/store/userStore";
 import { useRouter } from "next/navigation";
 import Lottie from "lottie-react";

@@ -1,9 +1,10 @@
 import { Package } from "lucide-react";
 import { useEffect, useState } from "react";
-import { customAxios } from "@/src/utils/customAxios";
+import { customAxios } from "@/src/auth/customAxios";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { getPaymentStatusInfo } from "@/src/utils/paymentStatus";
 
 // Order item summary type
 interface OrderItemSummary {
@@ -62,122 +63,6 @@ const OrdersTab = () => {
       )}`;
     }
     return imageUrl;
-  };
-
-  // 0=Pending, 1=Processing, 2=Shipped, 3=Delivered, 4=Cancelled, 5=Failed, 6=Refunded, 7=PartiallyRefunded, 8=PartiallyPaid
-  const getOrderStatusInfo = (status: string | number) => {
-    const statusKey = typeof status === "number" ? status : parseInt(status) || status;
-
-    const statusConfig: Record<
-      string | number,
-      { label: string; labelAr: string; bgColor: string }
-    > = {
-      0: {
-        label: "Pending",
-        labelAr: "قيد الانتظار",
-        bgColor: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
-      },
-      1: {
-        label: "Processing",
-        labelAr: "جاري المعالجة",
-        bgColor: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
-      },
-      2: {
-        label: "Shipped",
-        labelAr: "تم الشحن",
-        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
-      },
-      3: {
-        label: "Delivered",
-        labelAr: "تم التسليم",
-        bgColor: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
-      },
-      4: {
-        label: "Cancelled",
-        labelAr: "ملغي",
-        bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300",
-      },
-      5: {
-        label: "Failed",
-        labelAr: "فشل",
-        bgColor: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
-      },
-      6: {
-        label: "Refunded",
-        labelAr: "مسترد",
-        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
-      },
-      7: {
-        label: "Partially Refunded",
-        labelAr: "مسترد جزئياً",
-        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
-      },
-      8: {
-        label: "Partially Paid",
-        labelAr: "مدفوع جزئياً",
-        bgColor: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
-      },
-      pending: {
-        label: "Pending",
-        labelAr: "قيد الانتظار",
-        bgColor: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
-      },
-      processing: {
-        label: "Processing",
-        labelAr: "جاري المعالجة",
-        bgColor: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
-      },
-      shipped: {
-        label: "Shipped",
-        labelAr: "تم الشحن",
-        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
-      },
-      delivered: {
-        label: "Delivered",
-        labelAr: "تم التسليم",
-        bgColor: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
-      },
-      cancelled: {
-        label: "Cancelled",
-        labelAr: "ملغي",
-        bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300",
-      },
-      failed: {
-        label: "Failed",
-        labelAr: "فشل",
-        bgColor: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
-      },
-      refunded: {
-        label: "Refunded",
-        labelAr: "مسترد",
-        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
-      },
-      partiallyrefunded: {
-        label: "Partially Refunded",
-        labelAr: "مسترد جزئياً",
-        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
-      },
-      partiallypaid: {
-        label: "Partially Paid",
-        labelAr: "مدفوع جزئياً",
-        bgColor: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
-      },
-    };
-
-    const normalizedKey =
-      typeof statusKey === "number"
-        ? statusKey
-        : typeof statusKey === "string"
-        ? statusKey.toLowerCase()
-        : "";
-
-    return (
-      statusConfig[normalizedKey] || {
-        label: String(status),
-        labelAr: String(status),
-        bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300",
-      }
-    );
   };
 
   if (loading) {
@@ -241,7 +126,7 @@ const OrdersTab = () => {
                   </p>
                 </div>
                 {(() => {
-                  const statusInfo = getOrderStatusInfo(order.orderStatus);
+                  const statusInfo = getPaymentStatusInfo(order.paymentStatus);
                   return (
                     <span
                       className={`px-3 py-1 rounded-lg text-sm font-medium ${statusInfo.bgColor}`}>

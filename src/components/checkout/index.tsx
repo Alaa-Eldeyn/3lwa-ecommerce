@@ -9,7 +9,7 @@ import { useUserStore } from "@/src/store/userStore";
 import { useLocale } from "next-intl";
 import { useCartStore } from "@/src/store/cartStore";
 import { Tag, X } from "lucide-react";
-import { customAxios } from "@/src/utils/customAxios";
+import { customAxios } from "@/src/auth/customAxios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 

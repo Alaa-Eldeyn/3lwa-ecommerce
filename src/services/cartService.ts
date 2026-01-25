@@ -1,4 +1,4 @@
-import { customAxios } from "../utils/customAxios";
+import { customAxios } from "../auth/customAxios";
 
 const CART_BASE_URL = "/Cart";
 

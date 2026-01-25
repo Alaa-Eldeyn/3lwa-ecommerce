@@ -8,7 +8,7 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { customAxios } from "@/src/utils/customAxios";
+import { customAxios } from "@/src/auth/customAxios";
 import { useEffect, useState } from "react";
 
 interface State {

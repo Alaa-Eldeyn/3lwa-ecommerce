@@ -11,7 +11,7 @@ import { parsePhoneNumber } from "libphonenumber-js";
 import { createPortal } from "react-dom";
 import { profileSchema } from "@/src/schemas/schemas";
 import { ProfileFormData } from "@/src/types/types";
-import { customAxios } from "@/src/utils/customAxios";
+import { customAxios } from "@/src/auth/customAxios";
 import toast from "react-hot-toast";
 import axios from "axios";
 

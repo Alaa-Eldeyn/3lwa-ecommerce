@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
-import { customAxios } from "@/src/utils/customAxios";
+import { customAxios } from "@/src/auth/customAxios";
 import { Check, ShoppingCart } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { OrderData } from "@/src/types/order-details.types";

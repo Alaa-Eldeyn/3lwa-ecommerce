@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { customAxios } from "@/src/utils/customAxios";
+import { customAxios } from "@/src/auth/customAxios";
 import toast from "react-hot-toast";
 import { Address, AddressFormData } from "@/src/components/profile/components/AddressModal";
 

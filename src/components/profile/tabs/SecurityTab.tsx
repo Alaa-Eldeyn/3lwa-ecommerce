@@ -6,7 +6,7 @@ import { Lock, Eye, EyeOff, Trash2 } from "lucide-react";
 import { createPortal } from "react-dom";
 import { passwordUpdateSchema } from "@/src/schemas/schemas";
 import { PasswordUpdateFormData } from "@/src/types/types";
-import { customAxios } from "@/src/utils/customAxios";
+import { customAxios } from "@/src/auth/customAxios";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useUserStore } from "@/src/store/userStore";

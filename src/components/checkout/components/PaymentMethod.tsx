@@ -2,7 +2,7 @@
 import { CreditCard, Wallet, Banknote } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocale } from "next-intl";
-import { customAxios } from "@/src/utils/customAxios";
+import { customAxios } from "@/src/auth/customAxios";
 
 type PaymentMethodType = {
   id: string;

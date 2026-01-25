@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import type { User } from "../types/types"
-import { getUserFromCookie, saveUserToCookie, removeUserFromCookie } from "../utils/auth"
-import { customAxios } from "../utils/customAxios"
+import { getUserFromCookie, saveUserToCookie, removeUserFromCookie } from "../auth/auth"
+import { customAxios } from "../auth/customAxios"
 
 interface UserState {
   user: User | null

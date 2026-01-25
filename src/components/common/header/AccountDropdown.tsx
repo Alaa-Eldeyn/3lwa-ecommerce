@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useUserStore } from "@/src/store/userStore";
-import { logoutUser } from "@/src/utils/auth";
+import { logoutUser } from "@/src/auth/auth";
 
 interface AccountDropdownProps {
   onClose?: () => void;

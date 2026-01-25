@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { loginSchema } from "@/src/schemas/schemas";
 import { LoginFormData } from "@/src/types/types";
-import { loginUser } from "@/src/utils/auth";
+import { loginUser } from "@/src/auth/auth";
 import { useUserStore } from "@/src/store/userStore";
 import { useCartStore } from "@/src/store/cartStore";
 import { useRouter } from "next/navigation";

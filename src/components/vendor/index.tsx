@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Loader2, Store, Star, ThumbsUp, ThumbsDown, Flag, ChevronDown } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { customAxios } from "@/src/utils/customAxios";
+import { customAxios } from "@/src/auth/customAxios";
 import { useLocale } from "next-intl";
 import ProductCard from "../common/ProductCard";
 import { Product } from "@/src/types/types";

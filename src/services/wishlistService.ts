@@ -1,4 +1,4 @@
-import { customAxios } from "../utils/customAxios";
+import { customAxios } from "../auth/customAxios";
 import { WishlistResponse } from "../types/types";
 
 const WISHLIST_BASE_URL = "/wishlist";

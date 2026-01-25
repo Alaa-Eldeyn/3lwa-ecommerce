@@ -7,7 +7,7 @@ import { useCartStore } from "@/src/store/cartStore";
 import Link from "next/link";
 import Image from "next/image";
 import QuantityController from "../common/QuantityController";
-import { isAuthenticated } from "@/src/utils/auth";
+import { isAuthenticated } from "@/src/auth/auth";
 import { useLocale } from "next-intl";
 
 const CartSidebar = () => {
