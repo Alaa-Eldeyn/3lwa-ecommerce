@@ -6,7 +6,7 @@ import { Lock, Eye, EyeOff } from "lucide-react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { parsePhoneNumber } from "libphonenumber-js";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { loginSchema } from "@/src/schemas/schemas";

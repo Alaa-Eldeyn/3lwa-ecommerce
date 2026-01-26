@@ -2,7 +2,7 @@
 
 import { ShoppingCart, Heart, Star, Truck } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 import { useRouter } from "next/navigation";
 import { useState, useMemo, useEffect } from "react";
 import { useLocale } from "next-intl";

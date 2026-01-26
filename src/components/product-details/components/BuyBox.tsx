@@ -16,7 +16,7 @@ import { useCartStore } from "@/src/store/cartStore";
 import { useUserStore } from "@/src/store/userStore";
 import { ProductDetails } from "@/src/types/product-details.types";
 import toast from "react-hot-toast";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 
 interface BuyBoxProps {
   product: ProductDetails;

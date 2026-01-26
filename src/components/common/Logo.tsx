@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 
 const Logo = ({ type }: { type?: string }) => {
   return (

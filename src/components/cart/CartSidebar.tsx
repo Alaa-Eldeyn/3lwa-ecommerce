@@ -4,7 +4,7 @@ import { useState } from "react";
 import { X, ShoppingBag, Trash2, AlertTriangle } from "lucide-react";
 import { useHeaderStore } from "@/src/store/headerStore";
 import { useCartStore } from "@/src/store/cartStore";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 import Image from "next/image";
 import QuantityController from "../common/QuantityController";
 import { isAuthenticated } from "@/src/auth/auth";

@@ -2,7 +2,7 @@
 
 import { ArrowRight } from "lucide-react";
 import { useLocale } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 
 interface OrderSummaryProps {
   subtotal: number;

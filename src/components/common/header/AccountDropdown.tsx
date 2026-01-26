@@ -2,7 +2,7 @@
 
 import { LogIn, LogOut, User, ShoppingBag, MapPin } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 import { useEffect } from "react";
 import { useUserStore } from "@/src/store/userStore";
 import { logoutUser } from "@/src/auth/auth";

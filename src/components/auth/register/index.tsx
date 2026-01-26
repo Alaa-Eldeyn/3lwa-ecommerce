@@ -6,7 +6,7 @@ import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { parsePhoneNumber } from "libphonenumber-js";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 import { useState, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { registerSchema } from "@/src/schemas/schemas";

@@ -5,7 +5,7 @@ import { StarIcon, Check } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { PricingAttribute, ProductDetails } from "@/src/types/product-details.types";
 import axios from "axios";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 import { SelectedValueId } from "@/src/types/types";
 
 interface ProductInfoProps {

@@ -10,7 +10,7 @@ import ThemeSwitcher from "./ThemeSwitcher";
 import AccountDropdown from "./AccountDropdown";
 import { useUserStore } from "@/src/store/userStore";
 import { useEffect } from "react";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 
 const HeaderActions = () => {
   const t = useTranslations("header");

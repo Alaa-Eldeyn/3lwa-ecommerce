@@ -1,7 +1,7 @@
 "use client";
 
 import { ShoppingBag } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 
 const EmptyCart = () => {
   return (

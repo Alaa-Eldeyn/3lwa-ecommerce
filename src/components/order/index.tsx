@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLocale } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 import Image from "next/image";
 import { customAxios } from "@/src/auth/customAxios";
 import { Package, Loader2, ArrowLeft, ArrowRight, XCircle, Truck, X } from "lucide-react";

@@ -1,6 +1,6 @@
 "use client";
 import { useUserStore } from "@/src/store/userStore";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 import React from "react";
 
 const SignInPrompt = () => {

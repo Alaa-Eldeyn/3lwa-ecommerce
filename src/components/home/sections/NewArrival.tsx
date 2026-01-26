@@ -6,7 +6,7 @@ import "swiper/css";
 import "./carousel.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 import { useTranslations } from "next-intl";
 import ProductCard from "@/src/components/common/ProductCard";
 import DummyProductCard from "@/src/components/common/DummyProductCard";
