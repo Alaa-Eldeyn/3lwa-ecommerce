@@ -190,7 +190,7 @@ const OrdersTab = () => {
                   {t("orders.total")}: ${order.totalAmount.toFixed(2)}
                 </p>
                 <button
-                  onClick={() => router.push(`/order/${order.orderId}`)}
+                  onClick={() => router.push(`order/${order.orderId}`)}
                   className="px-4 py-2 text-primary border border-primary rounded-lg hover:bg-primary hover:text-white">
                   {t("orders.viewDetails")}
                 </button>
