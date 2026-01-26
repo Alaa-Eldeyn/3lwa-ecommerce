@@ -33,7 +33,7 @@ const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
 
   if (isLoggedIn) {
     return (
-      <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50 animate-fadeIn">
+      <div className="absolute right-0 lg:left-0 lg:right-auto mt-2 w-56 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50 animate-fadeIn">
         {/* User Info Section */}
         <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
           <p className="text-sm font-semibold text-gray-900 dark:text-white">
@@ -91,7 +91,7 @@ const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
 
   // Not Logged In
   return (
-    <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50 animate-fadeIn">
+    <div className="absolute right-0 lg:left-0 lg:right-auto mt-2 w-48 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50 animate-fadeIn">
       <div className="py-2">
         <Link
           href={`/login`}

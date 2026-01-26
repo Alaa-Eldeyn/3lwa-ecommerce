@@ -101,13 +101,13 @@ const HeaderActions = () => {
       {/* Mobile Categories Toggle Button */}
       <div className="lg:hidden flex items-center ">
         <div className="relative">
-          <Link
-            href={"/login"}
+          <button
+            onClick={toggleAccount}
             className="text-white flex items-center gap-1 hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all"
           >
-            <div className="text-[11px] leading-tight">{t("hello")}</div>
-            <User2Icon/>
-          </Link>
+            <div className="text-xs leading-tight">{user ? `${t("hello")}, ${user.firstName}` : `${t('login')}`}</div>
+            <User2Icon size={20} />
+          </button>
 
           {isAccountOpen && <AccountDropdown onClose={toggleAccount} />}
         </div>
