@@ -31,7 +31,7 @@ const ProductInfo = ({
 
   // Get pricing from bestOffer
   const bestOffer = product.pricing?.bestOffer;
-  const price = bestOffer?.salesPrice || bestOffer?.price || product.pricing?.minPrice || 0;
+  const price = bestOffer?.salesPrice || bestOffer?.price || product.pricing?.minPrice || undefined;
   const maxPrice = bestOffer?.price || product.pricing?.maxPrice;
   const discount =
     bestOffer?.discountPercentage ||
@@ -390,29 +390,31 @@ const ProductInfo = ({
       <hr className="border-gray-200 dark:border-gray-700" />
 
       {/* Pricing */}
-      <div>
-        <div className="flex items-baseline gap-3 mb-1">
-          <span className="text-3xl font-bold text-primary dark:text-primary">
-            ${price.toFixed(2)}
-          </span>
-          {maxPrice && maxPrice > price && (
-            <>
-              <span className="text-lg text-gray-400 dark:text-gray-500 line-through decoration-red-400">
-                ${maxPrice.toFixed(2)}
-              </span>
-              {discount && (
-                <span className="text-xs font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded">
-                  {locale === "ar" ? "وفّر" : "Save"} ${(maxPrice - price).toFixed(2)}
+      {price && (
+        <div>
+          <div className="flex items-baseline gap-3 mb-1">
+            <span className="text-3xl font-bold text-primary dark:text-primary">
+              ${price.toFixed(2)}
+            </span>
+            {maxPrice && maxPrice > price && (
+              <>
+                <span className="text-lg text-gray-400 dark:text-gray-500 line-through decoration-red-400">
+                  ${maxPrice.toFixed(2)}
                 </span>
-              )}
-            </>
-          )}
+                {discount && (
+                  <span className="text-xs font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded">
+                    {locale === "ar" ? "وفّر" : "Save"} ${(maxPrice - price).toFixed(2)}
+                  </span>
+                )}
+              </>
+            )}
+          </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {locale === "ar" ? "جميع الأسعار شاملة ضريبة القيمة المضافة" : "All prices include VAT"}
+          </p>
         </div>
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          {locale === "ar" ? "جميع الأسعار شاملة ضريبة القيمة المضافة" : "All prices include VAT"}
-        </p>
-      </div>
-
+      )}
+      
       {/* Variants Selection */}
       <div className="space-y-4">
         {/* Loading indicator for combination */}
