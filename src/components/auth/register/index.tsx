@@ -51,7 +51,7 @@ const Register = () => {
         try {
           const parsed = parsePhoneNumber(data.phone);
           if (parsed) {
-            phoneCode = parsed.countryCallingCode;
+            phoneCode = "+" + parsed.countryCallingCode;
             phoneNumber = parsed.nationalNumber;
           }
         } catch (error) {
