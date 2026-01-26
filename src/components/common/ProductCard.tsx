@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Link } from "@/src/i18n/routing";
 import { useRouter } from "next/navigation";
 import { useState, useMemo, useEffect } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import toast from "react-hot-toast";
 import { useCartStore } from "@/src/store/cartStore";
 import { useWishlistStore } from "@/src/store/wishlistStore";
@@ -46,6 +46,7 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const router = useRouter();
   const locale = useLocale();
+  const t = useTranslations("product");
   const { items, addItem, updateQuantity, removeItem } = useCartStore();
   const { items: wishlistItems, addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore();
   const { isAuthenticated, user } = useUserStore();
@@ -142,7 +143,7 @@ const ProductCard = ({
 
     if (!user) {
       // يمكن إضافة redirect للـ login page
-      toast.error(isArabic ? "يرجى تسجيل الدخول لإضافة المنتجات للمفضلة" : "Please login to add items to wishlist");
+      toast.error(t("pleaseLogin"));
       return;
     }
 
@@ -184,7 +185,7 @@ const ProductCard = ({
           {/* Stock Status Badge */}
           {stockStatus === "OutOfStock" && (
             <div className="absolute top-3 left-3 bg-red-400 text-white text-xs font-bold px-3 py-1 rounded-md shadow-md">
-              {isArabic ? "نفذ من المخزن" : "Out of Stock"}
+              {t("outOfStock")}
             </div>
           )}
         </div>
@@ -230,7 +231,7 @@ const ProductCard = ({
             {isFreeShipping && (
               <div className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
                 <Truck size={14} />
-                <span className="font-medium">{isArabic ? "شحن مجاني" : "Free Shipping"}</span>
+                <span className="font-medium">{t("freeShipping")}</span>
               </div>
             )}
           </div>
@@ -280,7 +281,7 @@ const ProductCard = ({
                 disabled={stockStatus === "OutOfStock"}
                 className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg center soft p-2.5 md:p-3.5 font-medium shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Add to cart">
-                <span className="lg:mx-2 text-xs md:text-sm">{isArabic ? "أضف للسلة" : "Add to Cart"}</span>
+                <span className="lg:mx-2 text-xs md:text-sm">{t("addToCart")}</span>
                 <ShoppingCart size={18} className="hidden lg:block" />
               </button>
             )}

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Loader2, Store, Star, ThumbsUp, ThumbsDown, Flag, ChevronDown } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { customAxios } from "@/src/auth/customAxios";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import ProductCard from "../common/ProductCard";
 import { Product } from "@/src/types/types";
 import axios from "axios";
@@ -14,6 +14,7 @@ const VendorPage = () => {
   const router = useRouter();
   const locale = useLocale();
   const isArabic = locale === "ar";
+  const t = useTranslations("vendor");
 
   const {
     data: response,
@@ -57,7 +58,7 @@ const VendorPage = () => {
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
           <p className="text-slate-600 text-lg font-medium">
-            {isArabic ? "جاري تحميل البيانات..." : "Loading data..."}
+            {t("loading")}
           </p>
         </div>
       </div>
@@ -72,16 +73,15 @@ const VendorPage = () => {
             <span className="text-3xl">❌</span>
           </div>
           <h2 className="text-2xl font-bold text-slate-800 mb-2">
-            {isArabic ? "حدث خطأ" : "Error occurred"}
+            {t("error")}
           </h2>
           <p className="text-slate-600 mb-4">
-            {(error as any)?.response?.data?.message ||
-              (isArabic ? "فشل تحميل بيانات البائع" : "Failed to load vendor data")}
+            {(error as any)?.response?.data?.message || t("errorMessage")}
           </p>
           <button
             onClick={() => router.push(`/products?v=${id}`)}
             className="px-6 py-3 bg-primary hover:bg-headerDark text-white font-semibold rounded-xl transition-colors">
-            {isArabic ? "العودة للمنتجات" : "Back to Products"}
+            {t("backToProducts")}
           </button>
         </div>
       </div>
@@ -93,7 +93,7 @@ const VendorPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <div className="text-center">
           <p className="text-slate-600 text-lg">
-            {isArabic ? "لا توجد بيانات للعرض" : "No data available"}
+            {t("noData")}
           </p>
         </div>
       </div>
@@ -214,11 +214,11 @@ const VendorPage = () => {
                   </div>
                   <span className="text-gray-500">|</span>
                   <span className="text-gray-600">
-                    {isArabic ? "2,847 تقييم" : "2,847 Reviews"}
+                    2,847 {t("reviews")}
                   </span>
                   <span className="text-gray-500">|</span>
                   <span className="text-gray-600">
-                    {totalProducts} {isArabic ? "منتج مباع" : "Products Sold"}
+                    {totalProducts} {t("productsSold")}
                   </span>
                 </div>
                 <p className="text-gray-700 leading-relaxed max-w-3xl">
@@ -233,7 +233,7 @@ const VendorPage = () => {
               onClick={() => router.push(`/products?v=${id}`)}
               className="bg-primary hover:bg-headerDark text-white px-8 py-3 rounded-lg font-semibold transition flex items-center space-x-2">
               <Store className="w-5 h-5" />
-              <span>{isArabic ? "عرض جميع المنتجات" : "View All Products"}</span>
+              <span>{t("viewAllProducts")}</span>
             </button>
           </div>
         </div>
@@ -242,21 +242,21 @@ const VendorPage = () => {
         <div id="vendor-stats-section" className="grid grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
             <div className="text-primary text-3xl font-bold mb-2">98.5%</div>
-            <div className="text-gray-600">{isArabic ? "تقييم إيجابي" : "Positive Feedback"}</div>
+            <div className="text-gray-600">{t("positiveFeedback")}</div>
           </div>
           <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
             <div className="text-primary text-3xl font-bold mb-2">24hrs</div>
             <div className="text-gray-600">
-              {isArabic ? "متوسط وقت الاستجابة" : "Avg. Response Time"}
+              {t("avgResponseTime")}
             </div>
           </div>
           <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
             <div className="text-primary text-3xl font-bold mb-2">{totalProducts}</div>
-            <div className="text-gray-600">{isArabic ? "المنتجات النشطة" : "Active Products"}</div>
+            <div className="text-gray-600">{t("activeProducts")}</div>
           </div>
           <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
             <div className="text-primary text-3xl font-bold mb-2">2018</div>
-            <div className="text-gray-600">{isArabic ? "عضو منذ" : "Member Since"}</div>
+            <div className="text-gray-600">{t("memberSince")}</div>
           </div>
         </div>
 
@@ -264,15 +264,15 @@ const VendorPage = () => {
         <div id="vendor-reviews-section" className="bg-white rounded-xl border border-gray-200 p-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-foreground">
-              {isArabic ? "تقييمات العملاء" : "Customer Reviews"}
+              {t("customerReviews")}
             </h2>
             <div className="flex items-center space-x-3">
-              <span className="text-gray-600">{isArabic ? "ترتيب حسب:" : "Sort by:"}</span>
+              <span className="text-gray-600">{t("sortBy")}</span>
               <select className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary">
-                <option>{isArabic ? "الأحدث" : "Most Recent"}</option>
-                <option>{isArabic ? "الأعلى تقييماً" : "Highest Rated"}</option>
-                <option>{isArabic ? "الأقل تقييماً" : "Lowest Rated"}</option>
-                <option>{isArabic ? "الأكثر فائدة" : "Most Helpful"}</option>
+                <option>{t("mostRecent")}</option>
+                <option>{t("highestRated")}</option>
+                <option>{t("lowestRated")}</option>
+                <option>{t("mostHelpful")}</option>
               </select>
             </div>
           </div>
@@ -293,7 +293,7 @@ const VendorPage = () => {
                   <div>
                     <div className="font-semibold text-foreground">{review.name}</div>
                     <div className="text-sm text-gray-500">
-                      {isArabic ? "شراء موثق" : "Verified Purchase"}
+                      {t("verifiedPurchase")}
                     </div>
                   </div>
                 </div>
@@ -305,18 +305,18 @@ const VendorPage = () => {
                 <button className="flex items-center space-x-2 text-gray-600 hover:text-primary transition">
                   <ThumbsUp className="w-4 h-4" />
                   <span>
-                    {isArabic ? "مفيد" : "Helpful"} ({review.helpful})
+                    {t("helpful")} ({review.helpful})
                   </span>
                 </button>
                 <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition">
                   <ThumbsDown className="w-4 h-4" />
                   <span>
-                    {isArabic ? "غير مفيد" : "Unhelpful"} ({review.unhelpful})
+                    {t("unhelpful")} ({review.unhelpful})
                   </span>
                 </button>
                 <button className="flex items-center space-x-2 text-gray-600 hover:text-red-600 transition">
                   <Flag className="w-4 h-4" />
-                  <span>{isArabic ? "الإبلاغ" : "Report"}</span>
+                  <span>{t("report")}</span>
                 </button>
               </div>
             </div>
@@ -324,7 +324,7 @@ const VendorPage = () => {
 
           <div className="flex justify-center mt-8">
             <button className="border border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-lg font-semibold transition">
-              {isArabic ? "تحميل المزيد من التقييمات" : "Load More Reviews"}
+              {t("loadMoreReviews")}
             </button>
           </div>
         </div>

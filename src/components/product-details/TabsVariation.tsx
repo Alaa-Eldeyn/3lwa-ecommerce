@@ -28,6 +28,7 @@ const TabsVariation = ({ description, reviews, totalReviews, product }: TabsVari
   const tFeatures = useTranslations("productDetails.features");
   const tProduct = useTranslations("product");
   const locale = useLocale();
+  const isArabic = locale === "ar";
   const [activeTab, setActiveTab] = useState<"details" | "specifications" | "reviews">(
     "details"
   );
@@ -37,7 +38,7 @@ const TabsVariation = ({ description, reviews, totalReviews, product }: TabsVari
     setVisibleReviews((prev) => prev + 6);
   };
 
-  const brandName = locale === "ar" ? product?.brand?.nameAr : product?.brand?.nameEn;
+  const brandName = isArabic ? product?.brand?.nameAr : product?.brand?.nameEn;
 
   return (
     <section id="details-tabs">

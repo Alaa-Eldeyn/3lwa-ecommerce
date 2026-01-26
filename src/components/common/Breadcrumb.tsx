@@ -13,6 +13,7 @@ const Breadcrumb = () => {
   const pathname = usePathname();
   const locale = useLocale();
   const t = useTranslations("breadcrumb");
+  const isArabic = locale === "ar";
 
   const pathWithoutLocale = pathname.replace(`/${locale}`, "");
 
@@ -66,7 +67,7 @@ const Breadcrumb = () => {
                     <ChevronRight
                       size={12}
                       className={`text-gray-400 dark:text-gray-500 mx-2 ${
-                        locale === "ar" ? "rotate-180" : ""
+                        isArabic ? "rotate-180" : ""
                       }`}
                     />
                     {isLink ? (

@@ -29,11 +29,12 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   const { locale } = await params;
-
+  const isArabic = locale === "ar";
+  
   return (
     <html
       lang={locale}
-      dir={locale === "ar" ? "rtl" : "ltr"}
+      dir={isArabic ? "rtl" : "ltr"}
       suppressHydrationWarning
     >
       <body

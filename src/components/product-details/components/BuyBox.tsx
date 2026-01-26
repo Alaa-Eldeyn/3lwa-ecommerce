@@ -28,6 +28,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
   const t = useTranslations("productDetails");
   const tProduct = useTranslations("product");
   const locale = useLocale();
+  const isArabic = locale === "ar";
   const { addItem } = useCartStore();
   const { isAuthenticated } = useUserStore();
 
@@ -35,7 +36,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
   const isCombinationAvailable = !!product.pricing;
 
   // Extract dynamic data from product
-  const title = locale === "ar" ? product.titleAr : product.titleEn;
+  const title = isArabic ? product.titleAr : product.titleEn;
   const bestOffer = product.pricing?.bestOffer;
   const price = bestOffer?.salesPrice || bestOffer?.price || product.pricing?.minPrice || 0;
   const productImage = product.thumbnailImage || product.generalImages?.[0]?.path || "";

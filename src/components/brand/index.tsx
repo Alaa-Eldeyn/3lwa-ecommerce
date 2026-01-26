@@ -53,7 +53,7 @@ const BrandPage = () => {
   const totalProducts = productsResponse?.totalRecords ?? 0;
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
+    return new Date(dateString).toLocaleDateString(isArabic ? "ar-EG" : "en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",

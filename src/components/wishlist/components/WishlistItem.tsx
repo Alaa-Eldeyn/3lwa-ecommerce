@@ -32,7 +32,8 @@ const WishlistItem = ({
 }: WishlistItemProps) => {
   const t = useTranslations("wishlist");
   const locale = useLocale();
-  const title = locale === "ar" ? itemTitleAr : itemTitleEn;
+  const isArabic = locale === "ar";
+  const title = isArabic ? itemTitleAr : itemTitleEn;
   const finalPrice = salesPrice > 0 ? salesPrice : price;
   const hasDiscount = salesPrice > 0 && salesPrice < price;
 
@@ -65,7 +66,7 @@ const WishlistItem = ({
           {title}
         </h3>
         <p className="text-xs text-gray-600 dark:text-gray-400 mb-1 line-clamp-1">
-          {locale === "ar" ? itemShortDescriptionAr : itemShortDescriptionEn}
+          {isArabic ? itemShortDescriptionAr : itemShortDescriptionEn}
         </p>
 
         {/* Price */}

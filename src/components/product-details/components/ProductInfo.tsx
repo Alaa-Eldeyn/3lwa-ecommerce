@@ -22,12 +22,14 @@ const ProductInfo = ({
   onSelectedAttributesChange,
 }: ProductInfoProps) => {
   const t = useTranslations("productDetails");
+  const tProduct = useTranslations("product");
   const locale = useLocale();
+  const isArabic = locale === "ar";
 
   // Extract dynamic data from product
-  const title = locale === "ar" ? product.titleAr : product.titleEn;
-  const description = locale === "ar" ? product.descriptionAr : product.descriptionEn;
-  const brand = locale === "ar" ? product?.brand?.nameAr : product?.brand?.nameEn;
+  const title = isArabic ? product.titleAr : product.titleEn;
+  const description = isArabic ? product.descriptionAr : product.descriptionEn;
+  const brand = isArabic ? product?.brand?.nameAr : product?.brand?.nameEn;
 
   // Get pricing from bestOffer
   const bestOffer = product.pricing?.bestOffer;
@@ -84,7 +86,7 @@ const ProductInfo = ({
         const attrToUse = selectedAttr || attrs[0];
 
         if (attrToUse) {
-          const value = locale === "ar" ? attrToUse.valueAr : attrToUse.valueEn;
+          const value = isArabic ? attrToUse.valueAr : attrToUse.valueEn;
           initial[attributeId] = {
             value,
             combinationValueId: attrToUse.combinationValueId,
@@ -102,7 +104,7 @@ const ProductInfo = ({
       const updated: Record<string, { value: string; combinationValueId: string }> = {};
       product.currentCombination.pricingAttributes.forEach((attr) => {
         if (attr.isSelected) {
-          const value = locale === "ar" ? attr.valueAr : attr.valueEn;
+          const value = isArabic ? attr.valueAr : attr.valueEn;
           updated[attr.attributeId] = {
             value,
             combinationValueId: attr.combinationValueId,
@@ -272,8 +274,8 @@ const ProductInfo = ({
     // Try to find in selectedAttributes (might have been set from previous selection)
     const selectedAttr = selectedAttributes[attributeId];
     if (selectedAttr) {
-      const selectedValue = locale === "ar" ? selectedAttr.value : selectedAttr.value;
-      const currentValue = locale === "ar" ? valueAr : valueEn;
+      const selectedValue = selectedAttr.value;
+      const currentValue = valueAr;
       if (selectedValue === currentValue && selectedAttr.combinationValueId) {
         return selectedAttr.combinationValueId;
       }
@@ -286,7 +288,7 @@ const ProductInfo = ({
 
   // Update selected attribute
   const handleAttributeSelect = async (attributeId: string, valueAr: string, valueEn: string) => {
-    const value = locale === "ar" ? valueAr : valueEn;
+    const value = isArabic ? valueAr : valueEn;
 
     // Get combinationValueId directly from pricingAttributes
     const pricingAttr = product.currentCombination?.pricingAttributes?.find(
@@ -403,14 +405,14 @@ const ProductInfo = ({
                 </span>
                 {discount && (
                   <span className="text-xs font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded">
-                    {locale === "ar" ? "وفّر" : "Save"} ${(maxPrice - price).toFixed(2)}
+                    {tProduct("save")} ${(maxPrice - price).toFixed(2)}
                   </span>
                 )}
               </>
             )}
           </div>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            {locale === "ar" ? "جميع الأسعار شاملة ضريبة القيمة المضافة" : "All prices include VAT"}
+            {tProduct("allPricesIncludeVAT")}
           </p>
         </div>
       )}
@@ -430,11 +432,11 @@ const ProductInfo = ({
           if (pricingAttributes.length === 0) return null;
 
           const attributeName =
-            locale === "ar"
+            isArabic
               ? pricingAttributes[0]?.attributeNameAr
               : pricingAttributes[0]?.attributeNameEn;
           const isColor = pricingAttributes.some((attr) => {
-            const value = locale === "ar" ? attr.valueAr : attr.valueEn;
+            const value = isArabic ? attr.valueAr : attr.valueEn;
             return isColorValue(value);
           });
           const selectedValue = selectedAttributes[attributeId];
@@ -452,7 +454,7 @@ const ProductInfo = ({
                   </label>
                   <div className="flex gap-3">
                     {pricingAttributes.map((attr, index) => {
-                      const value = locale === "ar" ? attr.valueAr : attr.valueEn;
+                      const value = isArabic ? attr.valueAr : attr.valueEn;
                       const isSelectedValue = selectedValueText === value;
                       return (
                         <button
@@ -507,13 +509,13 @@ const ProductInfo = ({
                             d="M4 6h16M4 10h16M4 14h16M4 18h16"
                           />
                         </svg>
-                        {locale === "ar" ? "دليل المقاسات" : "Size Guide"}
+                        {tProduct("sizeGuide")}
                       </button>
                     )}
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {pricingAttributes.map((attr, index) => {
-                      const value = locale === "ar" ? attr.valueAr : attr.valueEn;
+                      const value = isArabic ? attr.valueAr : attr.valueEn;
                       const isSelectedValue = selectedValueText === value;
                       const isDisabled = false; // You can add logic to check if variant is disabled
                       return (
@@ -545,8 +547,8 @@ const ProductInfo = ({
         {product.attributes && product.attributes.length > 0 && (
           <div className="space-y-2">
             {product.attributes.map((attr, index) => {
-              const attributeName = locale === "ar" ? attr.nameAr : attr.nameEn;
-              const attributeValue = locale === "ar" ? attr.valueAr : attr.valueEn;
+              const attributeName = isArabic ? attr.nameAr : attr.nameEn;
+              const attributeValue = isArabic ? attr.valueAr : attr.valueEn;
               return (
                 <div
                   key={`${attr.attributeId}-${index}`}

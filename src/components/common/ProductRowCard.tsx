@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Link } from "@/src/i18n/routing";
 import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import toast from "react-hot-toast";
 import { useCartStore } from "@/src/store/cartStore";
 import { useWishlistStore } from "@/src/store/wishlistStore";
@@ -45,6 +45,7 @@ const ProductRowCard = ({
 }: ProductRowCardProps) => {
   const router = useRouter();
   const locale = useLocale();
+  const t = useTranslations("product");
   const { items, addItem, updateQuantity, removeItem } = useCartStore();
   const { items: wishlistItems, addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore();
   const { isAuthenticated, user } = useUserStore();
@@ -130,7 +131,7 @@ const ProductRowCard = ({
     }
 
     if (!user) {
-      toast.error(isArabic ? "يرجى تسجيل الدخول لإضافة المنتجات للمفضلة" : "Please login to add items to wishlist");
+      toast.error(t("pleaseLogin"));
       return;
     }
 
@@ -179,7 +180,7 @@ const ProductRowCard = ({
         {/* Out of Stock Badge */}
         {stockStatus === "OutOfStock" && (
           <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-md shadow-md z-10">
-            {isArabic ? "نفذت الكمية" : "Out of Stock"}
+            {t("outOfStock")}
           </div>
         )}
 
@@ -243,7 +244,7 @@ const ProductRowCard = ({
             {isFreeShipping && (
               <div className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
                 <Truck size={12} />
-                <span className="font-medium">{isArabic ? "شحن مجاني" : "Free Ship"}</span>
+                <span className="font-medium">{t("freeShip")}</span>
               </div>
             )}
             {badges && badges.length > 0 && (
@@ -297,7 +298,7 @@ const ProductRowCard = ({
                 className="bg-primary hover:bg-primary/90 text-white dark:bg-white dark:text-primary dark:hover:bg-gray-200 rounded-full px-4 py-2 center soft font-medium text-xs md:text-sm shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all whitespace-nowrap"
                 title="Add to cart">
                 <ShoppingCart size={16} className="me-2"/>
-                <span>{isArabic ? "أضف للسلة" : "Add to Cart"}</span>
+                <span>{t("addToCart")}</span>
               </button>
             )}
           </div>

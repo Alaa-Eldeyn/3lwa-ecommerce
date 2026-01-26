@@ -428,7 +428,9 @@
       "processing": "Processing",
       "shipped": "Shipped",
       "delivered": "Delivered",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "qty": "Qty:",
+      "andMore": "and {count} more"
     },
     "security": {
       "title": "Security Settings",
@@ -781,6 +783,46 @@
     "regularFit": "Regular Fit",
     "origin": "Origin",
     "detailedSpecs": "Detailed product specifications",
-    "onlyItemsLeft": "Only {count} items left in stock"
+    "onlyItemsLeft": "Only {count} items left in stock",
+    "freeShip": "Free Ship"
+  },
+  "vendor": {
+    "loading": "Loading data...",
+    "error": "Error occurred",
+    "errorMessage": "Failed to load vendor data",
+    "backToProducts": "Back to Products",
+    "noData": "No data available",
+    "reviews": "Reviews",
+    "productsSold": "Products Sold",
+    "viewAllProducts": "View All Products",
+    "positiveFeedback": "Positive Feedback",
+    "avgResponseTime": "Avg. Response Time",
+    "activeProducts": "Active Products",
+    "memberSince": "Member Since",
+    "customerReviews": "Customer Reviews",
+    "sortBy": "Sort by:",
+    "mostRecent": "Most Recent",
+    "highestRated": "Highest Rated",
+    "lowestRated": "Lowest Rated",
+    "mostHelpful": "Most Helpful",
+    "verifiedPurchase": "Verified Purchase",
+    "helpful": "Helpful",
+    "unhelpful": "Unhelpful",
+    "report": "Report",
+    "loadMoreReviews": "Load More Reviews"
+  },
+  "vendorsSidebar": {
+    "title": "Available Offers",
+    "loading": "Loading offers...",
+    "error": "Error loading offers",
+    "noOffers": "No offers available",
+    "offersAvailable": "offers available",
+    "bestOffer": "Best Offer",
+    "delivery": "Delivery",
+    "days": "days",
+    "warrantyPolicy": "Warranty & Policy Details",
+    "warranty": "Warranty",
+    "addToCart": "Add to Cart",
+    "outOfStock": "Out of Stock"
   }
 }

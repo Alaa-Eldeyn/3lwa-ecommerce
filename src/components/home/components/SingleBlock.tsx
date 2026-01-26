@@ -15,9 +15,10 @@ type BlockItemUI = {
   campaignBadgeEn?: string;
 };
 const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
-  const locale = useLocale();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [hasOverflow, setHasOverflow] = useState(false);
+  const locale = useLocale();
+  const isArabic = locale === "ar";
 
   // Check if content overflows the container
   useEffect(() => {
@@ -106,13 +107,13 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
         <div>
           {/* Title */}
           <h2 className="text-xl font-bold text-secondary dark:text-gray-200">
-            {locale === "ar" ? block.titleAr : block.titleEn}
+            {isArabic ? block.titleAr : block.titleEn}
           </h2>
 
           {/* Subtitle */}
           {block.subtitleAr && block.subtitleEn && (
             <h3 className="text-sm text-gray-700 dark:text-gray-300">
-              {locale === "ar" ? block.subtitleAr : block.subtitleEn}
+              {isArabic ? block.subtitleAr : block.subtitleEn}
             </h3>
           )}
         </div>
@@ -121,9 +122,9 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
         {/* View all link */}
         {/* {block.layout === "Carousel" && block.showViewAllLink && (
           <Link
-            href={locale === "ar" ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
+            href={isArabic ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
             className="text-primary dark:text-primary text-sm hover:underline hover:text-red-700 dark:hover:text-red-400 font-medium">
-            {locale === "ar" ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
+            {isArabic ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
           </Link>
         )} */}
       </div>
@@ -137,14 +138,14 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
             className="flex-1 overflow-hidden relative mb-3 cursor-pointer block">
             <Image
               src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-              alt={locale === "ar" ? item.nameAr : item.nameEn}
+              alt={isArabic ? item.nameAr : item.nameEn}
               fill
               className="object-cover hover:scale-105 transition-transform"
             />
             {item.campaignBadgeAr && (
               <div
                 className={`absolute top-3 left-3 ${block.campaign?.BadgeColor} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg`}>
-                {locale === "ar" ? item.campaignBadgeAr : item.campaignBadgeEn}
+                {isArabic ? item.campaignBadgeAr : item.campaignBadgeEn}
               </div>
             )}
           </Link>
@@ -161,19 +162,19 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
               <div className="flex-1 overflow-hidden bg-gray-50 dark:bg-gray-700 relative">
                 <Image
                   src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-                  alt={locale === "ar" ? item.nameAr : item.nameEn}
+                  alt={isArabic ? item.nameAr : item.nameEn}
                   fill
                   className="object-cover hover:scale-105 transition-transform"
                 />
                 {item.campaignBadgeAr && (
                   <div
                     className={`absolute top-2 right-2 ${block.campaign?.BadgeColor} text-white text-[10px] font-bold px-2 py-0.5 rounded`}>
-                    {locale === "ar" ? item.campaignBadgeAr : item.campaignBadgeEn}
+                    {isArabic ? item.campaignBadgeAr : item.campaignBadgeEn}
                   </div>
                 )}
               </div>
               {/* <span className="text-xs text-gray-700 dark:text-gray-300">
-                {locale === "ar" ? item.nameAr : item.nameEn}
+                {isArabic ? item.nameAr : item.nameEn}
               </span> */}
             </Link>
           ))}
@@ -190,19 +191,19 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
               className="flex-1 relative overflow-hidden bg-gray-50 dark:bg-gray-700 flex items-center justify-center cursor-pointer">
               <Image
                 src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-                alt={locale === "ar" ? item.nameAr : item.nameEn}
+                alt={isArabic ? item.nameAr : item.nameEn}
                 fill
                 className="object-cover hover:scale-105 transition-transform"
               />
               {item.campaignBadgeAr && (
                 <span className="absolute bottom-2 left-2 text-xs font-semibold bg-white/80 dark:bg-gray-800/80 dark:text-gray-200 px-2 py-1 rounded">
-                  {locale === "ar" ? item.campaignBadgeAr : item.campaignBadgeEn}
+                  {isArabic ? item.campaignBadgeAr : item.campaignBadgeEn}
                 </span>
               )}
               {item.campaignBadgeAr && (
                 <div
                   className={`absolute top-2 right-2 ${block.campaign?.BadgeColor} text-white text-[10px] font-bold px-2 py-0.5 rounded`}>
-                  {locale === "ar" ? item.campaignBadgeAr : item.campaignBadgeEn}
+                  {isArabic ? item.campaignBadgeAr : item.campaignBadgeEn}
                 </div>
               )}
             </Link>
@@ -225,20 +226,20 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
                 <div className="bg-gray-50 dark:bg-gray-700 h-[220px] mb-2 flex items-center justify-center p-4 relative">
                   <Image
                     src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-                    alt={locale === "ar" ? item.nameAr : item.nameEn}
+                    alt={isArabic ? item.nameAr : item.nameEn}
                     fill
                     className="object-cover shadow-md hover:scale-105 transition-transform"
                   />
                   {item.campaignBadgeAr && (
                     <div
                       className={`absolute top-2 right-2 ${block.campaign?.BadgeColor} text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-md`}>
-                      {locale === "ar" ? item.campaignBadgeAr : item.campaignBadgeEn}
+                      {isArabic ? item.campaignBadgeAr : item.campaignBadgeEn}
                     </div>
                   )}
                 </div>
                 {item.nameAr && (
                   <div className="text-sm line-clamp-2 hover:text-primary dark:hover:text-primary hover:underline mb-1 text-gray-900 dark:text-gray-200">
-                    {locale === "ar" ? item.nameAr : item.nameEn}
+                    {isArabic ? item.nameAr : item.nameEn}
                   </div>
                 )}
               </Link>
@@ -272,7 +273,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
             <Image
               fill
               src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-              alt={locale === "ar" ? item.nameAr : item.nameEn}
+              alt={isArabic ? item.nameAr : item.nameEn}
               className="object-cover w-full h-full"
             />
           </Link>
@@ -282,9 +283,9 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
       {/* View all link */}
       {/* {block.layout !== "Carousel" && block.showViewAllLink && (
         <Link
-          href={locale === "ar" ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
+          href={isArabic ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
           className="text-primary dark:text-primary text-sm hover:underline hover:text-red-700 dark:hover:text-red-400 font-medium">
-          {locale === "ar" ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
+          {isArabic ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
         </Link>
       )} */}
     </div>

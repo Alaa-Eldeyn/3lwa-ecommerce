@@ -14,9 +14,7 @@ interface OrderStatusProps {
 }
 
 const OrderStatus = ({ id }: OrderStatusProps) => {
-  const locale = useLocale();
   const cardRef = useRef<HTMLDivElement>(null);
-  const isArabic = locale === "ar";
   const t = useTranslations("orderStatus");
 
   const [orderData, setOrderData] = useState<OrderData | null>(null);
@@ -188,7 +186,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
                         ` | ${t("seller")} ${item.vendorName}`}
                     </p>
                   </div>
-                  <div className={`text-${isArabic ? "left" : "right"}`}>
+                  <div className={`text-start}`}>
                     <p className="text-gray-500 text-xs">${item.unitPrice.toFixed(2)}</p>
                     <p className="font-bold text-gray-800">${item.subTotal.toFixed(2)}</p>
                   </div>
@@ -250,7 +248,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
         {/* Actions */}
         <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href={`/${locale}`}
+            href="/"
             className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-semibold rounded-xl text-white bg-primary hover:bg-primary/90 w-full sm:w-auto">
             {t("continueShopping")}
           </Link>

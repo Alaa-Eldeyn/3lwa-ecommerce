@@ -19,10 +19,11 @@ interface PaymentMethodProps {
 }
 
 const PaymentMethod = ({ selectedMethod, onChange }: PaymentMethodProps) => {
-  const locale = useLocale();
   const t = useTranslations("checkout.paymentMethod");
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethodType[]>([]);
   const [loading, setLoading] = useState(true);
+  const locale = useLocale();
+  const isArabic = locale === "ar";
 
   useEffect(() => {
     const fetchPaymentMethods = async () => {
@@ -110,7 +111,7 @@ const PaymentMethod = ({ selectedMethod, onChange }: PaymentMethodProps) => {
 
       <div className="space-y-3">
         {paymentMethods.map((method) => {
-          const title = locale === "ar" ? method.titleAr : method.titleEn;
+          const title = isArabic ? method.titleAr : method.titleEn;
           const isSelected = selectedMethod === method.id;
 
           return (

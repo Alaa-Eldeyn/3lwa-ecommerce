@@ -11,7 +11,7 @@ import {
   ChevronUp,
   ShoppingCart,
 } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useCartStore } from "@/src/store/cartStore";
@@ -62,6 +62,10 @@ const VendorsSidebar = ({
   productName,
 }: VendorsSidebarProps) => {
   const locale = useLocale();
+  const isArabic = locale === "ar";
+  const t = useTranslations("vendorsSidebar");
+  const tProductDetails = useTranslations("productDetails");
+  const tProduct = useTranslations("product");
   const [expandedVendor, setExpandedVendor] = useState<string | null>(null);
 
   // --- Cart & User Logic (مشابه لـ ProductCard) ---
@@ -102,26 +106,24 @@ const VendorsSidebar = ({
     };
   }, [isOpen, onClose]);
 
-  const isArabic = locale === "ar";
-
   // دالة لمعالجة حالة المخزون
   const getStockStatusInfo = (status: string) => {
     const s = status?.toLowerCase() || "";
     if (s === "instock") {
       return {
-        text: isArabic ? "متوفر" : "In Stock",
+        text: tProductDetails("inStock"),
         colorClass: "text-green-600 dark:text-green-400",
         iconColor: "text-green-600 dark:text-green-400",
       };
     } else if (s.includes("limited") || s.includes("low")) {
       return {
-        text: isArabic ? "كمية محدودة" : "Limited Stock",
+        text: tProductDetails("limitedStock"),
         colorClass: "text-orange-600 dark:text-orange-400",
         iconColor: "text-orange-600 dark:text-orange-400",
       };
     } else {
       return {
-        text: isArabic ? "غير متوفر" : "Out of Stock",
+        text: tProductDetails("outOfStock"),
         colorClass: "text-red-600 dark:text-red-400",
         iconColor: "text-red-600 dark:text-red-400",
       };
@@ -157,7 +159,7 @@ const VendorsSidebar = ({
             <div className="flex items-center gap-2">
               <Store size={24} className="text-primary" />
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                {isArabic ? "العروض المتاحة" : "Available Offers"}
+                {t("title")}
               </h2>
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1 mt-1">
@@ -165,7 +167,7 @@ const VendorsSidebar = ({
             </p>
             {vendors.length > 0 && (
               <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                {vendors.length} {isArabic ? "عرض متاح من البائعين" : "offers available"}
+                {vendors.length} {t("offersAvailable")}
               </p>
             )}
           </div>
@@ -182,7 +184,7 @@ const VendorsSidebar = ({
             <div className="flex flex-col items-center justify-center py-12 gap-3">
               <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
               <p className="text-gray-600 dark:text-gray-400">
-                {isArabic ? "جاري تحميل العروض..." : "Loading offers..."}
+                {t("loading")}
               </p>
             </div>
           )}
@@ -190,7 +192,7 @@ const VendorsSidebar = ({
           {error ? (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-center">
               <p className="text-red-600 dark:text-red-400">
-                {isArabic ? "حدث خطأ أثناء تحميل العروض" : "Error loading offers"}
+                {t("error")}
               </p>
             </div>
           ) : null}
@@ -199,7 +201,7 @@ const VendorsSidebar = ({
             <div className="text-center py-12">
               <Store size={48} className="mx-auto text-gray-400 mb-3" />
               <p className="text-gray-600 dark:text-gray-400">
-                {isArabic ? "لا توجد عروض متاحة حالياً" : "No offers available"}
+                {t("noOffers")}
               </p>
             </div>
           )}
@@ -297,7 +299,7 @@ const VendorsSidebar = ({
                   {vendor.isBuyBoxWinner && (
                     <div className="bg-primary text-white text-xs font-bold px-3 py-1.5 flex items-center justify-center gap-1">
                       <Star size={12} fill="currentColor" />
-                      {isArabic ? "أفضل عرض" : "Best Offer"}
+                      {t("bestOffer")}
                     </div>
                   )}
 
@@ -378,8 +380,7 @@ const VendorsSidebar = ({
                           <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
                             <Truck size={14} />
                             <span>
-                              {isArabic ? "توصيل خلال" : "Delivery"} {vendor.handlingTimeInDays}{" "}
-                              {isArabic ? "أيام" : "days"}
+                              {t("delivery")} {vendor.handlingTimeInDays} {t("days")}
                             </span>
                           </div>
                         </div>
@@ -405,13 +406,7 @@ const VendorsSidebar = ({
                               }`}
                               title="Add to cart">
                               <ShoppingCart size={16} />
-                              {isInStock
-                                ? isArabic
-                                  ? "إضافة للعربة"
-                                  : "Add to Cart"
-                                : isArabic
-                                ? "غير متوفر"
-                                : "Out of Stock"}
+                              {isInStock ? t("addToCart") : t("outOfStock")}
                             </button>
                           )}
                         </div>
@@ -423,7 +418,7 @@ const VendorsSidebar = ({
                               setExpandedVendor(isExpanded ? null : vendor.vendorItemId)
                             }
                             className="w-full flex items-center justify-center gap-1 text-xs text-gray-500 dark:text-gray-400 mt-3 hover:text-primary transition-colors py-1">
-                            {isArabic ? "تفاصيل الضمان والسياسة" : "Warranty & Policy Details"}
+                            {t("warrantyPolicy")}
                             {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                           </button>
                         )}
@@ -434,7 +429,7 @@ const VendorsSidebar = ({
                             {vendor.warrantyPolicy && (
                               <div className="mb-2">
                                 <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                                  {isArabic ? "الضمان" : "Warranty"}
+                                  {t("warranty")}
                                 </h4>
                                 <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed whitespace-pre-line">
                                   {vendor.warrantyPolicy}

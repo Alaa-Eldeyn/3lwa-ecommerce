@@ -428,7 +428,9 @@
       "processing": "قيد المعالجة",
       "shipped": "تم الشحن",
       "delivered": "تم التوصيل",
-      "cancelled": "ملغي"
+      "cancelled": "ملغي",
+      "qty": "الكمية:",
+      "andMore": "و {count} منتجات أخرى"
     },
     "security": {
       "title": "إعدادات الأمان",
@@ -787,6 +789,46 @@
     "regularFit": "عادي",
     "origin": "المنشأ",
     "detailedSpecs": "المواصفات التفصيلية للمنتج",
-    "onlyItemsLeft": "فقط {count} قطعة متبقية"
+    "onlyItemsLeft": "فقط {count} قطعة متبقية",
+    "freeShip": "شحن مجاني"
+  },
+  "vendor": {
+    "loading": "جاري تحميل البيانات...",
+    "error": "حدث خطأ",
+    "errorMessage": "فشل تحميل بيانات البائع",
+    "backToProducts": "العودة للمنتجات",
+    "noData": "لا توجد بيانات للعرض",
+    "reviews": "تقييم",
+    "productsSold": "منتج مباع",
+    "viewAllProducts": "عرض جميع المنتجات",
+    "positiveFeedback": "تقييم إيجابي",
+    "avgResponseTime": "متوسط وقت الاستجابة",
+    "activeProducts": "المنتجات النشطة",
+    "memberSince": "عضو منذ",
+    "customerReviews": "تقييمات العملاء",
+    "sortBy": "ترتيب حسب:",
+    "mostRecent": "الأحدث",
+    "highestRated": "الأعلى تقييماً",
+    "lowestRated": "الأقل تقييماً",
+    "mostHelpful": "الأكثر فائدة",
+    "verifiedPurchase": "شراء موثق",
+    "helpful": "مفيد",
+    "unhelpful": "غير مفيد",
+    "report": "الإبلاغ",
+    "loadMoreReviews": "تحميل المزيد من التقييمات"
+  },
+  "vendorsSidebar": {
+    "title": "العروض المتاحة",
+    "loading": "جاري تحميل العروض...",
+    "error": "حدث خطأ أثناء تحميل العروض",
+    "noOffers": "لا توجد عروض متاحة حالياً",
+    "offersAvailable": "عرض متاح من البائعين",
+    "bestOffer": "أفضل عرض",
+    "delivery": "توصيل خلال",
+    "days": "أيام",
+    "warrantyPolicy": "تفاصيل الضمان والسياسة",
+    "warranty": "الضمان",
+    "addToCart": "إضافة للعربة",
+    "outOfStock": "غير متوفر"
   }
 }

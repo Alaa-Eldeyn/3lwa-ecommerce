@@ -27,6 +27,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [secureAnimation, setSecureAnimation] = useState<object | null>(null);
   const locale = useLocale();
+  const isArabic = locale === "ar";
 
   useEffect(() => {
     fetch("/animation/secure.json")
@@ -106,7 +107,7 @@ const Login = () => {
               {/* Phone Field */}
               <div dir="ltr">
                 <label
-                  dir={locale === "ar" ? "rtl" : "ltr"}
+                  dir={isArabic ? "rtl" : "ltr"}
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t("phoneNumber")} *
                 </label>

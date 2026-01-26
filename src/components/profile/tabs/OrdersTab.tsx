@@ -174,14 +174,12 @@ const OrdersTab = () => {
                     {order.itemsSummary.length > 1 && (
                       <span className="text-gray-500">
                         {" "}
-                        {isArabic
-                          ? `و ${order.itemsSummary.length - 1} منتجات أخرى`
-                          : `and ${order.itemsSummary.length - 1} more`}
+                        {t("orders.andMore", { count: order.itemsSummary.length - 1 })}
                       </span>
                     )}
                   </p>
                   <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded">
-                    {isArabic ? "الكمية:" : "Qty:"} {order.totalItems}
+                    {t("orders.qty")} {order.totalItems}
                   </span>
                 </div>
               </div>

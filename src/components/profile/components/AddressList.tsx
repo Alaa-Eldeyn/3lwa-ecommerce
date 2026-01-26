@@ -42,13 +42,14 @@ const AddressList = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [addressToDelete, setAddressToDelete] = useState<string | null>(null);
   const locale = useLocale();
-
+  const isArabic = locale === "ar";
+  
   // Format date helper
   const formatDate = (dateString?: string) => {
     if (!dateString) return "";
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
+      return date.toLocaleDateString(isArabic ? "ar-EG" : "en-US", {
         year: "numeric",
         month: "long",
         day: "numeric",
