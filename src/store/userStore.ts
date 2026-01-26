@@ -63,9 +63,9 @@ export const useUserStore = create<UserState>((set, get) => ({
   logout: () => {
     set({ user: null });
     removeUserFromCookie();
-    if (typeof window !== "undefined") {
-      window.location.href = "/login";
-    }
+    // if (typeof window !== "undefined") {
+    //   window.location.href = "/login";
+    // }
   },
   
   isAuthenticated: () => {

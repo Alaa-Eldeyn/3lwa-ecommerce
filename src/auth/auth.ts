@@ -168,7 +168,6 @@ export const registerUser = async (data: RegisterFormData): Promise<User> => {
  * تسجيل خروج المستخدم
  */
 export const logoutUser = async (): Promise<void> => {
-  await customAxios.post(`/Auth/logout`);
   removeUserFromCookie();
 
   // تحديث الـ store إذا كان متاح (client-side فقط)
