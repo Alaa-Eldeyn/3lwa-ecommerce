@@ -635,6 +635,152 @@
       "title": "Products",
       "description": "Discover our products from {brandName}",
       "viewAll": "View All Products"
+    },
+    "loading": "Loading data...",
+    "error": "Error occurred",
+    "errorMessage": "Failed to load brand data",
+    "backToBrands": "Back to Brands",
+    "noData": "No data available",
+    "established": "Established:",
+    "establishedDate": "Established Date",
+    "about": "About {brandName}",
+    "noDescription": "No description available",
+    "brandInformation": "Brand Information",
+    "officialWebsite": "Official Website",
+    "removeFromFavorites": "Remove from Favorites"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "loading": "Loading cart...",
+    "empty": {
+      "title": "Your cart is empty",
+      "description": "Looks like you haven't added anything to your cart yet. Start shopping to fill it up!",
+      "continueShopping": "Continue Shopping"
+    },
+    "orderSummary": {
+      "title": "Order Summary",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "shippingFree": "Free",
+      "tax": "Tax",
+      "total": "Total",
+      "goToCheckout": "Go to Checkout"
     }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "couponCode": "Coupon Code",
+    "couponCodePlaceholder": "Enter coupon code",
+    "apply": "Apply",
+    "applying": "Applying...",
+    "applied": "Applied",
+    "shippingAddress": {
+      "title": "Shipping Addresses",
+      "addNew": "Add New Address",
+      "noAddresses": "No addresses found",
+      "default": "Default"
+    },
+    "paymentMethod": {
+      "title": "Payment Method",
+      "loading": "Loading..."
+    },
+    "orderSummary": {
+      "title": "Order Summary",
+      "loading": "Loading...",
+      "empty": "Cart is empty",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "shipping": "Shipping",
+      "tax": "Tax",
+      "total": "Total",
+      "seller": "Seller",
+      "qty": "Qty",
+      "deliveryNotes": "Delivery Notes",
+      "deliveryNotesPlaceholder": "Add any special delivery instructions (optional)",
+      "placeOrder": "Place Order",
+      "creatingOrder": "Creating Order...",
+      "securityNote": "🔒 Your payment information is secure and encrypted"
+    },
+    "errors": {
+      "selectAddress": "Please select a delivery address",
+      "selectPaymentMethod": "Please select a payment method",
+      "invalidPaymentMethod": "Invalid payment method"
+    },
+    "success": {
+      "orderCreated": "Order created successfully"
+    },
+    "error": {
+      "orderFailed": "Failed to create order"
+    }
+  },
+  "orderStatus": {
+    "loading": "Loading order details...",
+    "error": "Failed to load order details",
+    "tryAgain": "Try Again",
+    "thankYou": "Thank you for your purchase!",
+    "orderReceived": "We've received your order and it will ship soon.",
+    "orderNumber": "Order Number:",
+    "orderSummary": "Order Summary",
+    "noItems": "No items",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "tax": "Tax",
+    "shipping": "Shipping",
+    "shippingFree": "Free",
+    "totalAmount": "Total Amount",
+    "qty": "Qty:",
+    "seller": "Seller:",
+    "continueShopping": "Continue Shopping",
+    "viewMyOrders": "View My Orders"
+  },
+  "order": {
+    "loading": "Loading order details...",
+    "error": "Failed to load order details",
+    "tryAgain": "Try Again",
+    "backToOrders": "Back to Orders",
+    "orderDetails": "Order Details",
+    "placedOn": "Placed on ",
+    "orderItems": "Order Items",
+    "seller": "Seller: ",
+    "qty": "Qty:",
+    "noItems": "No items found",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "tax": "Tax",
+    "shipping": "Shipping",
+    "shippingFree": "Free",
+    "total": "Total",
+    "trackOrder": "Track Order",
+    "cancelOrder": "Cancel Order"
+  },
+  "product": {
+    "addToCart": "Add to Cart",
+    "outOfStock": "Out of Stock",
+    "freeShipping": "Free Shipping",
+    "pleaseLogin": "Please login to add items to wishlist",
+    "soldBy": "Sold by",
+    "notAvailable": "Not available",
+    "qty": "Qty:",
+    "buyNow": "Buy Now",
+    "deliveryBy": "Delivery by",
+    "days": "days",
+    "freeReturns": "Free Returns",
+    "within30Days": "Within 30 days of receipt",
+    "from": "from",
+    "save": "Save",
+    "allPricesIncludeVAT": "All prices include VAT",
+    "sizeGuide": "Size Guide",
+    "specifications": "Specifications",
+    "technicalSpecs": "Technical Specs",
+    "brand": "Brand",
+    "modelNumber": "Model Number",
+    "material": "Material",
+    "various": "Various",
+    "fitType": "Fit Type",
+    "regularFit": "Regular Fit",
+    "origin": "Origin",
+    "detailedSpecs": "Detailed product specifications",
+    "onlyItemsLeft": "Only {count} items left in stock"
   }
 }

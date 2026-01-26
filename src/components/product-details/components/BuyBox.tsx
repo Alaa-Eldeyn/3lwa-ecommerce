@@ -26,6 +26,7 @@ interface BuyBoxProps {
 
 const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxProps) => {
   const t = useTranslations("productDetails");
+  const tProduct = useTranslations("product");
   const locale = useLocale();
   const { addItem } = useCartStore();
   const { isAuthenticated } = useUserStore();
@@ -92,7 +93,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
         {/* Vendor Info */}
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-            {locale === "ar" ? "البائع" : "Sold by"}
+            {tProduct("soldBy")}
           </span>
           {isCombinationAvailable ? (
             <Link
@@ -103,7 +104,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
             </Link>
           ) : (
             <div className="text-sm font-bold text-gray-500 dark:text-gray-400">
-              {locale === "ar" ? "غير متوفر" : "Not available"}
+              {tProduct("notAvailable")}
             </div>
           )}
         </div>
@@ -127,9 +128,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
           </div>
           {availableQuantity > 0 && availableQuantity <= 100 && (
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              {locale === "ar"
-                ? `فقط ${availableQuantity} قطعة متبقية`
-                : `Only ${availableQuantity} items left in stock`}
+              {tProduct("onlyItemsLeft", { count: availableQuantity })}
             </p>
           )}
         </div>
@@ -139,7 +138,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
           {/* Quantity Selector */}
           <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 px-3 py-2">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-              {locale === "ar" ? "الكمية:" : "Qty:"}
+              {tProduct("qty")}
             </span>
             <div className="flex items-center gap-3">
               <button
@@ -186,7 +185,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
           <button
             disabled={stockStatus === 3 || !isCombinationAvailable}
             className="w-full bg-secondary hover:bg-[#1e3a5c] dark:hover:bg-[#1e3a5c]/80 text-white font-bold py-3.5 px-4 rounded-lg shadow-sm hover:shadow-md transition-all text-sm disabled:opacity-50 disabled:cursor-not-allowed">
-            {locale === "ar" ? "اشتري الآن" : "Buy Now"}
+            {tProduct("buyNow")}
           </button>
         </div>
 
@@ -204,9 +203,9 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
                 </p>
                 {bestOffer?.estimatedDeliveryDays && (
                   <p className="text-[10px] text-gray-500 dark:text-gray-400">
-                    {locale === "ar" ? "التوصيل خلال" : "Delivery by"}{" "}
+                    {tProduct("deliveryBy")}{" "}
                     <span className="font-medium text-gray-700 dark:text-gray-300">
-                      {bestOffer.estimatedDeliveryDays} {locale === "ar" ? "أيام" : "days"}
+                      {bestOffer.estimatedDeliveryDays} {tProduct("days")}
                     </span>
                   </p>
                 )}
@@ -221,10 +220,10 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
             </div>
             <div>
               <p className="text-xs font-bold text-gray-900 dark:text-white">
-                {locale === "ar" ? "إرجاع مجاني" : "Free Returns"}
+                {tProduct("freeReturns")}
               </p>
               <p className="text-[10px] text-gray-500 dark:text-gray-400">
-                {locale === "ar" ? "خلال 30 يوم من الاستلام" : "Within 30 days of receipt"}
+                {tProduct("within30Days")}
               </p>
             </div>
           </div>
@@ -238,7 +237,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
           className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium py-3 px-4 rounded-xl transition-colors flex items-center justify-between group">
           <span className="flex items-center gap-2">
             <Tags size={18} className="text-primary" />
-            {vendorCount} {t("otherOffers")} {locale === "ar" ? "من" : "from"}{" "}
+            {vendorCount} {t("otherOffers")} {tProduct("from")}{" "}
             {product.pricing?.minPrice.toFixed(2)}$
           </span>
           <svg

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/routing";
 import Image from "next/image";
 import { customAxios } from "@/src/auth/customAxios";
@@ -17,6 +17,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
   const locale = useLocale();
   const cardRef = useRef<HTMLDivElement>(null);
   const isArabic = locale === "ar";
+  const t = useTranslations("orderStatus");
 
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -42,14 +43,14 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
         }
       } catch (err) {
         console.error("Failed to fetch order data:", err);
-        setError(isArabic ? "فشل في تحميل تفاصيل الطلب" : "Failed to load order details");
+        setError(t("error"));
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchOrderData();
-  }, [id, isArabic]);
+  }, [id, t]);
 
   // Animation on load
   useEffect(() => {
@@ -94,7 +95,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
         <div className="text-center">
           <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
           <p className="text-lg text-gray-600">
-            {isArabic ? "جاري تحميل تفاصيل الطلب..." : "Loading order details..."}
+            {t("loading")}
           </p>
         </div>
       </div>
@@ -109,7 +110,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
           <button
             onClick={() => window.location.reload()}
             className="bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:bg-primaryDark transition-colors">
-            {isArabic ? "حاول مرة أخرى" : "Try Again"}
+            {t("tryAgain")}
           </button>
         </div>
       </div>
@@ -136,18 +137,16 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
 
         {/* Heading & Message */}
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-          {isArabic ? "شكراً لطلبك!" : "Thank you for your purchase!"}
+          {t("thankYou")}
         </h1>
         <p className="text-gray-500 max-w-md mx-auto text-lg mb-4">
-          {isArabic
-            ? "لقد استلمنا طلبك وسيتم شحنه قريباً."
-            : "We've received your order and it will ship soon."}
+          {t("orderReceived")}
         </p>
 
         {/* Order Number Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full border border-gray-200 mb-6">
           <span className="text-gray-500 text-sm font-medium">
-            {isArabic ? "رقم الطلب:" : "Order Number:"}
+            {t("orderNumber")}
           </span>
           <span className="text-primary font-bold tracking-wide">
             {orderData?.orderNumber || "---"}
@@ -157,7 +156,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
         {/* Order Summary Section */}
         <div className="bg-gray-50/80 rounded-2xl p-6 md:p-8 max-w-xl mx-auto border border-gray-100 text-left">
           <h2 className="text-lg font-bold text-gray-800 mb-6 border-b border-gray-200 pb-4 text-start">
-            {isArabic ? "ملخص الطلب" : "Order Summary"}
+            {t("orderSummary")}
           </h2>
 
           {/* Items List */}
@@ -184,9 +183,9 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
                       {item.itemName}
                     </h3>
                     <p className="text-gray-500 text-xs text-start">
-                      {isArabic ? "الكمية:" : "Qty:"} {item.quantity}
+                      {t("qty")} {item.quantity}
                       {item.vendorName &&
-                        ` | ${isArabic ? "البائع:" : "Seller:"} ${item.vendorName}`}
+                        ` | ${t("seller")} ${item.vendorName}`}
                     </p>
                   </div>
                   <div className={`text-${isArabic ? "left" : "right"}`}>
@@ -197,7 +196,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
               ))
             ) : (
               <p className="text-gray-500 text-center py-4">
-                {isArabic ? "لا توجد عناصر" : "No items"}
+                {t("noItems")}
               </p>
             )}
           </div>
@@ -207,7 +206,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
             {/* Subtotal */}
             <div className="flex justify-between items-center">
               <span className="text-gray-500 text-sm">
-                {isArabic ? "المجموع الفرعي" : "Subtotal"}
+                {t("subtotal")}
               </span>
               <span className="text-gray-800 font-medium">${itemsSubtotal.toFixed(2)}</span>
             </div>
@@ -215,7 +214,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
             {/* Discount */}
             {discountAmount > 0 && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-500 text-sm">{isArabic ? "الخصم" : "Discount"}</span>
+                <span className="text-gray-500 text-sm">{t("discount")}</span>
                 <span className="text-green-600 font-medium">-${discountAmount.toFixed(2)}</span>
               </div>
             )}
@@ -223,16 +222,16 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
             {/* Tax */}
             {taxAmount > 0 && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-500 text-sm">{isArabic ? "الضريبة" : "Tax"}</span>
+                <span className="text-gray-500 text-sm">{t("tax")}</span>
                 <span className="text-gray-800 font-medium">${taxAmount.toFixed(2)}</span>
               </div>
             )}
 
             {/* Shipping */}
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 text-sm">{isArabic ? "الشحن" : "Shipping"}</span>
+              <span className="text-gray-500 text-sm">{t("shipping")}</span>
               <span className="text-gray-800 font-medium">
-                {shippingAmount > 0 ? `$${shippingAmount.toFixed(2)}` : isArabic ? "مجاني" : "Free"}
+                {shippingAmount > 0 ? `$${shippingAmount.toFixed(2)}` : t("shippingFree")}
               </span>
             </div>
 
@@ -240,7 +239,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
             <div className="flex justify-between items-end pt-3 border-t border-gray-200">
               <div>
                 <p className="text-gray-500 text-sm">
-                  {isArabic ? "المجموع الكلي" : "Total Amount"}
+                  {t("totalAmount")}
                 </p>
               </div>
               <div className="text-2xl font-bold text-primary">${totalAmount.toFixed(2)}</div>
@@ -253,12 +252,12 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
           <Link
             href={`/${locale}`}
             className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-semibold rounded-xl text-white bg-primary hover:bg-primary/90 w-full sm:w-auto">
-            {isArabic ? "متابعة التسوق" : "Continue Shopping"}
+            {t("continueShopping")}
           </Link>
           <Link
             href={`/profile?tab=orders`}
             className="inline-flex items-center justify-center px-8 py-3.5 border border-gray-200 text-base font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 w-full sm:w-auto">
-            {isArabic ? "عرض طلباتي" : "View My Orders"}
+            {t("viewMyOrders")}
           </Link>
         </div>
       </main>

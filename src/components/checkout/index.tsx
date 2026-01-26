@@ -6,7 +6,7 @@ import ShippingAddress from "./components/ShippingAddress";
 import PaymentMethod from "./components/PaymentMethod";
 import CheckoutSummary from "./components/CheckoutSummary";
 import { useUserStore } from "@/src/store/userStore";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useCartStore } from "@/src/store/cartStore";
 import { Tag, X } from "lucide-react";
 import { customAxios } from "@/src/auth/customAxios";
@@ -31,6 +31,7 @@ const Checkout = () => {
   const { isAuthenticated } = useUserStore();
   const locale = useLocale();
   const isArabic = locale === "ar";
+  const t = useTranslations("checkout");
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   // تحميل الـ cart من الـ server لو اليوزر مسجل
@@ -124,14 +125,12 @@ const Checkout = () => {
 
   const onSubmit = async (data: any) => {
     if (!selectedAddress?.id) {
-      toast.error(
-        locale === "ar" ? "يرجى اختيار عنوان التوصيل" : "Please select a delivery address"
-      );
+      toast.error(t("errors.selectAddress"));
       return;
     }
 
     if (!paymentMethodId) {
-      toast.error(locale === "ar" ? "يرجى اختيار طريقة الدفع" : "Please select a payment method");
+      toast.error(t("errors.selectPaymentMethod"));
       return;
     }
 
@@ -139,7 +138,7 @@ const Checkout = () => {
     const selectedPaymentMethod = paymentMethods.find((method) => method.id === paymentMethodId);
 
     if (!selectedPaymentMethod) {
-      toast.error(locale === "ar" ? "طريقة الدفع غير صالحة" : "Invalid payment method");
+      toast.error(t("errors.invalidPaymentMethod"));
       return;
     }
 
@@ -157,7 +156,7 @@ const Checkout = () => {
 
       if (response.data?.success && response.data?.data?.orderId) {
         // Handle success - redirect to order confirmation page
-        toast.success(locale === "ar" ? "تم إنشاء الطلب بنجاح" : "Order created successfully");
+        toast.success(t("success.orderCreated"));
 
         // Clear the cart after successful order
         await clearCart(true);
@@ -165,14 +164,14 @@ const Checkout = () => {
         // Redirect to order status page with orderId
         router.push(`/${locale}/order-status/${response.data.data.orderId}`);
       } else {
-        throw new Error(response.data?.message || "Failed to create order");
+        throw new Error(response.data?.message || t("error.orderFailed"));
       }
     } catch (error: any) {
       console.error("Failed to create order:", error);
       const errorMessage =
         error.response?.data?.message ||
         error.response?.data?.errors?.[0] ||
-        (locale === "ar" ? "فشل إنشاء الطلب" : "Failed to create order");
+        t("error.orderFailed");
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -188,7 +187,7 @@ const Checkout = () => {
   return (
     <div className="bg-gray-50 dark:bg-gray-950 py-8">
       <div className="container">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Checkout</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{t("title")}</h1>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -200,7 +199,7 @@ const Checkout = () => {
               <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                   <Tag size={24} className="text-primary" />
-                  {locale === "ar" ? "كود الخصم" : "Coupon Code"}
+                  {t("couponCode")}
                 </h2>
 
                 {appliedPromoCode ? (
@@ -211,7 +210,7 @@ const Checkout = () => {
                         {appliedPromoCode}
                       </span>
                       <span className="text-sm text-green-600 dark:text-green-400">
-                        {locale === "ar" ? "مطبق" : "Applied"}
+                        {t("applied")}
                       </span>
                     </div>
                     <button
@@ -227,7 +226,7 @@ const Checkout = () => {
                       type="text"
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                      placeholder={locale === "ar" ? "أدخل كود الخصم" : "Enter coupon code"}
+                      placeholder={t("couponCodePlaceholder")}
                       className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
@@ -241,13 +240,7 @@ const Checkout = () => {
                       onClick={handleApplyPromo}
                       disabled={!promoCode.trim() || isApplyingPromo}
                       className="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                      {isApplyingPromo
-                        ? locale === "ar"
-                          ? "جاري التطبيق..."
-                          : "Applying..."
-                        : locale === "ar"
-                        ? "تطبيق"
-                        : "Apply"}
+                      {isApplyingPromo ? t("applying") : t("apply")}
                     </button>
                   </div>
                 )}

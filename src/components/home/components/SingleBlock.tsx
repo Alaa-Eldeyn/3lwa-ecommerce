@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Link } from "@/src/i18n/routing";
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { useLocale } from "next-intl";
 import { Block } from "@/src/types/home-blocks.types";
 
 type BlockItemUI = {
@@ -13,7 +14,8 @@ type BlockItemUI = {
   campaignBadgeAr?: string;
   campaignBadgeEn?: string;
 };
-const SingleBlock = ({ block, locale }: { block: Block; locale: string }) => {
+const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
+  const locale = useLocale();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [hasOverflow, setHasOverflow] = useState(false);
 

@@ -26,6 +26,7 @@ interface TabsVariationProps {
 const TabsVariation = ({ description, reviews, totalReviews, product }: TabsVariationProps) => {
   const t = useTranslations("productDetails");
   const tFeatures = useTranslations("productDetails.features");
+  const tProduct = useTranslations("product");
   const locale = useLocale();
   const [activeTab, setActiveTab] = useState<"details" | "specifications" | "reviews">(
     "details"
@@ -60,7 +61,7 @@ const TabsVariation = ({ description, reviews, totalReviews, product }: TabsVari
                 ? "border-primary dark:border-primary font-bold text-primary dark:text-primary"
                 : "border-transparent font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
             }`}>
-            {locale === "ar" ? "المواصفات" : "Specifications"}
+            {tProduct("specifications")}
           </button>
           <button
             onClick={() => setActiveTab("reviews")}
@@ -128,14 +129,14 @@ const TabsVariation = ({ description, reviews, totalReviews, product }: TabsVari
           {/* Specs Table */}
           <div className="col-span-12 md:col-span-4">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-              {locale === "ar" ? "المواصفات التقنية" : "Technical Specs"}
+              {tProduct("technicalSpecs")}
             </h3>
             <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
               <table className="min-w-full text-sm">
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                   <tr className="bg-white dark:bg-gray-800">
                     <td className="px-4 py-3 font-medium text-gray-500 dark:text-gray-400 w-1/3">
-                      {locale === "ar" ? "العلامة التجارية" : "Brand"}
+                      {tProduct("brand")}
                     </td>
                     <td className="px-4 py-3 text-gray-900 dark:text-white font-semibold">
                       {brandName || "-"}
@@ -143,7 +144,7 @@ const TabsVariation = ({ description, reviews, totalReviews, product }: TabsVari
                   </tr>
                   <tr>
                     <td className="px-4 py-3 font-medium text-gray-500 dark:text-gray-400 w-1/3">
-                      {locale === "ar" ? "رقم الموديل" : "Model Number"}
+                      {tProduct("modelNumber")}
                     </td>
                     <td className="px-4 py-3 text-gray-900 dark:text-white">
                       {product?.currentCombination?.sku || "-"}
@@ -151,26 +152,26 @@ const TabsVariation = ({ description, reviews, totalReviews, product }: TabsVari
                   </tr>
                   <tr className="bg-white dark:bg-gray-800">
                     <td className="px-4 py-3 font-medium text-gray-500 dark:text-gray-400 w-1/3">
-                      {locale === "ar" ? "المادة" : "Material"}
+                      {tProduct("material")}
                     </td>
                     <td className="px-4 py-3 text-gray-900 dark:text-white">
-                      {locale === "ar" ? "متنوع" : "Various"}
+                      {tProduct("various")}
                     </td>
                   </tr>
                   <tr>
                     <td className="px-4 py-3 font-medium text-gray-500 dark:text-gray-400 w-1/3">
-                      {locale === "ar" ? "نوع القطع" : "Fit Type"}
+                      {tProduct("fitType")}
                     </td>
                     <td className="px-4 py-3 text-gray-900 dark:text-white">
-                      {locale === "ar" ? "عادي" : "Regular Fit"}
+                      {tProduct("regularFit")}
                     </td>
                   </tr>
                   <tr className="bg-white dark:bg-gray-800">
                     <td className="px-4 py-3 font-medium text-gray-500 dark:text-gray-400 w-1/3">
-                      {locale === "ar" ? "المنشأ" : "Origin"}
+                      {tProduct("origin")}
                     </td>
                     <td className="px-4 py-3 text-gray-900 dark:text-white">
-                      {locale === "ar" ? "متنوع" : "Various"}
+                      {tProduct("various")}
                     </td>
                   </tr>
                 </tbody>
@@ -183,7 +184,7 @@ const TabsVariation = ({ description, reviews, totalReviews, product }: TabsVari
       {activeTab === "specifications" && (
         <div className="text-gray-600 dark:text-gray-400 leading-relaxed">
           <p>
-            {locale === "ar" ? "المواصفات التفصيلية للمنتج" : "Detailed product specifications"}
+            {tProduct("detailedSpecs")}
           </p>
         </div>
       )}

@@ -14,6 +14,7 @@ const BrandPage = () => {
   const locale = useLocale();
   const isArabic = locale === "ar";
   const t = useTranslations("brand.products");
+  const tBrand = useTranslations("brand");
 
   const {
     data: response,
@@ -52,7 +53,7 @@ const BrandPage = () => {
   const totalProducts = productsResponse?.totalRecords ?? 0;
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString(isArabic ? "ar-EG" : "en-US", {
+    return new Date(dateString).toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -65,7 +66,7 @@ const BrandPage = () => {
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
           <p className="text-slate-600 text-lg font-medium">
-            {isArabic ? "جاري تحميل البيانات..." : "Loading data..."}
+            {tBrand("loading")}
           </p>
         </div>
       </div>
@@ -80,16 +81,15 @@ const BrandPage = () => {
             <span className="text-3xl">❌</span>
           </div>
           <h2 className="text-2xl font-bold text-slate-800 mb-2">
-            {isArabic ? "حدث خطأ" : "Error occurred"}
+            {tBrand("error")}
           </h2>
           <p className="text-slate-600 mb-4">
-            {(error as any)?.response?.data?.message ||
-              (isArabic ? "فشل تحميل بيانات العلامة التجارية" : "Failed to load brand data")}
+            {(error as any)?.response?.data?.message || tBrand("errorMessage")}
           </p>
           <button
             onClick={() => router.push("/brands")}
             className="px-6 py-3 bg-primary hover:bg-headerDark text-white font-semibold rounded-xl transition-colors">
-            {isArabic ? "العودة للعلامات التجارية" : "Back to Brands"}
+            {tBrand("backToBrands")}
           </button>
         </div>
       </div>
@@ -101,7 +101,7 @@ const BrandPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <div className="text-center">
           <p className="text-slate-600 text-lg">
-            {isArabic ? "لا توجد بيانات للعرض" : "No data available"}
+            {tBrand("noData")}
           </p>
         </div>
       </div>
@@ -152,7 +152,7 @@ const BrandPage = () => {
                     <span className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
                       <span>
-                        {isArabic ? "تاريخ التأسيس:" : "Established:"}{" "}
+                        {tBrand("established")}{" "}
                         {formatDate(brandData.createdDateUtc)}
                       </span>
                     </span>
@@ -172,10 +172,10 @@ const BrandPage = () => {
         <div className="col-span-2">
           <div className="bg-white rounded-2xl border-2 border-gray-100 p-8 shadow-sm">
             <h2 className="text-3xl font-bold text-foreground mb-6">
-              {isArabic ? `نبذة عن ${displayName}` : `About ${displayName}`}
+              {tBrand("about", { brandName: displayName })}
             </h2>
             <p className="text-gray-700 text-lg leading-relaxed mb-6">
-              {displayDescription || (isArabic ? "لا يوجد وصف متاح" : "No description available")}
+              {displayDescription || tBrand("noDescription")}
             </p>
           </div>
         </div>
@@ -184,7 +184,7 @@ const BrandPage = () => {
         <div className="col-span-1">
           <div className="bg-white rounded-2xl border-2 border-gray-100 p-8 shadow-sm sticky top-24">
             <h3 className="text-2xl font-bold text-foreground mb-6">
-              {isArabic ? "معلومات العلامة التجارية" : "Brand Information"}
+              {tBrand("brandInformation")}
             </h3>
 
             <div className="space-y-6">
@@ -195,7 +195,7 @@ const BrandPage = () => {
                   </div>
                   <div>
                     <div className="text-sm text-gray-600 mb-1">
-                      {isArabic ? "الموقع الرسمي" : "Official Website"}
+                      {tBrand("officialWebsite")}
                     </div>
                     <a
                       href={brandData.websiteUrl}
@@ -215,7 +215,7 @@ const BrandPage = () => {
                 </div>
                 <div>
                   <div className="text-sm text-gray-600 mb-1">
-                    {isArabic ? "تاريخ التأسيس" : "Established Date"}
+                    {tBrand("establishedDate")}
                   </div>
                   <div className="font-semibold text-foreground">
                     {formatDate(brandData.createdDateUtc)}
@@ -227,7 +227,7 @@ const BrandPage = () => {
                 <div className="pt-4">
                   <button className="w-full bg-white hover:bg-gray-50 text-foreground font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-3 border-2 border-gray-200">
                     <Heart className="w-4 h-4" />
-                    <span>{isArabic ? "إزالة من المفضلة" : "Remove from Favorites"}</span>
+                    <span>{tBrand("removeFromFavorites")}</span>
                   </button>
                 </div>
               )}

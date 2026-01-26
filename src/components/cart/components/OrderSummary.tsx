@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/routing";
 
 interface OrderSummaryProps {
@@ -19,11 +19,12 @@ const OrderSummary = ({
 }: OrderSummaryProps) => {
   const locale = useLocale();
   const isArabic = locale === "ar";
+  const t = useTranslations("cart.orderSummary");
 
   return (
     <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-        {isArabic ? "ملخص الطلب" : "Order Summary"}
+        {t("title")}
       </h2>
 
       {/* Summary Items */}
@@ -31,7 +32,7 @@ const OrderSummary = ({
         {/* Subtotal */}
         <div className="flex items-center justify-between">
           <span className="text-gray-600 dark:text-gray-400">
-            {isArabic ? "المجموع الفرعي" : "Subtotal"}
+            {t("subtotal")}
           </span>
           <span className="text-lg font-bold text-gray-900 dark:text-white">
             ${subtotal.toFixed(2)}
@@ -41,7 +42,7 @@ const OrderSummary = ({
         {/* Shipping */}
         <div className="flex items-center justify-between">
           <span className="text-gray-600 dark:text-gray-400">
-            {isArabic ? "رسوم الشحن" : "Shipping"}
+            {t("shipping")}
           </span>
           <span
             className={`text-lg font-bold ${
@@ -50,9 +51,7 @@ const OrderSummary = ({
                 : "text-gray-900 dark:text-white"
             }`}>
             {shippingEstimate === 0
-              ? isArabic
-                ? "مجاني"
-                : "Free"
+              ? t("shippingFree")
               : `$${shippingEstimate.toFixed(2)}`}
           </span>
         </div>
@@ -60,7 +59,7 @@ const OrderSummary = ({
         {/* Tax */}
         {taxEstimate > 0 && (
           <div className="flex items-center justify-between">
-            <span className="text-gray-600 dark:text-gray-400">{isArabic ? "الضريبة" : "Tax"}</span>
+            <span className="text-gray-600 dark:text-gray-400">{t("tax")}</span>
             <span className="text-lg font-bold text-gray-900 dark:text-white">
               ${taxEstimate.toFixed(2)}
             </span>
@@ -73,7 +72,7 @@ const OrderSummary = ({
       {/* Total */}
       <div className="flex items-center justify-between mb-4">
         <span className="text-lg text-gray-900 dark:text-white">
-          {isArabic ? "المجموع الكلي" : "Total"}
+          {t("total")}
         </span>
         <span className="text-2xl font-bold text-gray-900 dark:text-white">
           ${totalEstimate.toFixed(2)}
@@ -84,7 +83,7 @@ const OrderSummary = ({
       <Link
         href="/checkout"
         className="w-full px-6 py-3 bg-primary dark:bg-white text-white dark:text-primary rounded-full font-medium hover:bg-secondary dark:hover:bg-gray-200 soft flex items-center justify-center gap-2">
-        {isArabic ? "التالي" : "Go to Checkout"}
+        {t("goToCheckout")}
         <ArrowRight className={isArabic ? "rotate-180" : ""} size={20} />
       </Link>
     </div>

@@ -7,7 +7,7 @@ import OrderSummary from "./components/OrderSummary";
 import EmptyCart from "./components/EmptyCart";
 import { useCartStore } from "@/src/store/cartStore";
 import { useUserStore } from "@/src/store/userStore";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 const Cart = () => {
   const { items, summary, updateQuantity, removeItem, getTotalPrice, isLoading, loadCartFromServer } =
@@ -15,6 +15,7 @@ const Cart = () => {
   const { isAuthenticated } = useUserStore();
   const locale = useLocale();
   const isArabic = locale === "ar";
+  const t = useTranslations("cart");
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   // تحميل الـ cart من الـ server لو اليوزر مسجل
@@ -67,7 +68,7 @@ const Cart = () => {
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto"></div>
-              <p className="mt-4 text-gray-600 dark:text-gray-400">Loading cart...</p>
+              <p className="mt-4 text-gray-600 dark:text-gray-400">{t("loading")}</p>
             </div>
           </div>
         </div>
@@ -93,7 +94,7 @@ const Cart = () => {
 
       <div className="container">
         <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-          {locale === "ar" ? "السلة" : "Your Cart"}
+          {t("title")}
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

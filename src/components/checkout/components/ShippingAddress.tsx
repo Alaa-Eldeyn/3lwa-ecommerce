@@ -4,7 +4,7 @@ import { useState } from "react";
 import AddressModal, { Address } from "@/src/components/profile/components/AddressModal";
 import { useAddresses } from "@/src/hooks/useAddresses";
 import { useEffect } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 interface ShippingAddressProps {
   onAddressChange?: (address: Address | null) => void;
@@ -13,6 +13,7 @@ interface ShippingAddressProps {
 const ShippingAddress = ({ onAddressChange }: ShippingAddressProps) => {
   const [showModal, setShowModal] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
+  const t = useTranslations("checkout.shippingAddress");
 
   const { addresses, selectedAddressId, handleSelectAddress, refetchAddresses } = useAddresses();
 
@@ -40,14 +41,14 @@ const ShippingAddress = ({ onAddressChange }: ShippingAddressProps) => {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <MapPin size={24} className="text-primary" />
-          عناوين الشحن
+          {t("title")}
         </h2>
         <button
           type="button"
           onClick={handleAddNew}
           className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors">
           <Plus size={20} />
-          إضافة عنوان جديد
+          {t("addNew")}
         </button>
       </div>
 
@@ -86,13 +87,15 @@ const CheckoutAddressList = ({
   onSelect,
 }: CheckoutAddressListProps) => {
   const locale = useLocale();
+  const t = useTranslations("checkout.shippingAddress");
+  const tProfile = useTranslations("profile.addresses");
 
   if (!addresses || addresses.length === 0) {
     return (
       <div className="bg-gray-50 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-8 text-center">
         <MapPin className="text-gray-400 mx-auto mb-2" size={32} />
         <p className="text-gray-500 dark:text-gray-400">
-          {locale === "ar" ? "لا توجد عناوين" : "No addresses found"}
+          {t("noAddresses")}
         </p>
       </div>
     );
@@ -132,7 +135,7 @@ const CheckoutAddressList = ({
                   {isDefault && (
                     <span className="bg-primary text-white px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
                       <Star size={10} className="fill-current" />
-                      {locale === "ar" ? "افتراضي" : "Default"}
+                      {t("default")}
                     </span>
                   )}
                 </div>
@@ -203,7 +206,7 @@ const CheckoutAddressList = ({
                         <span className="text-gray-700 dark:text-gray-300 font-medium">
                           {address.city?.titleAr ||
                             address.city?.titleEn ||
-                            (locale === "ar" ? "المدينة غير محددة" : "City not specified")}
+                            tProfile("cityNotSpecified")}
                         </span>
                       </div>
                     )}

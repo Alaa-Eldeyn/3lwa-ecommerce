@@ -1,7 +1,7 @@
 "use client";
 import { CreditCard, Wallet, Banknote } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { customAxios } from "@/src/auth/customAxios";
 
 type PaymentMethodType = {
@@ -20,6 +20,7 @@ interface PaymentMethodProps {
 
 const PaymentMethod = ({ selectedMethod, onChange }: PaymentMethodProps) => {
   const locale = useLocale();
+  const t = useTranslations("checkout.paymentMethod");
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethodType[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -93,9 +94,9 @@ const PaymentMethod = ({ selectedMethod, onChange }: PaymentMethodProps) => {
       <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
           <CreditCard size={24} className="text-primary" />
-          Payment Method
+          {t("title")}
         </h2>
-        <div className="text-center py-8 text-gray-500 dark:text-gray-400">Loading...</div>
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">{t("loading")}</div>
       </div>
     );
   }
@@ -104,7 +105,7 @@ const PaymentMethod = ({ selectedMethod, onChange }: PaymentMethodProps) => {
     <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
       <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
         <CreditCard size={24} className="text-primary" />
-        Payment Method
+        {t("title")}
       </h2>
 
       <div className="space-y-3">
