@@ -114,9 +114,10 @@ const SearchBar = () => {
         {/* Search Input */}
         <input
           value={q}
+          dir={isArabic ? "rtl" : "ltr"}
           onChange={(e) => setQ(e.target.value)}
           onKeyDown={handleKeyDown} // 4. NEW: Added Enter key support
-          placeholder="بحث في Basyit.com"
+          placeholder={isArabic ? "بحث في Basyit.com" : "Search in Basyit.com"}
           className="flex-1 h-full px-2 lg:px-4 text-gray-700 border-t border-b border-gray-300 bg-white focus:outline-none"
         />
         

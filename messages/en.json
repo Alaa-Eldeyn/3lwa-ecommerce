@@ -1,5 +1,7 @@
 {
   "header": {
+    "deliveryTo": "Delivery to",
+    "egypt": "Egypt",
     "search": "Search...",
     "cart": "Cart",
     "wishlist": "Wishlist",

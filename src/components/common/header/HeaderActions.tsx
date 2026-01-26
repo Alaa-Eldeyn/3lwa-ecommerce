@@ -30,10 +30,10 @@ const HeaderActions = () => {
       {/* Desktop Actions */}
       <div className="hidden lg:flex items-center gap-4 flex-1 justify-end">
         <button className="text-white hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all">
-          <span className="text-sm">التوصيل إلى</span>
+          <span className="text-sm">{t("deliveryTo")}</span>
           <span className="font-semibold text-sm flex items-center gap-1">
             <MapPin size={14} />
-            مصر
+            {t("egypt")}
           </span>
         </button>
 

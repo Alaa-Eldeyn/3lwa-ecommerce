@@ -1,5 +1,7 @@
 {
   "header": {
+    "deliveryTo": "التوصيل إلى",
+    "egypt": "مصر",
     "search": "ابحث...",
     "cart": "العربة",
     "wishlist": "المفضلة",
