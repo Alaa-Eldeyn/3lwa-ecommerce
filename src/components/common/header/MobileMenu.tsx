@@ -108,7 +108,7 @@ const MobileMenu = () => {
           {isLoggedIn ? (
             <div className="flex flex-col space-y-1">
               <Link 
-                href={`/${locale}/profile`}
+                href={`/profile`}
                 onClick={toggleMobile}
                 className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition"
               >
@@ -116,7 +116,7 @@ const MobileMenu = () => {
                 {t("myAccount")}
               </Link>
               <Link 
-                href={`/${locale}/profile?tab=orders`}
+                href={`/profile?tab=orders`}
                 onClick={toggleMobile}
                 className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition"
               >
@@ -133,7 +133,7 @@ const MobileMenu = () => {
           ) : (
             <div className="flex flex-col space-y-1">
               <Link
-                href={`/${locale}/login`}
+                href={`/login`}
                 onClick={toggleMobile}
                 className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition text-left"
               >
@@ -141,7 +141,7 @@ const MobileMenu = () => {
                 {t("login")}
               </Link>
               <Link
-                href={`/${locale}/register`}
+                href={`/register`}
                 onClick={toggleMobile}
                 className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition text-left"
               >

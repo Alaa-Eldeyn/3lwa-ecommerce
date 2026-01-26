@@ -256,7 +256,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
             {isArabic ? "متابعة التسوق" : "Continue Shopping"}
           </Link>
           <Link
-            href={`/${locale}/profile?tab=orders`}
+            href={`/profile?tab=orders`}
             className="inline-flex items-center justify-center px-8 py-3.5 border border-gray-200 text-base font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 w-full sm:w-auto">
             {isArabic ? "عرض طلباتي" : "View My Orders"}
           </Link>

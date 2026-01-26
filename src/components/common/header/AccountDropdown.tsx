@@ -47,7 +47,7 @@ const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
         {/* Menu Items */}
         <div className="py-2">
           <Link
-            href={`/${locale}/profile`}
+            href={`/profile`}
             onClick={handleLinkClick}
             className="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors"
           >
@@ -56,7 +56,7 @@ const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
           </Link>
 
           <Link
-            href={`/${locale}/profile?tab=orders`}
+            href={`/profile?tab=orders`}
             onClick={handleLinkClick}
             className="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors"
           >
@@ -65,7 +65,7 @@ const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
           </Link>
 
           <Link
-            href={`/${locale}/profile?tab=address`}
+            href={`/profile?tab=address`}
             onClick={handleLinkClick}
             className="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors"
           >
@@ -94,7 +94,7 @@ const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
     <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50 animate-fadeIn">
       <div className="py-2">
         <Link
-          href={`/${locale}/login`}
+          href={`/login`}
           onClick={handleLinkClick}
           className="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors rounded-t-xl"
         >
@@ -103,7 +103,7 @@ const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
         </Link>
 
         <Link
-          href={`/${locale}/register`}
+          href={`/register`}
           onClick={handleLinkClick}
           className="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors rounded-b-xl"
         >

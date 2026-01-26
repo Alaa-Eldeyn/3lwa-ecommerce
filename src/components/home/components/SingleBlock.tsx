@@ -55,7 +55,7 @@ const SingleBlock = ({ block, locale }: { block: Block; locale: string }) => {
   // Helper function to get the link for an item
   const getItemLink = (itemId: string) => {
     if (isProducts) {
-      return `/${locale}/products/product-details/${itemId}`;
+      return `/products/product-details/${itemId}`;
     } else {
       return `/products?c=${itemId}`;
     }

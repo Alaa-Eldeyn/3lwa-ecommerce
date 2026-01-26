@@ -207,7 +207,7 @@ const ProductCard = ({
 
           {/* Title */}
           <Link
-            href={`/${locale}/products/product-details/${itemCombinationId}`}
+            href={`/products/product-details/${itemCombinationId}`}
             className="!block! text-sm md:text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 leading-tight group-hover:text-primary soft">
             {displayTitle}
           </Link>
@@ -353,7 +353,7 @@ const ProductCard = ({
         <div className="py-4 flex flex-col flex-1">
           {/* Title */}
           <Link
-            href={`/${locale}/products/product-details/${itemCombinationId}`}
+            href={`/products/product-details/${itemCombinationId}`}
             className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
             {displayTitle}
           </Link>
@@ -421,7 +421,7 @@ const ProductCard = ({
         <div className="pt-4 flex flex-col flex-1">
           {/* Title */}
           <Link
-            href={`/${locale}/products/product-details/${itemCombinationId}`}
+            href={`/products/product-details/${itemCombinationId}`}
             className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
             {displayTitle}
           </Link>

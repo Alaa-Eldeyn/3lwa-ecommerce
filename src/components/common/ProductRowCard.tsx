@@ -219,7 +219,7 @@ const ProductRowCard = ({
 
           {/* Title */}
           <Link
-            href={`/${locale}/products/product-details/${itemCombinationId}`}
+            href={`/products/product-details/${itemCombinationId}`}
             className="text-base md:text-lg font-bold text-gray-900 dark:text-white mb-1 line-clamp-1 leading-tight group-hover:text-primary soft"
           >
             {displayTitle}

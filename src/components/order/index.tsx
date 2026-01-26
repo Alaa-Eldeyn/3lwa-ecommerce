@@ -110,7 +110,7 @@ const Order = ({ id }: OrderProps) => {
       {/* Breadcrumb / Back Button */}
       <div className="mb-6">
         <Link
-          href={`/${locale}/profile?tab=orders`}
+          href={`/profile?tab=orders`}
           className="flex items-center text-primary hover:opacity-80 transition-colors font-medium">
           {isArabic ? (
             <ArrowRight className="w-4 h-4 ms-2" />
