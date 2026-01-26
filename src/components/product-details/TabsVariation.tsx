@@ -52,7 +52,8 @@ const TabsVariation = ({ description, reviews, totalReviews, product }: TabsVari
             }`}>
             {t("productDetails")}
           </button>
-          <button
+          {/* //TODO: Add specifications and reviews tabs */}
+          {/* <button
             onClick={() => setActiveTab("specifications")}
             className={`border-b-2 py-4 px-1 text-sm whitespace-nowrap transition-colors ${
               activeTab === "specifications"
@@ -69,7 +70,7 @@ const TabsVariation = ({ description, reviews, totalReviews, product }: TabsVari
                 : "border-transparent font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
             }`}>
             {t("ratingAndReviews")} ({totalReviews || reviews.length})
-          </button>
+          </button> */}
         </nav>
       </div>
 
