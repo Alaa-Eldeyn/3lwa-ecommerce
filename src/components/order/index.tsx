@@ -7,7 +7,7 @@ import Image from "next/image";
 import { customAxios } from "@/src/auth/customAxios";
 import { Package, Loader2, ArrowLeft, ArrowRight, XCircle, Truck, X } from "lucide-react";
 import { OrderData } from "@/src/types/order-details.types";
-import { getPaymentStatusInfo } from "@/src/utils/paymentStatus";
+import { getOrderStatusInfo } from "@/src/utils/orderStatus";
 
 interface OrderProps {
   id: string;
@@ -103,7 +103,7 @@ const Order = ({ id }: OrderProps) => {
     );
   }
 
-  const paymentStatusInfo = getPaymentStatusInfo(orderData?.paymentStatus || "");
+  const orderStatusInfo = getOrderStatusInfo(orderData?.orderStatus ?? "");
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-8">
@@ -128,8 +128,8 @@ const Order = ({ id }: OrderProps) => {
             {isArabic ? "تفاصيل الطلب" : "Order Details"}
           </h1>
           <span
-            className={`px-3 py-1 rounded-full text-sm font-medium ${paymentStatusInfo.bgColor}`}>
-            {isArabic ? paymentStatusInfo.labelAr : paymentStatusInfo.label}
+            className={`px-3 py-1 rounded-full text-sm font-medium ${orderStatusInfo.bgColor}`}>
+            {isArabic ? orderStatusInfo.labelAr : orderStatusInfo.label}
           </span>
         </div>
         <div className="flex gap-2 items-center text-gray-600">

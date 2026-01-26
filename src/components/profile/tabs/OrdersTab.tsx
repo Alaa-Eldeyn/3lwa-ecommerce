@@ -4,7 +4,7 @@ import { customAxios } from "@/src/auth/customAxios";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { getPaymentStatusInfo } from "@/src/utils/paymentStatus";
+import { getOrderStatusInfo } from "@/src/utils/orderStatus";
 
 // Order item summary type
 interface OrderItemSummary {
@@ -126,7 +126,7 @@ const OrdersTab = () => {
                   </p>
                 </div>
                 {(() => {
-                  const statusInfo = getPaymentStatusInfo(order.paymentStatus);
+                  const statusInfo = getOrderStatusInfo(order.orderStatus);
                   return (
                     <span
                       className={`px-3 py-1 rounded-lg text-sm font-medium ${statusInfo.bgColor}`}>
