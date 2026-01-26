@@ -115,14 +115,15 @@ const SingleBlock = ({ block, locale }: { block: Block; locale: string }) => {
           )}
         </div>
 
+        {/* //TODO: Add view all link */}
         {/* View all link */}
-        {block.layout === "Carousel" && block.showViewAllLink && (
+        {/* {block.layout === "Carousel" && block.showViewAllLink && (
           <Link
             href={locale === "ar" ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
             className="text-primary dark:text-primary text-sm hover:underline hover:text-red-700 dark:hover:text-red-400 font-medium">
             {locale === "ar" ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
           </Link>
-        )}
+        )} */}
       </div>
 
       {/* Featured layout */}
@@ -275,14 +276,15 @@ const SingleBlock = ({ block, locale }: { block: Block; locale: string }) => {
           </Link>
         ))}
 
+      {/* //TODO: Add view all link */}
       {/* View all link */}
-      {block.layout !== "Carousel" && block.showViewAllLink && (
+      {/* {block.layout !== "Carousel" && block.showViewAllLink && (
         <Link
           href={locale === "ar" ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
           className="text-primary dark:text-primary text-sm hover:underline hover:text-red-700 dark:hover:text-red-400 font-medium">
           {locale === "ar" ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
         </Link>
-      )}
+      )} */}
     </div>
   );
 };
