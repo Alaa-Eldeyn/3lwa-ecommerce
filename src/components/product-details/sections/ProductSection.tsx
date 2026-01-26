@@ -29,7 +29,7 @@ const ProductSection = ({
   const maxPrice = bestOffer?.price || productDetails.pricing?.maxPrice;
   const discountPercentage =
     bestOffer?.discountPercentage ||
-    (maxPrice && price ? Math.round(((maxPrice - price) / maxPrice) * 100) : 0);
+    (maxPrice && price ? Math.round(((maxPrice - price) / maxPrice) * 100) : undefined);
 
   return (
     <>
