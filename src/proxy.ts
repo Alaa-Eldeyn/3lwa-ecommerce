@@ -27,7 +27,10 @@ export function proxy(req: NextRequest) {
   pathname = pathname.replace(/^\/(ar|en)/, "");
 
   if (!isUserLoggedIn && protectedPages.includes(pathname)) {
-    return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
+    // Store the current path as redirect parameter
+    const redirectUrl = new URL(`/${locale}/login`, req.url);
+    redirectUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(redirectUrl);
   }
 
   if (user && authPages.some((page) => pathname.includes(page))) {

@@ -6,7 +6,7 @@ import { Lock, Eye, EyeOff } from "lucide-react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { parsePhoneNumber } from "libphonenumber-js";
-import { Link } from "@/src/i18n/routing";
+import { Link, useRouter } from "@/src/i18n/routing";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { loginSchema } from "@/src/schemas/schemas";
@@ -14,13 +14,14 @@ import { LoginFormData } from "@/src/types/types";
 import { loginUser } from "@/src/auth/auth";
 import { useUserStore } from "@/src/store/userStore";
 import { useCartStore } from "@/src/store/cartStore";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Lottie from "lottie-react";
 import { useEffect } from "react";
 
 const Login = () => {
   const t = useTranslations("auth");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { setUser } = useUserStore();
   const { syncWithServer } = useCartStore();
   const [showPassword, setShowPassword] = useState(false);
@@ -74,7 +75,13 @@ const Login = () => {
       // مزامنة الـ cart المحلي مع الـ server بعد تسجيل الدخول
       await syncWithServer();
 
-      router.push("/");
+      // Redirect to previous page if available, otherwise go to home
+      const redirectPath = searchParams.get("redirect");
+      if (redirectPath) {
+        router.push(decodeURIComponent(redirectPath));
+      } else {
+        router.push("/");
+      }
     } catch (error) {
       console.error("Login error:", error);
     } finally {

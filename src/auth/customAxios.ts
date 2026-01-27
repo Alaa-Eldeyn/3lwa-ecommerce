@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
-import { getLocale } from "next-intl/server";
 
 const isValidValue = (value: any): boolean => {
   return (
@@ -13,11 +12,18 @@ const isValidValue = (value: any): boolean => {
 };
 
 const redirectToLogin = () => {
-  // const locale = getLocale();
   deleteCookie("basitUser");
   if (typeof window !== "undefined") {
-    const currentPath = window.location.pathname + window.location.search;
-    // window.location.href = `/${locale}/login?redirect=${encodeURIComponent(currentPath)}`;
+    const pathname = window.location.pathname;
+    
+    // Extract locale from pathname
+    const localeMatch = pathname.match(/^\/(ar|en)\b/);
+    const locale = localeMatch ? localeMatch[1] : "ar";
+    
+    // Remove locale from pathname for redirect parameter
+    const pathnameWithoutLocale = pathname.replace(/^\/(ar|en)/, "") || "/";
+    
+    window.location.href = `/${locale}/login?redirect=${encodeURIComponent(pathnameWithoutLocale)}`;
   }
 };
 
