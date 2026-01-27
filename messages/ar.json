@@ -634,6 +634,7 @@
     "addedToWishlist": "تمت الإضافة إلى قائمة الأمنيات",
     "removedFromWishlist": "تمت الإزالة من قائمة الأمنيات",
     "movedToCart": "تم نقل المنتج إلى العربة",
+    "unavailable": "غير متوفر",
     "error": "حدث خطأ، يرجى المحاولة مرة أخرى",
     "itemsCount": "{count} منتج",
     "off": "خصم",

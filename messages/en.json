@@ -628,6 +628,7 @@
     "addedToWishlist": "Added to wishlist",
     "removedFromWishlist": "Removed from wishlist",
     "movedToCart": "Moved to cart",
+    "unavailable": "Unavailable",
     "error": "An error occurred, please try again",
     "itemsCount": "{count} {count, plural, one {item} other {items}}",
     "off": "OFF",

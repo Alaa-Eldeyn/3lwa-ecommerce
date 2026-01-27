@@ -14,6 +14,7 @@ interface WishlistItemProps {
   thumbnailImage: string;
   price: number;
   salesPrice: number;
+  offerPricingId: string | null;
   onRemove: (itemCombinationId: string) => void;
   onMoveToCart: (itemCombinationId: string) => void;
 }
@@ -27,6 +28,7 @@ const WishlistItem = ({
   thumbnailImage,
   price,
   salesPrice,
+  offerPricingId,
   onRemove,
   onMoveToCart,
 }: WishlistItemProps) => {
@@ -36,6 +38,7 @@ const WishlistItem = ({
   const title = isArabic ? itemTitleAr : itemTitleEn;
   const finalPrice = salesPrice > 0 ? salesPrice : price;
   const hasDiscount = salesPrice > 0 && salesPrice < price;
+  const isAvailable = offerPricingId !== null;
 
   return (
     <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700">
@@ -47,7 +50,7 @@ const WishlistItem = ({
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"
         />
-        {hasDiscount && (
+        {isAvailable && hasDiscount && (
           <div className="absolute top-3 left-3 rtl:left-auto rtl:right-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
             {Math.round(((price - salesPrice) / price) * 100)}% {t("off")}
           </div>
@@ -69,25 +72,35 @@ const WishlistItem = ({
           {isArabic ? itemShortDescriptionAr : itemShortDescriptionEn}
         </p>
 
-        {/* Price */}
-        <div className="flex items-center gap-2 mb-4">
-          <span className="text-2xl font-bold text-primary">
-            {finalPrice.toFixed(2)} {t("currency")}
-          </span>
-          {hasDiscount && (
-            <span className="text-lg text-gray-500 dark:text-gray-400 line-through">
-              {price.toFixed(2)} {t("currency")}
+        {/* Price or Unavailable Status */}
+        {isAvailable ? (
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-2xl font-bold text-primary">
+              {finalPrice.toFixed(2)} {t("currency")}
             </span>
-          )}
-        </div>
+            {hasDiscount && (
+              <span className="text-lg text-gray-500 dark:text-gray-400 line-through">
+                {price.toFixed(2)} {t("currency")}
+              </span>
+            )}
+          </div>
+        ) : (
+          <div className="mb-4">
+            <span className="inline-block px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md text-sm font-medium">
+              {t("unavailable")}
+            </span>
+          </div>
+        )}
 
         {/* Action Button */}
-        <button
-          onClick={() => onMoveToCart(itemCombinationId)}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-secondary transition-colors font-medium">
-          <ShoppingCart size={20} />
-          {t("moveToCart")}
-        </button>
+        {isAvailable && (
+          <button
+            onClick={() => onMoveToCart(itemCombinationId)}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-secondary transition-colors font-medium">
+            <ShoppingCart size={20} />
+            {t("moveToCart")}
+          </button>
+        )}
       </div>
     </div>
   );
