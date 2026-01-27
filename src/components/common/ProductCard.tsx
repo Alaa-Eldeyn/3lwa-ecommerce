@@ -266,7 +266,7 @@ const ProductCard = ({
             </div>
           )}
 
-          <div className="flex gap-2 mt-auto">
+          <div className="flex gap-2 mt-auto min-h-12">
             {cartItem ? (
               <QuantityController
                 quantity={cartItem.quantity}

@@ -164,6 +164,7 @@ const CartSidebar = () => {
                         variant="default"
                         className="bg-white! dark:bg-gray-700! text-gray-900! "
                         showDeleteIcon={false}
+                        iconColor="primary"
                       />
 
                       <div className="flex items-center gap-2">

@@ -9,6 +9,7 @@ interface QuantityControllerProps {
   variant?: "default" | "compact" | "large" | "homz" | "nike" | "clean" | "gradient";
   className?: string;
   showDeleteIcon?: boolean;
+  iconColor?: "white" | "primary";
 }
 
 const QuantityController = ({
@@ -18,8 +19,14 @@ const QuantityController = ({
   variant = "default",
   className = "",
   showDeleteIcon = true,
+  iconColor = "white",
 }: QuantityControllerProps) => {
   const isLastItem = quantity === 1;
+  
+  // Determine icon color class based on iconColor prop
+  const iconColorClass = iconColor === "primary" 
+    ? "text-primary dark:text-primary" 
+    : "text-white dark:text-white";
 
   // Variant styles
   const variants = {
@@ -77,9 +84,9 @@ const QuantityController = ({
         title={isLastItem ? "Remove from cart" : "Decrease quantity"}
       >
         {isLastItem && showDeleteIcon ? (
-          <Trash2 size={styles.iconSize} className="text-white dark:text-white" />
+          <Trash2 size={styles.iconSize} className={iconColorClass} />
         ) : (
-          <Minus size={styles.iconSize} className="text-white dark:text-white" />
+          <Minus size={styles.iconSize} className={iconColorClass} />
         )}
       </button>
       <span className={styles.text}>{quantity}</span>
@@ -88,7 +95,7 @@ const QuantityController = ({
         className={styles.button}
         title="Increase quantity"
       >
-        <Plus size={styles.iconSize} className="text-white dark:text-white" />
+        <Plus size={styles.iconSize} className={iconColorClass} />
       </button>
     </div>
   );
