@@ -39,13 +39,13 @@ const AddressesTab = ({ t }: AddressesTabProps) => {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
             {t("addresses.title")}
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">{t("addresses.description")}</p>
+          <p className="text-gray-600 dark:text-gray-400 hidden md:block">{t("addresses.description")}</p>
         </div>
         <button
           onClick={handleAddNew}
           className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 dark:hover:bg-primary/80 soft text-sm">
           <Plus size={20} />
-          {t("addresses.addNew")}
+          <span className="hidden md:inline">{t("addresses.addNew")}</span>
         </button>
       </div>
 

@@ -207,7 +207,7 @@ const AddressList = ({
 
             {/* Footer Actions */}
             {showActions && (
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-col-reverse md:flex-row w-full justify-between gap-2">
                 {/* Date */}
                 {formattedDate && (
                   <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
@@ -227,7 +227,7 @@ const AddressList = ({
                         e.stopPropagation();
                         onEdit(address);
                       }}
-                      className="bg-secondary hover:bg-header dark:bg-secondary dark:hover:bg-header text-white px-3 py-1.5 rounded-lg transition-all duration-300 flex items-center gap-1.5 font-medium text-xs">
+                      className="bg-secondary hover:bg-header dark:bg-secondary dark:hover:bg-header text-white px-3 py-2 md:py-1.5 rounded-lg transition-all duration-300 flex items-center gap-1.5 font-medium text-xs flex-1">
                       <Edit2 size={10} />
                       {t?.("addresses.edit") || "Edit"}
                     </button>
@@ -240,7 +240,7 @@ const AddressList = ({
                         setAddressToDelete(address.id);
                         setShowDeleteModal(true);
                       }}
-                      className="bg-gray-200 dark:bg-gray-700 hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 px-3 py-1.5 rounded-lg transition-all duration-300 flex items-center gap-1.5 font-medium text-xs">
+                      className="bg-gray-200 dark:bg-gray-700 hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 px-3 py-2 md:py-1.5 rounded-lg transition-all duration-300 flex items-center gap-1.5 font-medium text-xs flex-1">
                       <Trash2 size={10} />
                       {t?.("addresses.delete") || "Delete"}
                     </button>
