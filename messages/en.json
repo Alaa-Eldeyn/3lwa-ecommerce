@@ -643,6 +643,20 @@
     "goToPage": "Go to page {page}",
     "pageInfo": "Page {current} of {total}"
   },
+  "products": {
+    "showingProducts": "Showing {count} products",
+    "sortBy": "Sort by:",
+    "sortDefault": "Default",
+    "sortPriceLow": "Price: Low to High",
+    "sortPriceHigh": "Price: High to Low",
+    "sortNameAsc": "Name: A to Z",
+    "sortNameDesc": "Name: Z to A",
+    "sortNewest": "Newest First",
+    "gridView": "Grid View",
+    "listView": "List View",
+    "loading": "Loading...",
+    "noProductsFound": "No products found"
+  },
   "brand": {
     "products": {
       "title": "Products",

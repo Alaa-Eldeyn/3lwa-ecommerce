@@ -177,7 +177,7 @@ const ProductCard = ({
 
           {/* Discount Badge */}
           {discount && (
-            <div className="absolute top-3 right-3 bg-primary text-white text-xs font-bold px-3 py-1 rounded-md shadow-md">
+            <div dir="rtl" className="absolute top-3 right-3 bg-primary text-white text-xs font-bold px-3 py-1 rounded-md shadow-md">
               {discount}%-
             </div>
           )}

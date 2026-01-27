@@ -41,6 +41,7 @@ const sizes = [
 
 const Products = () => {
   const t = useTranslations("filters");
+  const tProducts = useTranslations("products");
   const searchParams = useSearchParams();
   const searchTermFromUrl = searchParams.get("t");
   const categoryIdFromUrl = searchParams.get("c");
@@ -340,7 +341,7 @@ const Products = () => {
         <section className="flex-1 bg-white dark:bg-gray-900 p-5 rounded-xl border border-gray-200 dark:border-gray-700">
           <div className="flex-between flex-col lg:flex-row gap-2 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
             <p className="hidden lg:block text-gray-600 dark:text-gray-400">
-              Showing {totalRecords} products
+              {tProducts("showingProducts", { count: totalRecords })}
             </p>
 
             <div className="flex items-center justify-between lg:justify-center w-full lg:w-fit gap-4">
@@ -349,19 +350,19 @@ const Products = () => {
                 <label
                   htmlFor="sort"
                   className="hidden lg:block text-sm text-gray-600 dark:text-gray-400">
-                  Sort by:
+                  {tProducts("sortBy")}
                 </label>
                 <select
                   id="sort"
                   value={sortBy}
                   onChange={(e) => handleSortChange(e.target.value)}
                   className="px-4 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white">
-                  <option value="default">Default</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="name-asc">Name: A to Z</option>
-                  <option value="name-desc">Name: Z to A</option>
-                  <option value="newest">Newest First</option>
+                  <option value="default">{tProducts("sortDefault")}</option>
+                  <option value="price-low">{tProducts("sortPriceLow")}</option>
+                  <option value="price-high">{tProducts("sortPriceHigh")}</option>
+                  <option value="name-asc">{tProducts("sortNameAsc")}</option>
+                  <option value="name-desc">{tProducts("sortNameDesc")}</option>
+                  <option value="newest">{tProducts("sortNewest")}</option>
                 </select>
               </div>
 
@@ -374,7 +375,7 @@ const Products = () => {
                       ? "bg-secondary dark:bg-white text-white dark:text-secondary"
                       : "text-gray-600 dark:text-gray-400 hover:text-secondary dark:hover:text-white"
                   }`}
-                  title="Grid View">
+                  title={tProducts("gridView")}>
                   <svg
                     width="20"
                     height="20"
@@ -395,7 +396,7 @@ const Products = () => {
                       ? "bg-secondary dark:bg-white text-white dark:text-secondary"
                       : "text-gray-600 dark:text-gray-400 hover:text-secondary dark:hover:text-white"
                   }`}
-                  title="List View">
+                  title={tProducts("listView")}>
                   <svg
                     width="20"
                     height="20"
@@ -417,10 +418,10 @@ const Products = () => {
 
           {/* Products Grid/List */}
           {isLoading ? (
-            <div>Loading...</div>
+            <div>{tProducts("loading")}</div>
           ) : products.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-600 dark:text-gray-400 text-lg">No products found</p>
+              <p className="text-gray-600 dark:text-gray-400 text-lg">{tProducts("noProductsFound")}</p>
               {/* Optional: Add a reset button here if filters are active */}
             </div>
           ) : layoutMode === "grid" ? (

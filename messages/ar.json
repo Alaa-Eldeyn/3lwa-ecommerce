@@ -649,6 +649,20 @@
     "goToPage": "الانتقال إلى الصفحة {page}",
     "pageInfo": "الصفحة {current} من {total}"
   },
+  "products": {
+    "showingProducts": "عرض {count} منتج",
+    "sortBy": "ترتيب حسب:",
+    "sortDefault": "افتراضي",
+    "sortPriceLow": "السعر: من الأقل للأعلى",
+    "sortPriceHigh": "السعر: من الأعلى للأقل",
+    "sortNameAsc": "الاسم: من أ إلى ي",
+    "sortNameDesc": "الاسم: من ي إلى أ",
+    "sortNewest": "الأحدث أولاً",
+    "gridView": "عرض الشبكة",
+    "listView": "عرض القائمة",
+    "loading": "جاري التحميل...",
+    "noProductsFound": "لم يتم العثور على منتجات"
+  },
   "brand": {
     "products": {
       "title": "المنتجات",
