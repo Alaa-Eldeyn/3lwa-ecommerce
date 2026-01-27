@@ -92,9 +92,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-lg text-gray-600">
-            {t("loading")}
-          </p>
+          <p className="text-lg text-gray-600">{t("loading")}</p>
         </div>
       </div>
     );
@@ -134,18 +132,12 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
         </div>
 
         {/* Heading & Message */}
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-          {t("thankYou")}
-        </h1>
-        <p className="text-gray-500 max-w-md mx-auto text-lg mb-4">
-          {t("orderReceived")}
-        </p>
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{t("thankYou")}</h1>
+        <p className="text-gray-500 max-w-md mx-auto text-lg mb-4">{t("orderReceived")}</p>
 
         {/* Order Number Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full border border-gray-200 mb-6">
-          <span className="text-gray-500 text-sm font-medium">
-            {t("orderNumber")}
-          </span>
+          <span className="text-gray-500 text-sm font-medium">{t("orderNumber")}</span>
           <span className="text-primary font-bold tracking-wide">
             {orderData?.orderNumber || "---"}
           </span>
@@ -182,8 +174,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
                     </h3>
                     <p className="text-gray-500 text-xs text-start">
                       {t("qty")} {item.quantity}
-                      {item.vendorName &&
-                        ` | ${t("seller")} ${item.vendorName}`}
+                      {item.vendorName && ` | ${t("seller")} ${item.vendorName}`}
                     </p>
                   </div>
                   <div className={`text-start}`}>
@@ -193,9 +184,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
                 </div>
               ))
             ) : (
-              <p className="text-gray-500 text-center py-4">
-                {t("noItems")}
-              </p>
+              <p className="text-gray-500 text-center py-4">{t("noItems")}</p>
             )}
           </div>
 
@@ -203,9 +192,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
           <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
             {/* Subtotal */}
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 text-sm">
-                {t("subtotal")}
-              </span>
+              <span className="text-gray-500 text-sm">{t("subtotal")}</span>
               <span className="text-gray-800 font-medium">${itemsSubtotal.toFixed(2)}</span>
             </div>
 
@@ -236,9 +223,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
             {/* Total */}
             <div className="flex justify-between items-end pt-3 border-t border-gray-200">
               <div>
-                <p className="text-gray-500 text-sm">
-                  {t("totalAmount")}
-                </p>
+                <p className="text-gray-500 text-sm">{t("totalAmount")}</p>
               </div>
               <div className="text-2xl font-bold text-primary">${totalAmount.toFixed(2)}</div>
             </div>
@@ -248,14 +233,14 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
         {/* Actions */}
         <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/"
-            className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-semibold rounded-xl text-white bg-primary hover:bg-primary/90 w-full sm:w-auto">
-            {t("continueShopping")}
-          </Link>
-          <Link
             href={`/profile?tab=orders`}
             className="inline-flex items-center justify-center px-8 py-3.5 border border-gray-200 text-base font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 w-full sm:w-auto">
             {t("viewMyOrders")}
+          </Link>
+          <Link
+            href="/"
+            className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-semibold rounded-xl text-white bg-primary hover:bg-primary/90 w-full sm:w-auto">
+            {t("continueShopping")}
           </Link>
         </div>
       </main>
