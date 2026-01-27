@@ -24,8 +24,8 @@ const QuantityController = ({
   // Variant styles
   const variants = {
     default: {
-      container: "bg-primary text-white rounded-2xl flex items-center justify-between p-2",
-      button: "hover:bg-white/20 rounded-lg p-2 transition",
+      container: "border border-primary bg-primary text-white rounded-lg flex items-center justify-between p-1.5 min-h-12",
+      button: "bg-white/10 hover:bg-white/20 rounded-md p-2 transition",
       text: "font-semibold text-sm",
       iconSize: 16,
     },
@@ -77,9 +77,9 @@ const QuantityController = ({
         title={isLastItem ? "Remove from cart" : "Decrease quantity"}
       >
         {isLastItem && showDeleteIcon ? (
-          <Trash2 size={styles.iconSize} className="text-primary dark:text-white" />
+          <Trash2 size={styles.iconSize} className="text-white dark:text-white" />
         ) : (
-          <Minus size={styles.iconSize} className="text-primary dark:text-white" />
+          <Minus size={styles.iconSize} className="text-white dark:text-white" />
         )}
       </button>
       <span className={styles.text}>{quantity}</span>
@@ -88,7 +88,7 @@ const QuantityController = ({
         className={styles.button}
         title="Increase quantity"
       >
-        <Plus size={styles.iconSize} className="text-primary dark:text-white" />
+        <Plus size={styles.iconSize} className="text-white dark:text-white" />
       </button>
     </div>
   );
