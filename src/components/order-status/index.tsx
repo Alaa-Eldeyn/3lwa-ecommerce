@@ -89,10 +89,10 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-lg text-gray-600">{t("loading")}</p>
+          <p className="text-lg text-gray-600 dark:text-gray-400">{t("loading")}</p>
         </div>
       </div>
     );
@@ -100,9 +100,9 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-lg text-red-600 mb-4">{error}</p>
+          <p className="text-lg text-red-600 dark:text-red-400 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:bg-primaryDark transition-colors">
@@ -114,38 +114,38 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
   }
 
   return (
-    <div className="antialiased font-sans min-h-screen flex flex-col bg-gray-50 flex-grow items-center justify-center py-12 px-4">
+    <div className="antialiased font-sans min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 flex-grow items-center justify-center py-12 px-4">
       {/* Main Content */}
       <main
         ref={cardRef}
-        className="bg-white w-full max-w-3xl rounded-xl shadow-sm border border-gray-100 p-8 md:p-12 text-center relative overflow-hidden">
+        className="bg-white dark:bg-gray-800 w-full max-w-3xl rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-8 md:p-12 text-center relative overflow-hidden">
         {/* Decorative Background Elements */}
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-secondary"></div>
 
         {/* Success Icon */}
         <div className="relative mb-8 flex justify-center">
-          <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center">
-            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
-              <Check className="w-8 h-8 text-green-600" />
+          <div className="w-20 h-20 rounded-full bg-green-50 dark:bg-green-900/30 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-800/50 flex items-center justify-center">
+              <Check className="w-8 h-8 text-green-600 dark:text-green-400" />
             </div>
           </div>
         </div>
 
         {/* Heading & Message */}
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{t("thankYou")}</h1>
-        <p className="text-gray-500 max-w-md mx-auto text-lg mb-4">{t("orderReceived")}</p>
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">{t("thankYou")}</h1>
+        <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto text-lg mb-4">{t("orderReceived")}</p>
 
         {/* Order Number Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full border border-gray-200 mb-6">
-          <span className="text-gray-500 text-sm font-medium">{t("orderNumber")}</span>
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600 mb-6">
+          <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t("orderNumber")}</span>
           <span className="text-primary font-bold tracking-wide">
             {orderData?.orderNumber || "---"}
           </span>
         </div>
 
         {/* Order Summary Section */}
-        <div className="bg-gray-50/80 rounded-2xl p-6 md:p-8 max-w-xl mx-auto border border-gray-100 text-left">
-          <h2 className="text-lg font-bold text-gray-800 mb-6 border-b border-gray-200 pb-4 text-start">
+        <div className="bg-gray-50/80 dark:bg-gray-900/50 rounded-2xl p-6 md:p-8 max-w-xl mx-auto border border-gray-100 dark:border-gray-700 text-left">
+          <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-6 border-b border-gray-200 dark:border-gray-700 pb-4 text-start">
             {t("orderSummary")}
           </h2>
 
@@ -154,7 +154,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
             {orderItems.length > 0 ? (
               orderItems.map((item) => (
                 <div key={item.orderDetailId} className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 bg-white flex-shrink-0 relative">
+                  <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 flex-shrink-0 relative">
                     {item.itemImage ? (
                       <Image
                         src={getImageUrl(item.itemImage)}
@@ -163,67 +163,67 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
                         className="object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                        <ShoppingCart className="w-6 h-6 text-gray-400" />
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+                        <ShoppingCart className="w-6 h-6 text-gray-400 dark:text-gray-500" />
                       </div>
                     )}
                   </div>
                   <div className="flex-grow">
-                    <h3 className="font-semibold text-gray-800 text-sm md:text-base text-start">
+                    <h3 className="font-semibold text-gray-800 dark:text-white text-sm md:text-base text-start">
                       {item.itemName}
                     </h3>
-                    <p className="text-gray-500 text-xs text-start">
+                    <p className="text-gray-500 dark:text-gray-400 text-xs text-start">
                       {t("qty")} {item.quantity}
                       {item.vendorName && ` | ${t("seller")} ${item.vendorName}`}
                     </p>
                   </div>
                   <div className={`text-start}`}>
-                    <p className="text-gray-500 text-xs">${item.unitPrice.toFixed(2)}</p>
-                    <p className="font-bold text-gray-800">${item.subTotal.toFixed(2)}</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-xs">${item.unitPrice.toFixed(2)}</p>
+                    <p className="font-bold text-gray-800 dark:text-white">${item.subTotal.toFixed(2)}</p>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text-gray-500 text-center py-4">{t("noItems")}</p>
+              <p className="text-gray-500 dark:text-gray-400 text-center py-4">{t("noItems")}</p>
             )}
           </div>
 
           {/* Subtotal, Shipping, Total */}
-          <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 space-y-3">
             {/* Subtotal */}
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 text-sm">{t("subtotal")}</span>
-              <span className="text-gray-800 font-medium">${itemsSubtotal.toFixed(2)}</span>
+              <span className="text-gray-500 dark:text-gray-400 text-sm">{t("subtotal")}</span>
+              <span className="text-gray-800 dark:text-white font-medium">${itemsSubtotal.toFixed(2)}</span>
             </div>
 
             {/* Discount */}
             {discountAmount > 0 && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-500 text-sm">{t("discount")}</span>
-                <span className="text-green-600 font-medium">-${discountAmount.toFixed(2)}</span>
+                <span className="text-gray-500 dark:text-gray-400 text-sm">{t("discount")}</span>
+                <span className="text-green-600 dark:text-green-400 font-medium">-${discountAmount.toFixed(2)}</span>
               </div>
             )}
 
             {/* Tax */}
             {taxAmount > 0 && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-500 text-sm">{t("tax")}</span>
-                <span className="text-gray-800 font-medium">${taxAmount.toFixed(2)}</span>
+                <span className="text-gray-500 dark:text-gray-400 text-sm">{t("tax")}</span>
+                <span className="text-gray-800 dark:text-white font-medium">${taxAmount.toFixed(2)}</span>
               </div>
             )}
 
             {/* Shipping */}
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 text-sm">{t("shipping")}</span>
-              <span className="text-gray-800 font-medium">
+              <span className="text-gray-500 dark:text-gray-400 text-sm">{t("shipping")}</span>
+              <span className="text-gray-800 dark:text-white font-medium">
                 {shippingAmount > 0 ? `$${shippingAmount.toFixed(2)}` : t("shippingFree")}
               </span>
             </div>
 
             {/* Total */}
-            <div className="flex justify-between items-end pt-3 border-t border-gray-200">
+            <div className="flex justify-between items-end pt-3 border-t border-gray-200 dark:border-gray-700">
               <div>
-                <p className="text-gray-500 text-sm">{t("totalAmount")}</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">{t("totalAmount")}</p>
               </div>
               <div className="text-2xl font-bold text-primary">${totalAmount.toFixed(2)}</div>
             </div>
@@ -234,7 +234,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
         <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href={`/profile?tab=orders`}
-            className="inline-flex items-center justify-center px-8 py-3.5 border border-gray-200 text-base font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 w-full sm:w-auto">
+            className="inline-flex items-center justify-center px-8 py-3.5 border border-gray-200 dark:border-gray-600 text-base font-semibold rounded-xl text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500 w-full sm:w-auto">
             {t("viewMyOrders")}
           </Link>
           <Link

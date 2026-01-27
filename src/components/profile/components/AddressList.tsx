@@ -62,9 +62,9 @@ const AddressList = ({
   // Empty state
   if (!addresses || addresses.length === 0) {
     return (
-      <div className="bg-accent/30 border-2 border-dashed border-primary rounded-xl p-16 text-center">
+      <div className="bg-accent/30 dark:bg-accent/5 border-2 border-dashed border-primary dark:border-primary/50 rounded-xl p-16 text-center">
         <div className="flex flex-col items-center gap-6">
-          <div className="bg-primary/10 rounded-full w-24 h-24 flex items-center justify-center">
+          <div className="bg-primary/10 dark:bg-primary/20 rounded-full w-24 h-24 flex items-center justify-center">
             <MapPin className="text-primary text-5xl" />
           </div>
           <div>

@@ -62,10 +62,10 @@ const BrandPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
-          <p className="text-slate-600 text-lg font-medium">
+          <p className="text-slate-600 dark:text-gray-400 text-lg font-medium">
             {tBrand("loading")}
           </p>
         </div>
@@ -75,15 +75,15 @@ const BrandPage = () => {
 
   if (isError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md text-center">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-md text-center">
+          <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">❌</span>
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">
             {tBrand("error")}
           </h2>
-          <p className="text-slate-600 mb-4">
+          <p className="text-slate-600 dark:text-gray-400 mb-4">
             {(error as any)?.response?.data?.message || tBrand("errorMessage")}
           </p>
           <button
@@ -98,9 +98,9 @@ const BrandPage = () => {
 
   if (!brandData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-slate-600 text-lg">
+          <p className="text-slate-600 dark:text-gray-400 text-lg">
             {tBrand("noData")}
           </p>
         </div>
@@ -114,7 +114,7 @@ const BrandPage = () => {
 
   return (
     <div
-      className="min-h-screen bg-background text-foreground font-cairo space-y-8 pb-8"
+      className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-cairo space-y-8 pb-8"
       dir={isArabic ? "rtl" : "ltr"}>
       {/* Brand Hero Section */}
       <section
@@ -136,7 +136,7 @@ const BrandPage = () => {
                       alt={displayName}
                     />
                   ) : (
-                    <div className="w-32 h-32 flex items-center justify-center text-6xl font-bold text-gray-300">
+                    <div className="w-32 h-32 flex items-center justify-center text-6xl font-bold text-gray-300 dark:text-gray-600">
                       {displayName?.charAt(0) || "B"}
                     </div>
                   )}
@@ -164,14 +164,14 @@ const BrandPage = () => {
       {/* Brand Info Section */}
       <section
         id="brand-info-section"
-        className="bg-white max-w-[1440px] mx-auto px-8 grid grid-cols-3 gap-8">
+        className="bg-white dark:bg-gray-900 max-w-[1440px] mx-auto px-8 grid grid-cols-3 gap-8">
         {/* About & Statistics */}
         <div className="col-span-2">
-          <div className="bg-white rounded-2xl border-2 border-gray-100 p-8 shadow-sm">
-            <h2 className="text-3xl font-bold text-foreground mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-100 dark:border-gray-700 p-8 shadow-sm">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
               {tBrand("about", { brandName: displayName })}
             </h2>
-            <p className="text-gray-700 text-lg leading-relaxed mb-6">
+            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">
               {displayDescription || tBrand("noDescription")}
             </p>
           </div>
@@ -179,19 +179,19 @@ const BrandPage = () => {
 
         {/* Brand Information Sidebar */}
         <div className="col-span-1">
-          <div className="bg-white rounded-2xl border-2 border-gray-100 p-8 shadow-sm sticky top-24">
-            <h3 className="text-2xl font-bold text-foreground mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-100 dark:border-gray-700 p-8 shadow-sm sticky top-24">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
               {tBrand("brandInformation")}
             </h3>
 
             <div className="space-y-6">
               {brandData.websiteUrl && (
                 <div className="flex items-start gap-4">
-                  <div className="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="bg-primary/10 dark:bg-primary/20 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Globe className="text-primary text-xl" />
                   </div>
                   <div>
-                    <div className="text-sm text-gray-600 mb-1">
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                       {tBrand("officialWebsite")}
                     </div>
                     <a
@@ -207,14 +207,14 @@ const BrandPage = () => {
               )}
 
               <div className="flex items-start gap-4">
-                <div className="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="bg-primary/10 dark:bg-primary/20 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Calendar className="text-primary text-xl" />
                 </div>
                 <div>
-                  <div className="text-sm text-gray-600 mb-1">
+                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                     {tBrand("establishedDate")}
                   </div>
-                  <div className="font-semibold text-foreground">
+                  <div className="font-semibold text-gray-900 dark:text-white">
                     {formatDate(brandData.createdDateUtc)}
                   </div>
                 </div>
@@ -222,7 +222,7 @@ const BrandPage = () => {
 
               {brandData.isFavorite && (
                 <div className="pt-4">
-                  <button className="w-full bg-white hover:bg-gray-50 text-foreground font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-3 border-2 border-gray-200">
+                  <button className="w-full bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-3 border-2 border-gray-200 dark:border-gray-600">
                     <Heart className="w-4 h-4" />
                     <span>{tBrand("removeFromFavorites")}</span>
                   </button>
@@ -235,10 +235,10 @@ const BrandPage = () => {
 
       {/* Products Section */}
       {products.length > 0 && (
-        <section id="products-section" className="bg-white max-w-[1440px] mx-auto px-8">
+        <section id="products-section" className="bg-white dark:bg-gray-900 max-w-[1440px] mx-auto px-8">
           <div className="flex items-center justify-between mb-12">
             <div>
-              <h2 className="text-4xl font-bold text-foreground mb-3">{t("title")}</h2>
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">{t("title")}</h2>
             </div>
             <button
               onClick={() => router.push(`/products?b=${id}`)}
