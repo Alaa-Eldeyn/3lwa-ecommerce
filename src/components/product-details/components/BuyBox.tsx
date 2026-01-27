@@ -10,6 +10,8 @@ import {
   Tags,
   CheckCircle2,
   ExternalLink,
+  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { useCartStore } from "@/src/store/cartStore";
@@ -241,13 +243,17 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
             {vendorCount} {t("otherOffers")} {tProduct("from")}{" "}
             {product.pricing?.minPrice.toFixed(2)}$
           </span>
-          <svg
-            className="w-3 h-3 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+          {isArabic ? (
+            <ChevronLeft
+              size={18}
+              className="text-gray-400 group-hover:text-primary dark:group-hover:text-primary transition-colors"
+            />
+          ) : (
+            <ChevronRight
+              size={18}
+              className="text-gray-400 group-hover:text-primary dark:group-hover:text-primary transition-colors"
+            />
+          )}
         </button>
       )}
     </div>
