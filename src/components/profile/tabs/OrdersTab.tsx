@@ -76,7 +76,7 @@ const OrdersTab = () => {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl animate-pulse">
+              className="p-6 border border-gray-200 dark:border-gray-700 rounded-lg animate-pulse">
               <div className="flex gap-4">
                 <div className="w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-lg" />
                 <div className="flex-1 space-y-3">
@@ -105,7 +105,7 @@ const OrdersTab = () => {
           <p className="text-gray-600 dark:text-gray-400 mb-4">{t("orders.noOrders")}</p>
           <button
             onClick={() => router.push("/products")}
-            className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 soft">
+            className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 soft">
             {t("orders.startShopping")}
           </button>
         </div>
@@ -114,14 +114,14 @@ const OrdersTab = () => {
           {orders.map((order) => (
             <div
               key={order.orderId}
-              className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary soft">
+              className="p-4 md:p-6 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary soft">
               {/* Order Header */}
               <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
                 <div>
-                  <p className="font-semibold text-gray-900 dark:text-white">
+                  <p className="font-semibold text-gray-900 dark:text-white text-xs md:text-base">
                     {t("orders.orderNumber")}{order.orderNumber}
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
                     {t("orders.date")}:{" "}
                     {new Date(order.orderDate).toLocaleDateString(isArabic ? "ar-EG" : "en-UK")}
                   </p>
@@ -130,7 +130,7 @@ const OrdersTab = () => {
                   const statusInfo = getOrderStatusInfo(order.orderStatus);
                   return (
                     <span
-                      className={`px-3 py-1 rounded-lg text-sm font-medium ${statusInfo.bgColor}`}>
+                      className={`px-2 md:px-3 py-1 rounded-lg text-xs md:text-sm font-medium ${statusInfo.bgColor}`}>
                       {isArabic ? statusInfo.labelAr : statusInfo.label}
                     </span>
                   );
@@ -187,7 +187,7 @@ const OrdersTab = () => {
 
               {/* Order Footer */}
               <div className="flex flex-wrap justify-between items-center gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
-                <p className="text-lg font-bold text-gray-900 dark:text-white">
+                <p className="text-base md:text-lg font-bold text-gray-900 dark:text-white">
                   {t("orders.total")}: ${order.totalAmount.toFixed(2)}
                 </p>
                 <button

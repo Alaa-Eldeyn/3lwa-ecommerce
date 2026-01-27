@@ -252,7 +252,7 @@ const Profile = () => {
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+          <div className="lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
             {/* Personal Info */}
             {activeTab === "personalInfo" && (
               <PersonalInfoTab
