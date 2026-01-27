@@ -119,10 +119,11 @@ const OrdersTab = () => {
               <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
                 <div>
                   <p className="font-semibold text-gray-900 dark:text-white">
-                    {t("orders.orderNumber")}: {order.orderNumber}
+                    {t("orders.orderNumber")}{order.orderNumber}
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {t("orders.date")}: {new Date(order.orderDate).toLocaleDateString(locale)}
+                    {t("orders.date")}:{" "}
+                    {new Date(order.orderDate).toLocaleDateString(isArabic ? "ar-EG" : "en-UK")}
                   </p>
                 </div>
                 {(() => {

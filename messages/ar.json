@@ -419,7 +419,7 @@
     "orders": {
       "title": "سجل الطلبات",
       "description": "عرض وتتبع طلباتك",
-      "orderNumber": "رقم الطلب",
+      "orderNumber": "رقم الطلب: ",
       "date": "التاريخ",
       "total": "الإجمالي",
       "status": "الحالة",
