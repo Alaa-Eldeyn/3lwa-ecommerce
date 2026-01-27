@@ -2,6 +2,7 @@ import { create } from "zustand"
 import type { User } from "../types/types"
 import { getUserFromCookie, saveUserToCookie, removeUserFromCookie } from "../auth/auth"
 import { customAxios } from "../auth/customAxios"
+import toast from "react-hot-toast"
 
 interface UserState {
   user: User | null
@@ -75,10 +76,25 @@ export const useUserStore = create<UserState>((set, get) => ({
       import("./wishlistStore").then(({ useWishlistStore }) => {
         useWishlistStore.getState().clearAllItems(false);
       });
+
+      // Get current locale from pathname
+      const pathname = window.location.pathname;
+      const localeMatch = pathname.match(/^\/(ar|en)\b/);
+      const locale = localeMatch ? localeMatch[1] : "ar";
+
+      // Show success toast with locale-aware message
+      const logoutMessage = locale === "ar" 
+        ? "تم تسجيل الخروج بنجاح" 
+        : "Logged out successfully";
+      toast.success(logoutMessage, {
+        duration: 2000,
+      });
+
+      // Add delay for toast
+      setTimeout(() => {
+        window.location.href = `/${locale}`;
+      }, 1500);
     }
-    // if (typeof window !== "undefined") {
-    //   window.location.href = "/login";
-    // }
   },
   
   isAuthenticated: () => {
