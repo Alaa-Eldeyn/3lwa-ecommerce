@@ -8,13 +8,15 @@ import { Link } from "@/src/i18n/routing";
 import Image from "next/image";
 import QuantityController from "../common/QuantityController";
 import { isAuthenticated } from "@/src/auth/auth";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 const CartSidebar = () => {
   const { isCartOpen, closeCart } = useHeaderStore();
   const { items, updateQuantity, removeItem, clearCart, getTotalPrice } = useCartStore();
   const locale = useLocale();
   const isArabic = locale === "ar";
+  const t = useTranslations("cart.sidebar");
+  const tOrderSummary = useTranslations("cart.orderSummary");
 
   // State to control the Clear Confirmation Modal
   const [isClearModalOpen, setIsClearModalOpen] = useState(false);
@@ -65,7 +67,7 @@ const CartSidebar = () => {
       />
 
       {isClearModalOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity opacity-100"
@@ -79,9 +81,11 @@ const CartSidebar = () => {
               <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4 animate-bounce-short">
                 <AlertTriangle className="text-red-600 dark:text-red-400" size={32} />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">مسح السلة؟</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                {t("clearModal.title")}
+              </h3>
               <p className="text-gray-500 dark:text-gray-400">
-                هل أنت متأكد أنك تريد إزالة جميع المنتجات من السلة؟ لا يمكن التراجع عن هذا الإجراء.
+                {t("clearModal.description")}
               </p>
             </div>
 
@@ -90,12 +94,12 @@ const CartSidebar = () => {
               <button
                 onClick={() => setIsClearModalOpen(false)}
                 className="w-full py-2.5 px-4 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                إلغاء
+                {t("clearModal.cancel")}
               </button>
               <button
                 onClick={confirmClearCart}
                 className="w-full py-2.5 px-4 rounded-xl bg-red-600 text-white font-medium hover:bg-red-700 hover:shadow-lg hover:shadow-red-600/30 transition-all">
-                نعم، امسحها
+                {t("clearModal.confirm")}
               </button>
             </div>
           </div>
@@ -112,7 +116,7 @@ const CartSidebar = () => {
           <div className="flex items-center gap-2">
             <ShoppingBag size={24} className="text-primary" />
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              السلة ({items.length})
+              {t("titleWithCount", { count: items.length })}
             </h2>
           </div>
           <button
@@ -127,7 +131,7 @@ const CartSidebar = () => {
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <ShoppingBag size={64} className="text-gray-300 dark:text-gray-700 mb-4" />
-              <p className="text-gray-500 dark:text-gray-400 text-lg">السلة فارغة</p>
+              <p className="text-gray-500 dark:text-gray-400 text-lg">{t("empty")}</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -185,7 +189,9 @@ const CartSidebar = () => {
           <div className="border-t dark:border-gray-700 p-4 space-y-3">
             {/* Subtotal */}
             <div className="flex items-center justify-between text-lg">
-              <span className="text-gray-600 dark:text-gray-400">المجموع:</span>
+              <span className="text-gray-600 dark:text-gray-400">
+                {tOrderSummary("subtotal")}:
+              </span>
               <span className="font-bold text-gray-900 dark:text-white">
                 ${getTotalPrice().toFixed(2)}
               </span>
@@ -197,13 +203,13 @@ const CartSidebar = () => {
                 onClick={askToClearCart}
                 className="w-full flex items-center justify-center gap-2 bg-error text-white py-3 rounded-lg font-semibold hover:bg-error-hover transition">
                 <Trash2 size={18} />
-                مسح السلة
+                {t("clearCart")}
               </button>
               <Link
                 href="/cart"
                 onClick={closeCart}
                 className="block w-full text-center bg-primary dark:bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition">
-                عرض السلة
+                {t("viewCart")}
               </Link>
             </div>
           </div>

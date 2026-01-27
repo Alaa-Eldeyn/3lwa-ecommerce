@@ -656,6 +656,18 @@
   "cart": {
     "title": "Your Cart",
     "loading": "Loading cart...",
+    "sidebar": {
+      "titleWithCount": "Cart ({count})",
+      "empty": "Your cart is empty",
+      "clearCart": "Clear cart",
+      "viewCart": "View cart",
+      "clearModal": {
+        "title": "Clear cart?",
+        "description": "Are you sure you want to remove all items from your cart? This action cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Yes, clear it"
+      }
+    },
     "empty": {
       "title": "Your cart is empty",
       "description": "Looks like you haven't added anything to your cart yet. Start shopping to fill it up!",
