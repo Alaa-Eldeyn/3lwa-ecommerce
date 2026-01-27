@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Trash2, ShoppingCart } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/src/i18n/routing";
 
 interface WishlistItemProps {
   wishlistItemId: string;
@@ -43,7 +44,9 @@ const WishlistItem = ({
   return (
     <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700">
       {/* Image */}
-      <div className="relative h-64 bg-gray-100 dark:bg-gray-700 overflow-hidden">
+      <Link
+        href={`/products/product-details/${itemCombinationId}`}
+        className="relative h-64 bg-gray-100 dark:bg-gray-700 overflow-hidden block">
         <Image
           src={`${process.env.NEXT_PUBLIC_DOMAIN}/${thumbnailImage}`}
           alt={title}
@@ -56,21 +59,33 @@ const WishlistItem = ({
           </div>
         )}
         <button
-          onClick={() => onRemove(itemCombinationId)}
-          className="absolute top-3 right-3 rtl:right-auto rtl:left-3 p-2 bg-white dark:bg-gray-800 text-red-500 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors shadow-md"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onRemove(itemCombinationId);
+          }}
+          className="absolute top-3 right-3 rtl:right-auto rtl:left-3 p-2 bg-white dark:bg-gray-800 text-red-500 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors shadow-md z-10"
           aria-label={t("remove")}>
           <Trash2 size={20} />
         </button>
-      </div>
+      </Link>
 
       {/* Details */}
       <div className="p-4">
-        <h3 className="font-semibold text-lg text-gray-900 dark:text-white line-clamp-2">
-          {title}
-        </h3>
-        <p className="text-xs text-gray-600 dark:text-gray-400 mb-1 line-clamp-1">
-          {isArabic ? itemShortDescriptionAr : itemShortDescriptionEn}
-        </p>
+        <Link
+          href={`/products/product-details/${itemCombinationId}`}
+          className="block">
+          <h3 className="font-semibold text-lg text-gray-900 dark:text-white line-clamp-2 hover:text-primary transition-colors">
+            {title}
+          </h3>
+        </Link>
+        <Link
+          href={`/products/product-details/${itemCombinationId}`}
+          className="block">
+          <p className="text-xs text-gray-600 dark:text-gray-400 mb-1 line-clamp-1">
+            {isArabic ? itemShortDescriptionAr : itemShortDescriptionEn}
+          </p>
+        </Link>
 
         {/* Price or Unavailable Status */}
         {isAvailable ? (
@@ -95,7 +110,10 @@ const WishlistItem = ({
         {/* Action Button */}
         {isAvailable && (
           <button
-            onClick={() => onMoveToCart(itemCombinationId)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onMoveToCart(itemCombinationId);
+            }}
             className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-secondary transition-colors font-medium">
             <ShoppingCart size={20} />
             {t("moveToCart")}
