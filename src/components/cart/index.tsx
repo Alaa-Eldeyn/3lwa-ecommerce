@@ -93,7 +93,7 @@ const Cart = () => {
       <Breadcrumb />
 
       <div className="container">
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+        <h1 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-6">
           {t("title")}
         </h1>
 

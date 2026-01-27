@@ -49,7 +49,7 @@ const CartItem = ({
       <div className="flex-1 flex flex-col justify-between">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h3 className="font-bold text-gray-900 dark:text-white mb-1">{title}</h3>
+            <h3 className="text-sm md:text-base font-bold text-gray-900 dark:text-white mb-1">{title}</h3>
           </div>
 
           {/* Remove Button */}
@@ -63,7 +63,7 @@ const CartItem = ({
 
         {/* Price and Quantity */}
         <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-gray-900 dark:text-white">${price}</span>
+          <span className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">${price}</span>
 
           {/* Quantity Controls */}
           <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800 rounded-full">

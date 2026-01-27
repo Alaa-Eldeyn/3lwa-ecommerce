@@ -23,7 +23,7 @@ const OrderSummary = ({
 
   return (
     <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+      <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-6">
         {t("title")}
       </h2>
 
@@ -31,21 +31,21 @@ const OrderSummary = ({
       <div className="space-y-4 mb-6">
         {/* Subtotal */}
         <div className="flex items-center justify-between">
-          <span className="text-gray-600 dark:text-gray-400">
+          <span className="text-sm md:text-base text-gray-600 dark:text-gray-400">
             {t("subtotal")}
           </span>
-          <span className="text-lg font-bold text-gray-900 dark:text-white">
+          <span className="text-base md:text-lg font-bold text-gray-900 dark:text-white">
             ${subtotal.toFixed(2)}
           </span>
         </div>
 
         {/* Shipping */}
         <div className="flex items-center justify-between">
-          <span className="text-gray-600 dark:text-gray-400">
+          <span className="text-sm md:text-base text-gray-600 dark:text-gray-400">
             {t("shipping")}
           </span>
           <span
-            className={`text-lg font-bold ${
+            className={`text-base md:text-lg font-bold ${
               shippingEstimate === 0
                 ? "text-green-600 dark:text-green-400"
                 : "text-gray-900 dark:text-white"
@@ -59,8 +59,8 @@ const OrderSummary = ({
         {/* Tax */}
         {taxEstimate > 0 && (
           <div className="flex items-center justify-between">
-            <span className="text-gray-600 dark:text-gray-400">{t("tax")}</span>
-            <span className="text-lg font-bold text-gray-900 dark:text-white">
+            <span className="text-sm md:text-base text-gray-600 dark:text-gray-400">{t("tax")}</span>
+            <span className="text-base md:text-lg font-bold text-gray-900 dark:text-white">
               ${taxEstimate.toFixed(2)}
             </span>
           </div>
@@ -71,10 +71,10 @@ const OrderSummary = ({
 
       {/* Total */}
       <div className="flex items-center justify-between mb-4">
-        <span className="text-lg text-gray-900 dark:text-white">
+        <span className="text-base md:text-lg text-gray-900 dark:text-white">
           {t("total")}
         </span>
-        <span className="text-2xl font-bold text-gray-900 dark:text-white">
+        <span className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
           ${totalEstimate.toFixed(2)}
         </span>
       </div>
@@ -82,7 +82,7 @@ const OrderSummary = ({
       {/* Checkout Button */}
       <Link
         href="/checkout"
-        className="w-full px-6 py-3 bg-primary dark:bg-white text-white dark:text-primary rounded-full font-medium hover:bg-secondary dark:hover:bg-gray-200 soft flex items-center justify-center gap-2">
+        className="w-full px-6 py-3 bg-primary dark:bg-white text-white dark:text-primary rounded-full text-sm md:text-base font-medium hover:bg-secondary dark:hover:bg-gray-200 soft flex items-center justify-center gap-2">
         {t("goToCheckout")}
         <ArrowRight className={isArabic ? "rotate-180" : ""} size={20} />
       </Link>
