@@ -63,6 +63,19 @@ export const useUserStore = create<UserState>((set, get) => ({
   logout: () => {
     set({ user: null });
     removeUserFromCookie();
+    
+    // Clear cart and wishlist stores on logout
+    if (typeof window !== "undefined") {
+      // Clear cart
+      import("./cartStore").then(({ useCartStore }) => {
+        useCartStore.getState().clearCart(false);
+      });
+      
+      // Clear wishlist
+      import("./wishlistStore").then(({ useWishlistStore }) => {
+        useWishlistStore.getState().clearAllItems(false);
+      });
+    }
     // if (typeof window !== "undefined") {
     //   window.location.href = "/login";
     // }
