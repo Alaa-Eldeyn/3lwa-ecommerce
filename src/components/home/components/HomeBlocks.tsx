@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import axios from "axios";
 import { Block } from "@/src/types/home-blocks.types";
 import SingleBlock from "./SingleBlock";
@@ -10,6 +10,7 @@ import { useUserStore } from "@/src/store/userStore";
 const HomeBlocks = () => {
   const locale = useLocale();
   const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const t = useTranslations("home.signInPrompt");
   const [loading, setLoading] = useState(true);
   const [blocks, setBlocks] = useState<Block[]>([]);
 
@@ -59,7 +60,7 @@ const HomeBlocks = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500">{t("loading")}</div>
       </div>
     );
   }
@@ -76,12 +77,12 @@ const HomeBlocks = () => {
             <div key={block.id} className="flex flex-col gap-6 h-[420px]">
               <div className="bg-white dark:bg-gray-800 p-6 shadow-sm flex flex-col justify-center items-start gap-3 h-[140px]">
                 <h3 className="text-xl font-bold text-foreground dark:text-gray-200">
-                  Sign in for the best experience
+                  {t("bestExperience")}
                 </h3>
                 <Link
                   className="bg-accent dark:bg-accent/80 hover:bg-[#ffe0b3] dark:hover:bg-accent text-secondary dark:text-gray-900 font-bold py-2 px-8 rounded text-sm w-full shadow-sm border border-yellow-400 dark:border-yellow-500 flex items-center justify-center"
                   href="/login">
-                  Sign in securely
+                  {t("signInSecurely")}
                 </Link>
               </div>
               <SingleBlock block={block} locale={locale} />

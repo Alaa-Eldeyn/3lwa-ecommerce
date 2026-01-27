@@ -570,6 +570,15 @@
     "testimonials": {
       "title": "What our",
       "titleHighlight": "customers say"
+    },
+    "signInPrompt": {
+      "personalizedRecommendations": "See personalized recommendations",
+      "signIn": "Sign in",
+      "newCustomer": "New customer?",
+      "startHere": "Start here.",
+      "bestExperience": "Sign in for the best experience",
+      "signInSecurely": "Sign in securely",
+      "loading": "Loading..."
     }
   },
   "filters": {

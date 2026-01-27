@@ -576,6 +576,15 @@
     "testimonials": {
       "title": "ماذا يقول",
       "titleHighlight": "عملاؤنا"
+    },
+    "signInPrompt": {
+      "personalizedRecommendations": "شاهد التوصيات المخصصة",
+      "signIn": "تسجيل الدخول",
+      "newCustomer": "مستخدم جديد؟",
+      "startHere": "ابدأ من هنا.",
+      "bestExperience": "سجل الدخول للحصول على أفضل تجربة",
+      "signInSecurely": "سجل الدخول بأمان",
+      "loading": "جاري التحميل..."
     }
   },
   "filters": {
