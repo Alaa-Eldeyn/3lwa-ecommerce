@@ -295,7 +295,7 @@ const Products = () => {
         </button>
       </div>
 
-      <div className="flex gap-5 container">
+      <div className="flex gap-5 container pb-6">
         {/* Filters Sidebar */}
         <FiltersSidebar
           isOpen={isFiltersOpen}
