@@ -96,7 +96,7 @@ const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
         <Link
           href={`/login`}
           onClick={handleLinkClick}
-          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors rounded-t-xl"
+          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors"
         >
           <LogIn size={18} />
           <span className="text-sm font-medium">{t("login")}</span>
@@ -105,7 +105,7 @@ const AccountDropdown = ({ onClose }: AccountDropdownProps) => {
         <Link
           href={`/register`}
           onClick={handleLinkClick}
-          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors rounded-b-xl"
+          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors"
         >
           <User size={18} />
           <span className="text-sm font-medium">{t("register")}</span>
