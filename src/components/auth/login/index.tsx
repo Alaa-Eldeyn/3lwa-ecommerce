@@ -134,7 +134,7 @@ const Login = () => {
               </div>
 
               {/* Password Field */}
-              <div>
+              <div >
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t("password")} *
                 </label>
@@ -144,9 +144,12 @@ const Login = () => {
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                   />
                   <input
+                    dir="ltr"
                     type={showPassword ? "text" : "password"}
                     {...register("password")}
-                    className="w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary soft"
+                    className={`w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary soft ${
+                      isArabic ? "password-input-rtl-placeholder" : ""
+                    }`}
                     placeholder={t("passwordPlaceholder")}
                   />
                   <button

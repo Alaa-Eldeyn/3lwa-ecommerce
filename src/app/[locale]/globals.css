@@ -115,6 +115,11 @@
     overflow: hidden;
   }
 
+  .password-input-rtl-placeholder::placeholder {
+    direction: rtl;
+    text-align: right;
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
