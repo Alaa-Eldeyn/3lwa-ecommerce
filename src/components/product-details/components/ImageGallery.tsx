@@ -1,19 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
-import { X, ChevronLeft, ChevronRight, Heart, Share2 } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import { useWishlistStore } from "@/src/store/wishlistStore";
+import { useUserStore } from "@/src/store/userStore";
+import { useTranslations } from "next-intl";
+import toast from "react-hot-toast";
 
 interface ImageGalleryProps {
   images: string[];
   productTitle: string;
   discountPercentage?: number;
+  itemCombinationId?: string;
 }
 
-const ImageGallery = ({ images, productTitle, discountPercentage }: ImageGalleryProps) => {
+const ImageGallery = ({ images, productTitle, discountPercentage, itemCombinationId }: ImageGalleryProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isWishlistLoading, setIsWishlistLoading] = useState(false);
+  const { items: wishlistItems, addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore();
+  const { user } = useUserStore();
+  const t = useTranslations("product");
+
+  // Check if product is in wishlist
+  const isFavorite = useMemo(() => {
+    if (!itemCombinationId) return false;
+    return isInWishlist(itemCombinationId);
+  }, [wishlistItems, itemCombinationId, isInWishlist]);
 
   const handlePrevious = () => {
     setSelectedImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -31,6 +45,36 @@ const ImageGallery = ({ images, productTitle, discountPercentage }: ImageGallery
     setIsFullScreen(false);
   };
 
+  const toggleWishlist = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (!itemCombinationId) {
+      console.error("itemCombinationId is required");
+      return;
+    }
+
+    if (!user) {
+      toast.error(t("pleaseLogin"));
+      return;
+    }
+
+    setIsWishlistLoading(true);
+    try {
+      if (isFavorite) {
+        await removeFromWishlist(itemCombinationId, true);
+        toast.success(t("removedFromWishlist") || "Removed from wishlist");
+      } else {
+        await addToWishlist(itemCombinationId, true);
+        toast.success(t("addedToWishlist") || "Added to wishlist");
+      }
+    } catch (error) {
+      console.error("Failed to update wishlist:", error);
+      toast.error(t("wishlistError") || "Failed to update wishlist");
+    } finally {
+      setIsWishlistLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="sticky top-4">
@@ -41,14 +85,12 @@ const ImageGallery = ({ images, productTitle, discountPercentage }: ImageGallery
               -{discountPercentage}% OFF
             </span>
           )}
-          <div className="absolute top-4 right-4 z-10 space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="absolute top-4 right-4 z-10 space-y-2 transition-opacity duration-300">
             <button
-              onClick={() => setIsFavorite(!isFavorite)}
-              className="w-10 h-10 bg-white dark:bg-gray-800 rounded-full shadow-md flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-              <Heart size={18} className={isFavorite ? "fill-red-500 text-red-500" : ""} />
-            </button>
-            <button className="w-10 h-10 bg-white dark:bg-gray-800 rounded-full shadow-md flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
-              <Share2 size={18} />
+              onClick={toggleWishlist}
+              disabled={isWishlistLoading}
+              className="w-12 h-12 bg-white dark:bg-gray-800 rounded-full shadow-md flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              <Heart size={20} className={isFavorite ? "fill-red-500 text-red-500" : ""} />
             </button>
           </div>
           <Image

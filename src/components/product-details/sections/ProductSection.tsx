@@ -46,6 +46,7 @@ const ProductSection = ({
             }
             productTitle={title}
             discountPercentage={discountPercentage}
+            itemCombinationId={productDetails.currentCombination?.combinationId || productDetails.id}
           />
         </div>
 
