@@ -796,6 +796,18 @@
     "shippingFree": "Free",
     "total": "Total",
     "trackOrder": "Track Order",
+    "orderTracking": {
+      "title": "Order Tracking Timeline",
+      "orderNumber": "Order Number",
+      "orderPlaced": "Order Placed",
+      "orderPlacedDesc": "Your order has been received",
+      "processing": "Processing",
+      "processingDesc": "Your order is being processed",
+      "shipped": "Shipped",
+      "shippedDesc": "Your order has been shipped and is on the way",
+      "delivered": "Delivered",
+      "deliveredDesc": "Your order has been delivered successfully"
+    },
     "cancelOrder": "Cancel Order",
     "cancelOrderModal": {
       "title": "Cancel Order?",

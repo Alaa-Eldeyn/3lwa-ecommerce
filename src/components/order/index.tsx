@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Link } from "@/src/i18n/routing";
+import { Link, useRouter } from "@/src/i18n/routing";
 import Image from "next/image";
 import { customAxios } from "@/src/auth/customAxios";
 import {
@@ -27,6 +27,7 @@ const Order = ({ id }: OrderProps) => {
   const locale = useLocale();
   const isArabic = locale === "ar";
   const t = useTranslations("order");
+  const router = useRouter();
 
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -317,7 +318,9 @@ const Order = ({ id }: OrderProps) => {
 
           {/* Order Actions */}
           <div className="space-y-3">
-            <button className="w-full bg-primary hover:bg-primary/90 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+            <button
+              onClick={() => router.push(`/order/${id}/tracking`)}
+              className="w-full bg-primary hover:bg-primary/90 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
               <Truck className="w-5 h-5" />
               {t("trackOrder")}
             </button>

@@ -802,6 +802,18 @@
     "shippingFree": "مجاني",
     "total": "المجموع",
     "trackOrder": "تتبع الطلب",
+    "orderTracking": {
+      "title": "خط زمني لتتبع الطلب",
+      "orderNumber": "رقم الطلب",
+      "orderPlaced": "تم الطلب",
+      "orderPlacedDesc": "تم استلام طلبك بنجاح",
+      "processing": "قيد المعالجة",
+      "processingDesc": "جاري معالجة طلبك",
+      "shipped": "تم الشحن",
+      "shippedDesc": "تم شحن طلبك وهو في الطريق",
+      "delivered": "تم التوصيل",
+      "deliveredDesc": "تم توصيل طلبك بنجاح"
+    },
     "cancelOrder": "إلغاء الطلب",
     "cancelOrderModal": {
       "title": "إلغاء الطلب؟",
