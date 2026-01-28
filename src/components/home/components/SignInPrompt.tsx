@@ -8,7 +8,7 @@ const SignInPrompt = () => {
   const isAuthenticated = useUserStore((state) => state.isAuthenticated);
   const t = useTranslations("home.signInPrompt");
 
-  if (!isAuthenticated()) {
+  if (isAuthenticated()) {
     return null;
   }
 
