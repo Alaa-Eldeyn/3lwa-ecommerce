@@ -802,7 +802,18 @@
     "shippingFree": "مجاني",
     "total": "المجموع",
     "trackOrder": "تتبع الطلب",
-    "cancelOrder": "إلغاء الطلب"
+    "cancelOrder": "إلغاء الطلب",
+    "cancelOrderModal": {
+      "title": "إلغاء الطلب؟",
+      "description": "هل أنت متأكد من إلغاء هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.",
+      "reasonLabel": "سبب الإلغاء (اختياري)",
+      "reasonPlaceholder": "يرجى تقديم سبب لإلغاء هذا الطلب...",
+      "confirm": "نعم، إلغاء الطلب",
+      "cancel": "الاحتفاظ بالطلب",
+      "cancelling": "جاري الإلغاء...",
+      "success": "تم إلغاء الطلب بنجاح",
+      "error": "فشل إلغاء الطلب"
+    }
   },
   "product": {
     "addToCart": "أضف للسلة",

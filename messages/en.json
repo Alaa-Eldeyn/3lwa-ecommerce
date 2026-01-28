@@ -796,7 +796,18 @@
     "shippingFree": "Free",
     "total": "Total",
     "trackOrder": "Track Order",
-    "cancelOrder": "Cancel Order"
+    "cancelOrder": "Cancel Order",
+    "cancelOrderModal": {
+      "title": "Cancel Order?",
+      "description": "Are you sure you want to cancel this order? This action cannot be undone.",
+      "reasonLabel": "Reason for cancellation (optional)",
+      "reasonPlaceholder": "Please provide a reason for cancelling this order...",
+      "confirm": "Yes, Cancel Order",
+      "cancel": "Keep Order",
+      "cancelling": "Cancelling...",
+      "success": "Order cancelled successfully",
+      "error": "Failed to cancel order"
+    }
   },
   "product": {
     "addToCart": "Add to Cart",
