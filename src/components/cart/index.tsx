@@ -123,14 +123,14 @@ const Cart = () => {
 
           <div className="flex flex-col lg:flex-row gap-8 items-start">
             {/* Cart Items List */}
-            <section id="cart-items" className="flex-1 w-full space-y-6">
+            <section id="cart-items" className="flex-1 w-full space-y-4">
               {items.map((item) => {
                 const title = isArabic ? item.nameAr || item.name : item.nameEn || item.name;
 
                 return (
                   <div
                     key={item.id}
-                    className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-6 flex items-center justify-between shadow-sm transition-shadow">
+                    className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6 flex items-center justify-between shadow-xs">
                     <div className="flex items-center gap-6">
                       <div className="w-24 h-24 bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden shrink-0 border border-gray-100 dark:border-gray-700">
                         <Image
@@ -204,7 +204,7 @@ const Cart = () => {
 
             {/* Order Summary */}
             <aside id="order-summary" className="w-full lg:w-[400px] shrink-0">
-              <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-8 shadow-sm sticky top-32">
+              <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-xs sticky top-32">
                 <h2 className="text-xl font-bold text-secondary mb-6">{tOrderSummary("title")}</h2>
 
                 <div className="space-y-4 mb-6">
@@ -237,7 +237,7 @@ const Cart = () => {
 
                 <Link
                   href="/checkout"
-                  className="w-full bg-primary hover:bg-headerInteractive text-white font-bold py-4 px-6 rounded-lg transition-all transform active:scale-[0.98] shadow-lg shadow-primary/20 flex items-center justify-center gap-3">
+                  className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-lg transition-all transform active:scale-[0.98] shadow-sm shadow-primary/20 flex items-center justify-center gap-3">
                   {tOrderSummary("goToCheckout")}
                   <ArrowRight size={18} className={isArabic ? "rotate-180" : ""} />
                 </Link>
