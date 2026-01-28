@@ -8,6 +8,7 @@ import { useUserStore } from "@/src/store/userStore";
 import { Link } from "@/src/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { Trash2, Minus, Plus, ArrowLeft, ArrowRight, CreditCard, Lock } from "lucide-react";
+import Image from "next/image";
 
 const Cart = () => {
   const {
@@ -111,10 +112,12 @@ const Cart = () => {
                   className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-6 flex items-center justify-between shadow-sm transition-shadow">
                   <div className="flex items-center gap-6">
                     <div className="w-24 h-24 bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden shrink-0 border border-gray-100 dark:border-gray-700">
-                      <img
-                        className="w-full h-full object-contain p-2"
+                      <Image
                         src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
                         alt={title}
+                        width={96}
+                        height={96}
+                        className="w-full h-full object-cover"
                       />
                     </div>
                     <div>
