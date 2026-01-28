@@ -51,7 +51,7 @@ const HeaderActions = () => {
             onClick={toggleAccount}
             className="text-white hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all"
           >
-            <div className="text-[11px] leading-tight">{t("hello")}{user ? `, ${user.firstName}` : t("login")}</div>
+            <div className="text-[11px] leading-tight">{user ? `${t("hello")} ${user.firstName}` : t("login")}</div>
             <div className="flex items-center gap-1 font-semibold text-sm">
               <span>{t("accountAndLists")}</span>
               <ChevronDown size={14} className="mt-0.5" />
