@@ -35,13 +35,13 @@ const OrderTrackingTimeline = ({ timeline }: OrderTrackingTimelineProps) => {
   };
 
   return (
-    <section className="py-12 bg-gray-50 dark:bg-gray-900 max-w-7xl mx-auto px-6">
+    <section className="py-6 md:py-12 bg-gray-50 dark:bg-gray-900 max-w-7xl mx-auto px-4 md:px-6">
       {/* Container */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-8 md:p-10">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 md:p-10">
         {/* Title */}
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">{t("title")}</h2>
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 md:mb-8">{t("title")}</h2>
 
-        <div className="relative space-y-6" dir={isArabic ? "rtl" : "ltr"}>
+        <div className="relative space-y-4 md:space-y-6" dir={isArabic ? "rtl" : "ltr"}>
           {timeline.map((step: OrderStatusData["trackingTimeline"][0], index: number) => {
             const isCompleted = step.completed;
 
@@ -54,13 +54,13 @@ const OrderTrackingTimeline = ({ timeline }: OrderTrackingTimelineProps) => {
             const isLineToCurrentStep = index <= currentStepIndex;
 
             return (
-              <div key={index} className="relative flex items-center gap-6">
+              <div key={index} className="relative flex items-center gap-4 md:gap-6">
                 {/* Connecting Line*/}
                 {index > 0 && (
                   <div
                     className={`absolute ${
                       isArabic ? "right-8" : "left-8"
-                    } w-0.5 h-20 -top-12 transition-all duration-300 ${
+                    } w-0.5 h-24 -top-12 transition-all duration-300 ${
                       isLineToCurrentStep ? "bg-primary" : "bg-gray-200 dark:bg-gray-700"
                     }`}
                   />
@@ -87,10 +87,10 @@ const OrderTrackingTimeline = ({ timeline }: OrderTrackingTimelineProps) => {
                       : "bg-gray-50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700"
                   }`}>
                   {/* Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 md:mb-2">
                     {/* Status */}
                     <h3
-                      className={`text-xl font-bold transition-colors ${
+                      className={`text-lg md:text-xl font-bold transition-colors ${
                         isCompleted
                           ? "text-primary dark:text-primary"
                           : "text-gray-400 dark:text-gray-500"
@@ -113,7 +113,7 @@ const OrderTrackingTimeline = ({ timeline }: OrderTrackingTimelineProps) => {
 
                   {/* Description */}
                   <p
-                    className={`text-base leading-relaxed ${
+                    className={`text-sm md:text-base leading-relaxed ${
                       isCompleted
                         ? "text-gray-700 dark:text-gray-300"
                         : "text-gray-500 dark:text-gray-400"
