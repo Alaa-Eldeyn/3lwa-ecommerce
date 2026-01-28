@@ -9,7 +9,7 @@ import LangSwitch from "./LangSwitch";
 import ThemeSwitcher from "./ThemeSwitcher";
 import AccountDropdown from "./AccountDropdown";
 import { useUserStore } from "@/src/store/userStore";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Link } from "@/src/i18n/routing";
 
 const HeaderActions = () => {
@@ -20,10 +20,32 @@ const HeaderActions = () => {
   );
   const wishlistItems = useWishlistStore((state) => state.getTotalItems());
   const { user, initUser } = useUserStore();
+  const accountDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     initUser();
   }, [initUser]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isAccountOpen &&
+        accountDropdownRef.current &&
+        !accountDropdownRef.current.contains(event.target as Node)
+      ) {
+        toggleAccount();
+      }
+    };
+
+    if (isAccountOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isAccountOpen, toggleAccount]);
 
   return (
     <>
@@ -46,7 +68,7 @@ const HeaderActions = () => {
         <LangSwitch />
 
         {/* Account Dropdown - Amazon Style */}
-        <div className="relative">
+        <div className="relative" ref={accountDropdownRef}>
           <button
             onClick={toggleAccount}
             className="text-white hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all"
@@ -100,7 +122,7 @@ const HeaderActions = () => {
 
       {/* Mobile Categories Toggle Button */}
       <div className="lg:hidden flex items-center ">
-        <div className="relative">
+        <div className="relative" ref={accountDropdownRef}>
           <button
             onClick={toggleAccount}
             className="text-white flex items-center gap-1 hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all"
