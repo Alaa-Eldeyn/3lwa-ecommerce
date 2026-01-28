@@ -157,10 +157,10 @@ const Order = ({ id }: OrderProps) => {
   const orderStatusInfo = getOrderStatusInfo(orderData?.orderStatus ?? "");
 
   return (
-    <main className="max-w-7xl mx-auto bg-gray-50 dark:bg-gray-900">
+    <main className="bg-gray-50 dark:bg-gray-900">
       {/* Breadcrumb / Back Button */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 py-2">
-        <div className="container mx-auto flex items-center justify-between min-h-10">
+        <div className="container mx-auto flex items-center justify-between min-h-10 md:min-h-[44px]">
           <Link
             href={`/profile?tab=orders`}
             className="flex items-center text-primary hover:opacity-80 transition-colors font-medium">
@@ -174,7 +174,7 @@ const Order = ({ id }: OrderProps) => {
         </div>
       </div>
 
-      <div className="px-4 md:px-6 py-4 md:py-8">
+      <div className="container mx-auto px-4 md:px-6 py-4 md:py-8">
         {/* Order Header */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
           <div className="flex items-center justify-between mb-4">

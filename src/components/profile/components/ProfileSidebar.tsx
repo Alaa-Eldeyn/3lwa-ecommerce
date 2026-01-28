@@ -37,7 +37,7 @@ const ProfileSidebar = ({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
       <div className="flex flex-col items-center mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
         <div className="mb-3">
           <ProfileImageUpload
