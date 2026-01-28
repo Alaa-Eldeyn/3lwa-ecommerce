@@ -8,9 +8,9 @@ export type Block = {
   type: "ManualItems" | "Dynamic" | "ManualCategories";
   layout: "Featured" | "TwoColumn" | "Compact" | "Carousel" | "FullWidth";
   displayOrder: number;
-  showViewAllLink: boolean; //TODO
-  viewAllLinkTitleAr: string; //TODO
-  viewAllLinkTitleEn: string; //TODO
+  showViewAllLink: boolean;
+  viewAllLinkTitleAr: string;
+  viewAllLinkTitleEn: string;
   campaign?: Campaign;
   products: Array<Product>;
   categories: Array<Category>;
