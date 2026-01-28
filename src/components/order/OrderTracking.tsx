@@ -156,25 +156,27 @@ const OrderTracking = ({ id }: OrderTrackingProps) => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-        <Link
-          href={`/order/${id}`}
-          className="flex items-center text-primary hover:opacity-80 transition-colors font-medium">
-          {isArabic ? (
-            <ArrowRight className="w-4 h-4 ms-2" />
-          ) : (
-            <ArrowLeft className="w-4 h-4 me-2" />
-          )}
-          {t("backToOrders")}
-        </Link>
-        <div className="flex items-center gap-4">
-          <div className="text-right">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              {tTracking("orderNumber")}
-            </p>
-            <p className="font-semibold text-gray-900 dark:text-white">
-              {orderData.orderNumber || "---"}
-            </p>
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 py-2">
+        <div className="container mx-auto flex items-center justify-between min-h-10">
+          <Link
+            href={`/order/${id}`}
+            className="flex items-center text-primary hover:opacity-80 transition-colors font-medium">
+            {isArabic ? (
+              <ArrowRight className="w-4 h-4 ms-2" />
+            ) : (
+              <ArrowLeft className="w-4 h-4 me-2" />
+            )}
+            {t("backToOrders")}
+          </Link>
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {tTracking("orderNumber")}
+              </p>
+              <p className="text-sm md:text-base font-semibold text-gray-900 dark:text-white">
+                {orderData.orderNumber || "---"}
+              </p>
+            </div>
           </div>
         </div>
       </div>

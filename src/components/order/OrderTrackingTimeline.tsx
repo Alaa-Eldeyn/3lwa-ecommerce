@@ -35,9 +35,9 @@ const OrderTrackingTimeline = ({ timeline }: OrderTrackingTimelineProps) => {
   };
 
   return (
-    <section className="py-6 md:py-12 bg-gray-50 dark:bg-gray-900 max-w-7xl mx-auto px-4 md:px-6">
+    <section className="py-4 md:py-10 bg-gray-50 dark:bg-gray-900 max-w-7xl mx-auto px-4 md:px-6">
       {/* Container */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 md:p-10">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 md:p-10">
         {/* Title */}
         <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 md:mb-8">{t("title")}</h2>
 
