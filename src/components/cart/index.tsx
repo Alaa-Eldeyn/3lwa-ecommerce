@@ -53,11 +53,6 @@ const Cart = () => {
   // Use summary from API for authenticated users, calculate locally for guests
   const isUserAuthenticated = isAuthenticated();
   const subtotal = isUserAuthenticated ? summary.subTotal : getTotalPrice();
-  const shippingEstimate = isUserAuthenticated ? summary.shippingEstimate : 0;
-  const taxEstimate = isUserAuthenticated ? summary.taxEstimate : 0;
-  const totalEstimate = isUserAuthenticated
-    ? summary.totalEstimate
-    : subtotal + shippingEstimate + taxEstimate;
 
   // Loading state
   if (isInitialLoading) {
@@ -119,9 +114,6 @@ const Cart = () => {
             <div className="sticky top-24">
               <OrderSummary
                 subtotal={subtotal}
-                shippingEstimate={shippingEstimate}
-                taxEstimate={taxEstimate}
-                totalEstimate={totalEstimate}
               />
             </div>
           </div>

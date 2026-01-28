@@ -6,16 +6,10 @@ import { Link } from "@/src/i18n/routing";
 
 interface OrderSummaryProps {
   subtotal: number;
-  shippingEstimate: number;
-  taxEstimate: number;
-  totalEstimate: number;
 }
 
 const OrderSummary = ({
   subtotal,
-  shippingEstimate,
-  taxEstimate,
-  totalEstimate,
 }: OrderSummaryProps) => {
   const locale = useLocale();
   const isArabic = locale === "ar";
@@ -38,33 +32,6 @@ const OrderSummary = ({
             ${subtotal.toFixed(2)}
           </span>
         </div>
-
-        {/* Shipping */}
-        <div className="flex items-center justify-between">
-          <span className="text-sm md:text-base text-gray-600 dark:text-gray-400">
-            {t("shipping")}
-          </span>
-          <span
-            className={`text-base md:text-lg font-bold ${
-              shippingEstimate === 0
-                ? "text-green-600 dark:text-green-400"
-                : "text-gray-900 dark:text-white"
-            }`}>
-            {shippingEstimate === 0
-              ? t("shippingFree")
-              : `$${shippingEstimate.toFixed(2)}`}
-          </span>
-        </div>
-
-        {/* Tax */}
-        {taxEstimate > 0 && (
-          <div className="flex items-center justify-between">
-            <span className="text-sm md:text-base text-gray-600 dark:text-gray-400">{t("tax")}</span>
-            <span className="text-base md:text-lg font-bold text-gray-900 dark:text-white">
-              ${taxEstimate.toFixed(2)}
-            </span>
-          </div>
-        )}
       </div>
 
       <div className="h-px bg-gray-200 dark:bg-gray-700 mb-6" />
@@ -75,7 +42,7 @@ const OrderSummary = ({
           {t("total")}
         </span>
         <span className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
-          ${totalEstimate.toFixed(2)}
+          ${subtotal.toFixed(2)}
         </span>
       </div>
 

@@ -18,9 +18,6 @@ export interface CartItem {
 
 export interface CartSummary {
   subTotal: number;
-  shippingEstimate: number;
-  taxEstimate: number;
-  totalEstimate: number;
   itemCount: number;
 }
 
@@ -44,9 +41,6 @@ interface CartState {
 
 const defaultSummary: CartSummary = {
   subTotal: 0,
-  shippingEstimate: 0,
-  taxEstimate: 0,
-  totalEstimate: 0,
   itemCount: 0,
 };
 
@@ -220,9 +214,6 @@ export const useCartStore = create<CartState>()(
           // Store summary data from API
           const summary: CartSummary = {
             subTotal: cartData.subTotal || 0,
-            shippingEstimate: cartData.shippingEstimate || 0,
-            taxEstimate: cartData.taxEstimate || 0,
-            totalEstimate: cartData.totalEstimate || 0,
             itemCount: cartData.itemCount || 0,
           };
 
