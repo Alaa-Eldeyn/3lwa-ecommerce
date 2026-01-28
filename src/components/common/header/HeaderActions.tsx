@@ -20,7 +20,8 @@ const HeaderActions = () => {
   );
   const wishlistItems = useWishlistStore((state) => state.getTotalItems());
   const { user, initUser } = useUserStore();
-  const accountDropdownRef = useRef<HTMLDivElement>(null);
+  const desktopAccountRef = useRef<HTMLDivElement>(null);
+  const mobileAccountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     initUser();
@@ -29,13 +30,22 @@ const HeaderActions = () => {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      if (!isAccountOpen) return;
+
+      const target = event.target as Node;
+      const desktopEl = desktopAccountRef.current;
+      const mobileEl = mobileAccountRef.current;
+
+      // If click is inside either desktop or mobile account area, do nothing
       if (
-        isAccountOpen &&
-        accountDropdownRef.current &&
-        !accountDropdownRef.current.contains(event.target as Node)
+        (desktopEl && desktopEl.contains(target)) ||
+        (mobileEl && mobileEl.contains(target))
       ) {
-        toggleAccount();
+        return;
       }
+
+      // Otherwise, close the dropdown
+      toggleAccount();
     };
 
     if (isAccountOpen) {
@@ -68,7 +78,7 @@ const HeaderActions = () => {
         <LangSwitch />
 
         {/* Account Dropdown - Amazon Style */}
-        <div className="relative" ref={accountDropdownRef}>
+        <div className="relative" ref={desktopAccountRef}>
           <button
             onClick={toggleAccount}
             className="text-white hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all"
@@ -122,7 +132,7 @@ const HeaderActions = () => {
 
       {/* Mobile Categories Toggle Button */}
       <div className="lg:hidden flex items-center ">
-        <div className="relative" ref={accountDropdownRef}>
+        <div className="relative" ref={mobileAccountRef}>
           <button
             onClick={toggleAccount}
             className="text-white flex items-center gap-1 hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all"
