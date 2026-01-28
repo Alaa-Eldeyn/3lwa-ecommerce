@@ -11,6 +11,7 @@ import { customAxios } from "@/src/auth/customAxios";
 import { getUserFromCookie } from "@/src/auth/auth";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Breadcrumb from "@/src/components/common/Breadcrumb";
 import ProfileSidebar from "./components/ProfileSidebar";
 import PersonalInfoTab from "./tabs/PersonalInfoTab";
 import OrdersTab from "./tabs/OrdersTab";
@@ -249,13 +250,14 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-      <div className="container">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <Breadcrumb />
+      <div className="container pb-8">
         {/* Header */}
-        <div className="mb-8 text-center">
+        {/* <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t("title")}</h1>
           <p className="text-gray-600 dark:text-gray-400">{t("subtitle")}</p>
-        </div>
+        </div> */}
 
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Sidebar */}

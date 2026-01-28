@@ -186,7 +186,8 @@
     "register": "Register",
     "account": "Account",
     "orders": "Orders",
-    "product-details": "Product Details"
+    "product-details": "Product Details",
+    "profile": "Profile"
   },
   "auth": {
     "welcomeBack": "Welcome Back!",

@@ -186,7 +186,8 @@
     "register": "إنشاء حساب",
     "account": "الحساب",
     "orders": "الطلبات",
-    "product-details": "تفاصيل المنتج"
+    "product-details": "تفاصيل المنتج",
+    "profile": "الملف الشخصي"
   },
   "auth": {
     "welcomeBack": "مرحباً بعودتك!",
