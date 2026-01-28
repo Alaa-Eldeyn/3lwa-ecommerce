@@ -854,7 +854,20 @@
     "helpful": "Helpful",
     "unhelpful": "Unhelpful",
     "report": "Report",
-    "loadMoreReviews": "Load More Reviews"
+    "loadMoreReviews": "Load More Reviews",
+    "address": "Address:",
+    "location": "Location:",
+    "realEstateRegistered": "Real Estate Registered:",
+    "yes": "Yes",
+    "no": "No",
+    "nA": "N/A",
+    "vendorFallback": "Vendor",
+    "defaultDescription": "Welcome to our store - your premier destination for cutting-edge technology and electronics. We specialize in providing high-quality smartphones, laptops, accessories, and smart home devices. With over 10 years of experience in the industry, we pride ourselves on exceptional customer service, competitive pricing, and genuine products. All our items come with manufacturer warranty and fast shipping options.",
+    "products": {
+      "title": "Products",
+      "description": "Discover products from this vendor",
+      "viewAll": "View All Products"
+    }
   },
   "vendorsSidebar": {
     "title": "Available Offers",

@@ -76,7 +76,7 @@ const BrandPage = () => {
   if (isError) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-md text-center">
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-md text-center">
           <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">❌</span>
           </div>
@@ -164,10 +164,10 @@ const BrandPage = () => {
       {/* Brand Info Section */}
       <section
         id="brand-info-section"
-        className="bg-white dark:bg-gray-900 max-w-[1440px] mx-auto px-8 grid grid-cols-3 gap-8">
+        className="bg-gray-50 dark:bg-gray-900 max-w-[1440px] mx-auto px-8 grid grid-cols-3 gap-8">
         {/* About & Statistics */}
         <div className="col-span-2">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-100 dark:border-gray-700 p-8 shadow-sm">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-8">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
               {tBrand("about", { brandName: displayName })}
             </h2>
@@ -179,7 +179,7 @@ const BrandPage = () => {
 
         {/* Brand Information Sidebar */}
         <div className="col-span-1">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-100 dark:border-gray-700 p-8 shadow-sm sticky top-24">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-8 sticky top-24">
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
               {tBrand("brandInformation")}
             </h3>
@@ -235,7 +235,7 @@ const BrandPage = () => {
 
       {/* Products Section */}
       {products.length > 0 && (
-        <section id="products-section" className="bg-white dark:bg-gray-900 max-w-[1440px] mx-auto px-8">
+        <section id="products-section" className="bg-gray-50 dark:bg-gray-900 max-w-[1440px] mx-auto px-8">
           <div className="flex items-center justify-between mb-12">
             <div>
               <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">{t("title")}</h2>

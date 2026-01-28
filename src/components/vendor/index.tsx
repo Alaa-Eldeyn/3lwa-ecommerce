@@ -1,6 +1,16 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import { Loader2, Store, Star, ThumbsUp, ThumbsDown, Flag, ChevronDown } from "lucide-react";
+import {
+  Loader2,
+  Store,
+  Star,
+  ThumbsUp,
+  ThumbsDown,
+  Flag,
+  ChevronDown,
+  ArrowLeft,
+  ArrowRight,
+} from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { customAxios } from "@/src/auth/customAxios";
 import { useLocale, useTranslations } from "next-intl";
@@ -15,6 +25,7 @@ const VendorPage = () => {
   const locale = useLocale();
   const isArabic = locale === "ar";
   const t = useTranslations("vendor");
+  const tProducts = useTranslations("vendor.products");
 
   const {
     data: response,
@@ -24,7 +35,7 @@ const VendorPage = () => {
   } = useQuery({
     queryKey: ["vendor", id],
     queryFn: async () => {
-      const { data } = await customAxios.get(`/Vendor/${id}`);
+      const { data } = await customAxios.get(`/VendorManagement/Preview/${id}`);
       return data;
     },
     enabled: !!id,
@@ -57,9 +68,7 @@ const VendorPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
-          <p className="text-slate-600 text-lg font-medium">
-            {t("loading")}
-          </p>
+          <p className="text-slate-600 text-lg font-medium">{t("loading")}</p>
         </div>
       </div>
     );
@@ -72,9 +81,7 @@ const VendorPage = () => {
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">❌</span>
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">
-            {t("error")}
-          </h2>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">{t("error")}</h2>
           <p className="text-slate-600 mb-4">
             {(error as any)?.response?.data?.message || t("errorMessage")}
           </p>
@@ -92,17 +99,19 @@ const VendorPage = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-slate-600 text-lg">
-            {t("noData")}
-          </p>
+          <p className="text-slate-600 text-lg">{t("noData")}</p>
         </div>
       </div>
     );
   }
 
-  // Get display name - prefer companyName, fallback to contactName, then vendorCode
+  // Get display name - prefer storeName, fallback to administrator name, then vendorCode
   const displayName =
-    vendorData.companyName || vendorData.contactName || vendorData.vendorCode || "Vendor";
+    (vendorData.storeName && vendorData.storeName.trim()) ||
+    (vendorData.administratorFirstName && vendorData.administratorLastName
+      ? `${vendorData.administratorFirstName} ${vendorData.administratorLastName}`
+      : vendorData.administratorFirstName || vendorData.administratorLastName) ||
+    t("vendorFallback");
   const initials = displayName
     .split(" ")
     .map((word: string) => word.charAt(0))
@@ -198,74 +207,96 @@ const VendorPage = () => {
         <div
           id="vendor-header-section"
           className="bg-white rounded-xl border border-gray-200 p-8 mb-8">
-          <div className="flex items-start justify-between">
-            <div className="flex items-start space-x-6">
-              <div className="w-32 h-32 bg-gradient-to-br from-primary to-headerDark rounded-xl flex items-center justify-center">
-                <span className="text-white text-5xl font-bold">{initials}</span>
-              </div>
-              <div className="flex-1">
-                <h1 className="text-4xl font-bold text-foreground mb-3">{displayName}</h1>
-                <div className="flex items-center space-x-4 mb-4">
-                  <div className="flex items-center">
-                    {renderStars(vendorData.rating || 4.7)}
-                    <span className="ml-2 text-foreground font-semibold">
-                      {vendorData.rating ? vendorData.rating.toFixed(1) : "4.7"}
-                    </span>
-                  </div>
-                  <span className="text-gray-500">|</span>
-                  <span className="text-gray-600">
-                    2,847 {t("reviews")}
-                  </span>
-                  <span className="text-gray-500">|</span>
-                  <span className="text-gray-600">
-                    {totalProducts} {t("productsSold")}
+          <div className="flex items-start space-x-6">
+            <div className="w-32 h-32 bg-gradient-to-br from-primary to-headerDark rounded-xl flex items-center justify-center">
+              <span className="text-white text-5xl font-bold">{initials}</span>
+            </div>
+            <div className="flex-1">
+              <h1 className="text-4xl font-bold text-foreground mb-3">{displayName}</h1>
+              <div className="flex items-center space-x-4 mb-4">
+                <div className="flex items-center">
+                  {renderStars(vendorData.averageRating || 0)}
+                  <span className="ml-2 text-foreground font-semibold">
+                    {vendorData.averageRating ? vendorData.averageRating.toFixed(2) : "0.00"}
                   </span>
                 </div>
-                <p className="text-gray-700 leading-relaxed max-w-3xl">
-                  {vendorData.notes ||
-                    (isArabic
-                      ? "مرحباً بك في متجرنا - وجهتك المفضلة للتكنولوجيا والإلكترونيات الحديثة. نتخصص في توفير الهواتف الذكية عالية الجودة وأجهزة الكمبيوتر المحمولة والملحقات وأجهزة المنزل الذكي. مع أكثر من 10 سنوات من الخبرة في الصناعة، نفخر بخدمة العملاء الاستثنائية والأسعار التنافسية والمنتجات الأصيلة. جميع منتجاتنا تأتي مع ضمان الشركة المصنعة وخيارات الشحن السريع."
-                      : "Welcome to our store - your premier destination for cutting-edge technology and electronics. We specialize in providing high-quality smartphones, laptops, accessories, and smart home devices. With over 10 years of experience in the industry, we pride ourselves on exceptional customer service, competitive pricing, and genuine products. All our items come with manufacturer warranty and fast shipping options.")}
-                </p>
+                <span className="text-gray-500">|</span>
+                <span className="text-gray-600">2,847 {t("reviews")}</span>
+                <span className="text-gray-500">|</span>
+                <span className="text-gray-600">
+                  {totalProducts} {t("productsSold")}
+                </span>
               </div>
+
+              {/* Vendor Info */}
+              <div className="space-y-2 mb-4">
+                {(vendorData.address?.trim() || vendorData.postalCode?.trim()) && (
+                  <p className="text-gray-700">
+                    <span className="font-semibold">{t("address")}</span>{" "}
+                    {[vendorData.address?.trim(), vendorData.postalCode?.trim()]
+                      .filter(Boolean)
+                      .join(", ") || t("nA")}
+                  </p>
+                )}
+                {(vendorData.cityName?.trim() ||
+                  vendorData.stateName?.trim() ||
+                  vendorData.countryName?.trim()) && (
+                  <p className="text-gray-700">
+                    <span className="font-semibold">{t("location")}</span>{" "}
+                    {[
+                      vendorData.cityName?.trim(),
+                      vendorData.stateName?.trim(),
+                      vendorData.countryName?.trim(),
+                    ]
+                      .filter(Boolean)
+                      .join(", ")}
+                  </p>
+                )}
+                {vendorData.isRealEstateRegistered !== undefined && (
+                  <p className="text-gray-700">
+                    <span className="font-semibold">{t("realEstateRegistered")}</span>{" "}
+                    {vendorData.isRealEstateRegistered ? t("yes") : t("no")}
+                  </p>
+                )}
+              </div>
+
+              <p className="text-gray-700 leading-relaxed">
+                {vendorData.notes || t("defaultDescription")}
+              </p>
             </div>
-            <button
-              onClick={() => router.push(`/products?v=${id}`)}
-              className="bg-primary hover:bg-headerDark text-white px-8 py-3 rounded-lg font-semibold transition flex items-center space-x-2">
-              <Store className="w-5 h-5" />
-              <span>{t("viewAllProducts")}</span>
-            </button>
           </div>
         </div>
 
-        {/* Vendor Stats Section */}
-        <div id="vendor-stats-section" className="grid grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-            <div className="text-primary text-3xl font-bold mb-2">98.5%</div>
-            <div className="text-gray-600">{t("positiveFeedback")}</div>
-          </div>
-          <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-            <div className="text-primary text-3xl font-bold mb-2">24hrs</div>
-            <div className="text-gray-600">
-              {t("avgResponseTime")}
+        {/* Products Section */}
+        {products.length > 0 && (
+          <section
+            id="vendor-products-section"
+            className="border border-gray-200 rounded-xl p-8 mb-8">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">{tProducts("title")}</h2>
+                <p className="text-gray-600">{tProducts("description")}</p>
+              </div>
+              <button
+                onClick={() => router.push(`/products?v=${id}`)}
+                className="bg-primary hover:bg-headerDark text-white font-semibold py-3 px-8 rounded-xl transition-colors flex items-center gap-2">
+                <span>{tProducts("viewAll")}</span>
+                {isArabic ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
+              </button>
             </div>
-          </div>
-          <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-            <div className="text-primary text-3xl font-bold mb-2">{totalProducts}</div>
-            <div className="text-gray-600">{t("activeProducts")}</div>
-          </div>
-          <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
-            <div className="text-primary text-3xl font-bold mb-2">2018</div>
-            <div className="text-gray-600">{t("memberSince")}</div>
-          </div>
-        </div>
 
-        {/* Customer Reviews Section */}
-        <div id="vendor-reviews-section" className="bg-white rounded-xl border border-gray-200 p-8">
+            <div className="grid grid-cols-4 gap-6">
+              {products.map((product) => (
+                <ProductCard key={product.itemCombinationId} variant="minimal" {...product} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* // TODO: Customer Reviews Section */}
+        {/* <div id="vendor-reviews-section" className="bg-white rounded-xl border border-gray-200 p-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-foreground">
-              {t("customerReviews")}
-            </h2>
+            <h2 className="text-2xl font-bold text-foreground">{t("customerReviews")}</h2>
             <div className="flex items-center space-x-3">
               <span className="text-gray-600">{t("sortBy")}</span>
               <select className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary">
@@ -292,9 +323,7 @@ const VendorPage = () => {
                   />
                   <div>
                     <div className="font-semibold text-foreground">{review.name}</div>
-                    <div className="text-sm text-gray-500">
-                      {t("verifiedPurchase")}
-                    </div>
+                    <div className="text-sm text-gray-500">{t("verifiedPurchase")}</div>
                   </div>
                 </div>
                 <div className="text-sm text-gray-500">{review.date}</div>
@@ -327,7 +356,7 @@ const VendorPage = () => {
               {t("loadMoreReviews")}
             </button>
           </div>
-        </div>
+        </div> */}
       </main>
     </div>
   );
