@@ -183,13 +183,6 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
               </>
             )}
           </button>
-
-          {/* Buy Now Button */}
-          <button
-            disabled={stockStatus === 3 || !isCombinationAvailable}
-            className="w-full bg-secondary hover:bg-[#1e3a5c] dark:hover:bg-[#1e3a5c]/80 text-white font-bold py-3.5 px-4 rounded-lg shadow-sm hover:shadow-md transition-all text-sm disabled:opacity-50 disabled:cursor-not-allowed">
-            {tProduct("buyNow")}
-          </button>
         </div>
 
         {/* Delivery Info */}
