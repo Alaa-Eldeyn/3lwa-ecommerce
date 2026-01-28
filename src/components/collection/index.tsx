@@ -30,83 +30,52 @@ const CollectionPage = () => {
   // Get block ID from query params
   const productBlockId = searchParams.get("p");
   const categoryBlockId = searchParams.get("c");
+  const isProducts = !!productBlockId;
+  const isCategories = !!categoryBlockId;
 
   // Fetch Items
-  const { data: itemsData, isLoading: isLoadingItems } = useQuery<BlockResponse | null>({
+  const itemsQuery = useQuery<BlockResponse | null>({
     queryKey: ["collection-items", productBlockId],
-    queryFn: async (): Promise<BlockResponse | null> => {
-      const response = await axios.get(
+    queryFn: async () => {
+      const res = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/Homepage/blocks/${productBlockId}/items`
       );
-      const data = response.data?.data || response.data;
-      return data as BlockResponse;
+      return res.data?.data || res.data;
     },
-    enabled: !!productBlockId && !categoryBlockId,
+    enabled: isProducts,
     refetchOnWindowFocus: false,
   });
 
   // Fetch Categories
-  const { data: categoriesResponseData, isLoading: isLoadingCategories } =
-    useQuery<BlockResponse | null>({
-      queryKey: ["collection-categories", categoryBlockId],
-      queryFn: async (): Promise<BlockResponse | null> => {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/Homepage/blocks/${categoryBlockId}/categories`
-        );
-        const data = response.data?.data || response.data;
-        return data as BlockResponse;
-      },
-      enabled: !!categoryBlockId,
-      refetchOnWindowFocus: false,
-    });
+  const categoriesQuery = useQuery<BlockResponse | null>({
+    queryKey: ["collection-categories", categoryBlockId],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/Homepage/blocks/${categoryBlockId}/categories`
+      );
+      return res.data?.data || res.data;
+    },
+    enabled: isCategories,
+    refetchOnWindowFocus: false,
+  });
 
-  const itemsResponse = itemsData;
-  const categoriesResponse = categoriesResponseData;
-
-  //
-  const isProducts = !!productBlockId;
-  const isCategories = !!categoryBlockId;
+  const data = isProducts ? itemsQuery.data : categoriesQuery.data;
+  const isLoading = isProducts ? itemsQuery.isLoading : categoriesQuery.isLoading;
 
   // Extract block metadata from responses
   const blockTitle = isArabic
-    ? itemsResponse?.blockTitleAr || categoriesResponse?.blockTitleAr
-    : itemsResponse?.blockTitleEn || categoriesResponse?.blockTitleEn;
+    ? data?.blockTitleAr || data?.blockTitleEn
+    : data?.blockTitleEn || data?.blockTitleAr;
 
   // Extract products and categories from responses
-  const productsData = useMemo(() => {
-    if (!itemsResponse?.items) return [];
-    return itemsResponse.items.map((item: any) => ({
-      itemId: item.itemId,
-      itemCombinationId: item.itemCombinationId,
-      titleAr: item.nameAr,
-      titleEn: item.nameEn,
-      thumbnailImage: item.mainImageUrl,
-      itemRating: item.rating,
-      price: item.price,
-      salesPrice: item.price,
-      basePrice: item.originalPrice,
-      minimumPrice: item.price,
-      maximumPrice: item.originalPrice,
-    }));
-  }, [itemsResponse]);
+  const itemsData = useMemo(() => {
+    if (!data?.items) return [];
+    return data.items;
+  }, [data]);
 
   const categoriesData: Category[] = useMemo(() => {
-    return categoriesResponse?.categories || [];
-  }, [categoriesResponse]);
-
-  // Simple loading state - only show loading if we're actively fetching
-  const isLoading = (isProducts && isLoadingItems) || (isCategories && isLoadingCategories);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Loading collection...</p>
-        </div>
-      </div>
-    );
-  }
+    return data?.categories || [];
+  }, [data]);
 
   // Check if collection exists
   if (!blockTitle && !isLoading) {
@@ -141,14 +110,14 @@ const CollectionPage = () => {
         {/* Products Collection */}
         {isProducts && (
           <div>
-            {isLoadingItems ? (
+            {isLoading ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="w-8 h-8 text-primary animate-spin mr-3" />
                 <p className="text-gray-600 dark:text-gray-400">Loading products...</p>
               </div>
-            ) : productsData && productsData.length > 0 ? (
+            ) : itemsData && itemsData.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {productsData.map((product: Partial<Product>) => (
+                {itemsData.map((product: Partial<Product>) => (
                   <ProductCard key={product.itemCombinationId} variant="minimal" {...product} />
                 ))}
               </div>
@@ -163,7 +132,7 @@ const CollectionPage = () => {
         {/* Categories Collection */}
         {isCategories && (
           <div>
-            {isLoadingCategories ? (
+            {isLoading ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="w-8 h-8 text-primary animate-spin mr-3" />
                 <p className="text-gray-600 dark:text-gray-400">Loading categories...</p>
