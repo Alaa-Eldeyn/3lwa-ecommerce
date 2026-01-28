@@ -158,7 +158,7 @@ const Cart = () => {
                     <div className="flex flex-col items-end gap-6">
                       <button
                         onClick={() => handleRemoveItem(item.id)}
-                        className="text-red-500 hover:text-red-700 transition-colors p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20">
+                        className="text-red-500 hover:text-red-700 transition-colors p-2 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20">
                         <Trash2 size={18} />
                       </button>
 
