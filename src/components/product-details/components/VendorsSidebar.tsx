@@ -21,6 +21,7 @@ import QuantityController from "@/src/components/common/QuantityController";
 // 1. تحديد الـ Interfaces بناءً على الـ API الفعلي
 interface VendorItem {
   vendorItemId: string;
+  vendorItemPricingId: string;
   vendorId: string;
   vendorFullName: string;
   price: number;
@@ -244,7 +245,7 @@ const VendorsSidebar = ({
                       name: isArabic ? vendor.itemTitleAr : vendor.itemTitleEn,
                       price: vendor.salesPrice,
                       image: fullImageUrl,
-                      offerCombinationPricingId: vendor.itemCombinationId,
+                      offerCombinationPricingId: vendor.vendorItemPricingId,
                     },
                     isAuthenticated()
                   );
