@@ -51,15 +51,12 @@ const OrderTrackingTimeline = ({ timeline }: OrderTrackingTimelineProps) => {
                 s.completed && (i === timeline.length - 1 || !timeline[i + 1].completed)
             );
             const isCurrentStep = index === currentStepIndex;
-
-            const isLineToCurrentStep =
-              index > 0 && index <= currentStepIndex && currentStepIndex >= 0;
-            const showConnectingLine = index > 0;
+            const isLineToCurrentStep = index <= currentStepIndex;
 
             return (
               <div key={index} className="relative flex items-center gap-6">
                 {/* Connecting Line*/}
-                {showConnectingLine && (
+                {index > 0 && (
                   <div
                     className={`absolute ${
                       isArabic ? "right-8" : "left-8"
