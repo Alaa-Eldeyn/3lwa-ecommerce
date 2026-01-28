@@ -3,7 +3,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ThemeProvider } from "next-themes"
 import { Toaster } from "react-hot-toast";
-import WishlistInitializer from "@/src/components/common/WishlistInitializer";
+import WishlistInitializer from "@/src/effects/WishlistInitializer";
+import ScrollToTop from "@/src/effects/ScrollToTop";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
     const queryClient = new QueryClient();
@@ -17,6 +18,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
                 disableTransitionOnChange={false}
             >
                 <WishlistInitializer />
+                <ScrollToTop />
                 {children}
                 <Toaster position="top-right" reverseOrder={false} />
             </ThemeProvider>

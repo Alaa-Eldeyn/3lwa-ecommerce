@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Product } from "@/src/types/types";
 import { DynamicFilters } from "./filters/types";
-import ScrollToTop from "../common/ScrollToTop";
+import ScrollToTop from "../../effects/ScrollToTop";
 import Pagination from "../common/Pagination";
 import FiltersSidebar from "./FiltersSidebar";
 
