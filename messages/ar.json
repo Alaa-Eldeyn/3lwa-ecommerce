@@ -709,9 +709,12 @@
       "subtotal": "المجموع الفرعي",
       "shipping": "رسوم الشحن",
       "shippingFree": "مجاني",
+      "shippingCalculated": "يتم حسابها عند الدفع",
       "tax": "الضريبة",
+      "taxCalculated": "يتم حسابها عند الدفع",
       "total": "المجموع الكلي",
-      "goToCheckout": "التالي"
+      "goToCheckout": "التالي",
+      "secureCheckout": "دفع آمن"
     }
   },
   "checkout": {

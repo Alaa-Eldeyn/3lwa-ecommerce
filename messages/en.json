@@ -703,9 +703,12 @@
       "subtotal": "Subtotal",
       "shipping": "Shipping",
       "shippingFree": "Free",
+      "shippingCalculated": "Calculated at checkout",
       "tax": "Tax",
+      "taxCalculated": "Calculated at checkout",
       "total": "Total",
-      "goToCheckout": "Go to Checkout"
+      "goToCheckout": "Go to Checkout",
+      "secureCheckout": "Secure Checkout"
     }
   },
   "checkout": {
