@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import axios from "axios";
@@ -13,107 +13,59 @@ import Image from "next/image";
 import { Link } from "@/src/i18n/routing";
 import { Loader2 } from "lucide-react";
 
+type BlockResponse = {
+  blockId: string;
+  blockTitleAr: string;
+  blockTitleEn: string;
+  blockType: string;
+  items?: Product[];
+  categories?: Category[];
+};
+
 const CollectionPage = () => {
-  const { id } = useParams();
+  const searchParams = useSearchParams();
   const locale = useLocale();
   const isArabic = locale === "ar";
 
-  // Define response types
-  type ItemsResponse = {
-    blockId: string;
-    blockTitleAr: string;
-    blockTitleEn: string;
-    blockType: string;
-    items: Array<{
-      itemId: string;
-      itemCombinationId: string;
-      nameAr: string;
-      nameEn: string;
-      mainImageUrl: string;
-      rating: number;
-      price: number;
-      originalPrice: number;
-    }>;
-  };
+  // Get block ID from query params
+  const productBlockId = searchParams.get("p");
+  const categoryBlockId = searchParams.get("c");
 
-  type CategoriesResponse = {
-    blockId: string;
-    blockTitleAr: string;
-    blockTitleEn: string;
-    blockType: string;
-    categories: Category[];
-  };
-
-  // Try fetching items first to determine block type
-  const { 
-    data: itemsData, 
-    isLoading: isLoadingItems, 
-    isFetching: isFetchingItems,
-    error: itemsError 
-  } = useQuery<ItemsResponse | null>({
-    queryKey: ["collection-items", id],
-    queryFn: async (): Promise<ItemsResponse | null> => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/Homepage/blocks/${id}/items`
-        );
-        // Handle both response.data and response.data.data structures
-        const data = response.data?.data || response.data;
-        return data as ItemsResponse;
-      } catch (error: any) {
-        // If 404 or error, return null so we can try categories
-        if (error?.response?.status === 404 || error?.response?.status >= 400) {
-          return null;
-        }
-        throw error;
-      }
+  // Fetch Items
+  const { data: itemsData, isLoading: isLoadingItems } = useQuery<BlockResponse | null>({
+    queryKey: ["collection-items", productBlockId],
+    queryFn: async (): Promise<BlockResponse | null> => {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/Homepage/blocks/${productBlockId}/items`
+      );
+      const data = response.data?.data || response.data;
+      return data as BlockResponse;
     },
-    enabled: !!id,
+    enabled: !!productBlockId && !categoryBlockId,
     refetchOnWindowFocus: false,
-    retry: false, // Don't retry if it fails, we'll try categories instead
   });
 
-  const itemsResponse = itemsData as ItemsResponse | null | undefined;
-
-  // Determine block type from items response
-  const blockTypeFromItems = itemsResponse?.blockType;
-  const isProducts = blockTypeFromItems === "ManualItems";
-  // Check if we should fetch categories (either blockType is ManualCategories or items fetch returned null/error)
-  // Only check after items query has completed (not loading)
-  const shouldFetchCategories: boolean = 
-    (!isLoadingItems && blockTypeFromItems === "ManualCategories") || 
-    (!isLoadingItems && !itemsResponse && (!!itemsError || itemsData === null));
-
-  // Fetch categories if needed
-  const { 
-    data: categoriesResponseData, 
-    isLoading: isLoadingCategories,
-    isFetching: isFetchingCategories 
-  } = useQuery<CategoriesResponse | null>({
-    queryKey: ["collection-categories", id],
-    queryFn: async (): Promise<CategoriesResponse | null> => {
-      try {
+  // Fetch Categories
+  const { data: categoriesResponseData, isLoading: isLoadingCategories } =
+    useQuery<BlockResponse | null>({
+      queryKey: ["collection-categories", categoryBlockId],
+      queryFn: async (): Promise<BlockResponse | null> => {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/Homepage/blocks/${id}/categories`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/Homepage/blocks/${categoryBlockId}/categories`
         );
-        // Handle both response.data and response.data.data structures
         const data = response.data?.data || response.data;
-        return data as CategoriesResponse;
-      } catch (error: any) {
-        // If error, return null
-        if (error?.response?.status === 404 || error?.response?.status >= 400) {
-          return null;
-        }
-        throw error;
-      }
-    },
-    enabled: !!id && shouldFetchCategories,
-    refetchOnWindowFocus: false,
-    retry: false,
-  });
+        return data as BlockResponse;
+      },
+      enabled: !!categoryBlockId,
+      refetchOnWindowFocus: false,
+    });
 
-  const categoriesResponse = categoriesResponseData as CategoriesResponse | null | undefined;
-  const isCategories = shouldFetchCategories && !!categoriesResponse;
+  const itemsResponse = itemsData;
+  const categoriesResponse = categoriesResponseData;
+
+  //
+  const isProducts = !!productBlockId;
+  const isCategories = !!categoryBlockId;
 
   // Extract block metadata from responses
   const blockTitle = isArabic
@@ -123,8 +75,6 @@ const CollectionPage = () => {
   // Extract products and categories from responses
   const productsData = useMemo(() => {
     if (!itemsResponse?.items) return [];
-    // Items from the API are in block product format, need to fetch full details
-    // For now, we'll use them as-is and let ProductCard handle missing fields
     return itemsResponse.items.map((item: any) => ({
       itemId: item.itemId,
       itemCombinationId: item.itemCombinationId,
@@ -144,9 +94,8 @@ const CollectionPage = () => {
     return categoriesResponse?.categories || [];
   }, [categoriesResponse]);
 
-  const isLoading = (isProducts && isLoadingItems && !itemsResponse) || 
-                   (isCategories && isLoadingCategories && !categoriesResponse) ||
-                   (!isProducts && !isCategories && !itemsResponse && !categoriesResponse && (isLoadingItems || isLoadingCategories));
+  // Simple loading state - only show loading if we're actively fetching
+  const isLoading = (isProducts && isLoadingItems) || (isCategories && isLoadingCategories);
 
   if (isLoading) {
     return (
@@ -192,7 +141,7 @@ const CollectionPage = () => {
         {/* Products Collection */}
         {isProducts && (
           <div>
-            {isLoadingItems && !itemsResponse ? (
+            {isLoadingItems ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="w-8 h-8 text-primary animate-spin mr-3" />
                 <p className="text-gray-600 dark:text-gray-400">Loading products...</p>
@@ -200,11 +149,7 @@ const CollectionPage = () => {
             ) : productsData && productsData.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {productsData.map((product: Partial<Product>) => (
-                  <ProductCard
-                    key={product.itemCombinationId}
-                    variant="minimal"
-                    {...product}
-                  />
+                  <ProductCard key={product.itemCombinationId} variant="minimal" {...product} />
                 ))}
               </div>
             ) : (
@@ -218,7 +163,7 @@ const CollectionPage = () => {
         {/* Categories Collection */}
         {isCategories && (
           <div>
-            {isLoadingCategories && !categoriesResponse ? (
+            {isLoadingCategories ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="w-8 h-8 text-primary animate-spin mr-3" />
                 <p className="text-gray-600 dark:text-gray-400">Loading categories...</p>
@@ -257,15 +202,6 @@ const CollectionPage = () => {
                 <p className="text-gray-600 dark:text-gray-400 text-lg">No categories found</p>
               </div>
             )}
-          </div>
-        )}
-
-        {/* Empty State - when block type is unknown or neither products nor categories */}
-        {!isProducts && !isCategories && !isLoading && (
-          <div className="text-center py-12">
-            <p className="text-gray-600 dark:text-gray-400 text-lg">
-              This collection is currently empty.
-            </p>
           </div>
         )}
       </div>

@@ -121,7 +121,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
         {/* View all link */}
         {block.layout === "Carousel" && block.showViewAllLink && (
           <Link
-            href={`/collection/${block.id}`}
+            href={isProducts ? `/collection?p=${block.id}` : `/products?c=${block.id}`}
             className="text-primary dark:text-primary text-sm hover:underline hover:text-red-700 dark:hover:text-red-400 font-medium">
             {isArabic ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
           </Link>
@@ -281,7 +281,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
       {/* View all link */}
       {block.layout !== "Carousel" && block.showViewAllLink && (
         <Link
-          href={`/collection/${block.id}`}
+          href={isProducts ? `/collection?p=${block.id}` : `/products?c=${block.id}`}
           className="text-primary dark:text-primary text-sm hover:underline hover:text-red-700 dark:hover:text-red-400 font-medium">
           {isArabic ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
         </Link>
