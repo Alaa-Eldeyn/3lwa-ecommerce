@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/src/i18n/routing";
 import { User, Package, Shield, MapPin } from "lucide-react";
 import { ProfileFormData, PasswordUpdateFormData } from "@/src/types/types";
 import { useUserStore } from "@/src/store/userStore";
@@ -24,6 +25,7 @@ const Profile = () => {
   const t = useTranslations("profile");
   const tAuth = useTranslations("auth");
   const searchParams = useSearchParams();
+  const router = useRouter();
   const tabParam = searchParams.get("tab") as TabType | null;
   const { user, initUser, updateUser } = useUserStore();
 
@@ -76,6 +78,26 @@ const Profile = () => {
       setActiveTab("personalInfo");
     }
   }, [tabParam]);
+
+  // Handle tab change
+  const handleTabChange = (tabId: TabType) => {
+    setActiveTab(tabId);
+    
+    // Update URL with new tab parameter
+    const params = new URLSearchParams(searchParams.toString());
+    if (tabId === "personalInfo") {
+      // Remove tab parameter for default tab
+      params.delete("tab");
+    } else {
+      params.set("tab", tabId);
+    }
+    
+    const newUrl = params.toString() ? `/profile?${params.toString()}` : "/profile";
+    router.push(newUrl);
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchingProfile, setIsFetchingProfile] = useState(true);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
@@ -243,7 +265,7 @@ const Profile = () => {
               profileImagePath={user?.profileImagePath}
               activeTab={activeTab}
               tabs={tabs}
-              onTabChange={(tabId: string) => setActiveTab(tabId as TabType)}
+              onTabChange={(tabId: string) => handleTabChange(tabId as TabType)}
               onImageChange={(file: File) => {
                 setProfileImageFile(file);
               }}
