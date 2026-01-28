@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, ShoppingBag, Trash2, AlertTriangle } from "lucide-react";
+import { X, ShoppingBag, Trash2 } from "lucide-react";
 import { useHeaderStore } from "@/src/store/headerStore";
 import { useCartStore } from "@/src/store/cartStore";
 import { Link } from "@/src/i18n/routing";
@@ -9,6 +9,7 @@ import Image from "next/image";
 import QuantityController from "../common/QuantityController";
 import { isAuthenticated } from "@/src/auth/auth";
 import { useLocale, useTranslations } from "next-intl";
+import ClearCartModal from "./components/ClearCartModal";
 
 const CartSidebar = () => {
   const { isCartOpen, closeCart } = useHeaderStore();
@@ -66,40 +67,11 @@ const CartSidebar = () => {
         onClick={closeCart}
       />
 
-      {isClearModalOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-60 p-4"
-          onClick={() => setIsClearModalOpen(false)}>
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4 animate-bounce-short">
-                <AlertTriangle className="text-red-600 dark:text-red-400" size={32} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                {t("clearModal.title")}
-              </h3>
-              <p className="text-gray-500 dark:text-gray-400 mb-6">
-                {t("clearModal.description")}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => setIsClearModalOpen(false)}
-                className="w-full py-2.5 px-4 rounded-xl bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium">
-                {t("clearModal.cancel")}
-              </button>
-              <button
-                onClick={confirmClearCart}
-                className="w-full py-2.5 px-4 rounded-xl bg-error text-white font-medium hover:bg-error-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                {t("clearModal.confirm")}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ClearCartModal
+        isOpen={isClearModalOpen}
+        onCancel={() => setIsClearModalOpen(false)}
+        onConfirm={confirmClearCart}
+      />
 
       {/* 3. Sidebar (z-50 - Lower than Modal) */}
       <div
