@@ -87,7 +87,7 @@ const OrderTrackingTimeline = ({ timeline }: OrderTrackingTimelineProps) => {
                       : "bg-gray-50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700"
                   }`}>
                   {/* Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 md:mb-2">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 md:mb-1">
                     {/* Status */}
                     <h3
                       className={`text-lg md:text-xl font-bold transition-colors ${
