@@ -330,10 +330,7 @@ const Order = ({ id }: OrderProps) => {
                 <Truck className="w-5 h-5" />
                 {t("trackOrder")}
               </button>
-              {(orderData?.orderStatus === 0 ||
-                orderData?.orderStatus === 1 ||
-                orderData?.orderStatus === 2 ||
-                orderData?.orderStatus === 3) && (
+              {orderData?.canCancel && (
                 <button
                   onClick={() => setShowCancelModal(true)}
                   className="w-full border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-300 dark:hover:border-red-700 hover:text-red-600 dark:hover:text-red-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-gray-300">
