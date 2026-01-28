@@ -65,10 +65,10 @@ const VendorPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
-          <p className="text-slate-600 text-lg font-medium">{t("loading")}</p>
+          <p className="text-slate-600 dark:text-gray-400 text-lg font-medium">{t("loading")}</p>
         </div>
       </div>
     );
@@ -76,13 +76,13 @@ const VendorPage = () => {
 
   if (isError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md text-center">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-md text-center">
+          <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">❌</span>
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">{t("error")}</h2>
-          <p className="text-slate-600 mb-4">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">{t("error")}</h2>
+          <p className="text-slate-600 dark:text-gray-400 mb-4">
             {(error as any)?.response?.data?.message || t("errorMessage")}
           </p>
           <button
@@ -97,9 +97,9 @@ const VendorPage = () => {
 
   if (!vendorData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-slate-600 text-lg">{t("noData")}</p>
+          <p className="text-slate-600 dark:text-gray-400 text-lg">{t("noData")}</p>
         </div>
       </div>
     );
@@ -185,14 +185,14 @@ const VendorPage = () => {
         ))}
         {hasHalfStar && (
           <div className="relative w-4 h-4">
-            <Star className="w-4 h-4 text-gray-300 absolute" />
+            <Star className="w-4 h-4 text-gray-300 dark:text-gray-600 absolute" />
             <div className="absolute overflow-hidden" style={{ width: "50%" }}>
               <Star className="w-4 h-4 fill-yellow-500 text-yellow-500" />
             </div>
           </div>
         )}
         {[...Array(emptyStars)].map((_, i) => (
-          <Star key={`empty-${i}`} className="w-4 h-4 text-gray-300" />
+          <Star key={`empty-${i}`} className="w-4 h-4 text-gray-300 dark:text-gray-600" />
         ))}
       </div>
     );
@@ -200,30 +200,30 @@ const VendorPage = () => {
 
   return (
     <div
-      className="min-h-screen bg-background text-foreground font-cairo"
+      className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-cairo"
       dir={isArabic ? "rtl" : "ltr"}>
       <main id="vendor-main" className="max-w-7xl mx-auto px-6 py-12">
         {/* Vendor Header Section */}
         <div
           id="vendor-header-section"
-          className="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+          className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 mb-8">
           <div className="flex items-start space-x-6">
             <div className="w-32 h-32 bg-gradient-to-br from-primary to-headerDark rounded-xl flex items-center justify-center">
               <span className="text-white text-5xl font-bold">{initials}</span>
             </div>
             <div className="flex-1">
-              <h1 className="text-4xl font-bold text-foreground mb-3">{displayName}</h1>
+              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">{displayName}</h1>
               <div className="flex items-center space-x-4 mb-4">
                 <div className="flex items-center">
                   {renderStars(vendorData.averageRating || 0)}
-                  <span className="ml-2 text-foreground font-semibold">
+                  <span className="ml-2 text-gray-900 dark:text-white font-semibold">
                     {vendorData.averageRating ? vendorData.averageRating.toFixed(2) : "0.00"}
                   </span>
                 </div>
-                <span className="text-gray-500">|</span>
-                <span className="text-gray-600">2,847 {t("reviews")}</span>
-                <span className="text-gray-500">|</span>
-                <span className="text-gray-600">
+                <span className="text-gray-500 dark:text-gray-400">|</span>
+                <span className="text-gray-600 dark:text-gray-300">2,847 {t("reviews")}</span>
+                <span className="text-gray-500 dark:text-gray-400">|</span>
+                <span className="text-gray-600 dark:text-gray-300">
                   {totalProducts} {t("productsSold")}
                 </span>
               </div>
@@ -231,7 +231,7 @@ const VendorPage = () => {
               {/* Vendor Info */}
               <div className="space-y-2 mb-4">
                 {(vendorData.address?.trim() || vendorData.postalCode?.trim()) && (
-                  <p className="text-gray-700">
+                  <p className="text-gray-700 dark:text-gray-300">
                     <span className="font-semibold">{t("address")}</span>{" "}
                     {[vendorData.address?.trim(), vendorData.postalCode?.trim()]
                       .filter(Boolean)
@@ -241,7 +241,7 @@ const VendorPage = () => {
                 {(vendorData.cityName?.trim() ||
                   vendorData.stateName?.trim() ||
                   vendorData.countryName?.trim()) && (
-                  <p className="text-gray-700">
+                  <p className="text-gray-700 dark:text-gray-300">
                     <span className="font-semibold">{t("location")}</span>{" "}
                     {[
                       vendorData.cityName?.trim(),
@@ -253,14 +253,14 @@ const VendorPage = () => {
                   </p>
                 )}
                 {vendorData.isRealEstateRegistered !== undefined && (
-                  <p className="text-gray-700">
+                  <p className="text-gray-700 dark:text-gray-300">
                     <span className="font-semibold">{t("realEstateRegistered")}</span>{" "}
                     {vendorData.isRealEstateRegistered ? t("yes") : t("no")}
                   </p>
                 )}
               </div>
 
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                 {vendorData.notes || t("defaultDescription")}
               </p>
             </div>
@@ -271,11 +271,11 @@ const VendorPage = () => {
         {products.length > 0 && (
           <section
             id="vendor-products-section"
-            className="border border-gray-200 rounded-xl p-8 mb-8">
+            className="bg-white dark:bg-gray-900 border-gray-200 border dark:border-transparent rounded-xl p-8 dark:p-0 mb-8">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-2xl font-bold text-foreground">{tProducts("title")}</h2>
-                <p className="text-gray-600">{tProducts("description")}</p>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{tProducts("title")}</h2>
+                <p className="text-gray-600 dark:text-gray-400">{tProducts("description")}</p>
               </div>
               <button
                 onClick={() => router.push(`/products?v=${id}`)}
@@ -294,12 +294,12 @@ const VendorPage = () => {
         )}
 
         {/* // TODO: Customer Reviews Section */}
-        {/* <div id="vendor-reviews-section" className="bg-white rounded-xl border border-gray-200 p-8">
+        {/* <div id="vendor-reviews-section" className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-foreground">{t("customerReviews")}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("customerReviews")}</h2>
             <div className="flex items-center space-x-3">
-              <span className="text-gray-600">{t("sortBy")}</span>
-              <select className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary">
+              <span className="text-gray-600 dark:text-gray-400">{t("sortBy")}</span>
+              <select className="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary">
                 <option>{t("mostRecent")}</option>
                 <option>{t("highestRated")}</option>
                 <option>{t("lowestRated")}</option>
@@ -312,7 +312,7 @@ const VendorPage = () => {
             <div
               key={review.id}
               className={`${
-                index < reviews.length - 1 ? "border-b border-gray-200 pb-6 mb-6" : "pb-6"
+                index < reviews.length - 1 ? "border-b border-gray-200 dark:border-gray-700 pb-6 mb-6" : "pb-6"
               }`}>
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center space-x-3">
@@ -322,28 +322,28 @@ const VendorPage = () => {
                     className="w-12 h-12 rounded-full object-cover"
                   />
                   <div>
-                    <div className="font-semibold text-foreground">{review.name}</div>
-                    <div className="text-sm text-gray-500">{t("verifiedPurchase")}</div>
+                    <div className="font-semibold text-gray-900 dark:text-white">{review.name}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{t("verifiedPurchase")}</div>
                   </div>
                 </div>
-                <div className="text-sm text-gray-500">{review.date}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">{review.date}</div>
               </div>
               <div className="flex items-center mb-3">{renderStars(review.rating)}</div>
-              <p className="text-gray-700 mb-4">{review.text}</p>
+              <p className="text-gray-700 dark:text-gray-300 mb-4">{review.text}</p>
               <div className="flex items-center space-x-4 text-sm">
-                <button className="flex items-center space-x-2 text-gray-600 hover:text-primary transition">
+                <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-primary transition">
                   <ThumbsUp className="w-4 h-4" />
                   <span>
                     {t("helpful")} ({review.helpful})
                   </span>
                 </button>
-                <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition">
+                <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition">
                   <ThumbsDown className="w-4 h-4" />
                   <span>
                     {t("unhelpful")} ({review.unhelpful})
                   </span>
                 </button>
-                <button className="flex items-center space-x-2 text-gray-600 hover:text-red-600 transition">
+                <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-red-600 transition">
                   <Flag className="w-4 h-4" />
                   <span>{t("report")}</span>
                 </button>
@@ -352,7 +352,7 @@ const VendorPage = () => {
           ))}
 
           <div className="flex justify-center mt-8">
-            <button className="border border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-lg font-semibold transition">
+            <button className="border border-primary text-primary dark:text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-lg font-semibold transition">
               {t("loadMoreReviews")}
             </button>
           </div>
