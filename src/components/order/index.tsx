@@ -11,13 +11,13 @@ import {
   ArrowLeft,
   ArrowRight,
   XCircle,
-  Truck,
   X,
   AlertTriangle,
 } from "lucide-react";
 import { OrderData } from "@/src/types/order-details.types";
 import { getOrderStatusInfo } from "@/src/utils/orderStatus";
 import toast from "react-hot-toast";
+import OrderTrackingTimeline from "./OrderTrackingTimeline";
 
 interface OrderProps {
   id: string;
@@ -66,17 +66,6 @@ const Order = ({ id }: OrderProps) => {
     fetchOrderData();
   }, [id, t]);
 
-  // Helper to get image URL
-  const getImageUrl = (imageUrl: string) => {
-    if (!imageUrl) return "";
-    if (imageUrl.startsWith("uploads/") || imageUrl.startsWith("uploads\\")) {
-      return `${process.env.NEXT_PUBLIC_BASE_URL?.replace("/api/v1", "")}/${imageUrl.replace(
-        /\\/g,
-        "/"
-      )}`;
-    }
-    return imageUrl;
-  };
 
   // Handle cancel order
   const handleCancelOrder = async () => {
@@ -204,6 +193,9 @@ const Order = ({ id }: OrderProps) => {
           </div>
         </div>
 
+        {/* Tracking Timeline (inline) */}
+        <OrderTrackingTimeline orderData={orderData} />
+
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Order Items */}
@@ -216,7 +208,11 @@ const Order = ({ id }: OrderProps) => {
               </div>
 
               {orderItems.length > 0 ? (
-                orderItems.map((item, index) => (
+                orderItems.map((item, index) => {
+                  const imageSrc = item.itemImage?.startsWith("http")
+                    ? item.itemImage
+                    : `${process.env.NEXT_PUBLIC_DOMAIN}/${item.itemImage}`;
+                  return (
                   <div
                     key={item.orderDetailId}
                     className={`p-6 ${
@@ -228,7 +224,7 @@ const Order = ({ id }: OrderProps) => {
                       <div className="h-20 w-20 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700 shrink-0 relative">
                         {item.itemImage ? (
                           <Image
-                            src={getImageUrl(item.itemImage)}
+                            src={imageSrc}
                             alt={item.itemName}
                             fill
                             className="object-cover"
@@ -266,7 +262,8 @@ const Order = ({ id }: OrderProps) => {
                       </div>
                     </div>
                   </div>
-                ))
+                  );
+                })
               ) : (
                 <div className="p-6 text-center">
                   <Package className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-3" />
@@ -324,12 +321,6 @@ const Order = ({ id }: OrderProps) => {
 
             {/* Order Actions */}
             <div className="space-y-3">
-              <button
-                onClick={() => router.push(`/order/${id}/tracking`)}
-                className="w-full bg-primary hover:bg-primary/90 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
-                <Truck className="w-5 h-5" />
-                {t("trackOrder")}
-              </button>
               {orderData?.canCancel && (
                 <button
                   onClick={() => setShowCancelModal(true)}

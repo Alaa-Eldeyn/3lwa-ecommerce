@@ -807,7 +807,8 @@
       "shipped": "Shipped",
       "shippedDesc": "Your order has been shipped and is on the way",
       "delivered": "Delivered",
-      "deliveredDesc": "Your order has been delivered successfully"
+      "deliveredDesc": "Your order has been delivered successfully",
+      "estimatedDelivery": "Expected delivery by"
     },
     "cancelOrder": "Cancel Order",
     "cancelOrderModal": {

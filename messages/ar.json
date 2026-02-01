@@ -813,7 +813,8 @@
       "shipped": "تم الشحن",
       "shippedDesc": "تم شحن طلبك وهو في الطريق",
       "delivered": "تم التوصيل",
-      "deliveredDesc": "تم توصيل طلبك بنجاح"
+      "deliveredDesc": "تم توصيل طلبك بنجاح",
+      "estimatedDelivery": "التوصيل المتوقع بحلول"
     },
     "cancelOrder": "إلغاء الطلب",
     "cancelOrderModal": {

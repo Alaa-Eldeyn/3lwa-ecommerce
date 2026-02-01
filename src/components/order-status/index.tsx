@@ -63,18 +63,6 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
     }
   }, [isLoading]);
 
-  // Helper to get image URL
-  const getImageUrl = (imageUrl: string) => {
-    if (!imageUrl) return "";
-    if (imageUrl.startsWith("uploads/") || imageUrl.startsWith("uploads\\")) {
-      return `${process.env.NEXT_PUBLIC_BASE_URL?.replace("/api/v1", "")}/${imageUrl.replace(
-        /\\/g,
-        "/"
-      )}`;
-    }
-    return imageUrl;
-  };
-
   // Get order items from orderData
   const orderItems = orderData?.items || [];
 
@@ -152,17 +140,21 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
           {/* Items List */}
           <div className="space-y-6">
             {orderItems.length > 0 ? (
-              orderItems.map((item) => (
+              orderItems.map((item) => {
+                const imageSrc = item.itemImage?.startsWith("http")
+                  ? item.itemImage
+                  : `${process.env.NEXT_PUBLIC_DOMAIN}/${item.itemImage}`;
+                return (
                 <div key={item.orderDetailId} className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 flex-shrink-0 relative">
                     {item.itemImage ? (
                       <Image
-                        src={getImageUrl(item.itemImage)}
+                        src={imageSrc}
                         alt={item.itemName}
                         fill
                         className="object-cover"
                       />
-                    ) : (
+                    ) : ( 
                       <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800">
                         <ShoppingCart className="w-6 h-6 text-gray-400 dark:text-gray-500" />
                       </div>
@@ -180,9 +172,10 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
                   <div className={`text-start}`}>
                     <p className="text-gray-500 dark:text-gray-400 text-xs">${item.unitPrice.toFixed(2)}</p>
                     <p className="font-bold text-gray-800 dark:text-white">${item.subTotal.toFixed(2)}</p>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <p className="text-gray-500 dark:text-gray-400 text-center py-4">{t("noItems")}</p>
             )}
