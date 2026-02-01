@@ -14,34 +14,47 @@ export interface UpdateCartItemRequest {
   quantity: number;
 }
 
+export interface PricingAttributeResponse {
+  attributeId: string;
+  attributeNameAr: string;
+  attributeNameEn: string;
+  combinationValueId: string;
+  valueAr: string;
+  valueEn: string;
+  isSelected: boolean;
+  displayOrder: number;
+}
+
 export interface CartItemResponse {
-  id: string;
-  cartItemId?: string;
-  itemId: string;
-  itemName?: string;
-  itemNameAr?: string;
-  itemNameEn?: string;
-  unitPrice: number;
-  unitOriginalPrice?: number;
-  price?: number;
+  cartItemId: string;
   quantity: number;
-  imageUrl?: string;
-  imagePath?: string;
-  image?: string;
-  offerCombinationPricingId?: string;
-  subTotal?: number;
-  isAvailable?: boolean;
-  sellerName?: string;
+  itemNameAr: string;
+  itemNameEn: string;
+  imageUrl: string;
+  itemCombinationId: string;
+  offerCombinationPricingId: string;
+  vendorId: string;
+  sellerName: string;
+  unitOriginalPrice: number;
+  currentUnitPrice: number;
+  subTotal: number;
+  availableQuantity: number;
+  minOrderQuantity: number;
+  maxOrderQuantity: number;
+  isFreeShipping: boolean;
+  estimatedDeliveryDays: number;
+  vendorRating: number;
+  pricingAttributes: PricingAttributeResponse[];
 }
 
 export interface CartSummaryResponse {
-  cartId: string;
   items: CartItemResponse[];
+  totalCartItems: number;
+  totalQuantity: number;
   subTotal: number;
-  shippingEstimate: number;
-  taxEstimate: number;
-  totalEstimate: number;
-  itemCount: number;
+  totalOriginalPrice: number;
+  totalDiscount: number;
+  hasFreeShipping: boolean;
 }
 
 /**

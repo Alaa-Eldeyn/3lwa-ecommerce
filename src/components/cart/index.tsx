@@ -126,31 +126,67 @@ const Cart = () => {
             <section id="cart-items" className="flex-1 w-full space-y-4">
               {items.map((item) => {
                 const title = isArabic ? item.nameAr || item.name : item.nameEn || item.name;
+                const selectedAttrs = (item.pricingAttributes ?? []).filter((a) => a.isSelected);
+                const imageSrc = item.image?.startsWith("http") ? item.image : `${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`;
 
                 return (
                   <div
                     key={item.id}
                     className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6 flex items-center justify-between shadow-xs">
                     <div className="flex items-center gap-6">
-                      <div className="w-24 h-24 bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden shrink-0 border border-gray-100 dark:border-gray-700">
-                        <Image
-                          src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-                          alt={title}
-                          width={96}
-                          height={96}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
+                      {item.itemCombinationId ? (
+                        <Link
+                          href={`/products/product-details/${item.itemCombinationId}`}
+                          className="w-24 h-24 bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden shrink-0 border border-gray-100 dark:border-gray-700 block">
+                          <Image
+                            src={imageSrc}
+                            alt={title}
+                            width={96}
+                            height={96}
+                            className="w-full h-full object-cover"
+                          />
+                        </Link>
+                      ) : (
+                        <div className="w-24 h-24 bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden shrink-0 border border-gray-100 dark:border-gray-700">
+                          <Image
+                            src={imageSrc}
+                            alt={title}
+                            width={96}
+                            height={96}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
-                          {title}
-                        </h3>
-                        {/* //TODO: Variant/details */}
-                        {/* <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                        Natural Titanium, 256GB
-                      </p> */}
-                        <div className="text-xl font-bold text-secondary">
-                          ${item.price.toFixed(2)}
+                        {item.itemCombinationId ? (
+                          <Link
+                            href={`/products/product-details/${item.itemCombinationId}`}
+                            className="text-lg font-bold text-gray-900 dark:text-white mb-1 block hover:text-primary">
+                            {title}
+                          </Link>
+                        ) : (
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                            {title}
+                          </h3>
+                        )}
+                        {selectedAttrs.length > 0 && (
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                            {selectedAttrs.map((a) => (isArabic ? a.valueAr : a.valueEn)).join(" · ")}
+                          </p>
+                        )}
+                        {item.sellerName && (
+                          item.vendorId ? (
+                            <Link
+                              href={`/vendor/${item.vendorId}`}
+                              className="text-sm text-primary hover:underline">
+                              {item.sellerName}
+                            </Link>
+                          ) : (
+                            <span className="text-sm text-gray-500 dark:text-gray-400">{item.sellerName}</span>
+                          )
+                        )}
+                        <div className="text-xl font-bold text-secondary mt-1">
+                          ${(item.subTotal ?? item.price * item.quantity).toFixed(2)}
                         </div>
                       </div>
                     </div>

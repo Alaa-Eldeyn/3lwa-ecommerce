@@ -102,52 +102,94 @@ const CartSidebar = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {items.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  {/* Image */}
-                  <div className="relative w-20 h-20 shrink-0 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
-                    <Image
-                      src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-                      alt={isArabic ? item.nameAr || item.name : item.nameEn || item.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+              {items.map((item) => {
+                const title = isArabic ? item.nameAr || item.name : item.nameEn || item.name;
+                const selectedAttrs = (item.pricingAttributes ?? []).filter((a) => a.isSelected);
+                const imageSrc = item.image?.startsWith("http")
+                  ? item.image
+                  : `${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`;
 
-                  {/* Details */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sm text-gray-900 dark:text-white truncate">
-                      {isArabic ? item.nameAr || item.name : item.nameEn || item.name}
-                    </h3>
+                return (
+                  <div
+                    key={item.id}
+                    className="flex gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    {/* Image: clickable to product when itemCombinationId exists */}
+                    {item.itemCombinationId ? (
+                      <Link
+                        href={`/products/product-details/${item.itemCombinationId}`}
+                        onClick={closeCart}
+                        className="relative w-20 h-20 shrink-0 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden block">
+                        <Image src={imageSrc} alt={title} fill className="object-cover" />
+                      </Link>
+                    ) : (
+                      <div className="relative w-20 h-20 shrink-0 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                        <Image src={imageSrc} alt={title} fill className="object-cover" />
+                      </div>
+                    )}
 
-                    {/* Quantity Controls */}
-                    <div className="flex items-center justify-between mt-2">
-                      <QuantityController
-                        quantity={item.quantity}
-                        onIncrement={handleIncrement(item.id)}
-                        onDecrement={handleDecrement(item.id)}
-                        variant="default"
-                        className="bg-white! dark:bg-gray-700! text-gray-900! "
-                        showDeleteIcon={false}
-                        iconColor="primary"
-                      />
-
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-gray-900 dark:text-white">
-                          ${item.price * item.quantity}
+                    {/* Details */}
+                    <div className="flex-1 min-w-0">
+                      {item.itemCombinationId ? (
+                        <Link
+                          href={`/products/product-details/${item.itemCombinationId}`}
+                          onClick={closeCart}
+                          className="font-semibold text-sm text-gray-900 dark:text-white truncate block hover:text-primary">
+                          {title}
+                        </Link>
+                      ) : (
+                        <span className="font-semibold text-sm text-gray-900 dark:text-white truncate block">
+                          {title}
                         </span>
-                        <button
-                          onClick={() => removeItem(item.id, isAuthenticated())}
-                          className="text-red-500 hover:text-red-600 p-1">
-                          <Trash2 size={16} />
-                        </button>
+                      )}
+                      {selectedAttrs.length > 0 && (
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
+                          {selectedAttrs.map((a) => (isArabic ? a.valueAr : a.valueEn)).join(" · ")}
+                        </p>
+                      )}
+                      {item.sellerName &&
+                        (item.vendorId ? (
+                          <Link
+                            href={`/vendor/${item.vendorId}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-xs text-primary hover:underline mt-0.5 block">
+                            {item.sellerName}
+                          </Link>
+                        ) : (
+                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 block">
+                            {item.sellerName}
+                          </span>
+                        ))}
+
+                      {/* Quantity Controls */}
+                      <div className="flex items-center justify-between mt-2">
+                        <QuantityController
+                          quantity={item.quantity}
+                          onIncrement={handleIncrement(item.id)}
+                          onDecrement={handleDecrement(item.id)}
+                          variant="default"
+                          className="bg-white! dark:bg-gray-700! text-gray-900! "
+                          showDeleteIcon={false}
+                          iconColor="primary"
+                        />
+
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-gray-900 dark:text-white">
+                            ${(item.subTotal ?? item.price * item.quantity).toFixed(2)}
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeItem(item.id, isAuthenticated());
+                            }}
+                            className="text-red-500 hover:text-red-600 p-1">
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -157,9 +199,7 @@ const CartSidebar = () => {
           <div className="border-t dark:border-gray-700 p-4 space-y-3">
             {/* Subtotal */}
             <div className="flex items-center justify-between text-lg">
-              <span className="text-gray-600 dark:text-gray-400">
-                {tOrderSummary("subtotal")}:
-              </span>
+              <span className="text-gray-600 dark:text-gray-400">{tOrderSummary("subtotal")}:</span>
               <span className="font-bold text-gray-900 dark:text-white">
                 ${getTotalPrice().toFixed(2)}
               </span>

@@ -1,24 +1,53 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { addItemToCart, getCartSummary, removeItemFromCart, updateCartItem, clearCartApi, getCartCount } from "../services/cartService";
+import {
+  addItemToCart,
+  getCartSummary,
+  removeItemFromCart,
+  updateCartItem,
+  clearCartApi,
+  getCartCount,
+} from "../services/cartService";
+
+export interface CartPricingAttribute {
+  attributeId: string;
+  attributeNameAr: string;
+  attributeNameEn: string;
+  combinationValueId: string;
+  valueAr: string;
+  valueEn: string;
+  isSelected: boolean;
+  displayOrder: number;
+}
 
 export interface CartItem {
-  id: string;
-  itemId: string;
+  id: string; // cartItemId for API operations (or itemCombinationId for guest)
+  cartItemId?: string;
+  itemCombinationId?: string;
+  itemId?: string; // legacy / guest
   name: string;
   nameAr?: string;
   nameEn?: string;
-  price: number;
+  price: number; // currentUnitPrice
   originalPrice?: number;
+  subTotal?: number;
   image: string;
   quantity: number;
   offerCombinationPricingId?: string;
+  vendorId?: string;
+  sellerName?: string;
+  pricingAttributes?: CartPricingAttribute[];
   isAvailable?: boolean;
 }
 
 export interface CartSummary {
   subTotal: number;
   itemCount: number;
+  totalCartItems?: number;
+  totalQuantity?: number;
+  totalOriginalPrice?: number;
+  totalDiscount?: number;
+  hasFreeShipping?: boolean;
 }
 
 interface CartState {
@@ -26,7 +55,10 @@ interface CartState {
   summary: CartSummary;
   isLoading: boolean;
   isSyncing: boolean; // للتزامن مع API
-  addItem: (item: Omit<CartItem, 'quantity'> & { quantity?: number }, isAuthenticated?: boolean) => Promise<void>;
+  addItem: (
+    item: Omit<CartItem, "quantity"> & { quantity?: number },
+    isAuthenticated?: boolean
+  ) => Promise<void>;
   removeItem: (id: string, isAuthenticated?: boolean) => Promise<void>;
   updateQuantity: (id: string, quantity: number, isAuthenticated?: boolean) => Promise<void>;
   clearCart: (isAuthenticated?: boolean) => Promise<void>;
@@ -59,11 +91,11 @@ export const useCartStore = create<CartState>()(
           try {
             set({ isLoading: true });
             await addItemToCart({
-              itemId: item.itemId,
+              itemId: item.itemId ?? item.itemCombinationId ?? item.id,
               offerCombinationPricingId: item.offerCombinationPricingId || item.id,
               quantity: item.quantity || 1,
             });
-            
+
             // نحمل الـ cart من الـ server بعد الإضافة
             await get().loadCartFromServer();
           } catch (error) {
@@ -80,9 +112,7 @@ export const useCartStore = create<CartState>()(
           if (existingItem) {
             set({
               items: items.map((i) =>
-                i.id === item.id
-                  ? { ...i, quantity: i.quantity + (item.quantity || 1) }
-                  : i
+                i.id === item.id ? { ...i, quantity: i.quantity + (item.quantity || 1) } : i
               ),
             });
           } else {
@@ -136,9 +166,7 @@ export const useCartStore = create<CartState>()(
           }
         } else {
           set({
-            items: get().items.map((item) =>
-              item.id === id ? { ...item, quantity } : item
-            ),
+            items: get().items.map((item) => (item.id === id ? { ...item, quantity } : item)),
           });
         }
       },
@@ -172,7 +200,7 @@ export const useCartStore = create<CartState>()(
             for (const item of localItems) {
               try {
                 await addItemToCart({
-                  itemId: item.itemId,
+                  itemId: item.itemId ?? item.itemCombinationId ?? item.id,
                   offerCombinationPricingId: item.offerCombinationPricingId || item.id,
                   quantity: item.quantity,
                 });
@@ -195,26 +223,34 @@ export const useCartStore = create<CartState>()(
       loadCartFromServer: async () => {
         try {
           const cartData = await getCartSummary();
-          
-          // نحول الـ response للـ format بتاعنا
-          const serverItems: CartItem[] = cartData.items?.map((item: any) => ({
-            id: item.id,
-            itemId: item.itemId,
+
+          const serverItems: CartItem[] = (cartData.items ?? []).map((item) => ({
+            id: item.cartItemId,
+            cartItemId: item.cartItemId,
+            itemCombinationId: item.itemCombinationId,
             name: item.itemNameEn || item.itemNameAr,
             nameAr: item.itemNameAr,
             nameEn: item.itemNameEn,
-            price: item.unitPrice,
+            price: item.currentUnitPrice,
             originalPrice: item.unitOriginalPrice,
+            subTotal: item.subTotal,
             image: item.imageUrl,
             quantity: item.quantity,
             offerCombinationPricingId: item.offerCombinationPricingId,
-            isAvailable: item.isAvailable,
-          })) || [];
+            vendorId: item.vendorId,
+            sellerName: item.sellerName,
+            pricingAttributes: item.pricingAttributes ?? [],
+            isAvailable: item.availableQuantity > 0,
+          }));
 
-          // Store summary data from API
           const summary: CartSummary = {
-            subTotal: cartData.subTotal || 0,
-            itemCount: cartData.itemCount || 0,
+            subTotal: cartData.subTotal ?? 0,
+            itemCount: cartData.totalCartItems ?? cartData.items?.length ?? 0,
+            totalCartItems: cartData.totalCartItems,
+            totalQuantity: cartData.totalQuantity,
+            totalOriginalPrice: cartData.totalOriginalPrice,
+            totalDiscount: cartData.totalDiscount,
+            hasFreeShipping: cartData.hasFreeShipping,
           };
 
           set({ items: serverItems, summary });
@@ -229,10 +265,7 @@ export const useCartStore = create<CartState>()(
       },
 
       getTotalPrice: () => {
-        return get().items.reduce(
-          (total, item) => total + item.price * item.quantity,
-          0
-        );
+        return get().items.reduce((total, item) => total + item.price * item.quantity, 0);
       },
 
       getItemById: (id) => {
