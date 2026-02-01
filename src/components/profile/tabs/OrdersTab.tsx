@@ -53,18 +53,6 @@ const OrdersTab = () => {
     fetchOrders();
   }, []);
 
-  // Helper to get image URL
-  const getImageUrl = (imageUrl: string) => {
-    if (!imageUrl) return "";
-    if (imageUrl.startsWith("uploads/") || imageUrl.startsWith("uploads\\")) {
-      return `${process.env.NEXT_PUBLIC_BASE_URL?.replace("/api/v1", "")}/${imageUrl.replace(
-        /\\/g,
-        "/"
-      )}`;
-    }
-    return imageUrl;
-  };
-
   if (loading) {
     return (
       <div>
@@ -119,7 +107,8 @@ const OrdersTab = () => {
               <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
                 <div>
                   <p className="font-semibold text-gray-900 dark:text-white text-xs md:text-base">
-                    {t("orders.orderNumber")}{order.orderNumber}
+                    {t("orders.orderNumber")}
+                    {order.orderNumber}
                   </p>
                   <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
                     {t("orders.date")}:{" "}
@@ -141,24 +130,24 @@ const OrdersTab = () => {
               <div className="flex items-center gap-4 mb-4">
                 {/* Item Images - show up to 3 images */}
                 <div className="flex -space-x-2 rtl:space-x-reverse">
-                  {order.itemsSummary.slice(0, 3).map((item, index) => (
-                    <div
-                      key={index}
-                      className="relative w-16 h-16 rounded-lg border-2 border-white dark:border-gray-800 overflow-hidden bg-gray-100 dark:bg-gray-700">
-                      {item.thumbnailImage ? (
-                        <Image
-                          src={getImageUrl(item.thumbnailImage)}
-                          alt={item.itemName}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Package size={24} className="text-gray-400" />
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                  {order.itemsSummary.slice(0, 3).map((item, index) => {
+                    const imageSrc = item.thumbnailImage?.startsWith("http")
+                      ? item.thumbnailImage
+                      : `${process.env.NEXT_PUBLIC_DOMAIN}/${item.thumbnailImage}`;
+                    return (
+                      <div
+                        key={index}
+                        className="relative w-16 h-16 rounded-lg border-2 border-white dark:border-gray-800 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                        {item.thumbnailImage ? (
+                          <Image src={imageSrc} alt={item.itemName} fill className="object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Package size={24} className="text-gray-400" />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                   {order.itemsSummary.length > 3 && (
                     <div className="relative w-16 h-16 rounded-lg border-2 border-white dark:border-gray-800 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                       <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
