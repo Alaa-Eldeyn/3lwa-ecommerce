@@ -41,7 +41,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
   // Normalize items to have the same structure
   const items: BlockItemUI[] = isProducts
     ? block.products.map((p) => ({
-        id: p.itemId,
+        id: p.itemCombinationId,
         nameAr: p.nameAr,
         nameEn: p.nameEn,
         image: p.mainImageUrl,
