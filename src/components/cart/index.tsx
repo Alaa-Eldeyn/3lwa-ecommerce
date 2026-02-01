@@ -161,16 +161,16 @@ const Cart = () => {
                         {item.itemCombinationId ? (
                           <Link
                             href={`/products/product-details/${item.itemCombinationId}`}
-                            className="text-lg font-bold text-gray-900 dark:text-white mb-1 block hover:text-primary">
+                            className="text-lg font-bold text-gray-900 dark:text-white block hover:text-primary">
                             {title}
                           </Link>
                         ) : (
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                             {title}
                           </h3>
                         )}
                         {selectedAttrs.length > 0 && (
-                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
                             {selectedAttrs.map((a) => (isArabic ? a.valueAr : a.valueEn)).join(" · ")}
                           </p>
                         )}
