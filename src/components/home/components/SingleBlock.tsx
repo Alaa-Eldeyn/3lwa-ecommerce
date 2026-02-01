@@ -108,7 +108,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
           {/* Title */}
           {block.showViewAllLink ? (
             <Link
-              href={isProducts ? `/collection?p=${block.id}` : `/products?c=${block.id}`}
+              href={isProducts ? `/collection?p=${block.id}` : `/collection?c=${block.id}`}
               className="text-xl font-bold text-secondary dark:text-gray-200 hover:text-primary dark:hover:text-primary hover:underline cursor-pointer inline-block">
               {isArabic ? block.titleAr : block.titleEn}
             </Link>
@@ -129,7 +129,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
         {/* View all link */}
         {block.layout === "Carousel" && block.showViewAllLink && (
           <Link
-            href={isProducts ? `/collection?p=${block.id}` : `/products?c=${block.id}`}
+            href={isProducts ? `/collection?p=${block.id}` : `/collection?c=${block.id}`}
             className="text-primary dark:text-primary text-sm hover:underline hover:text-red-700 dark:hover:text-red-400 font-medium">
             {isArabic ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
           </Link>
@@ -289,7 +289,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
       {/* View all link */}
       {block.layout !== "Carousel" && block.showViewAllLink && (
         <Link
-          href={isProducts ? `/collection?p=${block.id}` : `/products?c=${block.id}`}
+          href={isProducts ? `/collection?p=${block.id}` : `/collection?c=${block.id}`}
           className="text-primary dark:text-primary text-sm hover:underline hover:text-red-700 dark:hover:text-red-400 font-medium">
           {isArabic ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
         </Link>
