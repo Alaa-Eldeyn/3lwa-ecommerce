@@ -101,7 +101,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
 
   // Improved placeholder: show bold title
   const renderPlaceholder = (title: string) => (
-    <div className="w-full h-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center">
+    <div className="w-full h-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center hover:scale-105 transition-transform">
       <span className="text-center font-bold text-gray-500 dark:text-gray-300 text-sm px-2">
         {title}
       </span>
@@ -159,7 +159,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
                 fill
                 src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
                 alt={isArabic ? item.nameAr : item.nameEn}
-                className="object-cover w-full h-full"
+                className="object-cover hover:scale-105 transition-transform"
               />
             ) : (
               renderPlaceholder(isArabic ? item.nameAr : item.nameEn)
@@ -187,7 +187,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
                     fill
                     src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
                     alt={isArabic ? item.nameAr : item.nameEn}
-                    className="object-cover w-full h-full"
+                    className="object-cover hover:scale-105 transition-transform"
                   />
                 ) : (
                   renderPlaceholder(isArabic ? item.nameAr : item.nameEn)
@@ -220,7 +220,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
                   fill
                   src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
                   alt={isArabic ? item.nameAr : item.nameEn}
-                  className="object-cover w-full h-full"
+                  className="object-cover hover:scale-105 transition-transform"
                 />
               ) : (
                 renderPlaceholder(isArabic ? item.nameAr : item.nameEn)
@@ -259,7 +259,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
                       fill
                       src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
                       alt={isArabic ? item.nameAr : item.nameEn}
-                      className="object-cover w-full h-full"
+                      className="object-cover shadow-md hover:scale-105 transition-transform"
                     />
                   ) : (
                     renderPlaceholder(isArabic ? item.nameAr : item.nameEn)
