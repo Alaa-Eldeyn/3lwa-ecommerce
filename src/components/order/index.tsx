@@ -320,7 +320,7 @@ const Order = ({ id }: OrderProps) => {
             </div>
 
             {/* Order Actions */}
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               {orderData?.canCancel && (
                 <button
                   onClick={() => setShowCancelModal(true)}
@@ -329,7 +329,7 @@ const Order = ({ id }: OrderProps) => {
                   {t("cancelOrder")}
                 </button>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
 
