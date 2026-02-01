@@ -14,6 +14,7 @@ type BlockItemUI = {
   campaignBadgeAr?: string;
   campaignBadgeEn?: string;
 };
+
 const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [hasOverflow, setHasOverflow] = useState(false);
@@ -35,6 +36,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
     window.addEventListener("resize", checkOverflow);
     return () => window.removeEventListener("resize", checkOverflow);
   }, [block.products, block.categories]);
+
   // Check if items are products or categories
   const isProducts = block.products.length > 0;
 
@@ -97,6 +99,15 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
     );
   };
 
+  // Improved placeholder: show bold title
+  const renderPlaceholder = (title: string) => (
+    <div className="w-full h-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center">
+      <span className="text-center font-bold text-gray-500 dark:text-gray-300 text-sm px-2">
+        {title}
+      </span>
+    </div>
+  );
+
   return (
     <div
       className={`bg-white dark:bg-gray-800 p-5 flex flex-col shadow-sm relative group ${
@@ -127,13 +138,13 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
         </div>
 
         {/* View all link */}
-        {block.layout === "Carousel" && block.showViewAllLink && (
+        {/* {block.layout === "Carousel" && block.showViewAllLink && (
           <Link
             href={isProducts ? `/collection?p=${block.id}` : `/collection?c=${block.id}`}
             className="text-primary dark:text-primary text-sm hover:underline hover:text-red-700 dark:hover:text-red-400 font-medium">
             {isArabic ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
           </Link>
-        )}
+        )} */}
       </div>
 
       {/* Featured layout */}
@@ -143,12 +154,16 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
             key={item.id}
             href={getItemLink(item.id)}
             className="flex-1 overflow-hidden relative mb-3 cursor-pointer block">
-            <Image
-              src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-              alt={isArabic ? item.nameAr : item.nameEn}
-              fill
-              className="object-cover hover:scale-105 transition-transform"
-            />
+            {item.image ? (
+              <Image
+                fill
+                src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
+                alt={isArabic ? item.nameAr : item.nameEn}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              renderPlaceholder(isArabic ? item.nameAr : item.nameEn)
+            )}
             {item.campaignBadgeAr && (
               <div
                 className={`absolute top-3 left-3 ${block.campaign?.BadgeColor} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg`}>
@@ -167,12 +182,16 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
               href={getItemLink(item.id)}
               className="flex flex-col gap-1 cursor-pointer">
               <div className="flex-1 overflow-hidden bg-gray-50 dark:bg-gray-700 relative">
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-                  alt={isArabic ? item.nameAr : item.nameEn}
-                  fill
-                  className="object-cover hover:scale-105 transition-transform"
-                />
+                {item.image ? (
+                  <Image
+                    fill
+                    src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
+                    alt={isArabic ? item.nameAr : item.nameEn}
+                    className="object-cover w-full h-full"
+                  />
+                ) : (
+                  renderPlaceholder(isArabic ? item.nameAr : item.nameEn)
+                )}
                 {item.campaignBadgeAr && (
                   <div
                     className={`absolute top-2 right-2 ${block.campaign?.BadgeColor} text-white text-[10px] font-bold px-2 py-0.5 rounded`}>
@@ -196,12 +215,16 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
               key={item.id || index}
               href={getItemLink(item.id)}
               className="flex-1 relative overflow-hidden bg-gray-50 dark:bg-gray-700 flex items-center justify-center cursor-pointer">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-                alt={isArabic ? item.nameAr : item.nameEn}
-                fill
-                className="object-cover hover:scale-105 transition-transform"
-              />
+              {item.image ? (
+                <Image
+                  fill
+                  src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
+                  alt={isArabic ? item.nameAr : item.nameEn}
+                  className="object-cover w-full h-full"
+                />
+              ) : (
+                renderPlaceholder(isArabic ? item.nameAr : item.nameEn)
+              )}
               {item.campaignBadgeAr && (
                 <span className="absolute bottom-2 left-2 text-xs font-semibold bg-white/80 dark:bg-gray-800/80 dark:text-gray-200 px-2 py-1 rounded">
                   {isArabic ? item.campaignBadgeAr : item.campaignBadgeEn}
@@ -231,12 +254,16 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
                 href={getItemLink(item.id)}
                 className="flex-none w-[180px] snap-start cursor-pointer">
                 <div className="bg-gray-50 dark:bg-gray-700 h-[220px] mb-2 flex items-center justify-center p-4 relative">
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-                    alt={isArabic ? item.nameAr : item.nameEn}
-                    fill
-                    className="object-cover shadow-md hover:scale-105 transition-transform"
-                  />
+                  {item.image ? (
+                    <Image
+                      fill
+                      src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
+                      alt={isArabic ? item.nameAr : item.nameEn}
+                      className="object-cover w-full h-full"
+                    />
+                  ) : (
+                    renderPlaceholder(isArabic ? item.nameAr : item.nameEn)
+                  )}
                   {item.campaignBadgeAr && (
                     <div
                       className={`absolute top-2 right-2 ${block.campaign?.BadgeColor} text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-md`}>
@@ -277,23 +304,27 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
             key={item.id}
             href={getItemLink(item.id)}
             className="py-10 bg-white dark:bg-gray-800 max-h-96 aspect-9/2 w-full center relative overflow-hidden mb-6 block">
-            <Image
-              fill
-              src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
-              alt={isArabic ? item.nameAr : item.nameEn}
-              className="object-cover w-full h-full"
-            />
+            {item.image ? (
+              <Image
+                fill
+                src={`${process.env.NEXT_PUBLIC_DOMAIN}/${item.image}`}
+                alt={isArabic ? item.nameAr : item.nameEn}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              renderPlaceholder(isArabic ? item.nameAr : item.nameEn)
+            )}
           </Link>
         ))}
 
       {/* View all link */}
-      {block.layout !== "Carousel" && block.showViewAllLink && (
+      {/* {block.layout !== "Carousel" && block.showViewAllLink && (
         <Link
           href={isProducts ? `/collection?p=${block.id}` : `/collection?c=${block.id}`}
           className="text-primary dark:text-primary text-sm hover:underline hover:text-red-700 dark:hover:text-red-400 font-medium">
           {isArabic ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
         </Link>
-      )}
+      )} */}
     </div>
   );
 };
