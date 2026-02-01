@@ -9,7 +9,7 @@ import LangSwitch from "./LangSwitch";
 import ThemeSwitcher from "./ThemeSwitcher";
 import AccountDropdown from "./AccountDropdown";
 import { useUserStore } from "@/src/store/userStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@/src/i18n/routing";
 
 const HeaderActions = () => {
@@ -22,6 +22,11 @@ const HeaderActions = () => {
   const { user, initUser } = useUserStore();
   const desktopAccountRef = useRef<HTMLDivElement>(null);
   const mobileAccountRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     initUser();
@@ -100,7 +105,7 @@ const HeaderActions = () => {
         >
           <div className="relative">
             <Heart size={28} strokeWidth={1.5} />
-            {wishlistItems > 0 && (
+            {mounted && wishlistItems > 0 && (
               <span className="absolute -top-1 left-1/2 -translate-x-1/2 bg-red-500 text-white text-xs font-bold rounded-full min-w-5 h-5 flex items-center justify-center px-1">
                 {wishlistItems}
               </span>
@@ -116,7 +121,7 @@ const HeaderActions = () => {
         >
           <div className="relative">
             <ShoppingCart size={32} strokeWidth={1.5} />
-            {totalItems > 0 && (
+            {mounted && totalItems > 0 && (
               <span className="absolute -top-1 left-1/2 -translate-x-1/2 bg-secondary text-white text-xs font-bold rounded-full min-w-5 h-5 flex items-center justify-center px-1">
                 {totalItems}
               </span>
@@ -150,7 +155,7 @@ const HeaderActions = () => {
         >
           <div className="relative">
             <Heart size={24} strokeWidth={1.5} />
-            {wishlistItems > 0 && (
+            {mounted && wishlistItems > 0 && (
               <span className="absolute -top-1 left-1/2 -translate-x-1/2 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
                 {wishlistItems}
               </span>
@@ -164,7 +169,7 @@ const HeaderActions = () => {
         >
           <div className="relative">
             <ShoppingCart size={28} strokeWidth={1.5} />
-            {totalItems > 0 && (
+            {mounted && totalItems > 0 && (
               <span className="absolute -top-1 left-1/2 -translate-x-1/2 bg-secondary text-white text-xs font-bold rounded-full min-w-5 h-5 flex items-center justify-center px-1">
                 {totalItems}
               </span>
