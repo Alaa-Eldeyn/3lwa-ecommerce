@@ -495,7 +495,7 @@ const ProductInfo = ({
                         {selectedValueText}
                       </span>
                     </label>
-                    {attributeName?.toLowerCase().includes("size") && (
+                    {/* {attributeName?.toLowerCase().includes("size") && (
                       <button className="text-xs text-primary dark:text-primary hover:underline flex items-center gap-1">
                         <svg
                           className="w-3 h-3"
@@ -511,7 +511,7 @@ const ProductInfo = ({
                         </svg>
                         {tProduct("sizeGuide")}
                       </button>
-                    )}
+                    )} */}
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {pricingAttributes.map((attr, index) => {
