@@ -106,9 +106,17 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
       <div className="flex items-center justify-between mb-4">
         <div>
           {/* Title */}
-          <h2 className="text-xl font-bold text-secondary dark:text-gray-200">
-            {isArabic ? block.titleAr : block.titleEn}
-          </h2>
+          {block.showViewAllLink ? (
+            <Link
+              href={isProducts ? `/collection?p=${block.id}` : `/products?c=${block.id}`}
+              className="text-xl font-bold text-secondary dark:text-gray-200 hover:text-primary dark:hover:text-primary hover:underline cursor-pointer inline-block">
+              {isArabic ? block.titleAr : block.titleEn}
+            </Link>
+          ) : (
+            <h2 className="text-xl font-bold text-secondary dark:text-gray-200">
+              {isArabic ? block.titleAr : block.titleEn}
+            </h2>
+          )}
 
           {/* Subtitle */}
           {block.subtitleAr && block.subtitleEn && (
