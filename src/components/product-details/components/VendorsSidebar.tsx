@@ -31,7 +31,7 @@ interface VendorItem {
   handlingTimeInDays: number;
   isBuyBoxWinner: boolean;
   warrantyPolicy: string | null;
-  itemCombinationImages?: { path: string }[];
+  thumbnailImage: string;
   conbinationAttributes?: {
     attributeNameAr: string;
     attributeNameEn: string;
@@ -159,9 +159,7 @@ const VendorsSidebar = ({
           <div>
             <div className="flex items-center gap-2">
               <Store size={24} className="text-primary" />
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                {t("title")}
-              </h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t("title")}</h2>
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1 mt-1">
               {productName}
@@ -184,26 +182,20 @@ const VendorsSidebar = ({
           {isLoading && (
             <div className="flex flex-col items-center justify-center py-12 gap-3">
               <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-gray-600 dark:text-gray-400">
-                {t("loading")}
-              </p>
+              <p className="text-gray-600 dark:text-gray-400">{t("loading")}</p>
             </div>
           )}
 
           {error ? (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-center">
-              <p className="text-red-600 dark:text-red-400">
-                {t("error")}
-              </p>
+              <p className="text-red-600 dark:text-red-400">{t("error")}</p>
             </div>
           ) : null}
 
           {!isLoading && !error && vendors.length === 0 && (
             <div className="text-center py-12">
               <Store size={48} className="mx-auto text-gray-400 mb-3" />
-              <p className="text-gray-600 dark:text-gray-400">
-                {t("noOffers")}
-              </p>
+              <p className="text-gray-600 dark:text-gray-400">{t("noOffers")}</p>
             </div>
           )}
 
@@ -220,13 +212,11 @@ const VendorsSidebar = ({
                   : 0;
 
               // تجهيز الصورة (مع إضافة الدومين)
-              const imagePath =
-                vendor.itemCombinationImages && vendor.itemCombinationImages.length > 0
-                  ? formatImagePath(vendor.itemCombinationImages[0].path)
-                  : null;
-              const fullImageUrl = imagePath
-                ? `${process.env.NEXT_PUBLIC_DOMAIN}/${imagePath}`
+              const fullImageUrl = vendor.thumbnailImage
+                ? `${process.env.NEXT_PUBLIC_DOMAIN}/${vendor.thumbnailImage}`
                 : "/placeholder.png";
+
+                console.log(fullImageUrl);
 
               // --- Cart Logic: هل المنتج موجود بالفعل في السلة؟ ---
               // نستخدم itemCombinationId لمعرفة العرض المحدد
