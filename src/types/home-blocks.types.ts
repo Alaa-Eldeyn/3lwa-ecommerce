@@ -50,3 +50,4 @@ export type Category = {
   nameEn: string;
   imageUrl: string;
 };
+

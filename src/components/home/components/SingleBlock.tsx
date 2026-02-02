@@ -124,7 +124,7 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
               {isArabic ? block.titleAr : block.titleEn}
             </Link>
           ) : (
-            <h2 className="text-xl font-bold text-secondary dark:text-gray-200">
+            <h2 className="text-xl font-bold text-secondary dark:text-gray-200 cursor-default">
               {isArabic ? block.titleAr : block.titleEn}
             </h2>
           )}
@@ -138,13 +138,13 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
         </div>
 
         {/* View all link */}
-        {/* {block.layout === "Carousel" && block.showViewAllLink && (
+        {block.layout === "Carousel" && block.showViewAllLink && (
           <Link
             href={isProducts ? `/collection?p=${block.id}` : `/collection?c=${block.id}`}
             className="text-primary dark:text-primary text-sm hover:underline hover:text-red-700 dark:hover:text-red-400 font-medium">
             {isArabic ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
           </Link>
-        )} */}
+        )}
       </div>
 
       {/* Featured layout */}
@@ -318,13 +318,13 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
         ))}
 
       {/* View all link */}
-      {/* {block.layout !== "Carousel" && block.showViewAllLink && (
+      {block.layout !== "Carousel" && block.showViewAllLink && (
         <Link
           href={isProducts ? `/collection?p=${block.id}` : `/collection?c=${block.id}`}
           className="text-primary dark:text-primary text-sm hover:underline hover:text-red-700 dark:hover:text-red-400 font-medium">
           {isArabic ? block.viewAllLinkTitleAr : block.viewAllLinkTitleEn}
         </Link>
-      )} */}
+      )}
     </div>
   );
 };
