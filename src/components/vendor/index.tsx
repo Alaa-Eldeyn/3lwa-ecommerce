@@ -1,23 +1,21 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
-import {
-  Loader2,
-  Store,
-  Star,
-  ThumbsUp,
-  ThumbsDown,
-  Flag,
-  ChevronDown,
-  ArrowLeft,
-  ArrowRight,
-} from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Loader2, Star, ArrowLeft, ArrowRight } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { customAxios } from "@/src/auth/customAxios";
 import { useLocale, useTranslations } from "next-intl";
 import ProductCard from "../common/ProductCard";
+import VendorReviewsSection from "./components/VendorReviewsSection";
+import WriteReviewModal from "./components/WriteReviewModal";
 import { Product } from "@/src/types/types";
-import axios from "axios";
-import Image from "next/image";
+import {
+  VendorReviewStats,
+  VendorReviewSubmitPayload,
+  VendorReviewUpdatePayload,
+  VendorReview,
+} from "@/src/types/vendor-reviews.types";
+import { useUserStore } from "@/src/store/userStore";
+import toast from "react-hot-toast";
 
 const VendorPage = () => {
   const { id } = useParams();
@@ -26,44 +24,163 @@ const VendorPage = () => {
   const isArabic = locale === "ar";
   const t = useTranslations("vendor");
   const tProducts = useTranslations("vendor.products");
+  const user = useUserStore((s) => s.user);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
-  const {
-    data: response,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["vendor", id],
-    queryFn: async () => {
-      const { data } = await customAxios.get(`/VendorManagement/Preview/${id}`);
-      return data;
+  const [vendorData, setVendorData] = useState<any>(null);
+  const [vendorLoading, setVendorLoading] = useState(true);
+  const [vendorError, setVendorError] = useState<any>(null);
+
+  const [reviewStats, setReviewStats] = useState<VendorReviewStats | undefined>(undefined);
+  const [reviewStatsLoading, setReviewStatsLoading] = useState(false);
+
+  const [reviews, setReviews] = useState<VendorReview[]>([]);
+  const [reviewsPageNumber, setReviewsPageNumber] = useState(1);
+  const reviewsPageSize = 10;
+  const [reviewsTotalRecords, setReviewsTotalRecords] = useState(0);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [productsLoading, setProductsLoading] = useState(false);
+
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const fetchReviewStats = useCallback(async () => {
+    if (!id) return;
+    setReviewStatsLoading(true);
+    try {
+      const { data } = await customAxios.get(`/VendorReview/vendor-review-stats/${id}`);
+      setReviewStats(data?.data);
+    } catch {
+      setReviewStats(undefined);
+    } finally {
+      setReviewStatsLoading(false);
+    }
+  }, [id]);
+
+  const fetchReviews = useCallback(
+    async (pageNumber: number = 1, append: boolean = false) => {
+      if (!id || typeof id !== "string") return;
+      setReviewsLoading(true);
+      try {
+        const { data } = await customAxios.get("/VendorReview/search", {
+          params: { vendorId: id, pageNumber, pageSize: reviewsPageSize },
+        });
+        const payload = data?.data ?? data;
+        const items: VendorReview[] = payload?.items ?? [];
+        const total = payload?.totalRecords ?? 0;
+        setReviewsTotalRecords(total);
+        setReviewsPageNumber(pageNumber);
+        setReviews((prev) => (append ? [...prev, ...items] : items));
+      } catch {
+        if (!append) setReviews([]);
+        setReviewsTotalRecords(0);
+      } finally {
+        setReviewsLoading(false);
+      }
     },
-    enabled: !!id,
-  });
+    [id, reviewsPageSize]
+  );
 
-  const vendorData = response?.data;
+  useEffect(() => {
+    if (!id) return;
+    setVendorLoading(true);
+    setVendorError(null);
+    customAxios
+      .get(`/VendorManagement/Preview/${id}`)
+      .then((res) => {
+        setVendorData(res?.data?.data ?? null);
+      })
+      .catch((err) => {
+        setVendorError(err);
+        setVendorData(null);
+      })
+      .finally(() => setVendorLoading(false));
+  }, [id]);
 
-  // Fetch vendor products
-  const { data: productsResponse } = useQuery({
-    queryKey: ["vendor-products", id],
-    queryFn: async () => {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/ItemAdvancedSearch/search`,
-        {
-          vendorId: id,
-          pageNumber: 0,
-          pageSize: 4,
-        }
-      );
-      return res?.data?.data;
-    },
-    enabled: !!id && !!vendorData,
-  });
+  useEffect(() => {
+    if (!id || !vendorData) return;
+    fetchReviewStats();
+  }, [id, vendorData, fetchReviewStats]);
 
-  const products: Product[] = productsResponse?.items ?? [];
-  const totalProducts = productsResponse?.totalRecords ?? 0;
+  useEffect(() => {
+    if (!id || !vendorData) return;
+    fetchReviews(1, false);
+  }, [id, vendorData, fetchReviews]);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!id || !vendorData) return;
+    setProductsLoading(true);
+    customAxios
+      .post("/ItemAdvancedSearch/search", {
+        vendorId: id,
+        pageNumber: 1,
+        pageSize: 4,
+      })
+      .then((res) => {
+        const data = res?.data?.data;
+        setProducts(data?.items ?? []);
+        setTotalProducts(data?.totalRecords ?? 0);
+      })
+      .catch(() => {
+        setProducts([]);
+        setTotalProducts(0);
+      })
+      .finally(() => setProductsLoading(false));
+  }, [id, vendorData]);
+
+  const handleSubmitReview = async (payload: VendorReviewSubmitPayload) => {
+    setSubmitError(null);
+    setSubmitLoading(true);
+    try {
+      await customAxios.post("/VendorReview/submit", payload);
+      await fetchReviewStats();
+      await fetchReviews(1, false);
+      setReviewModalOpen(false);
+      setSubmitError(null);
+      toast.success(t("submitReview"));
+    } catch (err: any) {
+      const message = err?.response?.data?.message || t("error");
+      setSubmitError(message);
+      toast.error(message);
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
+  const openReviewModal = () => {
+    setSubmitError(null);
+    setReviewModalOpen(true);
+  };
+
+  const closeReviewModal = () => {
+    if (!submitLoading) {
+      setReviewModalOpen(false);
+      setSubmitError(null);
+    }
+  };
+
+  const updateReview = async (payload: VendorReviewUpdatePayload) => {
+    try {
+      await customAxios.put("/VendorReview/update", payload);
+      await fetchReviewStats();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || t("error"));
+    }
+  };
+
+  const deleteReview = async (id: string) => {
+    try {
+      await customAxios.post("/VendorReview/delete", { id });
+      await fetchReviewStats();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || t("error"));
+    }
+  };
+
+  if (vendorLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
@@ -74,7 +191,7 @@ const VendorPage = () => {
     );
   }
 
-  if (isError) {
+  if (vendorError) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-md text-center">
@@ -83,7 +200,7 @@ const VendorPage = () => {
           </div>
           <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">{t("error")}</h2>
           <p className="text-slate-600 dark:text-gray-400 mb-4">
-            {(error as any)?.response?.data?.message || t("errorMessage")}
+            {vendorError?.response?.data?.message || t("errorMessage")}
           </p>
           <button
             onClick={() => router.push(`/products?v=${id}`)}
@@ -118,60 +235,6 @@ const VendorPage = () => {
     .join("")
     .toUpperCase()
     .slice(0, 2);
-
-  // Mock reviews data - in real app, this would come from an API
-  const reviews = [
-    {
-      id: 1,
-      name: "Ahmed Hassan",
-      avatar: "",
-      rating: 5,
-      date: "2 days ago",
-      text: "Excellent service and product quality! Ordered a laptop and it arrived within 2 days, perfectly packaged. The seller was very responsive to my questions and provided detailed information about the product specifications. Highly recommend this vendor for anyone looking for reliable electronics.",
-      helpful: 24,
-      unhelpful: 2,
-    },
-    {
-      id: 2,
-      name: "Sarah Al-Mansouri",
-      avatar: "",
-      rating: 4,
-      date: "5 days ago",
-      text: "Good experience overall. The product matches the description and works perfectly. Delivery took a bit longer than expected (4 days instead of 2), but the quality makes up for it. Customer service was helpful when I had questions about warranty coverage. Would buy again.",
-      helpful: 18,
-      unhelpful: 1,
-    },
-    {
-      id: 3,
-      name: "Mohammed Khalid",
-      avatar: "",
-      rating: 5,
-      date: "1 week ago",
-      text: "Outstanding vendor! This is my third purchase from TechMart and they never disappoint. Products are always authentic, prices are competitive, and shipping is fast. The seller also includes helpful setup guides and responds quickly to any post-purchase questions. Definitely my go-to store for electronics.",
-      helpful: 42,
-      unhelpful: 0,
-    },
-    {
-      id: 4,
-      name: "Fatima Abdullah",
-      avatar: "",
-      rating: 4.5,
-      date: "2 weeks ago",
-      text: "Very satisfied with my purchase. The smartphone I ordered came in original packaging with all accessories included. Price was better than retail stores. Only minor issue was that tracking information wasn't updated regularly, but the package arrived on time. Great vendor overall!",
-      helpful: 15,
-      unhelpful: 1,
-    },
-    {
-      id: 5,
-      name: "Youssef Ibrahim",
-      avatar: "",
-      rating: 5,
-      date: "3 weeks ago",
-      text: "Exceptional service! Bought a gaming laptop and the seller provided detailed specs and answered all my technical questions before purchase. Product arrived well-protected with extra bubble wrap. Even followed up after delivery to ensure everything was working properly. This level of customer care is rare. Highly recommended!",
-      helpful: 31,
-      unhelpful: 0,
-    },
-  ];
 
   const renderStars = (rating: number) => {
     const fullStars = Math.floor(rating);
@@ -212,20 +275,26 @@ const VendorPage = () => {
               <span className="text-white text-5xl font-bold">{initials}</span>
             </div>
             <div className="flex-1">
-              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">{displayName}</h1>
+              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
+                {displayName}
+              </h1>
               <div className="flex items-center space-x-4 mb-4">
                 <div className="flex items-center">
-                  {renderStars(vendorData.averageRating || 0)}
+                  {renderStars(reviewStats?.averageRating ?? vendorData.averageRating ?? 0)}
                   <span className="ml-2 text-gray-900 dark:text-white font-semibold">
-                    {vendorData.averageRating ? vendorData.averageRating.toFixed(2) : "0.00"}
+                    {reviewStats?.averageRating ?? vendorData.averageRating
+                      ? (reviewStats?.averageRating ?? vendorData.averageRating).toFixed(2)
+                      : "0.00"}
                   </span>
                 </div>
                 <span className="text-gray-500 dark:text-gray-400">|</span>
-                <span className="text-gray-600 dark:text-gray-300">2,847 {t("reviews")}</span>
-                <span className="text-gray-500 dark:text-gray-400">|</span>
                 <span className="text-gray-600 dark:text-gray-300">
-                  {totalProducts} {t("productsSold")}
+                  {reviewStats?.reviewCount ?? 0} {t("reviews")}
                 </span>
+                {/* <span className="text-gray-500 dark:text-gray-400">|</span> */}
+                {/* <span className="text-gray-600 dark:text-gray-300">
+                  {totalProducts} {t("productsSold")}
+                </span> */}
               </div>
 
               {/* Vendor Info */}
@@ -274,7 +343,9 @@ const VendorPage = () => {
             className="bg-white dark:bg-gray-900 border-gray-200 border dark:border-transparent rounded-xl p-8 dark:p-0 mb-8">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{tProducts("title")}</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {tProducts("title")}
+                </h2>
                 <p className="text-gray-600 dark:text-gray-400">{tProducts("description")}</p>
               </div>
               <button
@@ -293,70 +364,28 @@ const VendorPage = () => {
           </section>
         )}
 
-        {/* // TODO: Customer Reviews Section */}
-        {/* <div id="vendor-reviews-section" className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("customerReviews")}</h2>
-            <div className="flex items-center space-x-3">
-              <span className="text-gray-600 dark:text-gray-400">{t("sortBy")}</span>
-              <select className="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary">
-                <option>{t("mostRecent")}</option>
-                <option>{t("highestRated")}</option>
-                <option>{t("lowestRated")}</option>
-                <option>{t("mostHelpful")}</option>
-              </select>
-            </div>
-          </div>
+        {/* Customer Reviews Section */}
+        <VendorReviewsSection
+          reviewStats={reviewStats}
+          reviews={reviews}
+          reviewsLoading={reviewsLoading}
+          reviewsTotalRecords={reviewsTotalRecords}
+          locale={locale}
+          onWriteReview={() =>
+            user ? openReviewModal() : router.push(`/${locale}/login?redirect=/vendor/${id}`)
+          }
+          onLoadMore={() => fetchReviews(reviewsPageNumber + 1, true)}
+        />
 
-          {reviews.map((review, index) => (
-            <div
-              key={review.id}
-              className={`${
-                index < reviews.length - 1 ? "border-b border-gray-200 dark:border-gray-700 pb-6 mb-6" : "pb-6"
-              }`}>
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center space-x-3">
-                  <img
-                    src={review.avatar}
-                    alt="Reviewer"
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div>
-                    <div className="font-semibold text-gray-900 dark:text-white">{review.name}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{t("verifiedPurchase")}</div>
-                  </div>
-                </div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">{review.date}</div>
-              </div>
-              <div className="flex items-center mb-3">{renderStars(review.rating)}</div>
-              <p className="text-gray-700 dark:text-gray-300 mb-4">{review.text}</p>
-              <div className="flex items-center space-x-4 text-sm">
-                <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-primary transition">
-                  <ThumbsUp className="w-4 h-4" />
-                  <span>
-                    {t("helpful")} ({review.helpful})
-                  </span>
-                </button>
-                <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition">
-                  <ThumbsDown className="w-4 h-4" />
-                  <span>
-                    {t("unhelpful")} ({review.unhelpful})
-                  </span>
-                </button>
-                <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-red-600 transition">
-                  <Flag className="w-4 h-4" />
-                  <span>{t("report")}</span>
-                </button>
-              </div>
-            </div>
-          ))}
-
-          <div className="flex justify-center mt-8">
-            <button className="border border-primary text-primary dark:text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-lg font-semibold transition">
-              {t("loadMoreReviews")}
-            </button>
-          </div>
-        </div> */}
+        {/* Write Review Modal */}
+        <WriteReviewModal
+          isOpen={reviewModalOpen}
+          onClose={closeReviewModal}
+          vendorId={id as string}
+          onSubmit={handleSubmitReview}
+          isSubmitting={submitLoading}
+          submitError={submitError}
+        />
       </main>
     </div>
   );
