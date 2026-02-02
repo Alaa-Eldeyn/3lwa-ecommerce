@@ -69,7 +69,8 @@ const ReviewCard = ({
             {countReport} report{countReport !== 1 ? "s" : ""}
           </span>
         </div>
-        {(onEdit || onDelete) && (
+        {/* //TODO: Add edit and delete functionality */}
+        {/* {(onEdit || onDelete) && (
           <div className="flex items-center gap-1">
             {onEdit && (
               <button
@@ -90,7 +91,7 @@ const ReviewCard = ({
               </button>
             )}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
