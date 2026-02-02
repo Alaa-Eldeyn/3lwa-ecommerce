@@ -666,6 +666,21 @@
     "goToPage": "الانتقال إلى الصفحة {page}",
     "pageInfo": "الصفحة {current} من {total}"
   },
+  "collection": {
+    "loading": "جاري تحميل المجموعة...",
+    "notFound": "المجموعة غير موجودة",
+    "notFoundDescription": "المجموعة التي تبحث عنها غير موجودة.",
+    "noProductsFound": "لم يتم العثور على منتجات",
+    "noCategoriesFound": "لم يتم العثور على تصنيفات",
+    "header": {
+      "collections": "المجموعات",
+      "badgeLabel": "عروض لفترة محدودة",
+      "description": "اكتشف مجموعتنا المختارة من الهدايا والأزياء وأساسيات المنزل. استمتع بعروض رائعة على منتجات مختارة."
+    },
+    "categoryCard": {
+      "browse": "تصفح"
+    }
+  },
   "products": {
     "showingProducts": "عرض {count} منتج",
     "sortBy": "ترتيب حسب:",

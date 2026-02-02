@@ -665,6 +665,21 @@
     "goToPage": "Go to page {page}",
     "pageInfo": "Page {current} of {total}"
   },
+  "collection": {
+    "loading": "Loading collection...",
+    "notFound": "Collection not found",
+    "notFoundDescription": "The collection you're looking for doesn't exist.",
+    "noProductsFound": "No products found",
+    "noCategoriesFound": "No categories found",
+    "header": {
+      "collections": "Collections",
+      "badgeLabel": "Limited Time Deals",
+      "description": "Discover our curated selection of gifts, fashion, and home essentials. Enjoy great deals on selected items."
+    },
+    "categoryCard": {
+      "browse": "Browse"
+    }
+  },
   "products": {
     "showingProducts": "Showing {count} products",
     "sortBy": "Sort by:",
