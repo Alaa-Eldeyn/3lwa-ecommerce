@@ -278,7 +278,7 @@ const ProductCard = ({
             ) : (
               <button
                 onClick={handleAddToCart}
-                disabled={stockStatus === "OutOfStock"}
+                disabled={stockStatus === "OutOfStock" || !offerCombinationPricingId}
                 className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg center soft p-2.5 md:p-3.5 font-medium shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Add to cart">
                 <span className="lg:mx-2 text-xs md:text-sm">{t("addToCart")}</span>
