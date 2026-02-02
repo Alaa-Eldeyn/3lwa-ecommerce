@@ -240,7 +240,7 @@ const VendorsSidebar = ({
                 try {
                   await addItem(
                     {
-                      id: vendor.itemCombinationId,
+                      id: vendor.vendorItemId,
                       itemId: vendor.itemId,
                       name: isArabic ? vendor.itemTitleAr : vendor.itemTitleEn,
                       price: vendor.salesPrice,
