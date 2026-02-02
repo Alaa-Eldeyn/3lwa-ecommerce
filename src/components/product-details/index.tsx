@@ -32,19 +32,18 @@ const ProductDetails = ({ variant = "tabs" }: ProductDetailsProps) => {
     refetchOnWindowFocus: false,
   });
 
-  // Reviews
-  const {
-    data: reviews,
-    isLoading: reviewsLoading,
-    error: reviewsError,
-  } = useQuery({
+  // Reviews (for SectionsVariation; TabsVariation fetches its own via search API)
+  const { data: reviewsData } = useQuery({
     queryKey: ["reviews", id],
     queryFn: () =>
-      axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/ItemReview/reviews-by-Item/${id}`),
-    enabled: !!id,
+      axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/ItemReview/search`, {
+        params: { ItemId: id },
+      }),
+    enabled: !!id && variant === "sections",
     refetchOnWindowFocus: false,
   });
-  // console.log("Reviews:", reviews);
+  const sectionsReviews = reviewsData?.data?.items ?? [];
+  const sectionsTotalReviews = reviewsData?.data?.totalRecords ?? sectionsReviews.length;
 
   // State to hold updated product details (when attributes change)
   const [productDetails, setProductDetails] = useState<ProductDetails | undefined>();
@@ -125,8 +124,6 @@ const ProductDetails = ({ variant = "tabs" }: ProductDetailsProps) => {
                 ? productDetails.descriptionAr || productDetails.shortDescriptionAr || ""
                 : productDetails.descriptionEn || productDetails.shortDescriptionEn || ""
             }
-            reviews={reviews?.data?.data || []}
-            totalReviews={reviews?.data?.data?.length || 0}
             product={productDetails}
           />
         )}
@@ -139,8 +136,8 @@ const ProductDetails = ({ variant = "tabs" }: ProductDetailsProps) => {
                 ? productDetails.descriptionAr || productDetails.shortDescriptionAr || ""
                 : productDetails.descriptionEn || productDetails.shortDescriptionEn || ""
             }
-            reviews={reviews?.data?.data || []}
-            totalReviews={productDetails.averageRating || 0}
+            reviews={sectionsReviews}
+            totalReviews={sectionsTotalReviews}
           />
         )}
 

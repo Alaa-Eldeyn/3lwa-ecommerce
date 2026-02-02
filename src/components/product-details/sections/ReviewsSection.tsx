@@ -10,13 +10,13 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 interface Review {
-  id: string,
-  reviewNumber: number,
-  itemID: string,
-  customerID: string,
-  rating: number,
-  reviewTitle: string,
-  reviewText: string,
+  id: string;
+  itemId: string;
+  customerName?: string;
+  reviewNumber: string;
+  rating: number;
+  reviewTitle: string;
+  reviewText: string;
 }
 
 interface ReviewsSectionProps {
@@ -112,7 +112,7 @@ const ReviewsSection = ({
       ) : (
         <>
           {/* Reviews Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+          <div className="flex flex-col gap-5 mb-8">
             {reviews.slice(0, visibleReviews).map((review) => (
               <ReviewCard key={review.id} {...review} />
             ))}

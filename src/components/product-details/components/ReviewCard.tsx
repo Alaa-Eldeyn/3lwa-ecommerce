@@ -1,80 +1,96 @@
 "use client";
 
-import { Star, Check } from "lucide-react";
+import { Star, Pencil, Trash2, ThumbsUp, Flag } from "lucide-react";
 
 interface ReviewCardProps {
   id: string;
-  reviewNumber: number;
-  itemID: string;
-  customerID: string;
+  itemId: string;
+  customerName?: string;
+  reviewNumber?: string;
   rating: number;
   reviewTitle: string;
   reviewText: string;
+  helpfulVoteCount?: number;
+  countReport?: number;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
-const ReviewCard = ({ 
-  id,
-  reviewNumber,
-  rating, 
-  reviewTitle, 
+const ReviewCard = ({
+  rating,
+  reviewTitle,
   reviewText,
-  customerID 
+  customerName: customerNameProp,
+  reviewNumber,
+  helpfulVoteCount = 0,
+  countReport = 0,
+  onEdit,
+  onDelete,
 }: ReviewCardProps) => {
-  // استخراج اسم العميل من customerID أو استخدام قيمة افتراضية
-  const customerName = customerID ? `Customer ${customerID.slice(0, 8)}` : "Anonymous";
-  
-  // تنسيق التاريخ - يمكنك تعديله حسب الحاجة
-  const formattedDate = new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  const displayName = customerNameProp?.trim() || "Anonymous";
 
   return (
-    <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
-      {/* Rating */}
-      <div className="flex items-center gap-1 mb-3">
-        {[...Array(5)].map((_, i) => (
-          <Star
-            key={i}
-            size={16}
-            className={`${
-              i < Math.floor(rating)
-                ? "fill-yellow-400 text-yellow-400"
-                : i < rating
-                ? "fill-yellow-400 text-yellow-400 opacity-50"
-                : "fill-gray-300 text-gray-300"
-            }`}
-          />
-        ))}
+    <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50/50 dark:bg-gray-800/30">
+      {/* Header: name + rating */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
+        <span className="font-medium text-gray-800 dark:text-gray-200 text-sm">{displayName}</span>
+        <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5`}>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Star
+              key={i}
+              size={14}
+              className={
+                i <= rating
+                  ? "fill-amber-500 text-amber-500"
+                  : "fill-gray-300 dark:fill-gray-500 text-gray-300 dark:text-gray-500"
+              }
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Review Title */}
+      {/* Title */}
       {reviewTitle && (
-        <h3 className="font-bold text-gray-900 dark:text-white mb-2">
-          {reviewTitle}
-        </h3>
+        <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">{reviewTitle}</h3>
       )}
 
-      {/* Customer Name */}
-      <div className="flex items-center gap-2 mb-3">
-        <h4 className="font-semibold text-gray-700 dark:text-gray-300 text-sm">
-          {customerName}
-        </h4>
-        <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
-          <Check size={14} />
-        </span>
-      </div>
+      {/* Body */}
+      <p className="text-gray-600 dark:text-gray-300 text-sm leading-snug mb-3">{reviewText}</p>
 
-      {/* Review Text */}
-      <p className="text-gray-600 dark:text-gray-400 mb-3 leading-relaxed">
-        {reviewText}
-      </p>
-
-      {/* Date and Review Number */}
-      <div className="flex items-center justify-between text-sm text-gray-500">
-        <span>Posted on {formattedDate}</span>
-        <span className="text-xs">#{reviewNumber}</span>
+      {/* Footer: helpful, reports, actions */}
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-200 dark:border-gray-600">
+        <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+          <span className="flex items-center gap-1">
+            <ThumbsUp size={12} className="shrink-0" />
+            {helpfulVoteCount} helpful
+          </span>
+          <span className="flex items-center gap-1">
+            <Flag size={12} className="shrink-0" />
+            {countReport} report{countReport !== 1 ? "s" : ""}
+          </span>
+        </div>
+        {(onEdit || onDelete) && (
+          <div className="flex items-center gap-1">
+            {onEdit && (
+              <button
+                type="button"
+                onClick={onEdit}
+                className="px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-600 rounded border border-transparent hover:border-gray-300 dark:hover:border-gray-500 transition-colors focus:outline-none focus:border-primary"
+                aria-label="Edit review">
+                <Pencil size={12} />
+              </button>
+            )}
+            {onDelete && (
+              <button
+                type="button"
+                onClick={onDelete}
+                className="px-2 py-1 text-xs font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded border border-transparent hover:border-red-200 dark:hover:border-red-800 transition-colors focus:outline-none focus:border-red-500"
+                aria-label="Delete review">
+                <Trash2 size={12} />
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
