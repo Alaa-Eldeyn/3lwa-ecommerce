@@ -207,8 +207,8 @@ const SingleBlock = ({ block }: { block: Block; locale?: string }) => {
         </div>
       )}
 
-      {/* TwoColumn layout */}
-      {block.layout === "TwoColumn" && (
+      {/* TwoRows layout */}
+      {block.layout === "TwoRows" && (
         <div className="flex-1 flex flex-col gap-4 mb-3">
           {items.slice(0, 2).map((item, index) => (
             <Link

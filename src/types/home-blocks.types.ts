@@ -6,7 +6,7 @@ export type Block = {
   subtitleAr?: string;
   subtitleEn?: string;
   type: "ManualItems" | "Dynamic" | "ManualCategories";
-  layout: "Featured" | "TwoColumn" | "Compact" | "Carousel" | "FullWidth";
+  layout: "Featured" | "TwoRows" | "Compact" | "Carousel" | "FullWidth";
   displayOrder: number;
   showViewAllLink: boolean;
   viewAllLinkTitleAr: string;
