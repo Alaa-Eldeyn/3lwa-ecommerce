@@ -7,6 +7,7 @@ interface ProfileImageUploadProps {
   currentImage?: string;
   userName: string;
   onImageChange: (file: File) => void;
+  onImageRemove?: () => void;
   t: (key: string) => string;
 }
 
@@ -14,6 +15,7 @@ const ProfileImageUpload = ({
   currentImage,
   userName,
   onImageChange,
+  onImageRemove,
   t,
 }: ProfileImageUploadProps) => {
   // بناء URL الصورة الكامل
@@ -62,6 +64,7 @@ const ProfileImageUpload = ({
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    onImageRemove?.();
     setShowModal(false);
   };
 
@@ -128,14 +131,14 @@ const ProfileImageUpload = ({
               </button>
 
               {/* Remove Button */}
-              {/* {displayImage && (
+              {displayImage && (
                 <button
                   onClick={handleRemoveImage}
                   className="w-full flex items-center gap-3 px-6 py-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 soft">
                   <X size={24} />
                   <p className="font-semibold">{t("personalInfo.removePhoto") || "Remove Photo"}</p>
                 </button>
-              )} */}
+              )}
             </div>
 
             <input

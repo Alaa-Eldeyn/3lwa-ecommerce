@@ -18,6 +18,7 @@ interface ProfileSidebarProps {
   tabs: Tab[];
   onTabChange: (tabId: string) => void;
   onImageChange?: (file: File) => void;
+  onImageRemove?: () => void;
   t?: (key: string) => string;
 }
 
@@ -28,6 +29,7 @@ const ProfileSidebar = ({
   tabs,
   onTabChange,
   onImageChange,
+  onImageRemove,
   t,
 }: ProfileSidebarProps) => {
   const handleImageChange = (file: File) => {
@@ -44,6 +46,7 @@ const ProfileSidebar = ({
             currentImage={profileImagePath}
             userName={`${userData.firstName} ${userData.lastName}`}
             onImageChange={handleImageChange}
+            onImageRemove={onImageRemove}
             t={t || ((key) => key)}
           />
         </div>

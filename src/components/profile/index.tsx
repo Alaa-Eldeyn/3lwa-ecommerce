@@ -102,6 +102,7 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchingProfile, setIsFetchingProfile] = useState(true);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [shouldRemoveImage, setShouldRemoveImage] = useState(false);
 
   // Fetch user profile from API on mount
   useEffect(() => {
@@ -155,9 +156,11 @@ const Profile = () => {
         lastName: data.lastName,
       };
 
-      // Only include profileImage if a new image was selected
+      // Include profileImage if a new image was selected or if removal was requested
       if (profileImageString) {
         payload.profileImage = profileImageString;
+      } else if (shouldRemoveImage) {
+        payload.profileImage = "";
       }
 
       // Send to API
@@ -176,6 +179,7 @@ const Profile = () => {
 
         // Clear the image file state after successful upload
         setProfileImageFile(null);
+        setShouldRemoveImage(false);
 
         toast.success(response.data.message || "Profile updated successfully!");
 
@@ -270,6 +274,12 @@ const Profile = () => {
               onTabChange={(tabId: string) => handleTabChange(tabId as TabType)}
               onImageChange={(file: File) => {
                 setProfileImageFile(file);
+                setShouldRemoveImage(false);
+              }}
+              onImageRemove={() => {
+                setProfileImageFile(null);
+                setShouldRemoveImage(true);
+                updateUser({ profileImagePath: "" });
               }}
               t={t}
             />
