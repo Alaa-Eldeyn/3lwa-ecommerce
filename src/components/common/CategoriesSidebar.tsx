@@ -4,6 +4,7 @@ import { X, TextAlignJustify, ChevronLeft, ChevronRight } from "lucide-react";
 import { useHeaderStore } from "@/src/store/headerStore";
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/src/i18n/routing";
+import LangSwitch from "./header/LangSwitch";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -84,12 +85,15 @@ const CategoriesSidebar = () => {
               {selectedCategory ? selectedCategory.titleAr : t("all")}
             </h2>
           </div>
-          <button
-            onClick={handleClose}
-            className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
-            aria-label="Close">
-            <X size={20} />
-          </button>
+          <div className="flex items-center gap-2">
+            <LangSwitch />
+            <button
+              onClick={handleClose}
+              className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
+              aria-label="Close">
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
         {/* Content */}
