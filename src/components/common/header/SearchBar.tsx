@@ -43,7 +43,7 @@ const SearchBar = () => {
       params.delete("c")
     }
     
-    router.push(`/products?${params.toString()}`)
+    router.push(`/${locale}/products?${params.toString()}`)
   }
 
   // 1. NEW: Handle Enter key press in the input
