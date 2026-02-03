@@ -57,7 +57,7 @@ const Products = () => {
   // Key = attributeId (string), Value = array of valueIds (string[])
   const [selectedAttributes, setSelectedAttributes] = useState<Record<string, string[]>>({});
 
-  const [priceRange, setPriceRange] = useState<[number, number]>([10, 50000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [minItemRating, setMinItemRating] = useState<number>(0);
@@ -146,8 +146,8 @@ const Products = () => {
         selectedVendors.length > 0 ||
         selectedConditions.length > 0 ||
         Object.keys(selectedAttributes).length > 0 ||
-        priceRange[0] !== 10 || // Assuming 10 is your default "no filter" min
-        priceRange[1] !== 50000 || // Assuming 50000 is your default max
+        priceRange[0] !== 0 || 
+        priceRange[1] !== 50000 || 
         inStockOnly ||
         freeShippingOnly;
 
@@ -186,8 +186,8 @@ const Products = () => {
         }
         
         // Example of adding booleans if your API supports them directly
-        if (inStockOnly) payload.inStockOnly = inStockOnly;
-        if (freeShippingOnly) payload.freeShippingOnly = freeShippingOnly;
+        // if (inStockOnly) payload.inStockOnly = inStockOnly;
+        // if (freeShippingOnly) payload.freeShippingOnly = freeShippingOnly;
         // Add others as needed...
       }
       
@@ -226,7 +226,7 @@ const Products = () => {
     if (filtersData?.priceRange) {
       setPriceRange([filtersData.priceRange.minPrice, filtersData.priceRange.maxPrice]);
     } else {
-      setPriceRange([10, 50000]);
+      setPriceRange([0, 50000]);
     }
 
     setSelectedColors([]);
