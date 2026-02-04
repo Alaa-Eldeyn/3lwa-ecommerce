@@ -699,7 +699,8 @@
     "products": {
       "title": "المنتجات",
       "description": "اكتشف منتجاتنا من {brandName}",
-      "viewAll": "عرض جميع المنتجات"
+      "viewAll": "عرض جميع المنتجات",
+      "viewAllShort": "عرض الكل"
     },
     "loading": "جاري تحميل البيانات...",
     "error": "حدث خطأ",
@@ -933,7 +934,8 @@
     "products": {
       "title": "المنتجات",
       "description": "اكتشف منتجات هذا البائع",
-      "viewAll": "عرض جميع المنتجات"
+      "viewAll": "عرض جميع المنتجات",
+      "viewAllShort": "عرض الكل"
     }
   },
   "vendorsSidebar": {

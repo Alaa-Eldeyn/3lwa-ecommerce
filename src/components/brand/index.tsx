@@ -100,9 +100,7 @@ const BrandPage = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-slate-600 dark:text-gray-400 text-lg">
-            {tBrand("noData")}
-          </p>
+          <p className="text-slate-600 dark:text-gray-400 text-lg">{tBrand("noData")}</p>
         </div>
       </div>
     );
@@ -119,42 +117,35 @@ const BrandPage = () => {
       {/* Brand Hero Section */}
       <section
         id="brand-hero-section"
-        className="bg-gradient-to-br from-primary to-headerDark relative overflow-hidden h-[340px]">
+        className="bg-gradient-to-br from-primary to-headerDark relative overflow-hidden min-h-[240px] sm:min-h-[280px] lg:h-[340px] py-6 sm:py-8 mb-6">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 right-10 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
         </div>
-        <div className="max-w-[1440px] mx-auto px-8 h-full relative z-10">
-          <div className="flex items-center justify-between h-full">
-            <div className="flex-1">
-              <div className="flex items-center gap-6 mb-6">
-                <div className="bg-white rounded-2xl p-6 shadow-md">
-                  {brandData.logoPath ? (
-                    <img
-                      className="w-32 h-32 object-contain"
-                      src={`${process.env.NEXT_PUBLIC_DOMAIN}${brandData.logoPath}`}
-                      alt={displayName}
-                    />
-                  ) : (
-                    <div className="w-32 h-32 flex items-center justify-center text-6xl font-bold text-gray-300 dark:text-gray-600">
-                      {displayName?.charAt(0) || "B"}
-                    </div>
-                  )}
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full relative z-10 flex items-center">
+          <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+            <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-md flex-shrink-0">
+              {brandData.logoPath ? (
+                <img
+                  className="w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 object-contain"
+                  src={`${process.env.NEXT_PUBLIC_DOMAIN}${brandData.logoPath}`}
+                  alt={displayName}
+                />
+              ) : (
+                <div className="w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 flex items-center justify-center text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-300 dark:text-gray-600">
+                  {displayName?.charAt(0) || "B"}
                 </div>
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <h1 className="text-4xl font-bold text-white">{displayName}</h1>
-                  </div>
-                  <div className="flex items-center gap-4 text-white/90">
-                    <span className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
-                      <span>
-                        {tBrand("established")}{" "}
-                        {formatDate(brandData.createdDateUtc)}
-                      </span>
-                    </span>
-                  </div>
-                </div>
+              )}
+            </div>
+            <div className="text-start">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-4">
+                {displayName}
+              </h1>
+              <div className="flex items-center justify-center sm:justify-start gap-2 text-white/90">
+                <Calendar className="w-4 h-4 flex-shrink-0" />
+                <span>
+                  {tBrand("established")} {formatDate(brandData.createdDateUtc)}
+                </span>
               </div>
             </div>
           </div>
@@ -164,23 +155,23 @@ const BrandPage = () => {
       {/* Brand Info Section */}
       <section
         id="brand-info-section"
-        className="bg-gray-50 dark:bg-gray-900 max-w-[1440px] mx-auto px-8 grid grid-cols-3 gap-8">
+        className="bg-gray-50 dark:bg-gray-900 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mb-6">
         {/* About & Statistics */}
-        <div className="col-span-2">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-8">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+        <div className="lg:col-span-2">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 sm:p-6 lg:p-8">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
               {tBrand("about", { brandName: displayName })}
             </h2>
-            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">
+            <p className="text-gray-700 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-4 sm:mb-6">
               {displayDescription || tBrand("noDescription")}
             </p>
           </div>
         </div>
 
         {/* Brand Information Sidebar */}
-        <div className="col-span-1">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-8 sticky top-24">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+        <div className="lg:col-span-1">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 sm:p-6 lg:p-8 lg:sticky lg:top-24">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
               {tBrand("brandInformation")}
             </h3>
 
@@ -235,20 +226,24 @@ const BrandPage = () => {
 
       {/* Products Section */}
       {products.length > 0 && (
-        <section id="products-section" className="bg-gray-50 dark:bg-gray-900 max-w-[1440px] mx-auto px-8">
-          <div className="flex items-center justify-between mb-12">
+        <section
+          id="products-section"
+          className="bg-gray-50 dark:bg-gray-900 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between gap-4 mb-8 sm:mb-12">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">{t("title")}</h2>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
+                {t("title")}
+              </h2>
             </div>
             <button
               onClick={() => router.push(`/products?b=${id}`)}
-              className="bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-8 rounded-xl transition-colors flex items-center gap-2">
-              <span>{t("viewAll")}</span>
+              className="w-auto bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 sm:px-8 rounded-xl transition-colors flex items-center justify-center gap-2">
+              <span>{t("viewAllShort")}</span>
               {isArabic ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
             </button>
           </div>
 
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {products.map((product) => (
               <ProductCard key={product.itemCombinationId} variant="minimal" {...product} />
             ))}

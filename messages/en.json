@@ -698,7 +698,8 @@
     "products": {
       "title": "Products",
       "description": "Discover our products from {brandName}",
-      "viewAll": "View All Products"
+      "viewAll": "View All Products",
+      "viewAllShort": "View All"
     },
     "loading": "Loading data...",
     "error": "Error occurred",
@@ -932,7 +933,8 @@
     "products": {
       "title": "Products",
       "description": "Discover products from this vendor",
-      "viewAll": "View All Products"
+      "viewAll": "View All Products",
+      "viewAllShort": "View All"
     }
   },
   "vendorsSidebar": {

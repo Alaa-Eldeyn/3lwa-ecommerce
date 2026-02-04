@@ -265,23 +265,23 @@ const VendorPage = () => {
     <div
       className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-cairo"
       dir={isArabic ? "rtl" : "ltr"}>
-      <main id="vendor-main" className="max-w-7xl mx-auto px-6 py-12">
+      <main id="vendor-main" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
         {/* Vendor Header Section */}
         <div
           id="vendor-header-section"
-          className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 mb-8">
-          <div className="flex items-start space-x-6">
-            <div className="w-32 h-32 bg-gradient-to-br from-primary to-headerDark rounded-xl flex items-center justify-center">
-              <span className="text-white text-5xl font-bold">{initials}</span>
+          className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 flex-shrink-0 bg-gradient-to-br from-primary to-headerDark rounded-xl flex items-center justify-center">
+              <span className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold">{initials}</span>
             </div>
-            <div className="flex-1">
-              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
+            <div className="flex-1 w-full text-start">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-3 text-center sm:text-start">
                 {displayName}
               </h1>
-              <div className="flex items-center space-x-4 mb-4">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-4 mb-4">
                 <div className="flex items-center">
                   {renderStars(reviewStats?.averageRating ?? vendorData.averageRating ?? 0)}
-                  <span className="ml-2 text-gray-900 dark:text-white font-semibold">
+                  <span className="ms-2 text-gray-900 dark:text-white font-semibold">
                     {reviewStats?.averageRating ?? vendorData.averageRating
                       ? (reviewStats?.averageRating ?? vendorData.averageRating).toFixed(2)
                       : "0.00"}
@@ -310,7 +310,7 @@ const VendorPage = () => {
                 {(vendorData.cityName?.trim() ||
                   vendorData.stateName?.trim() ||
                   vendorData.countryName?.trim()) && (
-                  <p className="text-gray-700 dark:text-gray-300">
+                  <p className="text-gray-700 dark:text-gray-300 text-center sm:text-start">
                     <span className="font-semibold">{t("location")}</span>{" "}
                     {[
                       vendorData.cityName?.trim(),
@@ -322,7 +322,7 @@ const VendorPage = () => {
                   </p>
                 )}
                 {vendorData.isRealEstateRegistered !== undefined && (
-                  <p className="text-gray-700 dark:text-gray-300">
+                  <p className="text-gray-700 dark:text-gray-300 text-center sm:text-start">
                     <span className="font-semibold">{t("realEstateRegistered")}</span>{" "}
                     {vendorData.isRealEstateRegistered ? t("yes") : t("no")}
                   </p>
@@ -340,23 +340,23 @@ const VendorPage = () => {
         {products.length > 0 && (
           <section
             id="vendor-products-section"
-            className="bg-white dark:bg-gray-900 border-gray-200 border dark:border-transparent rounded-xl p-8 dark:p-0 mb-8">
-            <div className="flex items-center justify-between mb-8">
+            className="bg-white dark:bg-gray-900 border-gray-200 border dark:border-transparent rounded-xl p-4 sm:p-6 lg:p-8 dark:p-0 mb-6 sm:mb-8">
+            <div className="flex flex-row items-center justify-between gap-4 mb-6 sm:mb-8">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                   {tProducts("title")}
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400">{tProducts("description")}</p>
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{tProducts("description")}</p>
               </div>
               <button
                 onClick={() => router.push(`/products?v=${id}`)}
-                className="bg-primary hover:bg-headerDark text-white font-semibold py-3 px-8 rounded-xl transition-colors flex items-center gap-2">
-                <span>{tProducts("viewAll")}</span>
+                className="bg-primary hover:bg-headerDark text-white font-semibold py-3 px-6 text-sm sm:text-base sm:px-8 rounded-xl transition-colors flex items-center gap-2">
+                <span>{tProducts("viewAllShort")}</span>
                 {isArabic ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
               </button>
             </div>
 
-            <div className="grid grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {products.map((product) => (
                 <ProductCard key={product.itemCombinationId} variant="minimal" {...product} />
               ))}

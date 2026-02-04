@@ -30,12 +30,12 @@ export default function VendorReviewsSection({
     <section
       id="vendor-reviews-section"
       className="border border-gray-200 dark:border-transparent rounded-lg p-5 sm:p-6 dark:p-0 bg-white dark:bg-transparent">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+      <div className="flex flex-row items-center justify-between gap-3 mb-4">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t("customerReviews")}</h2>
         <button
           type="button"
           onClick={onWriteReview}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary hover:bg-headerDark text-white text-sm font-medium transition-colors shrink-0">
+          className="inline-flex items-center gap-1.5 px-4 py-3 rounded-lg bg-primary hover:bg-headerDark text-white text-sm font-medium transition-colors shrink-0">
           <PenLine className="w-3.5 h-3.5" />
           {t("writeReview")}
         </button>
