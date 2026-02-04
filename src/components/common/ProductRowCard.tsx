@@ -23,6 +23,7 @@ const ProductRowCard = ({
   titleEn,
   itemId,
   itemCombinationId,
+  offerCombinationPricingId,
   shortDescriptionEn,
   shortDescriptionAr,
   descriptionEn,
@@ -87,7 +88,7 @@ const ProductRowCard = ({
         name: displayTitle,
         price: currentPrice,
         image: image,
-        offerCombinationPricingId: itemCombinationId,
+        offerCombinationPricingId: offerCombinationPricingId,
       }, isAuthenticated());
     } catch (error) {
       console.error("Failed to add item to cart:", error);
