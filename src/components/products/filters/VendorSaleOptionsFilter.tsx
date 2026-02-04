@@ -54,7 +54,7 @@ const VendorSaleOptionsFilter = ({
       {isOpen && (
         <div className="pb-4 space-y-2">
           {/* Verified Vendors Only */}
-          <label className="flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
+          {/* <label className="flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
             <input
               type="checkbox"
               checked={verifiedVendorsOnly}
@@ -64,10 +64,10 @@ const VendorSaleOptionsFilter = ({
             <span className="text-sm text-gray-600 dark:text-gray-400">
               {t("verifiedVendorsOnly")}
             </span>
-          </label>
+          </label> */}
 
           {/* Prime Vendors Only */}
-          <label className="flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
+          {/* <label className="flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
             <input
               type="checkbox"
               checked={primeVendorsOnly}
@@ -77,10 +77,10 @@ const VendorSaleOptionsFilter = ({
             <span className="text-sm text-gray-600 dark:text-gray-400">
               {t("primeVendorsOnly")}
             </span>
-          </label>
+          </label> */}
 
           {/* On Sale Only */}
-          <label className="flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
+          {/* <label className="flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
             <input
               type="checkbox"
               checked={onSaleOnly}
@@ -90,10 +90,10 @@ const VendorSaleOptionsFilter = ({
             <span className="text-sm text-gray-600 dark:text-gray-400">
               {t("onSaleOnly")}
             </span>
-          </label>
+          </label> */}
 
           {/* Buy Box Winners Only */}
-          <label className="flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
+          {/* <label className="flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
             <input
               type="checkbox"
               checked={buyBoxWinnersOnly}
@@ -103,7 +103,7 @@ const VendorSaleOptionsFilter = ({
             <span className="text-sm text-gray-600 dark:text-gray-400">
               {t("buyBoxWinnersOnly")}
             </span>
-          </label>
+          </label> */}
 
           {/* With Warranty Only */}
           <label className="flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
@@ -119,7 +119,7 @@ const VendorSaleOptionsFilter = ({
           </label>
 
           {/* Show All Offers */}
-          <label className="flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
+          {/* <label className="flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
             <input
               type="checkbox"
               checked={showAllOffers}
@@ -129,7 +129,7 @@ const VendorSaleOptionsFilter = ({
             <span className="text-sm text-gray-600 dark:text-gray-400">
               {t("showAllOffers")}
             </span>
-          </label>
+          </label> */}
         </div>
       )}
     </div>

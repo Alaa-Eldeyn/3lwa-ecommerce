@@ -199,11 +199,11 @@ const FiltersSidebar = ({
           onChange={setMinItemRating}
         />
 
-        <RatingFilter
+        {/* <RatingFilter
           label={t("minVendorRating")}
           value={minVendorRating}
           onChange={setMinVendorRating}
-        />
+        /> */}
 
         <StockQuantityFilter inStockOnly={inStockOnly} onInStockOnlyChange={setInStockOnly} />
 
