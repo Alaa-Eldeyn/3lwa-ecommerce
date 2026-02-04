@@ -35,7 +35,7 @@ const VendorSaleOptionsFilter = ({
   const t = useTranslations("filters");
 
   return (
-    <div className="border-b border-gray-200 dark:border-gray-700 pb-2 mb-4">
+    <div>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between text-lg font-bold text-gray-900 dark:text-white mb-3"

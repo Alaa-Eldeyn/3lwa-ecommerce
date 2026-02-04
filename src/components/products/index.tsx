@@ -74,9 +74,15 @@ const Products = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(12);
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
-  const [filterTrigger, setFilterTrigger] = useState<number>(0);
   const [layoutMode, setLayoutMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState<string>("default");
+
+  // Wrap filter setters so changing a filter applies immediately (resets page, closes mobile sidebar)
+  const applyOnChange = <T,>(setter: (v: T) => void) => (value: T) => {
+    setter(value);
+    setPageNumber(1);
+    setIsFiltersOpen(false);
+  };
 
   // --- Fetch Dynamic Filters ---
   const { data: filtersData } = useQuery({
@@ -113,7 +119,6 @@ const Products = () => {
   const { data: productsData, isLoading } = useQuery({
     queryKey: [
       "products",
-      filterTrigger,
       pageNumber,
       pageSize,
       sortBy,
@@ -128,73 +133,46 @@ const Products = () => {
       selectedConditions,
       selectedAttributes,
       priceRange,
-      // Include other boolean states if you want them to trigger refetch immediately
+      minItemRating,
       inStockOnly,
       freeShippingOnly,
-      // ... add others
+      withWarrantyOnly,
     ],
     queryFn: async () => {
-      // Check if any filters are active
-      const hasActiveFilters = 
-        searchTerm ||
-        searchTermFromUrl ||
-        categoryIdFromUrl ||
-        brandIdFromUrl ||
-        vendorIdFromUrl ||
-        selectedCategories.length > 0 ||
-        selectedBrands.length > 0 ||
-        selectedVendors.length > 0 ||
-        selectedConditions.length > 0 ||
-        Object.keys(selectedAttributes).length > 0 ||
-        priceRange[0] !== 0 || 
-        priceRange[1] !== 50000 || 
-        inStockOnly ||
-        freeShippingOnly;
+      // API expects single IDs; prefer URL params, then first selected
+      const categoryId = categoryIdFromUrl || selectedCategories[0] || undefined;
+      const brandId = brandIdFromUrl || selectedBrands[0] || undefined;
+      const vendorId = vendorIdFromUrl || selectedVendors[0] || undefined;
+      const conditionId = selectedConditions[0] || undefined;
 
-      // Build payload based on active filters
-      const payload: any = {
-        pageNumber,
+      // Flatten selectedAttributes to attributeIds + attributeValues (parallel arrays)
+      const attributeIds: string[] = [];
+      const attributeValues: string[] = [];
+      Object.entries(selectedAttributes).forEach(([attrId, valueIds]) => {
+        valueIds.forEach((vId) => {
+          attributeIds.push(attrId);
+          attributeValues.push(vId);
+        });
+      });
+
+      const payload = {
+        searchTerm: searchTerm || searchTermFromUrl || undefined,
+        categoryId: categoryId || undefined,
+        vendorId: vendorId || undefined,
+        brandId: brandId || undefined,
+        minPrice: priceRange[0],
+        maxPrice: priceRange[1],
+        minItemRating,
+        inStockOnly,
+        freeShippingOnly,
+        conditionId: conditionId || undefined,
+        withWarrantyOnly,
+        attributeIds: attributeIds.length > 0 ? attributeIds : undefined,
+        attributeValues: attributeValues.length > 0 ? attributeValues : undefined,
+        sortBy: sortBy && sortBy !== "default" ? sortBy : undefined,
+        pageNumber: pageNumber - 1, // API is 0-based
         pageSize,
       };
-
-      // Only add filters if they are active
-      if (hasActiveFilters) {
-
-        if (searchTerm) payload.searchTerm = searchTerm;
-        if (searchTermFromUrl) payload.searchTerm = searchTermFromUrl;
-        if (categoryIdFromUrl) payload.categoryId = categoryIdFromUrl;
-        if (brandIdFromUrl) payload.brandId = brandIdFromUrl;
-        if (vendorIdFromUrl) payload.vendorId = vendorIdFromUrl;
-        if (selectedCategories.length > 0) payload.categories = selectedCategories;
-        
-        if (selectedBrands.length > 0) payload.brands = selectedBrands;
-        if (selectedVendors.length > 0) payload.vendors = selectedVendors;
-        if (selectedConditions.length > 0) payload.conditions = selectedConditions;
-
-        // --- FIXED: Map selectedAttributes to API Format ---
-        if (Object.keys(selectedAttributes).length > 0) {
-          payload.attributes = Object.entries(selectedAttributes).map(([attributeId, valueIds]) => ({
-            attributeId: attributeId,
-            valueIds: valueIds
-          }));
-        }
-        // -------------------------------------------------
-
-        if (priceRange[0] !== 0 || priceRange[1] !== 50000) {
-          payload.minPrice = priceRange[0];
-          payload.maxPrice = priceRange[1];
-        }
-        
-        // Example of adding booleans if your API supports them directly
-        // if (inStockOnly) payload.inStockOnly = inStockOnly;
-        // if (freeShippingOnly) payload.freeShippingOnly = freeShippingOnly;
-        // Add others as needed...
-      }
-      
-      // Add sortBy outside of hasActiveFilters check
-      if (sortBy && sortBy !== "default") {
-        payload.sortBy = sortBy;
-      }
 
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/ItemAdvancedSearch/search`,
@@ -245,16 +223,9 @@ const Products = () => {
     setPageSize(12);
   };
 
-  const handleApplyFilters = () => {
-    // Trigger refetch by incrementing filterTrigger
-    setFilterTrigger((prev) => prev + 1);
-    setIsFiltersOpen(false); // Close filters on mobile after applying
-    setPageNumber(1); // Reset to first page when filters change
-  };
-
   const handleSortChange = (newSort: string) => {
     setSortBy(newSort);
-    setFilterTrigger((prev) => prev + 1); // Trigger refetch when sort changes
+    setPageNumber(1);
   };
 
   const handlePageChange = (page: number) => {
@@ -280,40 +251,39 @@ const Products = () => {
           onClose={() => setIsFiltersOpen(false)}
           dynamicFilters={dynamicFilters}
           searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
+          setSearchTerm={applyOnChange(setSearchTerm)}
           selectedCategories={selectedCategories}
-          setSelectedCategories={setSelectedCategories}
+          setSelectedCategories={applyOnChange(setSelectedCategories)}
           priceRange={priceRange}
-          setPriceRange={setPriceRange}
+          setPriceRange={applyOnChange(setPriceRange)}
           selectedBrands={selectedBrands}
-          setSelectedBrands={setSelectedBrands}
+          setSelectedBrands={applyOnChange(setSelectedBrands)}
           selectedVendors={selectedVendors}
-          setSelectedVendors={setSelectedVendors}
+          setSelectedVendors={applyOnChange(setSelectedVendors)}
           selectedConditions={selectedConditions}
-          setSelectedConditions={setSelectedConditions}
+          setSelectedConditions={applyOnChange(setSelectedConditions)}
           selectedAttributes={selectedAttributes}
-          setSelectedAttributes={setSelectedAttributes}
+          setSelectedAttributes={applyOnChange(setSelectedAttributes)}
           minItemRating={minItemRating}
-          setMinItemRating={setMinItemRating}
+          setMinItemRating={applyOnChange(setMinItemRating)}
           minVendorRating={minVendorRating}
-          setMinVendorRating={setMinVendorRating}
+          setMinVendorRating={applyOnChange(setMinVendorRating)}
           inStockOnly={inStockOnly}
-          setInStockOnly={setInStockOnly}
+          setInStockOnly={applyOnChange(setInStockOnly)}
           freeShippingOnly={freeShippingOnly}
-          setFreeShippingOnly={setFreeShippingOnly}
+          setFreeShippingOnly={applyOnChange(setFreeShippingOnly)}
           verifiedVendorsOnly={verifiedVendorsOnly}
-          setVerifiedVendorsOnly={setVerifiedVendorsOnly}
+          setVerifiedVendorsOnly={applyOnChange(setVerifiedVendorsOnly)}
           primeVendorsOnly={primeVendorsOnly}
-          setPrimeVendorsOnly={setPrimeVendorsOnly}
+          setPrimeVendorsOnly={applyOnChange(setPrimeVendorsOnly)}
           onSaleOnly={onSaleOnly}
-          setOnSaleOnly={setOnSaleOnly}
+          setOnSaleOnly={applyOnChange(setOnSaleOnly)}
           buyBoxWinnersOnly={buyBoxWinnersOnly}
-          setBuyBoxWinnersOnly={setBuyBoxWinnersOnly}
+          setBuyBoxWinnersOnly={applyOnChange(setBuyBoxWinnersOnly)}
           withWarrantyOnly={withWarrantyOnly}
-          setWithWarrantyOnly={setWithWarrantyOnly}
+          setWithWarrantyOnly={applyOnChange(setWithWarrantyOnly)}
           showAllOffers={showAllOffers}
-          setShowAllOffers={setShowAllOffers}
-          onApplyFilters={handleApplyFilters}
+          setShowAllOffers={applyOnChange(setShowAllOffers)}
         />
 
         <section className="flex-1 md:bg-white dark:md:bg-gray-900 md:p-5 md:rounded-xl md:border md:border-gray-200 dark:md:border-gray-700">

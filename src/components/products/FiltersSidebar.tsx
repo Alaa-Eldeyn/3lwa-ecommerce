@@ -52,7 +52,6 @@ interface FiltersSidebarProps {
   setWithWarrantyOnly: (value: boolean) => void;
   showAllOffers: boolean;
   setShowAllOffers: (value: boolean) => void;
-  onApplyFilters: () => void;
 }
 
 const FiltersSidebar = ({
@@ -93,19 +92,13 @@ const FiltersSidebar = ({
   setWithWarrantyOnly,
   showAllOffers,
   setShowAllOffers,
-  onApplyFilters,
 }: FiltersSidebarProps) => {
   const t = useTranslations("filters");
 
   return (
     <>
       {/* Overlay for mobile */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={onClose}
-        />
-      )}
+      {isOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={onClose} />}
 
       {/* Filters Sidebar */}
       <aside
@@ -120,29 +113,20 @@ const FiltersSidebar = ({
           overflow-y-auto
           z-50 lg:z-auto
           transition-transform duration-300 ease-in-out
-          ${
-            isOpen
-              ? "translate-x-0 lg:translate-x-0"
-              : "-translate-x-full lg:translate-x-0"
-          }
-        `}
-      >
+          ${isOpen ? "translate-x-0 lg:translate-x-0" : "-translate-x-full lg:translate-x-0"}
+        `}>
         <div className="flex-between border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            {t("filtersTitle")}
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("filtersTitle")}</h2>
           <button
             onClick={onClose}
             className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
-            aria-label="Close filters"
-          >
+            aria-label="Close filters">
             <svg
               width="24"
               height="24"
               viewBox="0 0 24 24"
               fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+              xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M18 6L6 18M6 6L18 18"
                 stroke="currentColor"
@@ -192,24 +176,22 @@ const FiltersSidebar = ({
         )}
 
         {/* Dynamic Conditions Filter */}
-        {dynamicFilters?.conditions &&
-          dynamicFilters.conditions.length > 0 && (
-            <ConditionsFilter
-              conditions={dynamicFilters.conditions}
-              selectedConditions={selectedConditions}
-              onChange={setSelectedConditions}
-            />
-          )}
+        {dynamicFilters?.conditions && dynamicFilters.conditions.length > 0 && (
+          <ConditionsFilter
+            conditions={dynamicFilters.conditions}
+            selectedConditions={selectedConditions}
+            onChange={setSelectedConditions}
+          />
+        )}
 
         {/* Dynamic Attributes Filter */}
-        {dynamicFilters?.attributes &&
-          dynamicFilters.attributes.length > 0 && (
-            <AttributesFilter
-              attributes={dynamicFilters.attributes}
-              selectedAttributes={selectedAttributes}
-              onChange={setSelectedAttributes}
-            />
-          )}
+        {dynamicFilters?.attributes && dynamicFilters.attributes.length > 0 && (
+          <AttributesFilter
+            attributes={dynamicFilters.attributes}
+            selectedAttributes={selectedAttributes}
+            onChange={setSelectedAttributes}
+          />
+        )}
 
         <RatingFilter
           label={t("minItemRating")}
@@ -223,10 +205,7 @@ const FiltersSidebar = ({
           onChange={setMinVendorRating}
         />
 
-        <StockQuantityFilter
-          inStockOnly={inStockOnly}
-          onInStockOnlyChange={setInStockOnly}
-        />
+        <StockQuantityFilter inStockOnly={inStockOnly} onInStockOnlyChange={setInStockOnly} />
 
         <ShippingDeliveryFilter
           freeShippingOnly={freeShippingOnly}
@@ -260,14 +239,6 @@ const FiltersSidebar = ({
           showAllOffers={showAllOffers}
           onShowAllOffersChange={setShowAllOffers}
         />
-
-        {/* Apply Button */}
-        <button
-          onClick={onApplyFilters}
-          className="w-full mt-6 px-6 py-3 bg-secondary dark:bg-white text-white dark:text-black rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition"
-        >
-          تطبيق الفلاتر
-        </button>
       </aside>
     </>
   );
