@@ -36,6 +36,9 @@ const Order = ({ id }: OrderProps) => {
     orderDetailId: string;
     itemName: string;
     quantity: number;
+    itemImage: string;
+    unitPrice: number;
+    subTotal: number;
   } | null>(null);
   const [cancelItemQuantity, setCancelItemQuantity] = useState(1);
   const [cancelItemReason, setCancelItemReason] = useState("");
@@ -113,6 +116,9 @@ const Order = ({ id }: OrderProps) => {
     orderDetailId: string;
     itemName: string;
     quantity: number;
+    itemImage: string;
+    unitPrice: number;
+    subTotal: number;
   }) => {
     setCancelItemTarget(item);
     setCancelItemQuantity(item.quantity);
@@ -328,6 +334,9 @@ const Order = ({ id }: OrderProps) => {
                                     orderDetailId: item.orderDetailId,
                                     itemName: item.itemName,
                                     quantity: item.quantity,
+                                    itemImage: item.itemImage,
+                                    unitPrice: item.unitPrice,
+                                    subTotal: item.subTotal,
                                   })
                                 }
                                 className="text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 flex items-center gap-1">
@@ -486,35 +495,76 @@ const Order = ({ id }: OrderProps) => {
         {/* Cancel Item Modal */}
         {cancelItemTarget && (
           <div
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200"
             onClick={closeCancelItemModal}
             dir={isArabic ? "rtl" : "ltr"}>
             <div
               onClick={(e) => e.stopPropagation()}
-              className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full shadow-2xl">
-              <div className="mb-6">
-                <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4 mx-auto">
-                  <AlertTriangle className="text-red-600 dark:text-red-400" size={24} />
+              className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+              {/* Header with warning */}
+              <div className="px-6 pt-6 pb-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0">
+                    <AlertTriangle className="text-red-600 dark:text-red-400" size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                      {t("cancelItemModal.title")}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {t("cancelItemModal.description")}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 text-center">
-                  {t("cancelItemModal.title")}
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-2">
-                  {t("cancelItemModal.description")}
-                </p>
-                <p className="text-sm font-medium text-gray-900 dark:text-white mb-4 text-center">
-                  {cancelItemTarget.itemName}
-                </p>
+              </div>
 
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              {/* Item card */}
+              <div className="px-6 pb-4">
+                <div className="flex gap-3 p-2 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600">
+                  <div className="h-20 w-20 rounded-xl overflow-hidden bg-white dark:bg-gray-700 shrink-0 relative border border-gray-200 dark:border-gray-600">
+                    {cancelItemTarget.itemImage ? (
+                      <Image
+                        src={
+                          cancelItemTarget.itemImage.startsWith("http")
+                            ? cancelItemTarget.itemImage
+                            : `${process.env.NEXT_PUBLIC_DOMAIN}/${cancelItemTarget.itemImage}`
+                        }
+                        alt={cancelItemTarget.itemName}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Package className="w-10 h-10 text-gray-400 dark:text-gray-500" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0 flex flex-col justify-center">
+                    <h4 className="font-semibold text-sm text-gray-900 dark:text-white line-clamp-2">
+                      {cancelItemTarget.itemName}
+                    </h4>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
+                      {t("qty")} {cancelItemTarget.quantity} × $
+                      {cancelItemTarget.unitPrice.toFixed(2)}
+                    </p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
+                      ${cancelItemTarget.subTotal.toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Form */}
+              <div className="px-6 pb-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                     {t("cancelItemModal.quantityLabel")}
                   </label>
                   <select
                     value={cancelItemQuantity}
                     onChange={(e) => setCancelItemQuantity(Number(e.target.value))}
                     disabled={isCancellingItem}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50">
+                    className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50 transition-colors">
                     {Array.from({ length: cancelItemTarget.quantity }, (_, i) => i + 1).map((n) => (
                       <option key={n} value={n}>
                         {n}
@@ -523,8 +573,8 @@ const Order = ({ id }: OrderProps) => {
                   </select>
                 </div>
 
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                     {t("cancelItemModal.reasonLabel")}
                   </label>
                   <textarea
@@ -533,39 +583,39 @@ const Order = ({ id }: OrderProps) => {
                     placeholder={t("cancelItemModal.reasonPlaceholder")}
                     disabled={isCancellingItem}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary resize-none disabled:opacity-50"
+                    className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none disabled:opacity-50 transition-colors"
                   />
                 </div>
 
                 {cancelItemError && (
-                  <p className="text-sm text-red-600 dark:text-red-400 text-center mb-3">
+                  <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-lg">
                     {cancelItemError}
                   </p>
                 )}
-              </div>
 
-              <div className={`flex gap-4 ${isArabic ? "flex-row-reverse" : ""}`}>
-                <button
-                  type="button"
-                  onClick={handleCancelItem}
-                  disabled={isCancellingItem}
-                  className="flex-1 py-3 bg-error hover:bg-error-hover text-white rounded-xl transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                  {isCancellingItem ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      {t("cancelItemModal.cancelling")}
-                    </>
-                  ) : (
-                    t("cancelItemModal.confirm")
-                  )}
-                </button>
-                <button
-                  type="button"
-                  onClick={closeCancelItemModal}
-                  disabled={isCancellingItem}
-                  className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
-                  {t("cancelItemModal.cancel")}
-                </button>
+                <div className={`flex gap-3 pt-2 ${isArabic ? "flex-row-reverse" : ""}`}>
+                  <button
+                    type="button"
+                    onClick={handleCancelItem}
+                    disabled={isCancellingItem}
+                    className="flex-1 py-3 px-4 bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded-xl transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm">
+                    {isCancellingItem ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        {t("cancelItemModal.cancelling")}
+                      </>
+                    ) : (
+                      t("cancelItemModal.confirm")
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={closeCancelItemModal}
+                    disabled={isCancellingItem}
+                    className="flex-1 py-3 px-4 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200 dark:border-gray-600">
+                    {t("cancelItemModal.cancel")}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
