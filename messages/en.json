@@ -831,19 +831,25 @@
     "shipping": "Shipping",
     "shippingFree": "Free",
     "total": "Total",
+    "deliveryAddress": "Delivery address",
     "trackOrder": "Track Order",
     "orderTracking": {
       "title": "Order Tracking Timeline",
       "orderNumber": "Order Number",
       "orderPlaced": "Order Placed",
       "orderPlacedDesc": "Your order has been received",
+      "pickedUp": "Picked Up",
+      "inTransit": "In Transit",
+      "outForDelivery": "Out for Delivery",
       "processing": "Processing",
       "processingDesc": "Your order is being processed",
       "shipped": "Shipped",
       "shippedDesc": "Your order has been shipped and is on the way",
       "delivered": "Delivered",
       "deliveredDesc": "Your order has been delivered successfully",
-      "estimatedDelivery": "Expected delivery by"
+      "estimatedDelivery": "Expected delivery by",
+      "pending": "Pending",
+      "viewDetails": "View Details"
     },
     "cancelOrder": "Cancel Order",
     "cancelOrderModal": {

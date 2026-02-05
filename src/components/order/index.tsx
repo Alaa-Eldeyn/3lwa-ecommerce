@@ -5,11 +5,22 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/src/i18n/routing";
 import Image from "next/image";
 import { customAxios } from "@/src/auth/customAxios";
-import { Package, Loader2, ArrowLeft, ArrowRight, XCircle, X, AlertTriangle } from "lucide-react";
+import {
+  Package,
+  Loader2,
+  ArrowLeft,
+  ArrowRight,
+  XCircle,
+  X,
+  AlertTriangle,
+  Check,
+  Truck,
+  Home,
+  MapPin,
+} from "lucide-react";
 import { OrderData } from "@/src/types/order-details.types";
 import { getOrderStatusInfo } from "@/src/utils/orderStatus";
 import toast from "react-hot-toast";
-import OrderTrackingTimeline from "./OrderTrackingTimeline";
 
 interface OrderProps {
   id: string;
@@ -19,6 +30,7 @@ const Order = ({ id }: OrderProps) => {
   const locale = useLocale();
   const isArabic = locale === "ar";
   const t = useTranslations("order");
+  const tTracking = useTranslations("order.orderTracking");
   const router = useRouter();
 
   const [orderData, setOrderData] = useState<OrderData | null>(null);
@@ -202,7 +214,40 @@ const Order = ({ id }: OrderProps) => {
     );
   }
 
+  // Order status info
   const orderStatusInfo = getOrderStatusInfo(orderData?.orderStatus ?? "");
+  const orderDateFormatted = orderData?.orderDate
+    ? new Date(orderData.orderDate).toLocaleDateString(locale, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : "---";
+  const deliveryAddress = orderData?.deliveryAddress;
+  const deliveryAddressLines = deliveryAddress
+    ? [
+        deliveryAddress.recipientName,
+        deliveryAddress.address,
+        [deliveryAddress.cityNameAr, deliveryAddress.cityNameEn]
+          .filter(Boolean)
+          .join(isArabic ? "، " : ", "),
+        [deliveryAddress.stateNameAr, deliveryAddress.stateNameEn]
+          .filter(Boolean)
+          .join(isArabic ? "، " : ", "),
+        deliveryAddress.phoneCode && deliveryAddress.phoneNumber
+          ? `${deliveryAddress.phoneCode} ${deliveryAddress.phoneNumber}`
+          : null,
+      ].filter(Boolean)
+    : [];
+
+  // Per-item timeline steps
+  const itemTimelineSteps = [
+    { key: "orderPlaced" as const, icon: Check },
+    { key: "pickedUp" as const, icon: Check },
+    { key: "inTransit" as const, icon: Truck },
+    { key: "outForDelivery" as const, icon: Package },
+    { key: "delivered" as const, icon: Home },
+  ];
 
   return (
     <main className="bg-gray-50 dark:bg-gray-900">
@@ -223,140 +268,157 @@ const Order = ({ id }: OrderProps) => {
       </div>
 
       <div className="container mx-auto px-4 md:px-6 py-4 md:py-8">
-        {/* Order Header */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              {t("orderDetails")}
-            </h1>
-            <span
-              className={`px-3 py-1 rounded-full text-sm font-medium ${orderStatusInfo.bgColor}`}>
-              {isArabic ? orderStatusInfo.labelAr : orderStatusInfo.label}
-            </span>
-          </div>
-          <div className="flex gap-2 items-center text-gray-600 dark:text-gray-400">
-            <span className="font-semibold text-gray-900 dark:text-white">
-              {orderData?.orderNumber || "---"}
-            </span>
-            <span className="text-sm">•</span>
-            <span className="text-sm">
+        {/* Order header: order number, status chip, date, total */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 px-4 py-4 md:px-6 md:py-5 mb-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+                {tTracking("orderNumber")} {orderData?.orderNumber ?? "---"}
+              </h1>
+              <span
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${orderStatusInfo.bgColor}`}>
+                {isArabic ? orderStatusInfo.labelAr : orderStatusInfo.label}
+              </span>
+            </div>
+            <span>
               {t("placedOn")}
-              {orderData?.orderDate
-                ? new Date(orderData.orderDate).toLocaleDateString(locale, {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })
-                : "---"}
+              {orderDateFormatted}
             </span>
           </div>
         </div>
 
-        {/* Tracking Timeline (inline) */}
-        <OrderTrackingTimeline orderData={orderData} />
-
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Order Items */}
-          <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {t("orderItems")}
-                </h2>
-              </div>
-
-              {orderItems.length > 0 ? (
-                orderItems.map((item, index) => {
-                  const imageSrc = item.itemImage?.startsWith("http")
-                    ? item.itemImage
-                    : `${process.env.NEXT_PUBLIC_DOMAIN}/${item.itemImage}`;
-                  const itemStatusInfo = getOrderStatusInfo(item.shipmentStatus);
-                  const isItemCancelled = item.shipmentStatus === 6;
-                  const canCancelItem = orderData?.canCancel && !isItemCancelled;
-                  return (
-                    <div
-                      key={item.orderDetailId}
-                      className={`p-6 ${
-                        index < orderItems.length - 1
-                          ? "border-b border-gray-200 dark:border-gray-700"
-                          : ""
-                      }`}>
-                      <div className="flex items-start gap-4">
-                        <div className="h-20 w-20 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700 shrink-0 relative">
-                          {item.itemImage ? (
-                            <Image
-                              src={imageSrc}
-                              alt={item.itemName}
-                              fill
-                              className="object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <Package className="w-8 h-8 text-gray-400 dark:text-gray-500" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-xl text-gray-900 dark:text-white mb-1">
-                            {item.itemName}
-                          </h3>
-                          {item.vendorName && (
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                              {t("seller")}
-                              {item.vendorName}
-                            </p>
-                          )}
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm text-gray-600 dark:text-gray-400">
-                                {t("qty")} {item.quantity}
-                              </span>
-                              <span className="text-sm text-gray-600 dark:text-gray-400">×</span>
-                              <span className="text-sm text-gray-600 dark:text-gray-400">
-                                ${item.unitPrice.toFixed(2)}
-                              </span>
-                            </div>
-                            <span className="font-semibold text-gray-900 dark:text-white">
-                              ${item.subTotal.toFixed(2)}
-                            </span>
-                          </div>
-                          <div className="flex flex-wrap items-center justify-between gap-2 mt-2">
-                            <span
-                              className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${itemStatusInfo.bgColor}`}>
-                              {isArabic ? itemStatusInfo.labelAr : itemStatusInfo.label}
-                            </span>
-                            {canCancelItem && (
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  openCancelItemModal({
-                                    orderDetailId: item.orderDetailId,
-                                    itemName: item.itemName,
-                                    quantity: item.quantity,
-                                    itemImage: item.itemImage,
-                                    unitPrice: item.unitPrice,
-                                    subTotal: item.subTotal,
-                                  })
-                                }
-                                className="text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 flex items-center gap-1">
-                                <X className="w-4 h-4" />
-                                {t("cancelItem")}
-                              </button>
+          {/* Item cards */}
+          <div className="lg:col-span-2 space-y-3">
+            {orderItems.length > 0 ? (
+              orderItems.map((item, index) => {
+                const imageSrc = item.itemImage?.startsWith("http")
+                  ? item.itemImage
+                  : `${process.env.NEXT_PUBLIC_DOMAIN}/${item.itemImage}`;
+                const itemStatusInfo = getOrderStatusInfo(item.shipmentStatus);
+                const isItemCancelled = item.shipmentStatus === 6;
+                const canCancelItem = orderData?.canCancel && !isItemCancelled;
+                const itemStatus =
+                  item.shipmentStatus >= 4 ? 4 : Math.min(4, Math.max(0, item.shipmentStatus));
+                const itemProgress = Math.min(
+                  100,
+                  ((itemStatus >= 4 ? 5 : itemStatus + 1) / 5) * 100
+                );
+                return (
+                  <div
+                    key={item.orderDetailId}
+                    id={index === 0 ? "order-items-section" : undefined}
+                    className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden scroll-mt-4">
+                    <div className="p-3 md:p-4">
+                      {/* Item details row */}
+                      <div className="flex items-start justify-between gap-3 mb-3">
+                        <div className="flex items-start gap-3">
+                          <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 shrink-0 relative">
+                            {item.itemImage ? (
+                              <Image
+                                src={imageSrc}
+                                alt={item.itemName}
+                                fill
+                                sizes="56px"
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <Package className="w-6 h-6 text-gray-400 dark:text-gray-500" />
+                              </div>
                             )}
                           </div>
+                          <div className="min-w-0">
+                            <h3 className="font-semibold text-base text-gray-900 dark:text-white line-clamp-2">
+                              {item.itemName}
+                            </h3>
+                            {item.vendorName && (
+                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
+                                {t("seller")}
+                                {item.vendorName}
+                              </p>
+                            )}
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-gray-600 dark:text-gray-400">
+                                {t("qty")} {item.quantity} × ${item.unitPrice.toFixed(2)}
+                              </span>
+                              <span className="font-semibold text-gray-900 dark:text-white">
+                                ${item.subTotal.toFixed(2)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-end shrink-0">
+                          <span
+                            className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${itemStatusInfo.bgColor}`}>
+                            {isArabic ? itemStatusInfo.labelAr : itemStatusInfo.label}
+                          </span>
+                          {canCancelItem && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                openCancelItemModal({
+                                  orderDetailId: item.orderDetailId,
+                                  itemName: item.itemName,
+                                  quantity: item.quantity,
+                                  itemImage: item.itemImage,
+                                  unitPrice: item.unitPrice,
+                                  subTotal: item.subTotal,
+                                })
+                              }
+                              className="mt-1.5 text-xs font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 flex items-center gap-1 ms-auto">
+                              <X className="w-3.5 h-3.5" />
+                              {t("cancelItem")}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Per-item timeline */}
+                      <div className="relative pt-1">
+                        <div className="absolute top-5 start-4 end-4 h-0.5 bg-gray-200 dark:bg-gray-600 rounded" />
+                        <div
+                          className="absolute top-5 start-4 h-0.5 bg-primary dark:bg-primary rounded transition-all duration-300"
+                          style={{ width: `${itemProgress}%` }}
+                        />
+                        <div className="relative flex justify-between">
+                          {itemTimelineSteps.map((step, index) => {
+                            const completed = itemStatus >= index;
+                            const circleBg = completed
+                              ? "bg-primary text-white dark:bg-primary dark:text-white"
+                              : "bg-gray-200 dark:bg-gray-600 text-gray-400 dark:text-gray-500";
+                            return (
+                              <div
+                                key={step.key}
+                                className="flex flex-col items-center min-w-0 flex-1">
+                                <div
+                                  className={`w-8 h-8 rounded-full flex items-center justify-center mb-1 shrink-0 ${circleBg}`}>
+                                  <step.icon className="w-4 h-4" />
+                                </div>
+                                <p
+                                  className={`text-[10px] font-medium text-center leading-tight ${
+                                    completed
+                                      ? "text-gray-900 dark:text-white"
+                                      : "text-gray-500 dark:text-gray-400"
+                                  }`}>
+                                  {tTracking(step.key)}
+                                </p>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     </div>
-                  );
-                })
-              ) : (
-                <div className="p-6 text-center">
-                  <Package className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-3" />
-                  <p className="text-gray-500 dark:text-gray-400">{t("noItems")}</p>
-                </div>
-              )}
-            </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-8 text-center">
+                <Package className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-3" />
+                <p className="text-gray-500 dark:text-gray-400">{t("noItems")}</p>
+              </div>
+            )}
           </div>
 
           {/* Sidebar */}
@@ -405,21 +467,24 @@ const Order = ({ id }: OrderProps) => {
               </div>
             </div>
 
-            {/* Order Actions */}
-            {/* <div className="space-y-3">
-              {orderData?.canCancel && (
-                <button
-                  onClick={() => setShowCancelModal(true)}
-                  className="w-full border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-300 dark:hover:border-red-700 hover:text-red-600 dark:hover:text-red-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-gray-300">
-                  <X className="w-5 h-5" />
-                  {t("cancelOrder")}
-                </button>
-              )}
-            </div> */}
+            {/* Delivery address card */}
+            {deliveryAddressLines.length > 0 && (
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-primary shrink-0" />
+                  {t("deliveryAddress")}
+                </h3>
+                <address className="text-sm text-gray-600 dark:text-gray-400 not-italic space-y-1">
+                  {deliveryAddressLines.map((line, i) => (
+                    <p key={i}>{line}</p>
+                  ))}
+                </address>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Cancel Order Confirmation Modal (legacy – kept for reference) */}
+        {/* Cancel Order Confirmation Modal */}
         {showCancelModal && (
           <div
             className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
