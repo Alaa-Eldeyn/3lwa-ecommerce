@@ -19,7 +19,11 @@ import {
   MapPin,
 } from "lucide-react";
 import { OrderData } from "@/src/types/order-details.types";
-import { getOrderStatusInfo } from "@/src/utils/orderStatus";
+import {
+  getOrderStatusInfo,
+  getShipmentStatusInfo,
+  shipmentStatusToTimelineStep,
+} from "@/src/utils/orderStatus";
 import toast from "react-hot-toast";
 
 interface OrderProps {
@@ -296,15 +300,16 @@ const Order = ({ id }: OrderProps) => {
                 const imageSrc = item.itemImage?.startsWith("http")
                   ? item.itemImage
                   : `${process.env.NEXT_PUBLIC_DOMAIN}/${item.itemImage}`;
-                const itemStatusInfo = getOrderStatusInfo(item.shipmentStatus);
-                const isItemCancelled = item.shipmentStatus === 6;
+                const itemStatusInfo = getShipmentStatusInfo(item.shipmentStatus);
+                const isItemCancelled =
+                  item.shipmentStatus === 7 || item.shipmentStatus === 8;
                 const canCancelItem = orderData?.canCancel && !isItemCancelled;
-                const itemStatus =
-                  item.shipmentStatus >= 4 ? 4 : Math.min(4, Math.max(0, item.shipmentStatus));
-                const itemProgress = Math.min(
-                  100,
-                  ((itemStatus >= 4 ? 5 : itemStatus + 1) / 5) * 100
-                );
+                const itemTimelineStep = shipmentStatusToTimelineStep(item.shipmentStatus);
+                const itemStatus = itemTimelineStep >= 0 ? itemTimelineStep : 0;
+                const itemProgress =
+                  itemTimelineStep >= 0
+                    ? Math.min(100, ((itemTimelineStep + 1) / 5) * 100)
+                    : 0;
                 return (
                   <div
                     key={item.orderDetailId}

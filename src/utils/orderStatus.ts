@@ -1,8 +1,8 @@
-// OrderProgressStatus enum mapping
-// Pending = 0, Confirmed = 1, Processing = 2, Shipped = 3, Delivered = 4, 
-// Completed = 5, Cancelled = 6, PaymentFailed = 7, RefundRequested = 8, 
-// Refunded = 9, Returned = 10
-
+/**
+ * OrderProgressStatus enum (order-level)
+ * Pending=0, Confirmed=1, Processing=2, Shipped=3, Delivered=4,
+ * Completed=5, Cancelled=6, PaymentFailed=7, RefundRequested=8, Refunded=9, Returned=10
+ */
 export const getOrderStatusInfo = (status: string | number) => {
   const statusKey = typeof status === "number" ? status : parseInt(status) || status;
 
@@ -79,4 +79,77 @@ export const getOrderStatusInfo = (status: string | number) => {
       bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
     }
   );
+};
+
+/**
+ * ShipmentStatus enum (order-item / shipment-level)
+ * PendingProcessing=1, PreparingForShipment=2, PickedUpByCarrier=3,
+ * InTransitToCustomer=4, DeliveredToCustomer=5, ReturnedToSender=6,
+ * CancelledByCustomer=7, CancelledByMarketplace=8, DeliveryAttemptFailed=9
+ */
+export const getShipmentStatusInfo = (status: string | number) => {
+  const statusKey = typeof status === "number" ? status : parseInt(status) || status;
+
+  const statusConfig: Record<string | number, { label: string; labelAr: string; bgColor: string }> =
+    {
+      1: {
+        label: "Pending processing",
+        labelAr: "في انتظار المعالجة",
+        bgColor: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+      },
+      2: {
+        label: "Preparing for shipment",
+        labelAr: "جاري تجهيز الشحن",
+        bgColor: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
+      },
+      3: {
+        label: "Picked up by carrier",
+        labelAr: "تم التسليم لشركة الشحن",
+        bgColor: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300",
+      },
+      4: {
+        label: "In transit",
+        labelAr: "في الطريق",
+        bgColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
+      },
+      5: {
+        label: "Delivered",
+        labelAr: "تم التسليم",
+        bgColor: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+      },
+      6: {
+        label: "Returned to sender",
+        labelAr: "تم إرجاع الشحنة",
+        bgColor: "bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300",
+      },
+      7: {
+        label: "Cancelled by customer",
+        labelAr: "ملغي من قبل العميل",
+        bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+      },
+      8: {
+        label: "Cancelled by marketplace",
+        labelAr: "ملغي من قبل المتجر",
+        bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+      },
+      9: {
+        label: "Delivery attempt failed",
+        labelAr: "فشل محاولة التسليم",
+        bgColor: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
+      },
+    };
+
+  return (
+    statusConfig[statusKey] || {
+      label: String(status),
+      labelAr: String(status),
+      bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+    }
+  );
+};
+
+/** Map ShipmentStatus (1–5) to timeline step index (0–4). Returns -1 for cancelled/returned/failed (6–9). */
+export const shipmentStatusToTimelineStep = (shipmentStatus: number): number => {
+  if (shipmentStatus >= 1 && shipmentStatus <= 5) return shipmentStatus - 1;
+  return -1;
 };
