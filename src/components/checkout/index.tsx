@@ -147,7 +147,7 @@ const Checkout = () => {
       const orderData = {
         deliveryAddressId: selectedAddress.id,
         paymentMethod: selectedPaymentMethod.methodType,
-        paymentMethodId: paymentMethodId,
+        // paymentMethodId: paymentMethodId,
         couponCode: appliedPromoCode || null,
         notes: deliveryNotes || null,
       };
