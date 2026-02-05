@@ -942,6 +942,7 @@
     "yourReview": "Your review (optional)",
     "loginToReview": "Log in to write a review",
     "noReviewsYet": "No reviews yet. Be the first to review.",
+    "reportSubmitted": "Report submitted. Thank you for your feedback.",
     "close": "Close",
     "address": "Address:",
     "location": "Location:",
@@ -965,7 +966,9 @@
     "reports": "Reports",
     "ratingOutOf5": "{rating} out of 5",
     "editReview": "Edit review",
-    "deleteReview": "Delete review"
+    "deleteReview": "Delete review",
+    "markHelpful": "Mark as helpful",
+    "reportReview": "Report this review"
   },
   "vendorsSidebar": {
     "title": "Available Offers",

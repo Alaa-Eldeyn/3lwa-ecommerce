@@ -47,6 +47,7 @@ const VendorPage = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  // Fetch review stats
   const fetchReviewStats = useCallback(async () => {
     if (!id) return;
     setReviewStatsLoading(true);
@@ -60,6 +61,7 @@ const VendorPage = () => {
     }
   }, [id]);
 
+  // Fetch reviews
   const fetchReviews = useCallback(
     async (pageNumber: number = 1, append: boolean = false) => {
       if (!id || typeof id !== "string") return;
@@ -84,6 +86,7 @@ const VendorPage = () => {
     [id, reviewsPageSize]
   );
 
+  // Fetch vendor data
   useEffect(() => {
     if (!id) return;
     setVendorLoading(true);
@@ -100,16 +103,19 @@ const VendorPage = () => {
       .finally(() => setVendorLoading(false));
   }, [id]);
 
+  // Fetch review stats
   useEffect(() => {
     if (!id || !vendorData) return;
     fetchReviewStats();
   }, [id, vendorData, fetchReviewStats]);
 
+  // Fetch reviews
   useEffect(() => {
     if (!id || !vendorData) return;
     fetchReviews(1, false);
   }, [id, vendorData, fetchReviews]);
 
+  // Fetch products
   useEffect(() => {
     if (!id || !vendorData) return;
     setProductsLoading(true);
@@ -131,6 +137,7 @@ const VendorPage = () => {
       .finally(() => setProductsLoading(false));
   }, [id, vendorData]);
 
+  // Submit review
   const handleSubmitReview = async (payload: VendorReviewSubmitPayload) => {
     setSubmitError(null);
     setSubmitLoading(true);
@@ -150,6 +157,26 @@ const VendorPage = () => {
     }
   };
 
+  // Update review
+  const updateReview = async (payload: VendorReviewUpdatePayload) => {
+    try {
+      await customAxios.put("/VendorReview/update", payload);
+      await fetchReviewStats();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || t("error"));
+    }
+  };
+
+  // Delete review
+  const deleteReview = async (id: string) => {
+    try {
+      await customAxios.post("/VendorReview/delete", { id });
+      await fetchReviewStats();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || t("error"));
+    }
+  };
+
   const openReviewModal = () => {
     setSubmitError(null);
     setReviewModalOpen(true);
@@ -162,23 +189,32 @@ const VendorPage = () => {
     }
   };
 
-  const updateReview = async (payload: VendorReviewUpdatePayload) => {
-    try {
-      await customAxios.put("/VendorReview/update", payload);
-      await fetchReviewStats();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || t("error"));
-    }
-  };
+  // Handle review helpful
+  const handleReviewHelpful = useCallback(
+    async (reviewId: string) => {
+      try {
+        await customAxios.post(`/VendorReview/${reviewId}/helpful`, { reviewId });
+        await fetchReviews(1, false);
+      } catch (err: any) {
+        toast.error(err?.response?.data?.message || t("error"));
+      }
+    },
+    [fetchReviews, t]
+  );
 
-  const deleteReview = async (id: string) => {
-    try {
-      await customAxios.post("/VendorReview/delete", { id });
-      await fetchReviewStats();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || t("error"));
-    }
-  };
+  // Handle review report
+  const handleReviewReport = useCallback(
+    async (reviewId: string) => {
+      try {
+        await customAxios.post(`/VendorReview/${reviewId}/report`, { reviewId });
+        toast.success(t("reportSubmitted"));
+        await fetchReviews(1, false);
+      } catch (err: any) {
+        toast.error(err?.response?.data?.message || t("error"));
+      }
+    },
+    [fetchReviews, t]
+  );
 
   if (vendorLoading) {
     return (
@@ -265,14 +301,18 @@ const VendorPage = () => {
     <div
       className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-cairo"
       dir={isArabic ? "rtl" : "ltr"}>
-      <main id="vendor-main" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+      <main
+        id="vendor-main"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
         {/* Vendor Header Section */}
         <div
           id="vendor-header-section"
           className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
             <div className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 flex-shrink-0 bg-gradient-to-br from-primary to-headerDark rounded-xl flex items-center justify-center">
-              <span className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold">{initials}</span>
+              <span className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold">
+                {initials}
+              </span>
             </div>
             <div className="flex-1 w-full text-start">
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-3 text-center sm:text-start">
@@ -346,7 +386,9 @@ const VendorPage = () => {
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                   {tProducts("title")}
                 </h2>
-                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{tProducts("description")}</p>
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+                  {tProducts("description")}
+                </p>
               </div>
               <button
                 onClick={() => router.push(`/products?v=${id}`)}
@@ -375,6 +417,8 @@ const VendorPage = () => {
             user ? openReviewModal() : router.push(`/${locale}/login?redirect=/vendor/${id}`)
           }
           onLoadMore={() => fetchReviews(reviewsPageNumber + 1, true)}
+          onHelpful={handleReviewHelpful}
+          onReport={handleReviewReport}
         />
 
         {/* Write Review Modal */}

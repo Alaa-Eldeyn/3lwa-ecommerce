@@ -13,6 +13,8 @@ export interface VendorReviewsSectionProps {
   locale: string;
   onWriteReview: () => void;
   onLoadMore: () => void;
+  onHelpful?: (reviewId: string) => void | Promise<void>;
+  onReport?: (reviewId: string) => void | Promise<void>;
 }
 
 export default function VendorReviewsSection({
@@ -23,6 +25,8 @@ export default function VendorReviewsSection({
   locale,
   onWriteReview,
   onLoadMore,
+  onHelpful,
+  onReport,
 }: VendorReviewsSectionProps) {
   const t = useTranslations("vendor");
 
@@ -91,28 +95,39 @@ export default function VendorReviewsSection({
         </div>
       ) : reviews.length > 0 ? (
         <div className="space-y-4 mt-5">
-          {reviews.map((review) => (
-            <ReviewCard
-              key={review.id}
-              id={review.id}
-              itemId={review.vendorId}
-              customerName={review.customerName}
-              reviewNumber={
-                review.createdDateUtc
-                  ? new Date(review.createdDateUtc).toLocaleDateString(locale, {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })
-                  : undefined
-              }
-              rating={review.rating}
-              reviewTitle=""
-              reviewText={review.reviewText ?? ""}
-              helpfulVoteCount={0}
-              countReport={0}
-            />
-          ))}
+          {reviews.map((review) => {
+            const r = review as VendorReview & {
+              createdDateUtc?: string;
+              reviewDate?: string;
+              helpfulCount?: number;
+              reportCount?: number;
+            };
+            const dateStr = r.createdDateUtc ?? r.reviewDate;
+            return (
+              <ReviewCard
+                key={review.id}
+                id={review.id}
+                itemId={review.vendorId}
+                customerName={review.customerName}
+                reviewNumber={
+                  dateStr
+                    ? new Date(dateStr).toLocaleDateString(locale, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : undefined
+                }
+                rating={review.rating}
+                reviewTitle=""
+                reviewText={review.reviewText ?? ""}
+                helpfulVoteCount={r.helpfulCount ?? 0}
+                countReport={r.reportCount ?? 0}
+                onHelpful={onHelpful}
+                onReport={onReport}
+              />
+            );
+          })}
           {reviews.length < reviewsTotalRecords && (
             <div className="flex justify-center pt-4">
               <button

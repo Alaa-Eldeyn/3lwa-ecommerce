@@ -943,6 +943,7 @@
     "yourReview": "نص التقييم (اختياري)",
     "loginToReview": "سجّل الدخول لكتابة تقييم",
     "noReviewsYet": "لا توجد تقييمات بعد. كن أول من يقيّم.",
+    "reportSubmitted": "تم إرسال الإبلاغ. شكراً على ملاحظاتك.",
     "close": "إغلاق",
     "address": "العنوان:",
     "location": "الموقع:",
@@ -966,7 +967,9 @@
     "reports": "إبلاغات",
     "ratingOutOf5": "{rating} من 5",
     "editReview": "تعديل التقييم",
-    "deleteReview": "حذف التقييم"
+    "deleteReview": "حذف التقييم",
+    "markHelpful": "تقييم كمفيد",
+    "reportReview": "الإبلاغ عن هذا التقييم"
   },
   "vendorsSidebar": {
     "title": "العروض المتاحة",

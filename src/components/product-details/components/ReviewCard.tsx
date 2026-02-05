@@ -15,9 +15,12 @@ interface ReviewCardProps {
   countReport?: number;
   onEdit?: () => void;
   onDelete?: () => void;
+  onHelpful?: (reviewId: string) => void | Promise<void>;
+  onReport?: (reviewId: string) => void | Promise<void>;
 }
 
 const ReviewCard = ({
+  id,
   rating,
   reviewTitle,
   reviewText,
@@ -27,6 +30,8 @@ const ReviewCard = ({
   countReport = 0,
   onEdit,
   onDelete,
+  onHelpful,
+  onReport,
 }: ReviewCardProps) => {
   const t = useTranslations("reviewCard");
   const displayName = customerNameProp?.trim() || t("anonymous");
@@ -36,10 +41,7 @@ const ReviewCard = ({
       {/* Header: name + rating */}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
         <span className="font-medium text-gray-800 dark:text-gray-200 text-sm">{displayName}</span>
-        <div
-          className="flex items-center gap-0.5"
-          aria-label={t("ratingOutOf5", { rating })}
-        >
+        <div className="flex items-center gap-0.5" aria-label={t("ratingOutOf5", { rating })}>
           {[1, 2, 3, 4, 5].map((i) => (
             <Star
               key={i}
@@ -65,14 +67,36 @@ const ReviewCard = ({
       {/* Footer: helpful, reports, actions */}
       <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-200 dark:border-gray-600">
         <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-          <span className="flex items-center gap-1">
-            <ThumbsUp size={12} className="shrink-0" />
-            {helpfulVoteCount} {t("helpful")}
-          </span>
-          <span className="flex items-center gap-1">
-            <Flag size={12} className="shrink-0" />
-            {countReport} {countReport === 1 ? t("report") : t("reports")}
-          </span>
+          {onHelpful ? (
+            <button
+              type="button"
+              onClick={() => onHelpful(id)}
+              className="flex items-center gap-1 hover:text-primary dark:hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 rounded"
+              aria-label={t("markHelpful")}>
+              <ThumbsUp size={12} className="shrink-0" />
+              {helpfulVoteCount} {t("helpful")}
+            </button>
+          ) : (
+            <span className="flex items-center gap-1">
+              <ThumbsUp size={12} className="shrink-0" />
+              {helpfulVoteCount} {t("helpful")}
+            </span>
+          )}
+          {onReport ? (
+            <button
+              type="button"
+              onClick={() => onReport(id)}
+              className="flex items-center gap-1 hover:text-error dark:hover:text-error transition-colors focus:outline-none focus:ring-2 focus:ring-error/30 rounded"
+              aria-label={t("reportReview")}>
+              <Flag size={12} className="shrink-0" />
+              {countReport} {countReport === 1 ? t("report") : t("reports")}
+            </button>
+          ) : (
+            <span className="flex items-center gap-1">
+              <Flag size={12} className="shrink-0" />
+              {countReport} {countReport === 1 ? t("report") : t("reports")}
+            </span>
+          )}
         </div>
         {/* //TODO: Add edit and delete functionality */}
         {/* {(onEdit || onDelete) && (
