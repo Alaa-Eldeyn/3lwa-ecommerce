@@ -958,6 +958,15 @@
       "viewAllShort": "View All"
     }
   },
+  "reviewCard": {
+    "anonymous": "Anonymous",
+    "helpful": "Helpful",
+    "report": "Report",
+    "reports": "Reports",
+    "ratingOutOf5": "{rating} out of 5",
+    "editReview": "Edit review",
+    "deleteReview": "Delete review"
+  },
   "vendorsSidebar": {
     "title": "Available Offers",
     "loading": "Loading offers...",

@@ -959,6 +959,15 @@
       "viewAllShort": "عرض الكل"
     }
   },
+  "reviewCard": {
+    "anonymous": "مجهول",
+    "helpful": "مفيد",
+    "report": "إبلاغ",
+    "reports": "إبلاغات",
+    "ratingOutOf5": "{rating} من 5",
+    "editReview": "تعديل التقييم",
+    "deleteReview": "حذف التقييم"
+  },
   "vendorsSidebar": {
     "title": "العروض المتاحة",
     "loading": "جاري تحميل العروض...",

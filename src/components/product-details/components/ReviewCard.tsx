@@ -1,6 +1,7 @@
 "use client";
 
 import { Star, Pencil, Trash2, ThumbsUp, Flag } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ReviewCardProps {
   id: string;
@@ -27,14 +28,18 @@ const ReviewCard = ({
   onEdit,
   onDelete,
 }: ReviewCardProps) => {
-  const displayName = customerNameProp?.trim() || "Anonymous";
+  const t = useTranslations("reviewCard");
+  const displayName = customerNameProp?.trim() || t("anonymous");
 
   return (
     <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50/50 dark:bg-gray-800/30">
       {/* Header: name + rating */}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
         <span className="font-medium text-gray-800 dark:text-gray-200 text-sm">{displayName}</span>
-        <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5`}>
+        <div
+          className="flex items-center gap-0.5"
+          aria-label={t("ratingOutOf5", { rating })}
+        >
           {[1, 2, 3, 4, 5].map((i) => (
             <Star
               key={i}
@@ -62,11 +67,11 @@ const ReviewCard = ({
         <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
           <span className="flex items-center gap-1">
             <ThumbsUp size={12} className="shrink-0" />
-            {helpfulVoteCount} helpful
+            {helpfulVoteCount} {t("helpful")}
           </span>
           <span className="flex items-center gap-1">
             <Flag size={12} className="shrink-0" />
-            {countReport} report{countReport !== 1 ? "s" : ""}
+            {countReport} {countReport === 1 ? t("report") : t("reports")}
           </span>
         </div>
         {/* //TODO: Add edit and delete functionality */}
