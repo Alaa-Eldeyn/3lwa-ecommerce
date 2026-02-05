@@ -856,7 +856,21 @@
       "cancelling": "Cancelling...",
       "success": "Order cancelled successfully",
       "error": "Failed to cancel order"
-    }
+    },
+    "cancelItemModal": {
+      "title": "Cancel item",
+      "description": "Cancel this item from your order? You can cancel all or part of the quantity.",
+      "quantityLabel": "Quantity to cancel",
+      "reasonLabel": "Reason (optional)",
+      "reasonPlaceholder": "Reason for cancelling...",
+      "confirm": "Yes, Cancel Item",
+      "cancel": "Keep Item",
+      "cancelling": "Cancelling...",
+      "success": "Item cancelled successfully",
+      "error": "Failed to cancel item"
+    },
+    "itemStatus": "Status",
+    "cancelItem": "Cancel item"
   },
   "product": {
     "addToCart": "Add to Cart",

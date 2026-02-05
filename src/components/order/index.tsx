@@ -5,15 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/src/i18n/routing";
 import Image from "next/image";
 import { customAxios } from "@/src/auth/customAxios";
-import {
-  Package,
-  Loader2,
-  ArrowLeft,
-  ArrowRight,
-  XCircle,
-  X,
-  AlertTriangle,
-} from "lucide-react";
+import { Package, Loader2, ArrowLeft, ArrowRight, XCircle, X, AlertTriangle } from "lucide-react";
 import { OrderData } from "@/src/types/order-details.types";
 import { getOrderStatusInfo } from "@/src/utils/orderStatus";
 import toast from "react-hot-toast";
@@ -32,10 +24,23 @@ const Order = ({ id }: OrderProps) => {
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Cancel order modal
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const [cancelError, setCancelError] = useState<string | null>(null);
   const [cancellationReason, setCancellationReason] = useState("");
+
+  // Cancel single item modal
+  const [cancelItemTarget, setCancelItemTarget] = useState<{
+    orderDetailId: string;
+    itemName: string;
+    quantity: number;
+  } | null>(null);
+  const [cancelItemQuantity, setCancelItemQuantity] = useState(1);
+  const [cancelItemReason, setCancelItemReason] = useState("");
+  const [cancelItemError, setCancelItemError] = useState<string | null>(null);
+  const [isCancellingItem, setIsCancellingItem] = useState(false);
 
   useEffect(() => {
     const fetchOrderData = async () => {
@@ -65,7 +70,6 @@ const Order = ({ id }: OrderProps) => {
 
     fetchOrderData();
   }, [id, t]);
-
 
   // Handle cancel order
   const handleCancelOrder = async () => {
@@ -101,6 +105,55 @@ const Order = ({ id }: OrderProps) => {
       setCancelError(err?.response?.data?.message || t("cancelOrderModal.error"));
     } finally {
       setIsCancelling(false);
+    }
+  };
+
+  // Open cancel item modal
+  const openCancelItemModal = (item: {
+    orderDetailId: string;
+    itemName: string;
+    quantity: number;
+  }) => {
+    setCancelItemTarget(item);
+    setCancelItemQuantity(item.quantity);
+    setCancelItemReason("");
+    setCancelItemError(null);
+  };
+
+  const closeCancelItemModal = () => {
+    if (!isCancellingItem) {
+      setCancelItemTarget(null);
+      setCancelItemQuantity(1);
+      setCancelItemReason("");
+      setCancelItemError(null);
+    }
+  };
+
+  // Cancel single order item (line)
+  const handleCancelItem = async () => {
+    if (!cancelItemTarget || cancelItemQuantity < 1) return;
+
+    try {
+      setIsCancellingItem(true);
+      setCancelItemError(null);
+
+      await customAxios.post("/customer/orders/cancel", {
+        orderDetailId: cancelItemTarget.orderDetailId,
+        quantityToCancel: cancelItemQuantity,
+        reason: cancelItemReason.trim() || undefined,
+      });
+
+      const response = await customAxios.get(`/customer/orders/${id}`);
+      if (response.data?.success && response.data?.data) {
+        setOrderData(response.data.data);
+      }
+
+      closeCancelItemModal();
+      toast.success(t("cancelItemModal.success"), { duration: 3000 });
+    } catch (err: any) {
+      setCancelItemError(err?.response?.data?.message || t("cancelItemModal.error"));
+    } finally {
+      setIsCancellingItem(false);
     }
   };
 
@@ -212,56 +265,80 @@ const Order = ({ id }: OrderProps) => {
                   const imageSrc = item.itemImage?.startsWith("http")
                     ? item.itemImage
                     : `${process.env.NEXT_PUBLIC_DOMAIN}/${item.itemImage}`;
+                  const itemStatusInfo = getOrderStatusInfo(item.shipmentStatus);
+                  const isItemCancelled = item.shipmentStatus === 6;
+                  const canCancelItem = orderData?.canCancel && !isItemCancelled;
                   return (
-                  <div
-                    key={item.orderDetailId}
-                    className={`p-6 ${
-                      index < orderItems.length - 1
-                        ? "border-b border-gray-200 dark:border-gray-700"
-                        : ""
-                    }`}>
-                    <div className="flex items-start gap-4">
-                      <div className="h-20 w-20 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700 shrink-0 relative">
-                        {item.itemImage ? (
-                          <Image
-                            src={imageSrc}
-                            alt={item.itemName}
-                            fill
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <Package className="w-8 h-8 text-gray-400 dark:text-gray-500" />
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-xl text-gray-900 dark:text-white mb-1">
-                          {item.itemName}
-                        </h3>
-                        {item.vendorName && (
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                            {t("seller")}
-                            {item.vendorName}
-                          </p>
-                        )}
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-600 dark:text-gray-400">
-                              {t("qty")} {item.quantity}
+                    <div
+                      key={item.orderDetailId}
+                      className={`p-6 ${
+                        index < orderItems.length - 1
+                          ? "border-b border-gray-200 dark:border-gray-700"
+                          : ""
+                      }`}>
+                      <div className="flex items-start gap-4">
+                        <div className="h-20 w-20 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700 shrink-0 relative">
+                          {item.itemImage ? (
+                            <Image
+                              src={imageSrc}
+                              alt={item.itemName}
+                              fill
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <Package className="w-8 h-8 text-gray-400 dark:text-gray-500" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-xl text-gray-900 dark:text-white mb-1">
+                            {item.itemName}
+                          </h3>
+                          {item.vendorName && (
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                              {t("seller")}
+                              {item.vendorName}
+                            </p>
+                          )}
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-gray-600 dark:text-gray-400">
+                                {t("qty")} {item.quantity}
+                              </span>
+                              <span className="text-sm text-gray-600 dark:text-gray-400">×</span>
+                              <span className="text-sm text-gray-600 dark:text-gray-400">
+                                ${item.unitPrice.toFixed(2)}
+                              </span>
+                            </div>
+                            <span className="font-semibold text-gray-900 dark:text-white">
+                              ${item.subTotal.toFixed(2)}
                             </span>
-                            <span className="text-sm text-gray-600 dark:text-gray-400">×</span>
-                            <span className="text-sm text-gray-600 dark:text-gray-400">
-                              ${item.unitPrice.toFixed(2)}
-                            </span>
                           </div>
-                          <span className="font-semibold text-gray-900 dark:text-white">
-                            ${item.subTotal.toFixed(2)}
-                          </span>
+                          <div className="flex flex-wrap items-center justify-between gap-2 mt-2">
+                            <span
+                              className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${itemStatusInfo.bgColor}`}>
+                              {isArabic ? itemStatusInfo.labelAr : itemStatusInfo.label}
+                            </span>
+                            {canCancelItem && (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  openCancelItemModal({
+                                    orderDetailId: item.orderDetailId,
+                                    itemName: item.itemName,
+                                    quantity: item.quantity,
+                                  })
+                                }
+                                className="text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 flex items-center gap-1">
+                                <X className="w-4 h-4" />
+                                {t("cancelItem")}
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
                   );
                 })
               ) : (
@@ -333,7 +410,7 @@ const Order = ({ id }: OrderProps) => {
           </div>
         </div>
 
-        {/* Cancel Order Confirmation Modal */}
+        {/* Cancel Order Confirmation Modal (legacy – kept for reference) */}
         {showCancelModal && (
           <div
             className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
@@ -400,6 +477,94 @@ const Order = ({ id }: OrderProps) => {
                   disabled={isCancelling}
                   className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
                   {t("cancelOrderModal.cancel")}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Cancel Item Modal */}
+        {cancelItemTarget && (
+          <div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={closeCancelItemModal}
+            dir={isArabic ? "rtl" : "ltr"}>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full shadow-2xl">
+              <div className="mb-6">
+                <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4 mx-auto">
+                  <AlertTriangle className="text-red-600 dark:text-red-400" size={24} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 text-center">
+                  {t("cancelItemModal.title")}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-2">
+                  {t("cancelItemModal.description")}
+                </p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white mb-4 text-center">
+                  {cancelItemTarget.itemName}
+                </p>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {t("cancelItemModal.quantityLabel")}
+                  </label>
+                  <select
+                    value={cancelItemQuantity}
+                    onChange={(e) => setCancelItemQuantity(Number(e.target.value))}
+                    disabled={isCancellingItem}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50">
+                    {Array.from({ length: cancelItemTarget.quantity }, (_, i) => i + 1).map((n) => (
+                      <option key={n} value={n}>
+                        {n}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {t("cancelItemModal.reasonLabel")}
+                  </label>
+                  <textarea
+                    value={cancelItemReason}
+                    onChange={(e) => setCancelItemReason(e.target.value)}
+                    placeholder={t("cancelItemModal.reasonPlaceholder")}
+                    disabled={isCancellingItem}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary resize-none disabled:opacity-50"
+                  />
+                </div>
+
+                {cancelItemError && (
+                  <p className="text-sm text-red-600 dark:text-red-400 text-center mb-3">
+                    {cancelItemError}
+                  </p>
+                )}
+              </div>
+
+              <div className={`flex gap-4 ${isArabic ? "flex-row-reverse" : ""}`}>
+                <button
+                  type="button"
+                  onClick={handleCancelItem}
+                  disabled={isCancellingItem}
+                  className="flex-1 py-3 bg-error hover:bg-error-hover text-white rounded-xl transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                  {isCancellingItem ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      {t("cancelItemModal.cancelling")}
+                    </>
+                  ) : (
+                    t("cancelItemModal.confirm")
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={closeCancelItemModal}
+                  disabled={isCancellingItem}
+                  className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                  {t("cancelItemModal.cancel")}
                 </button>
               </div>
             </div>
