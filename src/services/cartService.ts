@@ -45,6 +45,10 @@ export interface CartItemResponse {
   estimatedDeliveryDays: number;
   vendorRating: number;
   pricingAttributes: PricingAttributeResponse[];
+  /** When false, item may be unavailable (e.g. quantity exceeds maxOrderQuantity) */
+  isAvailable?: boolean;
+  /** Message from API when item is unavailable (e.g. "Quantity exceeds maximum order") */
+  availabilityMessage?: string;
 }
 
 export interface CartSummaryResponse {

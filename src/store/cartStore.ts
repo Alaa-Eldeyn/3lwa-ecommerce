@@ -7,6 +7,7 @@ import {
   updateCartItem,
   clearCartApi,
   getCartCount,
+  type CartItemResponse,
 } from "../services/cartService";
 
 export interface CartPricingAttribute {
@@ -38,6 +39,10 @@ export interface CartItem {
   sellerName?: string;
   pricingAttributes?: CartPricingAttribute[];
   isAvailable?: boolean;
+  /** Message when item is unavailable (e.g. "Quantity exceeds maximum order") */
+  availabilityMessage?: string;
+  minOrderQuantity?: number;
+  maxOrderQuantity?: number;
 }
 
 export interface CartSummary {
@@ -75,6 +80,46 @@ const defaultSummary: CartSummary = {
   subTotal: 0,
   itemCount: 0,
 };
+
+/** Map API cart item to store CartItem; clamp quantity to min/max and return whether server update is needed */
+function mapApiItemToCartItem(
+  item: CartItemResponse
+): { cartItem: CartItem; clampedQuantity: number; needsServerUpdate: boolean } {
+  const minQty = item.minOrderQuantity ?? 1;
+  const maxQty = item.maxOrderQuantity;
+  const quantity =
+    maxQty != null && item.quantity > maxQty ? maxQty : item.quantity;
+  const clampedQty = minQty != null && quantity < minQty ? minQty : quantity;
+  const cartItem: CartItem = {
+    id: item.cartItemId,
+    cartItemId: item.cartItemId,
+    itemCombinationId: item.itemCombinationId,
+    name: item.itemNameEn || item.itemNameAr,
+    nameAr: item.itemNameAr,
+    nameEn: item.itemNameEn,
+    price: item.currentUnitPrice,
+    originalPrice: item.unitOriginalPrice,
+    subTotal: item.subTotal,
+    image: item.imageUrl,
+    quantity: clampedQty,
+    offerCombinationPricingId: item.offerCombinationPricingId,
+    vendorId: item.vendorId,
+    sellerName: item.sellerName,
+    pricingAttributes: item.pricingAttributes ?? [],
+    isAvailable:
+      item.isAvailable !== undefined
+        ? item.isAvailable
+        : item.availableQuantity > 0,
+    availabilityMessage: item.availabilityMessage,
+    minOrderQuantity: item.minOrderQuantity,
+    maxOrderQuantity: item.maxOrderQuantity,
+  };
+  return {
+    cartItem,
+    clampedQuantity: clampedQty,
+    needsServerUpdate: clampedQty !== item.quantity,
+  };
+}
 
 export const useCartStore = create<CartState>()(
   persist(
@@ -143,11 +188,20 @@ export const useCartStore = create<CartState>()(
         }
       },
 
-      // دالة لتحديث الكمية
+      // دالة لتحديث الكمية (مع التحقق من minOrderQuantity و maxOrderQuantity)
       updateQuantity: async (id, quantity, isAuthenticated = false) => {
         if (quantity <= 0) {
           await get().removeItem(id, isAuthenticated);
           return;
+        }
+
+        const item = get().getItemById(id);
+        let validatedQuantity = quantity;
+        if (item) {
+          const minQty = item.minOrderQuantity ?? 1;
+          const maxQty = item.maxOrderQuantity;
+          if (maxQty != null && quantity > maxQty) validatedQuantity = maxQty;
+          else if (quantity < minQty) validatedQuantity = minQty;
         }
 
         if (isAuthenticated) {
@@ -155,7 +209,7 @@ export const useCartStore = create<CartState>()(
             set({ isLoading: true });
             await updateCartItem({
               cartItemId: id,
-              quantity,
+              quantity: validatedQuantity,
             });
             await get().loadCartFromServer();
           } catch (error) {
@@ -166,7 +220,9 @@ export const useCartStore = create<CartState>()(
           }
         } else {
           set({
-            items: get().items.map((item) => (item.id === id ? { ...item, quantity } : item)),
+            items: get().items.map((item) =>
+              item.id === id ? { ...item, quantity: validatedQuantity } : item
+            ),
           });
         }
       },
@@ -224,24 +280,48 @@ export const useCartStore = create<CartState>()(
         try {
           const cartData = await getCartSummary();
 
-          const serverItems: CartItem[] = (cartData.items ?? []).map((item) => ({
-            id: item.cartItemId,
-            cartItemId: item.cartItemId,
-            itemCombinationId: item.itemCombinationId,
-            name: item.itemNameEn || item.itemNameAr,
-            nameAr: item.itemNameAr,
-            nameEn: item.itemNameEn,
-            price: item.currentUnitPrice,
-            originalPrice: item.unitOriginalPrice,
-            subTotal: item.subTotal,
-            image: item.imageUrl,
-            quantity: item.quantity,
-            offerCombinationPricingId: item.offerCombinationPricingId,
-            vendorId: item.vendorId,
-            sellerName: item.sellerName,
-            pricingAttributes: item.pricingAttributes ?? [],
-            isAvailable: item.availableQuantity > 0,
-          }));
+          const itemsRaw = cartData.items ?? [];
+          const serverItems: CartItem[] = [];
+          const clampUpdates: { cartItemId: string; quantity: number }[] = [];
+
+          for (const item of itemsRaw) {
+            const { cartItem, clampedQuantity, needsServerUpdate } =
+              mapApiItemToCartItem(item);
+            serverItems.push(cartItem);
+            if (needsServerUpdate) {
+              clampUpdates.push({
+                cartItemId: item.cartItemId,
+                quantity: clampedQuantity,
+              });
+            }
+          }
+
+          // Sync server when we clamped any quantity (fix over-max on server)
+          if (clampUpdates.length > 0) {
+            for (const { cartItemId, quantity } of clampUpdates) {
+              try {
+                await updateCartItem({ cartItemId, quantity });
+              } catch (e) {
+                console.warn("Failed to correct cart item quantity on server:", e);
+              }
+            }
+            // Reload so summary and totals reflect corrected quantities
+            const freshData = await getCartSummary();
+            const freshItems = (freshData.items ?? []).map((apiItem) =>
+              mapApiItemToCartItem(apiItem).cartItem
+            );
+            const freshSummary: CartSummary = {
+              subTotal: freshData.subTotal ?? 0,
+              itemCount: freshData.totalCartItems ?? freshData.items?.length ?? 0,
+              totalCartItems: freshData.totalCartItems,
+              totalQuantity: freshData.totalQuantity,
+              totalOriginalPrice: freshData.totalOriginalPrice,
+              totalDiscount: freshData.totalDiscount,
+              hasFreeShipping: freshData.hasFreeShipping,
+            };
+            set({ items: freshItems, summary: freshSummary });
+            return;
+          }
 
           const summary: CartSummary = {
             subTotal: cartData.subTotal ?? 0,
