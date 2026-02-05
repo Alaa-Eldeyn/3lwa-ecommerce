@@ -17,6 +17,7 @@ import {
   Truck,
   Home,
   MapPin,
+  CircleDashed,
 } from "lucide-react";
 import { OrderData } from "@/src/types/order-details.types";
 import {
@@ -246,7 +247,7 @@ const Order = ({ id }: OrderProps) => {
 
   // Per-item timeline steps
   const itemTimelineSteps = [
-    { key: "orderPlaced" as const, icon: Check },
+    { key: "orderPlaced" as const, icon: CircleDashed },
     { key: "pickedUp" as const, icon: Check },
     { key: "inTransit" as const, icon: Truck },
     { key: "outForDelivery" as const, icon: Package },
@@ -317,7 +318,7 @@ const Order = ({ id }: OrderProps) => {
                     className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden scroll-mt-4">
                     <div className="p-3 md:p-4">
                       {/* Item details row */}
-                      <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="flex items-start justify-between gap-3 mb-4">
                         <div className="flex items-start gap-3">
                           <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 shrink-0 relative">
                             {item.itemImage ? (
@@ -344,13 +345,13 @@ const Order = ({ id }: OrderProps) => {
                                 {item.vendorName}
                               </p>
                             )}
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm text-gray-600 dark:text-gray-400">
+                            <div>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
                                 {t("qty")} {item.quantity} × ${item.unitPrice.toFixed(2)}
-                              </span>
-                              <span className="font-semibold text-gray-900 dark:text-white">
+                              </p>
+                              <p className="font-semibold text-gray-900 dark:text-white">
                                 ${item.subTotal.toFixed(2)}
-                              </span>
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -393,12 +394,13 @@ const Order = ({ id }: OrderProps) => {
                             const circleBg = completed
                               ? "bg-primary text-white dark:bg-primary dark:text-white"
                               : "bg-gray-200 dark:bg-gray-600 text-gray-400 dark:text-gray-500";
+                            const stepLabel = getShipmentStatusInfo(index + 1);
                             return (
                               <div
                                 key={step.key}
                                 className="flex flex-col items-center min-w-0 flex-1">
                                 <div
-                                  className={`w-8 h-8 rounded-full flex items-center justify-center mb-1 shrink-0 ${circleBg}`}>
+                                  className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 shrink-0 ${circleBg}`}>
                                   <step.icon className="w-4 h-4" />
                                 </div>
                                 <p
@@ -407,7 +409,7 @@ const Order = ({ id }: OrderProps) => {
                                       ? "text-gray-900 dark:text-white"
                                       : "text-gray-500 dark:text-gray-400"
                                   }`}>
-                                  {tTracking(step.key)}
+                                  {isArabic ? stepLabel.labelAr : stepLabel.label}
                                 </p>
                               </div>
                             );
