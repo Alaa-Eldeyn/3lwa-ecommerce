@@ -65,7 +65,7 @@ const VendorPage = () => {
       if (!id || typeof id !== "string") return;
       setReviewsLoading(true);
       try {
-        const { data } = await customAxios.get("/VendorReview/search", {
+        const { data } = await customAxios.get("/VendorReview/search-public", {
           params: { vendorId: id, pageNumber, pageSize: reviewsPageSize },
         });
         const payload = data?.data ?? data;
