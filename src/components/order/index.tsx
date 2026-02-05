@@ -156,6 +156,12 @@ const Order = ({ id }: OrderProps) => {
   const handleCancelItem = async () => {
     if (!cancelItemTarget || cancelItemQuantity < 1) return;
 
+    const trimmedReason = cancelItemReason.trim();
+    if (!trimmedReason) {
+      setCancelItemError(t("cancelItemModal.reasonRequired"));
+      return;
+    }
+
     try {
       setIsCancellingItem(true);
       setCancelItemError(null);
@@ -163,16 +169,12 @@ const Order = ({ id }: OrderProps) => {
       await customAxios.post("/customer/orders/cancel", {
         orderDetailId: cancelItemTarget.orderDetailId,
         quantityToCancel: cancelItemQuantity,
-        reason: cancelItemReason.trim() || undefined,
+        reason: trimmedReason,
       });
-
-      const response = await customAxios.get(`/customer/orders/${id}`);
-      if (response.data?.success && response.data?.data) {
-        setOrderData(response.data.data);
-      }
 
       closeCancelItemModal();
       toast.success(t("cancelItemModal.success"), { duration: 3000 });
+      window.location.reload();
     } catch (err: any) {
       setCancelItemError(err?.response?.data?.message || t("cancelItemModal.error"));
     } finally {
@@ -647,14 +649,18 @@ const Order = ({ id }: OrderProps) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                    {t("cancelItemModal.reasonLabel")}
+                    {t("cancelItemModal.reasonLabel")} <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     value={cancelItemReason}
-                    onChange={(e) => setCancelItemReason(e.target.value)}
+                    onChange={(e) => {
+                      setCancelItemReason(e.target.value);
+                      if (cancelItemError) setCancelItemError(null);
+                    }}
                     placeholder={t("cancelItemModal.reasonPlaceholder")}
                     disabled={isCancellingItem}
                     rows={3}
+                    required
                     className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none disabled:opacity-50 transition-colors"
                   />
                 </div>
@@ -666,20 +672,20 @@ const Order = ({ id }: OrderProps) => {
                 )}
 
                 <div className={`flex gap-3 pt-2 ${isArabic ? "flex-row-reverse" : ""}`}>
-                  <button
-                    type="button"
-                    onClick={handleCancelItem}
-                    disabled={isCancellingItem}
-                    className="flex-1 py-3 px-4 bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded-xl transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm">
-                    {isCancellingItem ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        {t("cancelItemModal.cancelling")}
-                      </>
-                    ) : (
-                      t("cancelItemModal.confirm")
-                    )}
-                  </button>
+                <button
+                  type="button"
+                  onClick={handleCancelItem}
+                  disabled={isCancellingItem || !cancelItemReason.trim()}
+                  className="flex-1 py-3 px-4 bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded-xl transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm">
+                  {isCancellingItem ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      {t("cancelItemModal.cancelling")}
+                    </>
+                  ) : (
+                    t("cancelItemModal.confirm")
+                  )}
+                </button>
                   <button
                     type="button"
                     onClick={closeCancelItemModal}
