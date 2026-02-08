@@ -957,7 +957,7 @@
   },
   "product": {
     "addToCart": "أضف للسلة",
-    "outOfStock": "نفذ من المخزن",
+    "outOfStock": "غير متوفر",
     "freeShipping": "شحن مجاني",
     "pleaseLogin": "يرجى تسجيل الدخول لإضافة المنتجات للمفضلة",
     "addedToWishlist": "تمت الإضافة إلى قائمة الأمنيات",

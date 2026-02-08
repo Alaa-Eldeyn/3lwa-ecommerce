@@ -48,38 +48,50 @@ const ProductCard = ({
   const locale = useLocale();
   const t = useTranslations("product");
   const { items, addItem, updateQuantity, removeItem } = useCartStore();
-  const { items: wishlistItems, addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore();
+  const {
+    items: wishlistItems,
+    addItem: addToWishlist,
+    removeItem: removeFromWishlist,
+    isInWishlist,
+  } = useWishlistStore();
   const { isAuthenticated, user } = useUserStore();
   const [isWishlistLoading, setIsWishlistLoading] = useState(false);
 
   const isArabic = locale === "ar";
-  
+
   // التحقق من وجود المنتج في الـ wishlist
   const isFavorite = useMemo(() => {
     if (!itemCombinationId) return false;
     return isInWishlist(itemCombinationId);
   }, [wishlistItems, itemCombinationId, isInWishlist]);
-  
 
   const image = thumbnailImage || "";
-  const displayTitle = isArabic ? (titleAr || "") : (titleEn || "");
-  const displayDescription = isArabic 
-    ? (shortDescriptionAr || descriptionAr || "")
-    : (shortDescriptionEn || descriptionEn || "");
-  const displayCategory = isArabic
-    ? (categoryTitle || "")
-    : (categoryTitle || "");
-  const displayBrand = isArabic ? (brandNameAr || brandTitle || "") : (brandNameEn || brandTitle || "");
-  
+  const displayTitle = isArabic ? titleAr || "" : titleEn || "";
+  const displayDescription = isArabic
+    ? shortDescriptionAr || descriptionAr || ""
+    : shortDescriptionEn || descriptionEn || "";
+  const displayCategory = isArabic ? categoryTitle || "" : categoryTitle || "";
+  const displayBrand = isArabic ? brandNameAr || brandTitle || "" : brandNameEn || brandTitle || "";
+
   // TODO: Review
   const currentPrice = salesPrice || price || basePrice || minimumPrice || 0;
   // السعر الأصلي (قبل الخصم)
-  const originalPrice = price && salesPrice && price > salesPrice ? price : (maximumPrice && maximumPrice > currentPrice ? maximumPrice : undefined);
+  const originalPrice =
+    price && salesPrice && price > salesPrice
+      ? price
+      : maximumPrice && maximumPrice > currentPrice
+      ? maximumPrice
+      : undefined;
   // نسبة الخصم
-  const discount = originalPrice ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100) : undefined;
+  const discount = originalPrice
+    ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
+    : undefined;
 
   // Find if product exists in cart
-  const cartItem = useMemo(() => items.find((item) => item.id === itemCombinationId), [items, itemCombinationId]);
+  const cartItem = useMemo(
+    () => items.find((item) => item.id === itemCombinationId),
+    [items, itemCombinationId]
+  );
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -92,14 +104,17 @@ const ProductCard = ({
     console.log("Adding to cart:", itemId);
     console.log("Using offerCombinationPricingId:", offerCombinationPricingId);
     try {
-      await addItem({
-        id: itemCombinationId,
-        itemId: itemId,
-        name: displayTitle,
-        price: currentPrice,
-        image: image,
-        offerCombinationPricingId: offerCombinationPricingId,
-      }, isAuthenticated());
+      await addItem(
+        {
+          id: itemCombinationId,
+          itemId: itemId,
+          name: displayTitle,
+          price: currentPrice,
+          image: image,
+          offerCombinationPricingId: offerCombinationPricingId,
+        },
+        isAuthenticated()
+      );
     } catch (error) {
       console.error("Failed to add item to cart:", error);
     }
@@ -135,7 +150,7 @@ const ProductCard = ({
 
   const toggleWishlist = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    
+
     if (!itemCombinationId) {
       console.error("itemCombinationId is required");
       return;
@@ -159,7 +174,7 @@ const ProductCard = ({
     } finally {
       setIsWishlistLoading(false);
     }
-  }
+  };
 
   if (variant === "minimal") {
     return (
@@ -177,7 +192,9 @@ const ProductCard = ({
 
           {/* Discount Badge */}
           {discount && (
-            <div dir="rtl" className="absolute top-3 right-3 bg-primary text-white text-xs font-bold px-3 py-1 rounded-md shadow-md">
+            <div
+              dir="rtl"
+              className="absolute top-3 right-3 bg-primary text-white text-xs font-bold px-3 py-1 rounded-md shadow-md">
               {discount}%-
             </div>
           )}
@@ -200,9 +217,7 @@ const ProductCard = ({
               </div>
             )}
             {displayBrand && (
-              <div className="text-xs text-primary dark:text-primary font-bold">
-                {displayBrand}
-              </div>
+              <div className="text-xs text-primary dark:text-primary font-bold">{displayBrand}</div>
             )}
           </div>
 
@@ -237,15 +252,19 @@ const ProductCard = ({
           </div>
 
           {/* Prices */}
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-base md:text-xl font-bold text-gray-900 dark:text-white">${currentPrice.toFixed(2)}</span>
-
-            {originalPrice && (
-              <span className="text-xs md:text-sm line-through text-gray-400 dark:text-gray-500">
-                ${originalPrice.toFixed(2)}
+          {stockStatus !== "OutOfStock" && (
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-base md:text-xl font-bold text-gray-900 dark:text-white">
+                ${currentPrice.toFixed(2)}
               </span>
-            )}
-          </div>
+
+              {originalPrice && (
+                <span className="text-xs md:text-sm line-through text-gray-400 dark:text-gray-500">
+                  ${originalPrice.toFixed(2)}
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Badges */}
           {badges && badges.length > 0 && (
@@ -368,7 +387,9 @@ const ProductCard = ({
 
           {/* Prices */}
           <div className="flex items-center gap-2">
-            <span className="text-base md:text-xl font-bold text-gray-900 dark:text-white">${currentPrice.toFixed(2)}</span>
+            <span className="text-base md:text-xl font-bold text-gray-900 dark:text-white">
+              ${currentPrice.toFixed(2)}
+            </span>
 
             {originalPrice && (
               <>
@@ -484,7 +505,12 @@ const ProductCard = ({
         <div
           onClick={() => router.push(`/products/product-details/${itemCombinationId}`)}
           className="w-full aspect-square relative bg-gray-50 dark:bg-gray-700 overflow-hidden">
-          <Image src={`${process.env.NEXT_PUBLIC_DOMAIN}/${image}`} alt={displayTitle} fill className="object-cover group-hover:scale-105 soft" />
+          <Image
+            src={`${process.env.NEXT_PUBLIC_DOMAIN}/${image}`}
+            alt={displayTitle}
+            fill
+            className="object-cover group-hover:scale-105 soft"
+          />
 
           {/* Favorite Button - Top Left */}
           <button
@@ -516,8 +542,14 @@ const ProductCard = ({
               {currentPrice.toLocaleString()}
               <span className="text-xs md:text-sm font-normal">جنيه</span>
             </span>
-            {originalPrice && <span className="line-through text-xs md:text-sm text-gray-400 dark:text-gray-500">${originalPrice.toFixed(2)}</span>}
-            {discount && <span className="font-bold text-sm md:text-base text-green-500">{discount}%-</span>}
+            {originalPrice && (
+              <span className="line-through text-xs md:text-sm text-gray-400 dark:text-gray-500">
+                ${originalPrice.toFixed(2)}
+              </span>
+            )}
+            {discount && (
+              <span className="font-bold text-sm md:text-base text-green-500">{discount}%-</span>
+            )}
           </div>
 
           {cartItem ? (
@@ -760,7 +792,9 @@ const ProductCard = ({
 
             {/* Prices */}
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-base md:text-xl font-bold text-white drop-shadow-lg">${currentPrice.toFixed(2)}</span>
+              <span className="text-base md:text-xl font-bold text-white drop-shadow-lg">
+                ${currentPrice.toFixed(2)}
+              </span>
               {originalPrice && (
                 <span className="text-xs md:text-sm line-through text-white/70 drop-shadow-lg">
                   ${originalPrice.toFixed(2)}

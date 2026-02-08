@@ -33,12 +33,15 @@ export function VendorHeader() {
   }, [accountOpen]);
 
   const isActive = (href: string) => {
-    if (href === "/vendor/dashboard") return pathname === "/vendor/dashboard" || pathname?.endsWith("/vendor");
+    if (href === "/vendor/dashboard")
+      return pathname === "/vendor/dashboard" || pathname?.endsWith("/vendor");
     return pathname?.startsWith(href);
   };
 
   const navLinkClass = (href: string) =>
-    `flex text-nowrap items-center gap-1 px-2 lg:px-4 py-2 text-white hover:text-white transition-all duration-200 rounded-md font-medium text-sm hover:bg-white/10 ${isActive(href) ? "bg-white/10" : ""}`;
+    `flex text-nowrap items-center gap-1 px-2 lg:px-4 py-2 text-white hover:text-white transition-all duration-200 rounded-md font-medium text-sm hover:bg-white/10 ${
+      isActive(href) ? "bg-white/10" : ""
+    }`;
 
   return (
     <header className="text-primary dark:text-white w-full shadow-md sticky top-0 z-50">
@@ -50,8 +53,7 @@ export function VendorHeader() {
             <Link
               href="/vendor/dashboard"
               className="flex items-center gap-2"
-              aria-label="Vendor Dashboard"
-            >
+              aria-label="Vendor Dashboard">
               <Image
                 src="/images/logo/logogt.png"
                 alt="Basit"
@@ -59,31 +61,21 @@ export function VendorHeader() {
                 height={30}
                 className="block"
               />
-              <span className="text-white font-medium text-sm md:text-base opacity-90">
+              {/* <span className="text-white font-medium text-sm md:text-base opacity-90">
                 | Vendor
-              </span>
+              </span> */}
             </Link>
           </div>
 
           {/* Actions - same layout as HeaderActions (hidden lg:flex items-center gap-4 flex-1 justify-end) */}
           <div className="hidden lg:flex items-center gap-4 flex-1 justify-end">
-            <Link
-              href="/vendor/notifications"
-              className="relative text-white hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all flex items-center gap-1"
-              aria-label="Notifications"
-            >
-              <i className="fa-regular fa-bell text-lg" aria-hidden />
-              <span className="absolute -top-0.5 right-0 w-2 h-2 bg-red-500 rounded-full" />
-            </Link>
-
             <div className="relative" ref={accountRef}>
               <button
                 type="button"
                 onClick={() => setAccountOpen(!accountOpen)}
                 className="text-white hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all"
                 aria-expanded={accountOpen}
-                aria-label="Account menu"
-              >
+                aria-label="Account menu">
                 <div className="text-[11px] leading-tight">Vendor</div>
                 <div className="flex items-center gap-1 font-semibold text-sm">
                   <span>Ahmed Store</span>
@@ -99,27 +91,32 @@ export function VendorHeader() {
                   <Link
                     href="/vendor/profile-edit"
                     className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-                    onClick={() => setAccountOpen(false)}
-                  >
+                    onClick={() => setAccountOpen(false)}>
                     Profile
                   </Link>
                   <Link
                     href="/vendor/security-settings"
                     className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-                    onClick={() => setAccountOpen(false)}
-                  >
+                    onClick={() => setAccountOpen(false)}>
                     Security
                   </Link>
                   <Link
                     href="/vendor/login"
                     className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-                    onClick={() => setAccountOpen(false)}
-                  >
+                    onClick={() => setAccountOpen(false)}>
                     Sign out
                   </Link>
                 </div>
               )}
             </div>
+
+            <Link
+              href="/vendor/notifications"
+              className="relative text-white hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all flex items-center gap-1"
+              aria-label="Notifications">
+              <i className="fa-regular fa-bell text-lg" aria-hidden />
+              <span className="absolute -top-0.5 right-0 w-2 h-2 bg-red-500 rounded-full" />
+            </Link>
           </div>
 
           {/* Mobile: menu toggle + notifications + account */}
@@ -127,8 +124,7 @@ export function VendorHeader() {
             <Link
               href="/vendor/notifications"
               className="relative text-white p-2 hover:ring-1 hover:ring-white/50 rounded-sm transition-all"
-              aria-label="Notifications"
-            >
+              aria-label="Notifications">
               <i className="fa-regular fa-bell text-xl" aria-hidden />
               <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" />
             </Link>
@@ -136,9 +132,11 @@ export function VendorHeader() {
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-white hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all"
-              aria-label="Toggle menu"
-            >
-              <i className={`fa-solid ${mobileMenuOpen ? "fa-times" : "fa-bars"} text-xl`} aria-hidden />
+              aria-label="Toggle menu">
+              <i
+                className={`fa-solid ${mobileMenuOpen ? "fa-times" : "fa-bars"} text-xl`}
+                aria-hidden
+              />
             </button>
           </div>
         </div>
@@ -154,8 +152,7 @@ export function VendorHeader() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={navLinkClass(item.href)}
-                >
+                  className={navLinkClass(item.href)}>
                   <i className={`fa-solid ${item.icon}`} aria-hidden />
                   {item.label}
                 </Link>
@@ -172,11 +169,7 @@ export function VendorHeader() {
         <div className="px-4 lg:px-8 relative overflow-auto">
           <nav className="flex items-center gap-1 py-2 w-full justify-start relative">
             {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={navLinkClass(item.href)}
-              >
+              <Link key={item.href} href={item.href} className={navLinkClass(item.href)}>
                 <i className={`fa-solid ${item.icon} me-2`} aria-hidden />
                 {item.label}
               </Link>
