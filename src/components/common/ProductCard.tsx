@@ -224,13 +224,13 @@ const ProductCard = ({
           {/* Title */}
           <Link
             href={`/products/product-details/${itemCombinationId}`}
-            className="!block! text-sm md:text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 leading-tight group-hover:text-primary soft">
+            className="!block! text-sm md:text-base font-bold text-gray-900 dark:text-white mb-2 leading-tight group-hover:text-primary soft">
             {displayTitle}
           </Link>
 
           {/* Description */}
           {displayDescription && (
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1 line-clamp-1">
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
               {displayDescription}
             </p>
           )}
@@ -374,13 +374,13 @@ const ProductCard = ({
           {/* Title */}
           <Link
             href={`/products/product-details/${itemCombinationId}`}
-            className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
+            className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2">
             {displayTitle}
           </Link>
 
           {/* Description */}
           {displayDescription && (
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-1">
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
               {displayDescription}
             </p>
           )}
@@ -444,13 +444,13 @@ const ProductCard = ({
           {/* Title */}
           <Link
             href={`/products/product-details/${itemCombinationId}`}
-            className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2 line-clamp-1">
+            className="text-lg font-bold text-gray-900 group-hover:text-secondary dark:text-white mb-2">
             {displayTitle}
           </Link>
 
           {/* Description */}
           {displayDescription && (
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-1">
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
               {displayDescription}
             </p>
           )}
@@ -609,7 +609,7 @@ const ProductCard = ({
           {/* Title */}
           <Link
             href={`/products/product-details/${itemCombinationId}`}
-            className="block text-sm md:text-base font-bold text-gray-900 dark:text-white mb-1 line-clamp-1 group-hover:text-primary transition-colors">
+            className="block text-sm md:text-base font-bold text-gray-900 dark:text-white mb-1 group-hover:text-primary transition-colors">
             {displayTitle}
           </Link>
 
