@@ -177,3 +177,28 @@ export const logoutUser = async (): Promise<void> => {
     });
   }
 };
+
+/* -------------------------------------------------------------------------- */
+/**
+ * تسجيل دخول البائع
+ */
+export const loginVendor = async (email: string, password: string): Promise<User> => {
+  try {
+    const response = await axios.post<AuthResponse>(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/Auth/login-vendor`,
+      { email, password }
+    );
+
+    return handleAuthSuccess(response.data);
+  } catch (error) {
+    const errorMessage = axios.isAxiosError(error)
+      ? error.response?.data?.message || "فشل تسجيل الدخول"
+      : "فشل تسجيل الدخول";
+
+    if (typeof window !== "undefined") {
+      toast.error(errorMessage);
+    }
+
+    throw new Error(errorMessage);
+  }
+};
