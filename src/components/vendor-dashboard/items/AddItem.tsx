@@ -4,31 +4,46 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "@/src/i18n/routing";
 import { useLocale } from "next-intl";
 import axios from "axios";
-import type { Product } from "@/src/types/types";
+import type {
+  Item,
+  ItemSearchResponse,
+  ItemDetail,
+  ItemByIdResponse,
+  // Attribute API is admin-only – uncomment when available to vendor:
+  // CategoryAttribute,
+  // CategoryAttributesResponse,
+  // AttributeOption,
+} from "@/src/types/item-search.types";
 
 const SEARCH_DEBOUNCE_MS = 350;
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-type CombinationRow = { color: string; storage: string; price: string; stock: string; sku: string };
-
-const defaultCombinationRows: CombinationRow[] = [
-  { color: "Black", storage: "32GB", price: "89.50", stock: "15", sku: "WH-BT-001-BK-32" },
-  { color: "Black", storage: "64GB", price: "109.50", stock: "12", sku: "WH-BT-001-BK-64" },
-  { color: "White", storage: "32GB", price: "89.50", stock: "8", sku: "WH-BT-001-WH-32" },
-  { color: "White", storage: "64GB", price: "109.50", stock: "10", sku: "WH-BT-001-WH-64" },
-];
+// Attribute API (combination mode) – uncomment when API is available:
+// type CombinationRow = { optionIds: string[]; price: string; stock: string; sku: string };
+// function cartesian<T>(arrays: T[][]): T[][] {
+//   if (arrays.length === 0) return [[]];
+//   const [first, ...rest] = arrays;
+//   const restProduct = cartesian(rest);
+//   return first.flatMap((f) => restProduct.map((r) => [f, ...r]));
+// }
 
 export function AddItem() {
   const locale = useLocale();
   const isArabic = locale === "ar";
 
-  const [pricingMode, setPricingMode] = useState<"basic" | "combination">("basic");
   const [itemSearchQuery, setItemSearchQuery] = useState("");
   const [itemSearchDebounced, setItemSearchDebounced] = useState("");
-  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [searchResults, setSearchResults] = useState<Item[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<Product | null>(null);
   const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
+
+  const [itemDetail, setItemDetail] = useState<ItemDetail | null>(null);
+  const [itemDetailLoading, setItemDetailLoading] = useState(false);
+  // Attribute API is admin-only – uncomment when available:
+  // const [categoryAttributes, setCategoryAttributes] = useState<CategoryAttribute[]>([]);
+  // const [attributesLoading, setAttributesLoading] = useState(false);
+  // const [selectedOptionIdsByAttribute, setSelectedOptionIdsByAttribute] = useState<Record<string, string[]>>({});
+  // const [combinationRows, setCombinationRows] = useState<CombinationRow[]>([]);
 
   // Basic pricing state
   const [salePrice, setSalePrice] = useState("");
@@ -36,8 +51,14 @@ export function AddItem() {
   const [stockQuantity, setStockQuantity] = useState("");
   const [lowStockAlert, setLowStockAlert] = useState("");
 
-  // Combination pricing state
-  const [combinationRows, setCombinationRows] = useState<CombinationRow[]>(defaultCombinationRows);
+  // Attribute API is admin-only – use combination mode when API is available:
+  const pricingMode: "basic" | "combination" = "basic";
+  // useMemo(() => {
+  //   const hasMultipleOptions = categoryAttributes.some(
+  //     (attr) => (attr.AttributeOptionsJson?.length ?? 0) > 1
+  //   );
+  //   return hasMultipleOptions ? "combination" : "basic";
+  // }, [categoryAttributes]);
 
   // Debounce search query
   useEffect(() => {
@@ -45,7 +66,7 @@ export function AddItem() {
     return () => clearTimeout(t);
   }, [itemSearchQuery]);
 
-  // Fetch search results
+  // Fetch search results via GET /Item/search
   useEffect(() => {
     if (!itemSearchDebounced) {
       setSearchResults([]);
@@ -53,15 +74,13 @@ export function AddItem() {
     }
     let cancelled = false;
     setSearchLoading(true);
+    const params = new URLSearchParams({
+      searchTerm: itemSearchDebounced,
+      pageSize: "10",
+      pageNumber: "1",
+    });
     axios
-      .post<{ data?: { items?: Product[]; totalCount?: number } }>(
-        `${BASE_URL}/ItemAdvancedSearch/search`,
-        {
-          searchTerm: itemSearchDebounced,
-          pageNumber: 0,
-          pageSize: 12,
-        }
-      )
+      .get<ItemSearchResponse>(`${BASE_URL}/Item/search?${params.toString()}`)
       .then((res) => {
         if (!cancelled && res.data?.data?.items) setSearchResults(res.data.data.items);
       })
@@ -76,28 +95,118 @@ export function AddItem() {
     };
   }, [itemSearchDebounced]);
 
-  const handleSelectItem = useCallback((item: Product) => {
-    setSelectedItem(item);
+  const handleSelectItem = useCallback((item: Item) => {
     setItemSearchQuery("");
     setItemSearchDebounced("");
     setSearchResults([]);
     setSearchDropdownOpen(false);
-    // Pre-fill basic pricing from item when available for dynamic calculations
-    const price = item.salesPrice ?? item.price ?? item.minimumPrice ?? item.basePrice;
-    if (price != null && !Number.isNaN(Number(price))) setSalePrice(String(price));
-    if (item.basePrice != null && !Number.isNaN(Number(item.basePrice)))
-      setCostPrice(String(item.basePrice));
-    if (item.availableQuantity != null && !Number.isNaN(Number(item.availableQuantity)))
-      setStockQuantity(String(item.availableQuantity));
+    setItemDetail(null);
+    // setCategoryAttributes([]);
+    // setSelectedOptionIdsByAttribute({});
+    // setCombinationRows([]);
+
+    setItemDetailLoading(true);
+    // setAttributesLoading(true);
+    axios
+      .get<ItemByIdResponse>(`${BASE_URL}/Item/${item.id}`)
+      .then((res) => {
+        const detail = res.data?.data;
+        if (!detail) return;
+        setItemDetail(detail);
+        const price =
+          detail.baseSalesPrice ?? detail.minimumPrice ?? detail.maximumPrice ?? detail.basePrice;
+        if (price != null && !Number.isNaN(Number(price))) setSalePrice(String(price));
+        if (detail.basePrice != null && !Number.isNaN(Number(detail.basePrice)))
+          setCostPrice(String(detail.basePrice));
+        if (detail.quantity != null && !Number.isNaN(Number(detail.quantity)))
+          setStockQuantity(String(detail.quantity));
+        // Attribute API is admin-only – uncomment when available:
+        // return axios
+        //   .get<CategoryAttributesResponse>(`${BASE_URL}/Attribute/category/${detail.categoryId}`)
+        //   .then((attrRes) => ({ detail, attrs: attrRes.data?.data ?? [] }));
+      })
+      // .then((payload) => {
+      //   if (!payload) return;
+      //   setCategoryAttributes(payload.attrs);
+      //   const byAttr: Record<string, string[]> = {};
+      //   payload.attrs.forEach((attr) => {
+      //     const values = payload.detail.itemAttributes
+      //       .filter((a) => a.attributeId === attr.attributeId)
+      //       .map((a) => a.value)
+      //       .filter(Boolean);
+      //     const options = attr.AttributeOptionsJson ?? [];
+      //     const firstOption = [...options].sort((a, b) => a.displayOrder - b.displayOrder)[0];
+      //     byAttr[attr.attributeId] =
+      //       values.length > 0 ? values : (firstOption ? [firstOption.id] : []);
+      //   });
+      //   setSelectedOptionIdsByAttribute(byAttr);
+      // })
+      .catch(() => {
+        setItemDetail(null);
+        // setCategoryAttributes([]);
+      })
+      .finally(() => {
+        setItemDetailLoading(false);
+        // setAttributesLoading(false);
+      });
   }, []);
 
+  // Attribute API is admin-only – uncomment when available:
+  // const orderedAttributes = useMemo(
+  //   () => [...categoryAttributes].sort((a, b) => a.displayOrder - b.displayOrder),
+  //   [categoryAttributes]
+  // );
+  // useEffect(() => {
+  //   if (pricingMode !== "combination" || orderedAttributes.length === 0) {
+  //     setCombinationRows([]);
+  //     return;
+  //   }
+  //   const optionIdArrays = orderedAttributes.map(
+  //     (attr) => selectedOptionIdsByAttribute[attr.attributeId] ?? []
+  //   );
+  //   const hasEmpty = optionIdArrays.some((arr) => arr.length === 0);
+  //   if (hasEmpty) {
+  //     setCombinationRows([]);
+  //     return;
+  //   }
+  //   const product = cartesian(optionIdArrays);
+  //   const defaultPrice = itemDetail?.basePrice != null ? String(itemDetail.basePrice) : "";
+  //   const defaultStock = itemDetail?.quantity != null ? String(itemDetail.quantity) : "";
+  //   setCombinationRows((prev) => {
+  //     const prevByKey = new Map(prev.map((r) => [r.optionIds.join("|"), r]));
+  //     return product.map((optionIds) => {
+  //       const key = optionIds.join("|");
+  //       const existing = prevByKey.get(key);
+  //       return {
+  //         optionIds,
+  //         price: existing?.price ?? defaultPrice,
+  //         stock: existing?.stock ?? defaultStock,
+  //         sku: existing?.sku ?? "",
+  //       };
+  //     });
+  //   });
+  // }, [pricingMode, orderedAttributes, selectedOptionIdsByAttribute, itemDetail?.basePrice, itemDetail?.quantity]);
+  // const toggleAttributeOption = useCallback((attributeId: string, optionId: string) => {
+  //   setSelectedOptionIdsByAttribute((prev) => {
+  //     const current = prev[attributeId] ?? [];
+  //     const has = current.includes(optionId);
+  //     const next = has ? current.filter((id) => id !== optionId) : [...current, optionId];
+  //     return { ...prev, [attributeId]: next.length > 0 ? next : current };
+  //   });
+  // }, []);
+  // const selectAllAttributeOptions = useCallback((attributeId: string, optionIds: string[]) => {
+  //   setSelectedOptionIdsByAttribute((prev) => ({ ...prev, [attributeId]: optionIds }));
+  // }, []);
+
   const clearSelectedItem = useCallback(() => {
-    setSelectedItem(null);
+    setItemDetail(null);
+    // setCategoryAttributes([]);
+    // setSelectedOptionIdsByAttribute({});
+    // setCombinationRows([]);
     setSalePrice("");
     setCostPrice("");
     setStockQuantity("");
     setLowStockAlert("");
-    setCombinationRows(defaultCombinationRows);
   }, []);
 
   // Dynamic calculations for basic pricing
@@ -109,38 +218,50 @@ export function AddItem() {
   const profitPerUnit = (salePriceNum - costPriceNum).toFixed(2);
   const totalValue = (salePriceNum * stockNum).toFixed(2);
 
-  // Dynamic calculations for combination pricing
-  const combinationTotals = useMemo(() => {
-    let totalValueComb = 0;
-    combinationRows.forEach((row) => {
-      const p = parseFloat(row.price) || 0;
-      const s = parseInt(row.stock, 10) || 0;
-      totalValueComb += p * s;
-    });
-    return { totalValue: totalValueComb.toFixed(2), count: combinationRows.length };
-  }, [combinationRows]);
+  // Attribute API (combination mode) – uncomment when available:
+  // const combinationTotals = useMemo(() => {
+  //   let totalValueComb = 0;
+  //   combinationRows.forEach((row) => {
+  //     const p = parseFloat(row.price) || 0;
+  //     const s = parseInt(row.stock, 10) || 0;
+  //     totalValueComb += p * s;
+  //   });
+  //   return { totalValue: totalValueComb.toFixed(2), count: combinationRows.length };
+  // }, [combinationRows]);
+  // const updateCombinationRow = useCallback(
+  //   (index: number, field: "price" | "stock" | "sku", value: string) => {
+  //     setCombinationRows((prev) => {
+  //       const next = [...prev];
+  //       next[index] = { ...next[index], [field]: value };
+  //       return next;
+  //     });
+  //   },
+  //   []
+  // );
+  // const getOptionLabel = useCallback(
+  //   (attr: CategoryAttribute, optionId: string): string => {
+  //     const opt = attr.AttributeOptionsJson?.find((o) => o.id === optionId);
+  //     if (!opt) return optionId;
+  //     return isArabic ? opt.titleAr : opt.titleEn;
+  //   },
+  //   [isArabic]
+  // );
 
-  const updateCombinationRow = useCallback(
-    (index: number, field: keyof CombinationRow, value: string) => {
-      setCombinationRows((prev) => {
-        const next = [...prev];
-        next[index] = { ...next[index], [field]: value };
-        return next;
-      });
-    },
-    []
-  );
-
-  const displayTitle = (item: Product) =>
+  const displayTitle = (item: Item | ItemDetail) =>
     (isArabic ? item.titleAr : item.titleEn) || item.title || "";
-  const displayCategory = (item: Product) =>
+  const displayCategory = (item: Item | ItemDetail) =>
     (isArabic ? item.categoryTitleAr : item.categoryTitleEn) || item.categoryTitle || "—";
-  const displayBrand = (item: Product) =>
+  const displayBrand = (item: Item | ItemDetail) =>
     (isArabic ? item.brandTitleAr : item.brandTitleEn) || item.brandTitle || "—";
-  const itemImage = (item: Product) =>
-    item.thumbnailImage
-      ? `${process.env.NEXT_PUBLIC_DOMAIN || ""}/${item.thumbnailImage}`.replace(/\/+/g, "/")
-      : "/placeholder.png";
+  const itemImage = (item: Item | ItemDetail) => {
+    const thumb = item.thumbnailImage;
+    if (thumb)
+      return `${process.env.NEXT_PUBLIC_DOMAIN || ""}/${thumb}`.replace(/\/+/g, "/");
+    const detail = item as ItemDetail;
+    if (Array.isArray(detail.images) && detail.images.length > 0 && detail.images[0]?.path)
+      return `${process.env.NEXT_PUBLIC_DOMAIN || ""}/${detail.images[0].path}`.replace(/\/+/g, "/");
+    return "/placeholder.png";
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
@@ -159,7 +280,7 @@ export function AddItem() {
             </p>
           </div>
         </div>
-        {selectedItem && (
+        {itemDetail && (
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -190,7 +311,7 @@ export function AddItem() {
             }}
             onFocus={() => searchResults.length > 0 && setSearchDropdownOpen(true)}
             onBlur={() => setTimeout(() => setSearchDropdownOpen(false), 200)}
-            placeholder="Search by name, SKU, or category..."
+            placeholder="Search for an item"
             className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
             aria-label="Search items"
           />
@@ -222,7 +343,7 @@ export function AddItem() {
               ) : (
                 <ul className="py-2">
                   {searchResults.map((item) => (
-                    <li key={item.itemCombinationId || item.itemId}>
+                    <li key={item.id}>
                       <button
                         type="button"
                         onClick={() => handleSelectItem(item)}
@@ -239,7 +360,7 @@ export function AddItem() {
                             {displayTitle(item)}
                           </p>
                           <p className="text-xs text-gray-500 truncate">
-                            {item.sku || item.itemId} · {displayCategory(item)}
+                            {item.sku} · {displayCategory(item)}
                           </p>
                         </div>
                       </button>
@@ -252,7 +373,14 @@ export function AddItem() {
         </div>
       </div>
 
-      {selectedItem && (
+      {itemDetailLoading && (
+        <div className="mb-6 p-6 bg-white rounded-lg border border-gray-200 flex items-center justify-center gap-2 text-gray-600">
+          <i className="fa-solid fa-spinner fa-spin" aria-hidden />
+          <span>Loading item details...</span>
+        </div>
+      )}
+
+      {itemDetail && !itemDetailLoading && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1 space-y-6">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -261,31 +389,25 @@ export function AddItem() {
                 <div className="w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
                   <img
                     className="w-full h-full object-cover"
-                    src={itemImage(selectedItem)}
-                    alt={displayTitle(selectedItem)}
+                    src={itemImage(itemDetail)}
+                    alt={displayTitle(itemDetail)}
                   />
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Product Name</p>
-                  <p className="font-medium text-foreground">{displayTitle(selectedItem)}</p>
+                  <p className="font-medium text-foreground">{displayTitle(itemDetail)}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">SKU</p>
-                  <p className="font-mono text-sm text-foreground">
-                    {selectedItem.sku || selectedItem.itemId}
-                  </p>
+                  <p className="text-sm text-foreground">{itemDetail.sku ?? "—"}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Category</p>
-                  <p className="text-sm text-foreground">{displayCategory(selectedItem)}</p>
+                  <p className="text-sm text-foreground">{displayCategory(itemDetail)}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Brand</p>
-                  <p className="text-sm text-foreground">{displayBrand(selectedItem)}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Item ID</p>
-                  <p className="font-mono text-xs text-gray-500">{selectedItem.itemId}</p>
+                  <p className="text-sm text-foreground">{displayBrand(itemDetail)}</p>
                 </div>
               </div>
             </div>
@@ -326,36 +448,6 @@ export function AddItem() {
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-foreground mb-4">Pricing Configuration</h3>
-              <div className="mb-6">
-                <div className="flex gap-4">
-                  <button
-                    type="button"
-                    onClick={() => setPricingMode("basic")}
-                    className={`flex-1 px-4 py-3 border-2 rounded-lg text-sm font-medium transition-colors ${
-                      pricingMode === "basic"
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-gray-300 text-gray-600 hover:border-gray-400"
-                    }`}>
-                    <i className="fa-solid fa-tag mr-2" aria-hidden />
-                    Basic Pricing
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPricingMode("combination")}
-                    className={`flex-1 px-4 py-3 border-2 rounded-lg text-sm font-medium transition-colors ${
-                      pricingMode === "combination"
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-gray-300 text-gray-600 hover:border-gray-400"
-                    }`}>
-                    <i className="fa-solid fa-layer-group mr-2" aria-hidden />
-                    Combination Pricing
-                  </button>
-                </div>
-                <p className="text-xs text-gray-600 mt-2">
-                  Choose how to set pricing for this item
-                </p>
-              </div>
-
               {pricingMode === "basic" && (
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -433,46 +525,59 @@ export function AddItem() {
                 </div>
               )}
 
-              {pricingMode === "combination" && (
+              {/* Attribute API is admin-only – uncomment when GET /Attribute/category/{categoryId} is available to vendor: */}
+              {/* {pricingMode === "combination" && (
                 <div className="space-y-6">
                   <div className="space-y-4">
-                    <h4 className="font-medium text-foreground">Select Attributes</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Color
-                        </label>
-                        <div className="space-y-2">
-                          {["Black", "White", "Blue"].map((c) => (
-                            <label key={c} className="flex items-center">
-                              <input
-                                type="checkbox"
-                                className="rounded border-gray-300 text-primary focus:ring-primary/20"
-                                defaultChecked={c !== "Blue"}
-                              />
-                              <span className="ml-2 text-sm">{c}</span>
-                            </label>
-                          ))}
-                        </div>
+                    <h4 className="font-medium text-foreground">Select at least one option per attribute</h4>
+                    {attributesLoading ? (
+                      <p className="text-sm text-gray-500">Loading attributes...</p>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {orderedAttributes.map((attr) => {
+                          const title = isArabic ? attr.titleAr : attr.titleEn;
+                          const options = [...(attr.AttributeOptionsJson ?? [])].sort(
+                            (a, b) => a.displayOrder - b.displayOrder
+                          );
+                          const selected = selectedOptionIdsByAttribute[attr.attributeId] ?? [];
+                          return (
+                            <div key={attr.id}>
+                              <label className="block text-sm font-medium text-foreground mb-2">
+                                {title}
+                                {attr.isRequired && <span className="text-red-500 ml-1">*</span>}
+                              </label>
+                              <div className="flex flex-wrap gap-2">
+                                {options.map((opt: AttributeOption) => {
+                                  const label = isArabic ? opt.titleAr : opt.titleEn;
+                                  const checked = selected.includes(opt.id);
+                                  return (
+                                    <label
+                                      key={opt.id}
+                                      className="flex items-center rounded border border-gray-300 px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                                      <input
+                                        type="checkbox"
+                                        checked={checked}
+                                        onChange={() => toggleAttributeOption(attr.attributeId, opt.id)}
+                                        className="rounded border-gray-300 text-primary focus:ring-primary/20"
+                                      />
+                                      <span className="ml-2">{label}</span>
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                              {options.length > 1 && (
+                                <button
+                                  type="button"
+                                  onClick={() => selectAllAttributeOptions(attr.attributeId, options.map((o) => o.id))}
+                                  className="mt-1 text-xs text-primary hover:underline">
+                                  Select all
+                                </button>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Storage
-                        </label>
-                        <div className="space-y-2">
-                          {["32GB", "64GB", "128GB"].map((s) => (
-                            <label key={s} className="flex items-center">
-                              <input
-                                type="checkbox"
-                                className="rounded border-gray-300 text-primary focus:ring-primary/20"
-                                defaultChecked={s !== "128GB"}
-                              />
-                              <span className="ml-2 text-sm">{s}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                    )}
                   </div>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
@@ -486,12 +591,13 @@ export function AddItem() {
                       <table className="w-full border border-gray-200 rounded-lg">
                         <thead className="bg-gray-50">
                           <tr>
-                            <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
-                              Color
-                            </th>
-                            <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
-                              Storage
-                            </th>
+                            {orderedAttributes.map((attr) => (
+                              <th
+                                key={attr.attributeId}
+                                className="text-left px-4 py-3 text-sm font-medium text-gray-600">
+                                {isArabic ? attr.titleAr : attr.titleEn}
+                              </th>
+                            ))}
                             <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
                               Price (EGP)
                             </th>
@@ -512,9 +618,12 @@ export function AddItem() {
                             const stockNum = parseInt(row.stock, 10) || 0;
                             const lineTotal = (priceNum * stockNum).toFixed(2);
                             return (
-                              <tr key={row.sku} className="border-t border-gray-100">
-                                <td className="px-4 py-3 text-sm">{row.color}</td>
-                                <td className="px-4 py-3 text-sm">{row.storage}</td>
+                              <tr key={row.optionIds.join("|")} className="border-t border-gray-100">
+                                {orderedAttributes.map((attr, attrIndex) => (
+                                  <td key={attr.attributeId} className="px-4 py-3 text-sm">
+                                    {getOptionLabel(attr, row.optionIds[attrIndex] ?? "")}
+                                  </td>
+                                ))}
                                 <td className="px-4 py-3">
                                   <input
                                     type="number"
@@ -536,7 +645,17 @@ export function AddItem() {
                                     className="w-16 border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary/20"
                                   />
                                 </td>
-                                <td className="px-4 py-3 text-xs text-gray-500">{row.sku}</td>
+                                <td className="px-4 py-3">
+                                  <input
+                                    type="text"
+                                    value={row.sku}
+                                    onChange={(e) =>
+                                      updateCombinationRow(index, "sku", e.target.value)
+                                    }
+                                    placeholder="SKU"
+                                    className="w-24 border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary/20"
+                                  />
+                                </td>
                                 <td className="px-4 py-3 text-right text-sm font-medium text-primary">
                                   {lineTotal}
                                 </td>
@@ -550,14 +669,15 @@ export function AddItem() {
                       <div className="flex items-center">
                         <i className="fa-solid fa-info-circle text-blue-600 mr-2" aria-hidden />
                         <p className="text-sm text-blue-800">
-                          Combinations are automatically generated based on selected attributes.
-                          Ensure all combinations have valid pricing and stock levels.
+                          Combinations are generated from your selected attribute options. Choose at
+                          least one option per attribute above, then set price and stock for each
+                          combination.
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
 
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -603,12 +723,23 @@ export function AddItem() {
         </div>
       )}
 
-      {!selectedItem && (
+      {!itemDetail && !itemDetailLoading && (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
           <i className="fa-solid fa-box-open text-4xl text-gray-300 mb-3" aria-hidden />
           <p className="text-gray-600">
             Search and select an item above to configure your offer and pricing.
           </p>
+        </div>
+      )}
+
+      {itemDetail && (
+        <div className="mt-6">
+          <button
+            type="button"
+            onClick={clearSelectedItem}
+            className="text-sm text-gray-600 hover:text-gray-800 underline">
+            Change item
+          </button>
         </div>
       )}
     </div>
