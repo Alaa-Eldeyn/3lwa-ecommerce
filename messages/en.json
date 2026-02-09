@@ -952,7 +952,50 @@
       "error": "Failed to cancel item"
     },
     "itemStatus": "Status",
-    "cancelItem": "Cancel item"
+    "cancelItem": "Cancel item",
+    "requestRefund": "Request refund"
+  },
+  "refund": {
+    "title": "Request Refund",
+    "backToOrder": "Back to Order",
+    "productInfo": "Product",
+    "quantity": "Quantity",
+    "unitPrice": "Unit price",
+    "subTotal": "Subtotal",
+    "requestedCountLabel": "Number of items to refund",
+    "reasonLabel": "Reason",
+    "reasonPlaceholder": "Select a reason",
+    "reasonDetailsLabel": "Additional details",
+    "reasonDetailsPlaceholder": "Describe the reason for your refund request...",
+    "submit": "Submit Refund Request",
+    "submitting": "Submitting...",
+    "success": "Refund request submitted successfully",
+    "errors": {
+      "selectAddress": "Please select a return address",
+      "requestedCountRequired": "Please select how many items to refund",
+      "reasonRequired": "Please select a reason",
+      "reasonDetailsRequired": "Please provide additional details",
+      "notWithinRefundPeriod": "Refund is not available for this order."
+    },
+    "reasonOptions": {
+      "1": "Defective product",
+      "2": "Wrong item shipped",
+      "3": "Item not as described",
+      "4": "Damaged during shipping",
+      "5": "Changed mind",
+      "6": "Ordered by mistake",
+      "7": "Better price found",
+      "8": "Late delivery",
+      "9": "Missing parts",
+      "10": "Quality not satisfactory",
+      "99": "Other"
+    },
+    "shippingAddress": {
+      "title": "Return / Refund Address",
+      "addNew": "Add New Address",
+      "noAddresses": "No addresses found. Add an address for the refund.",
+      "default": "Default"
+    }
   },
   "product": {
     "addToCart": "Add to Cart",

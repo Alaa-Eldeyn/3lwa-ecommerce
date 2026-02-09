@@ -953,7 +953,50 @@
       "error": "فشل إلغاء الصنف"
     },
     "itemStatus": "الحالة",
-    "cancelItem": "إلغاء الصنف"
+    "cancelItem": "إلغاء الصنف",
+    "requestRefund": "طلب استرداد"
+  },
+  "refund": {
+    "title": "طلب استرداد",
+    "backToOrder": "العودة للطلب",
+    "productInfo": "المنتج",
+    "quantity": "الكمية",
+    "unitPrice": "سعر الوحدة",
+    "subTotal": "المجموع الفرعي",
+    "requestedCountLabel": "عدد القطع المراد استردادها",
+    "reasonLabel": "السبب",
+    "reasonPlaceholder": "اختر السبب",
+    "reasonDetailsLabel": "تفاصيل إضافية",
+    "reasonDetailsPlaceholder": "اشرح سبب طلب الاسترداد...",
+    "submit": "إرسال طلب الاسترداد",
+    "submitting": "جاري الإرسال...",
+    "success": "تم إرسال طلب الاسترداد بنجاح",
+    "errors": {
+      "selectAddress": "يرجى اختيار عنوان الاسترداد",
+      "requestedCountRequired": "يرجى اختيار عدد القطع المراد استردادها",
+      "reasonRequired": "يرجى اختيار السبب",
+      "reasonDetailsRequired": "يرجى تقديم تفاصيل إضافية",
+      "notWithinRefundPeriod": "الاسترداد غير متاح لهذا الطلب."
+    },
+    "reasonOptions": {
+      "1": "منتج معيب",
+      "2": "تم شحن منتج خاطئ",
+      "3": "لا يطابق الوصف",
+      "4": "تالف أثناء الشحن",
+      "5": "غيّرت رأيي",
+      "6": "طلبته بالخطأ",
+      "7": "وجدت سعراً أفضل",
+      "8": "تأخر التوصيل",
+      "9": "قطع ناقصة",
+      "10": "الجودة غير مرضية",
+      "99": "أخرى"
+    },
+    "shippingAddress": {
+      "title": "عنوان الاسترداد",
+      "addNew": "إضافة عنوان جديد",
+      "noAddresses": "لا توجد عناوين. أضف عنواناً للاسترداد.",
+      "default": "افتراضي"
+    }
   },
   "product": {
     "addToCart": "أضف للسلة",

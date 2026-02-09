@@ -304,15 +304,12 @@ const Order = ({ id }: OrderProps) => {
                   ? item.itemImage
                   : `${process.env.NEXT_PUBLIC_DOMAIN}/${item.itemImage}`;
                 const itemStatusInfo = getShipmentStatusInfo(item.shipmentStatus);
-                const isItemCancelled =
-                  item.shipmentStatus === 7 || item.shipmentStatus === 8;
+                const isItemCancelled = item.shipmentStatus === 7 || item.shipmentStatus === 8;
                 const canCancelItem = orderData?.canCancel && !isItemCancelled;
                 const itemTimelineStep = shipmentStatusToTimelineStep(item.shipmentStatus);
                 const itemStatus = itemTimelineStep >= 0 ? itemTimelineStep : 0;
                 const itemProgress =
-                  itemTimelineStep >= 0
-                    ? Math.min(100, ((itemTimelineStep + 1) / 5) * 100)
-                    : 0;
+                  itemTimelineStep >= 0 ? Math.min(100, ((itemTimelineStep + 1) / 5) * 100) : 0;
                 return (
                   <div
                     key={item.orderDetailId}
@@ -362,24 +359,35 @@ const Order = ({ id }: OrderProps) => {
                             className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${itemStatusInfo.bgColor}`}>
                             {isArabic ? itemStatusInfo.labelAr : itemStatusInfo.label}
                           </span>
-                          {canCancelItem && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                openCancelItemModal({
-                                  orderDetailId: item.orderDetailId,
-                                  itemName: item.itemName,
-                                  quantity: item.quantity,
-                                  itemImage: item.itemImage,
-                                  unitPrice: item.unitPrice,
-                                  subTotal: item.subTotal,
-                                })
-                              }
-                              className="mt-1.5 text-xs font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 flex items-center gap-1 ms-auto">
-                              <X className="w-3.5 h-3.5" />
-                              {t("cancelItem")}
-                            </button>
-                          )}
+                          <div className="mt-1.5 flex flex-col items-end gap-1">
+                            {canCancelItem && (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  openCancelItemModal({
+                                    orderDetailId: item.orderDetailId,
+                                    itemName: item.itemName,
+                                    quantity: item.quantity,
+                                    itemImage: item.itemImage,
+                                    unitPrice: item.unitPrice,
+                                    subTotal: item.subTotal,
+                                  })
+                                }
+                                className="text-xs font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 flex items-center gap-1">
+                                <X className="w-3.5 h-3.5" />
+                                {t("cancelItem")}
+                              </button>
+                            )}
+                            {orderData?.isWithinRefundPeriod && !isItemCancelled && (
+                              <Link
+                                href={`/order/${id}/refund?orderDetailId=${encodeURIComponent(
+                                  item.orderDetailId
+                                )}`}
+                                className="text-xs font-medium text-primary hover:text-primary/80 dark:text-primary dark:hover:opacity-90 flex items-center gap-1">
+                                {t("requestRefund")}
+                              </Link>
+                            )}
+                          </div>
                         </div>
                       </div>
 
@@ -672,20 +680,20 @@ const Order = ({ id }: OrderProps) => {
                 )}
 
                 <div className={`flex gap-3 pt-2 ${isArabic ? "flex-row-reverse" : ""}`}>
-                <button
-                  type="button"
-                  onClick={handleCancelItem}
-                  disabled={isCancellingItem || !cancelItemReason.trim()}
-                  className="flex-1 py-3 px-4 bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded-xl transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm">
-                  {isCancellingItem ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      {t("cancelItemModal.cancelling")}
-                    </>
-                  ) : (
-                    t("cancelItemModal.confirm")
-                  )}
-                </button>
+                  <button
+                    type="button"
+                    onClick={handleCancelItem}
+                    disabled={isCancellingItem || !cancelItemReason.trim()}
+                    className="flex-1 py-3 px-4 bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded-xl transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm">
+                    {isCancellingItem ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        {t("cancelItemModal.cancelling")}
+                      </>
+                    ) : (
+                      t("cancelItemModal.confirm")
+                    )}
+                  </button>
                   <button
                     type="button"
                     onClick={closeCancelItemModal}

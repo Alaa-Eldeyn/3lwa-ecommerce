@@ -6,14 +6,20 @@ import { useAddresses } from "@/src/hooks/useAddresses";
 import { useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
+export type ShippingAddressPurpose = "checkout" | "refund";
+
 interface ShippingAddressProps {
   onAddressChange?: (address: Address | null) => void;
+  /** When "refund", labels show return/refund address context. When "checkout" (default), labels are for shipping. */
+  purpose?: ShippingAddressPurpose;
 }
 
-const ShippingAddress = ({ onAddressChange }: ShippingAddressProps) => {
+const ShippingAddress = ({ onAddressChange, purpose = "checkout" }: ShippingAddressProps) => {
   const [showModal, setShowModal] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
-  const t = useTranslations("checkout.shippingAddress");
+  const t = useTranslations(
+    purpose === "refund" ? "refund.shippingAddress" : "checkout.shippingAddress"
+  );
 
   const { addresses, selectedAddressId, handleSelectAddress, refetchAddresses } = useAddresses();
 
@@ -57,6 +63,7 @@ const ShippingAddress = ({ onAddressChange }: ShippingAddressProps) => {
         addresses={addresses}
         selectedAddressId={selectedAddressId}
         onSelect={handleSelectAddress}
+        purpose={purpose}
       />
 
       {/* Modal للإضافة/التعديل */}
@@ -79,15 +86,19 @@ interface CheckoutAddressListProps {
   addresses: Address[];
   selectedAddressId?: string;
   onSelect: (addressId: string) => void;
+  purpose?: ShippingAddressPurpose;
 }
 
 const CheckoutAddressList = ({
   addresses,
   selectedAddressId,
   onSelect,
+  purpose = "checkout",
 }: CheckoutAddressListProps) => {
   const locale = useLocale();
-  const t = useTranslations("checkout.shippingAddress");
+  const t = useTranslations(
+    purpose === "refund" ? "refund.shippingAddress" : "checkout.shippingAddress"
+  );
   const tProfile = useTranslations("profile.addresses");
 
   if (!addresses || addresses.length === 0) {
