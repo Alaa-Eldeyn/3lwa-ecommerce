@@ -378,7 +378,7 @@ const Order = ({ id }: OrderProps) => {
                                 {t("cancelItem")}
                               </button>
                             )}
-                            {orderData?.isWithinRefundPeriod && !isItemCancelled && (
+                            {orderData?.isWithinRefundPeriod && orderData?.orderStatus === 5 && !isItemCancelled && (
                               <Link
                                 href={`/order/${id}/refund?orderDetailId=${encodeURIComponent(
                                   item.orderDetailId

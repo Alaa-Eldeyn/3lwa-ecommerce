@@ -976,7 +976,8 @@
       "requestedCountRequired": "يرجى اختيار عدد القطع المراد استردادها",
       "reasonRequired": "يرجى اختيار السبب",
       "reasonDetailsRequired": "يرجى تقديم تفاصيل إضافية",
-      "notWithinRefundPeriod": "الاسترداد غير متاح لهذا الطلب."
+      "notWithinRefundPeriod": "الاسترداد غير متاح لهذا الطلب.",
+      "orderNotCompleted": "يجب إكمال الطلب قبل طلب الاسترداد."
     },
     "reasonOptions": {
       "1": "منتج معيب",

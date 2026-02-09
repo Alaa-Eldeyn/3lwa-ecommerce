@@ -975,7 +975,8 @@
       "requestedCountRequired": "Please select how many items to refund",
       "reasonRequired": "Please select a reason",
       "reasonDetailsRequired": "Please provide additional details",
-      "notWithinRefundPeriod": "Refund is not available for this order."
+      "notWithinRefundPeriod": "Refund is not available for this order.",
+      "orderNotCompleted": "Order must be completed before requesting a refund."
     },
     "reasonOptions": {
       "1": "Defective product",

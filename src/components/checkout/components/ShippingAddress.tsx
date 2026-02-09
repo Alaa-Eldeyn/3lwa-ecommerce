@@ -42,8 +42,13 @@ const ShippingAddress = ({ onAddressChange, purpose = "checkout" }: ShippingAddr
     setEditingAddress(null);
   };
 
+  const isRefund = purpose === "refund";
+  const cardClass = isRefund
+    ? "bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700"
+    : "bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700";
+
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+    <div className={cardClass}>
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <MapPin size={24} className="text-primary" />
@@ -101,9 +106,14 @@ const CheckoutAddressList = ({
   );
   const tProfile = useTranslations("profile.addresses");
 
+  const isRefund = purpose === "refund";
+  const emptyStateClass = isRefund
+    ? "bg-gray-50 dark:bg-gray-700 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-8 text-center"
+    : "bg-gray-50 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-8 text-center";
+
   if (!addresses || addresses.length === 0) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-8 text-center">
+      <div className={emptyStateClass}>
         <MapPin className="text-gray-400 mx-auto mb-2" size={32} />
         <p className="text-gray-500 dark:text-gray-400">
           {t("noAddresses")}
@@ -121,14 +131,18 @@ const CheckoutAddressList = ({
           .filter(Boolean)
           .join(", ");
 
+        const labelBorderClass = isRefund
+          ? isSelected
+            ? "border-primary bg-primary/5"
+            : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+          : isSelected
+            ? "border-primary bg-primary/5"
+            : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600";
+
         return (
           <label
             key={address.id}
-            className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer transition-all ${
-              isSelected
-                ? "border-primary bg-primary/5"
-                : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
-            }`}>
+            className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer transition-all ${labelBorderClass}`}>
             <input
               type="radio"
               name="shipping-address"
@@ -162,7 +176,10 @@ const CheckoutAddressList = ({
                 </div>
 
                 {/* Address Details */}
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3 gap-2 mt-2">
+                <div
+                  className={`rounded-lg p-3 gap-2 mt-2 ${
+                    isRefund ? "bg-gray-50 dark:bg-gray-700" : "bg-gray-50 dark:bg-gray-900"
+                  }`}>
                   {/* Address */}
                   {address.address && (
                     <div className="flex items-start gap-2 mb-2">

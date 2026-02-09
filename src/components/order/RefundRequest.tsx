@@ -55,6 +55,13 @@ export default function RefundRequest({ orderId, orderDetailId }: RefundRequestP
             setIsLoading(false);
             return;
           }
+          if (data.orderStatus !== 5) {
+            setError(
+              t("errors.orderNotCompleted") || "Order must be completed before requesting a refund."
+            );
+            setIsLoading(false);
+            return;
+          }
           const found = data.items?.find((i) => i.orderDetailId === orderDetailId);
           if (!found) {
             setError("Item not found in this order.");
