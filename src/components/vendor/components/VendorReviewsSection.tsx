@@ -15,7 +15,7 @@ export interface VendorReviewsSectionProps {
   onWriteReview: () => void;
   onLoadMore: () => void;
   onHelpful?: (reviewId: string) => void | Promise<void>;
-  onReport?: (reviewId: string) => void | Promise<void>;
+  onReport?: (reviewId: string, isReportedByUser: boolean) => void | Promise<void>;
 }
 
 export default function VendorReviewsSection({

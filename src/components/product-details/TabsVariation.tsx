@@ -24,7 +24,7 @@ export interface Review {
   helpfulVoteCount?: number;
   countReport?: number;
   isMarkedHelpfulByUser?: boolean;
-  isReportedByUser?: boolean;
+  isReportedByUser: boolean;
 }
 
 interface TabsVariationProps {
