@@ -16,12 +16,15 @@ export interface Review {
   id: string;
   itemId: string;
   customerName?: string;
-  reviewNumber: string;
+  reviewDate?: string;
+  reviewNumber?: string;
   reviewTitle: string;
   reviewText: string;
   rating: number;
   helpfulVoteCount?: number;
   countReport?: number;
+  isMarkedHelpfulByUser?: boolean;
+  isReportedByUser?: boolean;
 }
 
 interface TabsVariationProps {
@@ -320,6 +323,48 @@ const TabsVariation = ({ description, product }: TabsVariationProps) => {
     setVisibleReviews((prev) => prev + 6);
   };
 
+  const handleReviewHelpful = async (reviewId: string) => {
+    try {
+      await customAxios.post(`/ItemReview/${reviewId}/toggle-helpful`, { reviewId });
+      await queryClient.invalidateQueries({ queryKey: ["reviews", itemId] });
+    } catch (err: unknown) {
+      const message =
+        err && typeof err === "object" && "response" in err && err.response && typeof (err.response as { data?: { message?: string } }).data?.message === "string"
+          ? (err.response as { data: { message: string } }).data.message
+          : t("errorSubmitReview");
+      toast.error(message);
+    }
+  };
+
+  const handleReviewReport = async (reviewId: string, isReportedByUser: boolean) => {
+    try {
+      await customAxios.post(`/ItemReview/${reviewId}/toggle-report`, { reviewId });
+      if (!isReportedByUser) {
+        toast.success(t("reportSubmitted"));
+      }
+      await queryClient.invalidateQueries({ queryKey: ["reviews", itemId] });
+    } catch (err: unknown) {
+      const message =
+        err && typeof err === "object" && "response" in err && err.response && typeof (err.response as { data?: { message?: string } }).data?.message === "string"
+          ? (err.response as { data: { message: string } }).data.message
+          : t("errorSubmitReview");
+      toast.error(message);
+    }
+  };
+
+  const formatReviewDate = (dateStr: string | undefined) => {
+    if (!dateStr) return undefined;
+    try {
+      return new Date(dateStr).toLocaleDateString(locale, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    } catch {
+      return undefined;
+    }
+  };
+
   const brandName = isArabic ? product?.brand?.nameAr : product?.brand?.nameEn;
 
   return (
@@ -487,8 +532,19 @@ const TabsVariation = ({ description, product }: TabsVariationProps) => {
                 {reviews.slice(0, visibleReviews).map((review) => (
                   <ReviewCard
                     key={review.id}
-                    {...review}
+                    id={review.id}
+                    itemId={review.itemId}
                     customerName={review.customerName}
+                    reviewDate={formatReviewDate(review.reviewDate ?? review.reviewNumber)}
+                    rating={review.rating}
+                    reviewTitle={review.reviewTitle ?? ""}
+                    reviewText={review.reviewText ?? ""}
+                    helpfulVoteCount={review.helpfulVoteCount ?? 0}
+                    countReport={review.countReport ?? 0}
+                    isMarkedHelpfulByUser={review.isMarkedHelpfulByUser}
+                    isReportedByUser={review.isReportedByUser}
+                    onHelpful={handleReviewHelpful}
+                    onReport={handleReviewReport}
                     onEdit={() => openEditModal(review)}
                     onDelete={() => handleDeleteReview(review)}
                   />

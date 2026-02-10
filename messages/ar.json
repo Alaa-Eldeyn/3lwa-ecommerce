@@ -1088,7 +1088,8 @@
     "editReview": "تعديل التقييم",
     "deleteReview": "حذف التقييم",
     "markHelpful": "تقييم كمفيد",
-    "reportReview": "الإبلاغ عن هذا التقييم"
+    "reportReview": "الإبلاغ عن هذا التقييم",
+    "reportSubmitted": "تم إرسال الإبلاغ"
   },
   "vendorsSidebar": {
     "title": "العروض المتاحة",

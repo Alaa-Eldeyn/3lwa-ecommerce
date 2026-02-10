@@ -1087,7 +1087,8 @@
     "editReview": "Edit review",
     "deleteReview": "Delete review",
     "markHelpful": "Mark as helpful",
-    "reportReview": "Report this review"
+    "reportReview": "Report this review",
+    "reportSubmitted": "Report submitted"
   },
   "vendorsSidebar": {
     "title": "Available Offers",

@@ -18,7 +18,7 @@ interface ReviewCardProps {
   onEdit?: () => void;
   onDelete?: () => void;
   onHelpful?: (reviewId: string) => void | Promise<void>;
-  onReport?: (reviewId: string) => void | Promise<void>;
+  onReport?: (reviewId: string, isReportedByUser?: boolean) => void | Promise<void>;
 }
 
 const ReviewCard = ({
