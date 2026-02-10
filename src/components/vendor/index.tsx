@@ -408,6 +408,7 @@ const VendorPage = () => {
 
         {/* Customer Reviews Section */}
         <VendorReviewsSection
+          vendorId={id as string}
           reviewStats={reviewStats}
           reviews={reviews}
           reviewsLoading={reviewsLoading}

@@ -6,6 +6,7 @@ import ReviewCard from "../../product-details/components/ReviewCard";
 import type { VendorReviewStats, VendorReview } from "@/src/types/vendor-reviews.types";
 
 export interface VendorReviewsSectionProps {
+  vendorId: string;
   reviewStats: VendorReviewStats | undefined;
   reviews: VendorReview[];
   reviewsLoading: boolean;
@@ -18,6 +19,7 @@ export interface VendorReviewsSectionProps {
 }
 
 export default function VendorReviewsSection({
+  vendorId,
   reviewStats,
   reviews,
   reviewsLoading,
@@ -96,33 +98,25 @@ export default function VendorReviewsSection({
       ) : reviews.length > 0 ? (
         <div className="space-y-4 mt-5">
           {reviews.map((review) => {
-            const r = review as VendorReview & {
-              createdDateUtc?: string;
-              reviewDate?: string;
-              helpfulCount?: number;
-              reportCount?: number;
-            };
-            const dateStr = r.createdDateUtc ?? r.reviewDate;
+            const formattedDate = review.reviewDate
+              ? new Date(review.reviewDate).toLocaleDateString(locale, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })
+              : undefined;
             return (
               <ReviewCard
                 key={review.id}
                 id={review.id}
-                itemId={review.vendorId}
+                itemId={vendorId}
                 customerName={review.customerName}
-                reviewNumber={
-                  dateStr
-                    ? new Date(dateStr).toLocaleDateString(locale, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : undefined
-                }
+                reviewDate={formattedDate}
                 rating={review.rating}
                 reviewTitle=""
                 reviewText={review.reviewText ?? ""}
-                helpfulVoteCount={r.helpfulCount ?? 0}
-                countReport={r.reportCount ?? 0}
+                helpfulVoteCount={review.helpfulCount ?? 0}
+                countReport={review.reportCount ?? 0}
                 onHelpful={onHelpful}
                 onReport={onReport}
               />

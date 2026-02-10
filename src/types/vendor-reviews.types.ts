@@ -32,13 +32,16 @@ export interface VendorReviewUpdatePayload {
 /** Vendor Review */
 export interface VendorReview {
   id: string;
-  customerId?: string;
-  vendorId: string;
+  customerName: string;
+  reviewDate: string;
   rating: number;
-  reviewText?: string;
-  customerName?: string;
-  isVerifiedPurchase?: boolean;
-  createdDateUtc?: string;
-  orderDate?: string;
+  reviewText: string;
+  helpfulCount: number;
+  reportCount: number;
+  isVerifiedPurchase: boolean;
+  isEdited: boolean;
+  isOwnReview: boolean;
+  isMarkedHelpfulByUser: boolean;
+  isReportedByUser: boolean;
   [key: string]: unknown;
 }

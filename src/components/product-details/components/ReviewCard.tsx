@@ -7,7 +7,7 @@ interface ReviewCardProps {
   id: string;
   itemId: string;
   customerName?: string;
-  reviewNumber?: string;
+  reviewDate?: string;
   rating: number;
   reviewTitle: string;
   reviewText: string;
@@ -25,7 +25,7 @@ const ReviewCard = ({
   reviewTitle,
   reviewText,
   customerName: customerNameProp,
-  reviewNumber,
+  reviewDate,
   helpfulVoteCount = 0,
   countReport = 0,
   onEdit,
@@ -38,22 +38,29 @@ const ReviewCard = ({
 
   return (
     <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50/50 dark:bg-gray-800/30">
-      {/* Header: name + rating */}
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
-        <span className="font-medium text-gray-800 dark:text-gray-200 text-sm">{displayName}</span>
-        <div className="flex items-center gap-0.5" aria-label={t("ratingOutOf5", { rating })}>
-          {[1, 2, 3, 4, 5].map((i) => (
-            <Star
-              key={i}
-              size={14}
-              className={
-                i <= rating
-                  ? "fill-amber-500 text-amber-500"
-                  : "fill-gray-300 dark:fill-gray-500 text-gray-300 dark:text-gray-500"
-              }
-            />
-          ))}
+      {/* Header: name + rating + date */}
+      <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
+          <span className="font-medium text-gray-800 dark:text-gray-200 text-sm">
+            {displayName}
+          </span>
+          <div className="flex items-center gap-0.5" aria-label={t("ratingOutOf5", { rating })}>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Star
+                key={i}
+                size={14}
+                className={
+                  i <= rating
+                    ? "fill-amber-500 text-amber-500"
+                    : "fill-gray-300 dark:fill-gray-500 text-gray-300 dark:text-gray-500"
+                }
+              />
+            ))}
+          </div>
         </div>
+        {reviewDate && (
+          <span className="text-xs text-gray-500 dark:text-gray-400">{reviewDate}</span>
+        )}
       </div>
 
       {/* Title */}
