@@ -117,6 +117,8 @@ export default function VendorReviewsSection({
                 reviewText={review.reviewText ?? ""}
                 helpfulVoteCount={review.helpfulCount ?? 0}
                 countReport={review.reportCount ?? 0}
+                isMarkedHelpfulByUser={review.isMarkedHelpfulByUser}
+                isReportedByUser={review.isReportedByUser}
                 onHelpful={onHelpful}
                 onReport={onReport}
               />

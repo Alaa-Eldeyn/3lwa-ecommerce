@@ -13,6 +13,8 @@ interface ReviewCardProps {
   reviewText: string;
   helpfulVoteCount?: number;
   countReport?: number;
+  isMarkedHelpfulByUser?: boolean;
+  isReportedByUser?: boolean;
   onEdit?: () => void;
   onDelete?: () => void;
   onHelpful?: (reviewId: string) => void | Promise<void>;
@@ -28,6 +30,8 @@ const ReviewCard = ({
   reviewDate,
   helpfulVoteCount = 0,
   countReport = 0,
+  isMarkedHelpfulByUser = false,
+  isReportedByUser = false,
   onEdit,
   onDelete,
   onHelpful,
@@ -78,9 +82,17 @@ const ReviewCard = ({
             <button
               type="button"
               onClick={() => onHelpful(id)}
-              className="flex items-center gap-1 hover:text-primary dark:hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 rounded"
-              aria-label={t("markHelpful")}>
-              <ThumbsUp size={12} className="shrink-0" />
+              className={`flex items-center gap-1 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 rounded ${
+                isMarkedHelpfulByUser
+                  ? "text-primary dark:text-primary fill-primary dark:fill-primary"
+                  : "text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary"
+              }`}
+              aria-label={t("markHelpful")}
+              aria-pressed={isMarkedHelpfulByUser}>
+              <ThumbsUp
+                size={12}
+                className={`shrink-0 ${isMarkedHelpfulByUser ? "fill-current" : ""}`}
+              />
               {helpfulVoteCount} {t("helpful")}
             </button>
           ) : (
@@ -92,10 +104,15 @@ const ReviewCard = ({
           {onReport ? (
             <button
               type="button"
-              onClick={() => onReport(id)}
-              className="flex items-center gap-1 hover:text-error dark:hover:text-error transition-colors focus:outline-none focus:ring-2 focus:ring-error/30 rounded"
-              aria-label={t("reportReview")}>
-              <Flag size={12} className="shrink-0" />
+              onClick={() => onReport(id, isReportedByUser)}
+              className={`flex items-center gap-1 transition-colors focus:outline-none focus:ring-2 focus:ring-error/30 rounded ${
+                isReportedByUser
+                  ? "text-error dark:text-error fill-error dark:fill-error"
+                  : "text-gray-500 dark:text-gray-400 hover:text-error dark:hover:text-error"
+              }`}
+              aria-label={t("reportReview")}
+              aria-pressed={isReportedByUser}>
+              <Flag size={12} className={`shrink-0 ${isReportedByUser ? "fill-current" : ""}`} />
               {countReport} {countReport === 1 ? t("report") : t("reports")}
             </button>
           ) : (

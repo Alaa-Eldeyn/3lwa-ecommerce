@@ -193,7 +193,7 @@ const VendorPage = () => {
   const handleReviewHelpful = useCallback(
     async (reviewId: string) => {
       try {
-        await customAxios.post(`/VendorReview/${reviewId}/helpful`, { reviewId });
+        await customAxios.post(`/VendorReview/${reviewId}/toggle-helpful`, { reviewId });
         await fetchReviews(1, false);
       } catch (err: any) {
         toast.error(err?.response?.data?.message || t("error"));
@@ -204,10 +204,12 @@ const VendorPage = () => {
 
   // Handle review report
   const handleReviewReport = useCallback(
-    async (reviewId: string) => {
+    async (reviewId: string, isReportedByUser: boolean) => {
       try {
-        await customAxios.post(`/VendorReview/${reviewId}/report`, { reviewId });
-        toast.success(t("reportSubmitted"));
+        await customAxios.post(`/VendorReview/${reviewId}/toggle-report`, { reviewId });
+        if (!isReportedByUser) {
+          toast.success(t("reportSubmitted"));
+        }
         await fetchReviews(1, false);
       } catch (err: any) {
         toast.error(err?.response?.data?.message || t("error"));
