@@ -87,9 +87,13 @@ const ProductCard = ({
     ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
     : undefined;
 
-  // Find if product exists in cart
+  // Find if product exists in cart (by id for guest, by itemCombinationId for backend-fetched items)
   const cartItem = useMemo(
-    () => items.find((item) => item.id === itemCombinationId),
+    () =>
+      items.find(
+        (item) =>
+          item.id === itemCombinationId || item.itemCombinationId === itemCombinationId
+      ),
     [items, itemCombinationId]
   );
 
@@ -122,29 +126,25 @@ const ProductCard = ({
 
   const handleIncrement = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!itemId || !itemCombinationId) return;
-    if (cartItem) {
-      try {
-        await updateQuantity(itemCombinationId, cartItem.quantity + 1, isAuthenticated());
-      } catch (error) {
-        console.error("Failed to update quantity:", error);
-      }
+    if (!cartItem) return;
+    try {
+      await updateQuantity(cartItem.id, cartItem.quantity + 1, isAuthenticated());
+    } catch (error) {
+      console.error("Failed to update quantity:", error);
     }
   };
 
   const handleDecrement = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!itemId || !itemCombinationId) return;
-    if (cartItem) {
-      try {
-        if (cartItem.quantity === 1) {
-          await removeItem(itemCombinationId, isAuthenticated());
-        } else {
-          await updateQuantity(itemCombinationId, cartItem.quantity - 1, isAuthenticated());
-        }
-      } catch (error) {
-        console.error("Failed to update quantity:", error);
+    if (!cartItem) return;
+    try {
+      if (cartItem.quantity === 1) {
+        await removeItem(cartItem.id, isAuthenticated());
+      } else {
+        await updateQuantity(cartItem.id, cartItem.quantity - 1, isAuthenticated());
       }
+    } catch (error) {
+      console.error("Failed to update quantity:", error);
     }
   };
 
