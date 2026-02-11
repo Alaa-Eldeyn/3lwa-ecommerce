@@ -26,7 +26,7 @@ const Register = () => {
   const [secureAnimation, setSecureAnimation] = useState<object | null>(null);
   const locale = useLocale();
   const isArabic = locale === "ar";
-  
+
   useEffect(() => {
     fetch("/animation/secure.json")
       .then((res) => res.json())
@@ -84,9 +84,7 @@ const Register = () => {
         {/* Left Side - Animation (Sticky) */}
         <div className="hidden lg:flex flex-col items-center justify-center sticky top-20 h-[calc(100vh-10rem)] overflow-hidden">
           <div className="w-full max-w-lg center h-full overflow-hidden">
-            {secureAnimation && (
-              <Lottie animationData={secureAnimation} loop={true} />
-            )}
+            {secureAnimation && <Lottie animationData={secureAnimation} loop={true} />}
           </div>
         </div>
 
@@ -97,9 +95,7 @@ const Register = () => {
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
               {t("createAccount")}
             </h2>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
-              {t("registerSubtitle")}
-            </p>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">{t("registerSubtitle")}</p>
           </div>
 
           {/* Form */}
@@ -174,7 +170,9 @@ const Register = () => {
 
               {/* Phone Field */}
               <div dir="ltr">
-                <label dir={isArabic ? "rtl" : "ltr"} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label
+                  dir={isArabic ? "rtl" : "ltr"}
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t("phoneNumber")} *
                 </label>
                 <Controller
@@ -187,6 +185,7 @@ const Register = () => {
                       value={value || ""}
                       onChange={onChange}
                       className="w-full"
+                      countrySelectProps={{ tabIndex: -1 }}
                       numberInputProps={{
                         className:
                           "w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary",
@@ -213,10 +212,10 @@ const Register = () => {
                     placeholder={t("passwordPlaceholder")}
                   />
                   <button
+                    tabIndex={-1}
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 soft"
-                  >
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 soft">
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
@@ -242,10 +241,10 @@ const Register = () => {
                     placeholder={t("confirmPasswordPlaceholder")}
                   />
                   <button
+                    tabIndex={-1}
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 soft"
-                  >
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 soft">
                     {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
@@ -265,20 +264,13 @@ const Register = () => {
                   />
                   <label
                     htmlFor="agreeToTerms"
-                    className="ms-2 block text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
-                  >
+                    className="ms-2 block text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
                     {t("agreeToTerms")}{" "}
-                    <Link
-                      href="/terms"
-                      className="text-primary hover:text-primary/80 soft"
-                    >
+                    <Link href="/terms" className="text-primary hover:text-primary/80 soft">
                       {t("termsAndConditions")}
                     </Link>{" "}
                     {t("and")}{" "}
-                    <Link
-                      href="/privacy"
-                      className="text-primary hover:text-primary/80 soft"
-                    >
+                    <Link href="/privacy" className="text-primary hover:text-primary/80 soft">
                       {t("privacyPolicy")}
                     </Link>
                   </label>
@@ -292,8 +284,7 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 px-4 bg-primary hover:bg-secondary text-white font-medium rounded-xl soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+                className="w-full py-3 px-4 bg-primary hover:bg-secondary text-white font-medium rounded-xl soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed">
                 {isLoading ? t("creatingAccount") : t("registerButton")}
               </button>
             </form>
@@ -352,10 +343,7 @@ const Register = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 {t("alreadyHaveAccount")}{" "}
-                <Link
-                  href="/login"
-                  className="font-medium text-primary hover:text-primary/80 soft"
-                >
+                <Link href="/login" className="font-medium text-primary hover:text-primary/80 soft">
                   {t("signInNow")}
                 </Link>
               </p>
