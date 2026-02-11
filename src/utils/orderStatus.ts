@@ -215,10 +215,15 @@ export const getRefundStatusInfo = (status: string | number) => {
         bgColor: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300",
       },
       11: {
-        label: "Closed",
-        labelAr: "مغلق",
-        bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+        label: "Refunded",
+        labelAr: "تم الاسترداد",
+        bgColor: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300",
       },
+      // 11: {
+      //   label: "Closed",
+      //   labelAr: "مغلق",
+      //   bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+      // },
     };
 
   return (
