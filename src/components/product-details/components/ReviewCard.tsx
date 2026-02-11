@@ -77,8 +77,9 @@ const ReviewCard = ({
       {/* Body */}
       <p className="text-gray-600 dark:text-gray-300 text-sm leading-snug mb-3">{reviewText}</p>
 
+      {/* // TODO: Restore Review Actions Footer */}
       {/* Footer: helpful, reports, actions */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-200 dark:border-gray-600">
+      {/* <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-200 dark:border-gray-600">
         <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
           {onHelpful ? (
             <button
@@ -146,7 +147,7 @@ const ReviewCard = ({
             )}
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
