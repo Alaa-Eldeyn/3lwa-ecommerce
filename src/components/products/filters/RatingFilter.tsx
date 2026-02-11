@@ -72,7 +72,7 @@ const RatingFilter = ({ label, value, onChange, max = 5 }: RatingFilterProps) =>
                   className="w-4 h-4 text-gray-900 dark:text-white bg-gray-100 border-gray-300 focus:ring-0"
                 />
                 <div className="flex items-center gap-2">
-                  {renderStars(rating)}
+                  {rating > 0 && renderStars(rating)}
                   <span className="text-sm text-gray-600 dark:text-gray-400">
                     {rating === 0 ? t("all") : `${rating}+ ${t("stars")}`}
                   </span>
