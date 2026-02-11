@@ -21,7 +21,7 @@ const EmptyCart = () => {
 
       <Link
         href="/products"
-        className="px-8 py-3 bg-primary dark:bg-white text-white dark:text-primary rounded-full font-medium hover:bg-secondary dark:hover:bg-gray-200 soft">
+        className="px-8 py-3 bg-primary dark:bg-white text-white dark:text-primary rounded-xl font-medium hover:bg-secondary dark:hover:bg-gray-200 soft">
         {t("continueShopping")}
       </Link>
     </div>
