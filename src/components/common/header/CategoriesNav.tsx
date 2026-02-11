@@ -24,8 +24,9 @@ const CategoriesNav = () => {
     queryFn: () => axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/Category/tree`),
     refetchOnWindowFocus: false,
   });
+  
   const mainCategories = categories?.data?.data?.filter(
-    (cat: Category) => cat.isMainCategory
+    (cat: Category) => cat.isHomeCategory
   ) || [];
 
 
