@@ -3,7 +3,16 @@
 import { useState, useEffect } from "react";
 import { Loader2, Star, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import type { VendorReviewSubmitPayload } from "@/src/types/vendor-reviews.types";
+import type {
+  VendorReviewSubmitPayload,
+  VendorReviewUpdatePayload,
+} from "@/src/types/vendor-reviews.types";
+
+export interface EditingReview {
+  id: string;
+  rating: number;
+  reviewText: string;
+}
 
 export interface WriteReviewModalProps {
   isOpen: boolean;
@@ -12,6 +21,9 @@ export interface WriteReviewModalProps {
   onSubmit: (payload: VendorReviewSubmitPayload) => Promise<void>;
   isSubmitting: boolean;
   submitError: string | null;
+  /** When set, modal is in edit mode: form is prefilled and submit calls onUpdate */
+  editingReview?: EditingReview | null;
+  onUpdate?: (payload: VendorReviewUpdatePayload) => Promise<void>;
 }
 
 export default function WriteReviewModal({
@@ -21,6 +33,8 @@ export default function WriteReviewModal({
   onSubmit,
   isSubmitting,
   submitError,
+  editingReview = null,
+  onUpdate,
 }: WriteReviewModalProps) {
   const t = useTranslations("vendor");
   const [rating, setRating] = useState(5);
@@ -28,15 +42,26 @@ export default function WriteReviewModal({
 
   useEffect(() => {
     if (isOpen) {
-      setRating(5);
-      setText("");
+      if (editingReview) {
+        setRating(editingReview.rating);
+        setText(editingReview.reviewText ?? "");
+      } else {
+        setRating(5);
+        setText("");
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, editingReview]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit({ vendorId, rating, reviewText: text.trim() || "" });
+    if (editingReview && onUpdate) {
+      await onUpdate({ id: editingReview.id, rating, reviewText: text.trim() || "" });
+    } else {
+      await onSubmit({ vendorId, rating, reviewText: text.trim() || "" });
+    }
   };
+
+  const isEditMode = Boolean(editingReview);
 
   if (!isOpen) return null;
 
@@ -48,7 +73,9 @@ export default function WriteReviewModal({
         onClick={(e) => e.stopPropagation()}
         className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full shadow-2xl">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">{t("writeReview")}</h3>
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+            {isEditMode ? t("editReview") : t("writeReview")}
+          </h3>
           <button
             type="button"
             onClick={() => !isSubmitting && onClose()}
@@ -122,8 +149,10 @@ export default function WriteReviewModal({
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
-                  {t("submitReview")}
+                  {isEditMode ? t("updateReview") : t("submitReview")}
                 </>
+              ) : isEditMode ? (
+                t("updateReview")
               ) : (
                 t("submitReview")
               )}

@@ -26,6 +26,7 @@ const VendorPage = () => {
   const tProducts = useTranslations("vendor.products");
   const user = useUserStore((s) => s.user);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [editingReview, setEditingReview] = useState<VendorReview | null>(null);
 
   const [vendorData, setVendorData] = useState<any>(null);
   const [vendorLoading, setVendorLoading] = useState(true);
@@ -162,6 +163,10 @@ const VendorPage = () => {
     try {
       await customAxios.put("/VendorReview/update", payload);
       await fetchReviewStats();
+      await fetchReviews(1, false);
+      setEditingReview(null);
+      setReviewModalOpen(false);
+      toast.success(t("updateReview"));
     } catch (err: any) {
       toast.error(err?.response?.data?.message || t("error"));
     }
@@ -172,6 +177,8 @@ const VendorPage = () => {
     try {
       await customAxios.post("/VendorReview/delete", { id });
       await fetchReviewStats();
+      await fetchReviews(1, false);
+      toast.success(t("deleteReview"));
     } catch (err: any) {
       toast.error(err?.response?.data?.message || t("error"));
     }
@@ -179,14 +186,22 @@ const VendorPage = () => {
 
   const openReviewModal = () => {
     setSubmitError(null);
+    setEditingReview(null);
     setReviewModalOpen(true);
   };
 
   const closeReviewModal = () => {
     if (!submitLoading) {
       setReviewModalOpen(false);
+      setEditingReview(null);
       setSubmitError(null);
     }
+  };
+
+  const openEditReviewModal = (review: VendorReview) => {
+    setSubmitError(null);
+    setEditingReview(review);
+    setReviewModalOpen(true);
   };
 
   // Handle review helpful
@@ -422,6 +437,8 @@ const VendorPage = () => {
           onLoadMore={() => fetchReviews(reviewsPageNumber + 1, true)}
           onHelpful={handleReviewHelpful}
           onReport={handleReviewReport}
+          onEdit={user ? openEditReviewModal : undefined}
+          onDelete={user ? deleteReview : undefined}
         />
 
         {/* Write Review Modal */}
@@ -432,6 +449,12 @@ const VendorPage = () => {
           onSubmit={handleSubmitReview}
           isSubmitting={submitLoading}
           submitError={submitError}
+          editingReview={
+            editingReview
+              ? { id: editingReview.id, rating: editingReview.rating, reviewText: editingReview.reviewText ?? "" }
+              : null
+          }
+          onUpdate={updateReview}
         />
       </main>
     </div>

@@ -16,6 +16,8 @@ export interface VendorReviewsSectionProps {
   onLoadMore: () => void;
   onHelpful?: (reviewId: string) => void | Promise<void>;
   onReport?: (reviewId: string, isReportedByUser: boolean) => void | Promise<void>;
+  onEdit?: (review: VendorReview) => void;
+  onDelete?: (reviewId: string) => void | Promise<void>;
 }
 
 export default function VendorReviewsSection({
@@ -29,6 +31,8 @@ export default function VendorReviewsSection({
   onLoadMore,
   onHelpful,
   onReport,
+  onEdit,
+  onDelete,
 }: VendorReviewsSectionProps) {
   const t = useTranslations("vendor");
 
@@ -119,6 +123,9 @@ export default function VendorReviewsSection({
                 countReport={review.reportCount ?? 0}
                 isMarkedHelpfulByUser={review.isMarkedHelpfulByUser}
                 isReportedByUser={review.isReportedByUser}
+                isOwnReview={review.isOwnReview}
+                onEdit={onEdit ? () => onEdit(review) : undefined}
+                onDelete={onDelete ? () => onDelete(review.id) : undefined}
                 onHelpful={onHelpful}
                 onReport={onReport}
               />

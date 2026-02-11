@@ -15,6 +15,7 @@ interface ReviewCardProps {
   countReport?: number;
   isMarkedHelpfulByUser?: boolean;
   isReportedByUser?: boolean;
+  isOwnReview?: boolean;
   onEdit?: () => void;
   onDelete?: () => void;
   onHelpful?: (reviewId: string) => void | Promise<void>;
@@ -32,6 +33,7 @@ const ReviewCard = ({
   countReport = 0,
   isMarkedHelpfulByUser = false,
   isReportedByUser = false,
+  isOwnReview = false,
   onEdit,
   onDelete,
   onHelpful,
@@ -122,15 +124,14 @@ const ReviewCard = ({
             </span>
           )}
         </div>
-        {/* //TODO: Add edit and delete functionality */}
-        {/* {(onEdit || onDelete) && (
+        {isOwnReview && (onEdit || onDelete) && (
           <div className="flex items-center gap-1">
             {onEdit && (
               <button
                 type="button"
                 onClick={onEdit}
                 className="px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-600 rounded border border-transparent hover:border-gray-300 dark:hover:border-gray-500 transition-colors focus:outline-none focus:border-primary"
-                aria-label="Edit review">
+                aria-label={t("editReview")}>
                 <Pencil size={12} />
               </button>
             )}
@@ -139,12 +140,12 @@ const ReviewCard = ({
                 type="button"
                 onClick={onDelete}
                 className="px-2 py-1 text-xs font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded border border-transparent hover:border-red-200 dark:hover:border-red-800 transition-colors focus:outline-none focus:border-red-500"
-                aria-label="Delete review">
+                aria-label={t("deleteReview")}>
                 <Trash2 size={12} />
               </button>
             )}
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );
