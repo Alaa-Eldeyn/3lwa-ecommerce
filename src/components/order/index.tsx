@@ -23,6 +23,7 @@ import { OrderData } from "@/src/types/order-details.types";
 import {
   getOrderStatusInfo,
   getShipmentStatusInfo,
+  getRefundStatusInfo,
   shipmentStatusToTimelineStep,
 } from "@/src/utils/orderStatus";
 import toast from "react-hot-toast";
@@ -305,8 +306,14 @@ const Order = ({ id }: OrderProps) => {
                   : `${process.env.NEXT_PUBLIC_DOMAIN}/${item.itemImage}`;
                 const itemStatusInfo = getShipmentStatusInfo(item.shipmentStatus);
                 const isItemCancelled = item.shipmentStatus === 7 || item.shipmentStatus === 8;
+                const isItemCompleted = item.shipmentStatus === 5;
                 const canCancelItem = orderData?.canCancel && !isItemCancelled;
                 const itemTimelineStep = shipmentStatusToTimelineStep(item.shipmentStatus);
+                const itemRefundStatus = item.refundStatus;
+                const itemRefundStatusInfo =
+                  itemRefundStatus != null && itemRefundStatus >= 1
+                    ? getRefundStatusInfo(itemRefundStatus)
+                    : null;
                 const itemStatus = itemTimelineStep >= 0 ? itemTimelineStep : 0;
                 const itemProgress =
                   itemTimelineStep >= 0 ? Math.min(100, ((itemTimelineStep + 1) / 5) * 100) : 0;
@@ -355,10 +362,17 @@ const Order = ({ id }: OrderProps) => {
                           </div>
                         </div>
                         <div className="text-end shrink-0">
-                          <span
-                            className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${itemStatusInfo.bgColor}`}>
-                            {isArabic ? itemStatusInfo.labelAr : itemStatusInfo.label}
-                          </span>
+                          {itemRefundStatusInfo ? (
+                            <span
+                              className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${itemRefundStatusInfo.bgColor}`}>
+                              {isArabic ? itemRefundStatusInfo.labelAr : itemRefundStatusInfo.label}
+                            </span>
+                          ) : (
+                            <span
+                              className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${itemStatusInfo.bgColor}`}>
+                              {isArabic ? itemStatusInfo.labelAr : itemStatusInfo.label}
+                            </span>
+                          )}
                           <div className="mt-1.5 flex flex-col items-end gap-1">
                             {canCancelItem && (
                               <button
@@ -378,54 +392,59 @@ const Order = ({ id }: OrderProps) => {
                                 {t("cancelItem")}
                               </button>
                             )}
-                            {orderData?.isWithinRefundPeriod && orderData?.orderStatus === 5 && !isItemCancelled && (
-                              <Link
-                                href={`/order/${id}/refund?orderDetailId=${encodeURIComponent(
-                                  item.orderDetailId
-                                )}`}
-                                className="text-xs font-medium text-primary hover:text-primary/80 dark:text-primary dark:hover:opacity-90 flex items-center gap-1">
-                                {t("requestRefund")}
-                              </Link>
-                            )}
+                            {orderData?.isWithinRefundPeriod &&
+                              isItemCompleted &&
+                              !isItemCancelled &&
+                              !itemRefundStatusInfo && (
+                                <Link
+                                  href={`/order/${id}/refund?orderDetailId=${encodeURIComponent(
+                                    item.orderDetailId
+                                  )}`}
+                                  className="text-xs font-medium text-primary hover:text-primary/80 dark:text-primary dark:hover:opacity-90 flex items-center gap-1">
+                                  {t("requestRefund")}
+                                </Link>
+                              )}
                           </div>
                         </div>
                       </div>
 
                       {/* Per-item timeline */}
-                      <div className="relative pt-1">
-                        <div className="absolute top-5 start-4 end-4 h-0.5 bg-gray-200 dark:bg-gray-600 rounded" />
-                        <div
-                          className="absolute top-5 start-4 h-0.5 bg-primary dark:bg-primary rounded transition-all duration-300"
-                          style={{ width: `${itemProgress}%` }}
-                        />
-                        <div className="relative flex justify-between">
-                          {itemTimelineSteps.map((step, index) => {
-                            const completed = itemStatus >= index;
-                            const circleBg = completed
-                              ? "bg-primary text-white dark:bg-primary dark:text-white"
-                              : "bg-gray-200 dark:bg-gray-600 text-gray-400 dark:text-gray-500";
-                            const stepLabel = getShipmentStatusInfo(index + 1);
-                            return (
-                              <div
-                                key={step.key}
-                                className="flex flex-col items-center min-w-0 flex-1">
+                      {!itemRefundStatus && (
+                        <div className="relative pt-1">
+                          <div className="absolute top-5 start-4 end-4 h-0.5 bg-gray-200 dark:bg-gray-600 rounded" />
+                          <div
+                            className="absolute top-5 start-4 h-0.5 bg-primary dark:bg-primary rounded transition-all duration-300"
+                            style={{ width: `${itemProgress}%` }}
+                          />
+                          <div className="relative flex justify-between">
+                            {itemTimelineSteps.map((step, index) => {
+                              const completed = itemStatus >= index;
+                              const circleBg = completed
+                                ? "bg-primary text-white dark:bg-primary dark:text-white"
+                                : "bg-gray-200 dark:bg-gray-600 text-gray-400 dark:text-gray-500";
+                              const stepLabel = getShipmentStatusInfo(index + 1);
+                              return (
                                 <div
-                                  className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 shrink-0 ${circleBg}`}>
-                                  <step.icon className="w-4 h-4" />
+                                  key={step.key}
+                                  className="flex flex-col items-center min-w-0 flex-1">
+                                  <div
+                                    className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 shrink-0 ${circleBg}`}>
+                                    <step.icon className="w-4 h-4" />
+                                  </div>
+                                  <p
+                                    className={`text-[10px] font-medium text-center leading-tight ${
+                                      completed
+                                        ? "text-gray-900 dark:text-white"
+                                        : "text-gray-500 dark:text-gray-400"
+                                    }`}>
+                                    {isArabic ? stepLabel.labelAr : stepLabel.label}
+                                  </p>
                                 </div>
-                                <p
-                                  className={`text-[10px] font-medium text-center leading-tight ${
-                                    completed
-                                      ? "text-gray-900 dark:text-white"
-                                      : "text-gray-500 dark:text-gray-400"
-                                  }`}>
-                                  {isArabic ? stepLabel.labelAr : stepLabel.label}
-                                </p>
-                              </div>
-                            );
-                          })}
+                              );
+                            })}
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 );

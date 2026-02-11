@@ -55,4 +55,6 @@ export interface OrderDetailItem {
   discountAmount: number;
   taxAmount: number;
   shipmentStatus: number;
+  /** RefundStatus enum: Open=1, UnderReview=2, NeedMoreInfo=3, InfoApproved=4, ItemShippedBack=5, ItemReceived=6, Inspecting=7, Approved=8, Rejected=9, Refunded=10, Closed=11 */
+  refundStatus?: number;
 }

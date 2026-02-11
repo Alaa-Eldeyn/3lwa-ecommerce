@@ -153,3 +153,79 @@ export const shipmentStatusToTimelineStep = (shipmentStatus: number): number => 
   if (shipmentStatus >= 1 && shipmentStatus <= 5) return shipmentStatus - 1;
   return -1;
 };
+
+/**
+ * RefundStatus enum (item-level refund request)
+ * Open=1, UnderReview=2, NeedMoreInfo=3, InfoApproved=4, ItemShippedBack=5,
+ * ItemReceived=6, Inspecting=7, Approved=8, Rejected=9, Refunded=10, Closed=11
+ */
+export const getRefundStatusInfo = (status: string | number) => {
+  const statusKey = typeof status === "number" ? status : parseInt(status) || status;
+
+  const statusConfig: Record<string | number, { label: string; labelAr: string; bgColor: string }> =
+    {
+      1: {
+        label: "Refund open",
+        labelAr: "طلب استرداد مفتوح",
+        bgColor: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+      },
+      2: {
+        label: "Under review",
+        labelAr: "قيد المراجعة",
+        bgColor: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
+      },
+      3: {
+        label: "More info needed",
+        labelAr: "معلومات إضافية مطلوبة",
+        bgColor: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
+      },
+      4: {
+        label: "Info approved",
+        labelAr: "تم اعتماد المعلومات",
+        bgColor: "bg-sky-100 text-sky-800 dark:bg-sky-900/30 dark:text-sky-300",
+      },
+      5: {
+        label: "Item shipped back",
+        labelAr: "تم إرجاع المنتج",
+        bgColor: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300",
+      },
+      6: {
+        label: "Item received",
+        labelAr: "تم استلام المنتج",
+        bgColor: "bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300",
+      },
+      7: {
+        label: "Inspecting",
+        labelAr: "قيد الفحص",
+        bgColor: "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-300",
+      },
+      8: {
+        label: "Approved",
+        labelAr: "موافق عليه",
+        bgColor: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+      },
+      9: {
+        label: "Rejected",
+        labelAr: "مرفوض",
+        bgColor: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
+      },
+      10: {
+        label: "Refunded",
+        labelAr: "تم الاسترداد",
+        bgColor: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300",
+      },
+      11: {
+        label: "Closed",
+        labelAr: "مغلق",
+        bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+      },
+    };
+
+  return (
+    statusConfig[statusKey] || {
+      label: String(status),
+      labelAr: String(status),
+      bgColor: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+    }
+  );
+};
