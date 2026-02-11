@@ -142,7 +142,7 @@ const HeaderActions = () => {
             onClick={toggleAccount}
             className="text-white flex items-center gap-1 hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all"
           >
-            <div className="text-xs leading-tight">{user ? `${t("hello")}, ${user.firstName}` : `${t('login')}`}</div>
+            <div className="text-xs leading-tight">{user ? `${t("hello")} ${user.firstName}` : `${t('login')}`}</div>
             <User2Icon size={20} />
           </button>
 
