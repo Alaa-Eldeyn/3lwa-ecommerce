@@ -118,7 +118,7 @@ export default function WriteReviewModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 py-2.5 px-4 rounded-xl bg-primary hover:bg-headerDark text-white font-medium transition-colors disabled:opacity-50 inline-flex items-center justify-center gap-2">
+              className="flex-1 py-2.5 px-4 rounded-xl bg-primary hover:bg-secondary text-white font-medium transition-colors disabled:opacity-50 inline-flex items-center justify-center gap-2">
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" aria-hidden />

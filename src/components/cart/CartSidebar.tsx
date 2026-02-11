@@ -216,7 +216,7 @@ const CartSidebar = () => {
               <Link
                 href="/cart"
                 onClick={closeCart}
-                className="block w-full text-center bg-primary dark:bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition">
+                className="block w-full text-center bg-primary dark:bg-primary text-white py-3 rounded-lg font-semibold hover:bg-secondary transition">
                 {t("viewCart")}
               </Link>
             </div>

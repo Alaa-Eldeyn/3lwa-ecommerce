@@ -109,7 +109,7 @@ export function AccountVerificationV2() {
                 <i className="fa-solid fa-cloud-arrow-up text-gray-400 text-4xl mb-3" aria-hidden />
                 <p className="text-sm text-gray-600 mb-2">Drag and drop your file here</p>
                 <p className="text-xs text-gray-500 mb-4">or</p>
-                <button type="button" className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90">
+                <button type="button" className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary">
                   Browse Files
                 </button>
                 <p className="text-xs text-gray-400 mt-3">PDF, JPG, PNG (max 10MB)</p>

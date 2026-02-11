@@ -170,7 +170,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
           <button
             onClick={handleAddToCart}
             disabled={isAddingToCart || stockStatus === 3 || !isCombinationAvailable}
-            className="w-full bg-primary hover:bg-teal-700 dark:hover:bg-teal-600 text-white font-bold py-3.5 px-4 rounded-lg shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 text-sm disabled:cursor-not-allowed">
+            className="w-full bg-primary hover:bg-secondary text-white font-bold py-3.5 px-4 rounded-lg shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 text-sm disabled:cursor-not-allowed">
             {isAddingToCart ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

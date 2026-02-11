@@ -222,7 +222,7 @@ export function CreatePromo() {
             <button type="button" className="px-8 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">
               Save as Draft
             </button>
-            <button type="button" className="px-8 py-3 bg-primary text-white rounded-lg font-medium hover:bg-header transition-colors shadow-sm">
+            <button type="button" className="px-8 py-3 bg-primary text-white rounded-lg font-medium hover:bg-secondary transition-colors shadow-sm">
               Create Promo Code
             </button>
           </div>

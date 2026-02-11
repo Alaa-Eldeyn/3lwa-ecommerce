@@ -43,7 +43,7 @@ const AddressesTab = ({ t }: AddressesTabProps) => {
         </div>
         <button
           onClick={handleAddNew}
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 dark:hover:bg-primary/80 soft text-sm">
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl hover:bg-secondary dark:hover:bg-secondary soft text-sm">
           <Plus size={20} />
           <span className="hidden md:inline">{t("addresses.addNew")}</span>
         </button>

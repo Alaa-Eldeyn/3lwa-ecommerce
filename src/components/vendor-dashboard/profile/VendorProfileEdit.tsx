@@ -180,7 +180,7 @@ export function VendorProfileEdit() {
 
           <div className="flex items-center justify-end space-x-4">
             <button type="button" className="px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium">Cancel</button>
-            <button type="button" className="px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-header font-medium">Save Changes</button>
+            <button type="button" className="px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary font-medium">Save Changes</button>
           </div>
         </div>
 
@@ -193,7 +193,7 @@ export function VendorProfileEdit() {
               </div>
               <p className="text-sm text-gray-600 text-center mb-4">Upload a logo to represent your store across the platform</p>
               <div className="flex flex-col space-y-2 w-full">
-                <button type="button" className="w-full px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-header font-medium">
+                <button type="button" className="w-full px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary font-medium">
                   <i className="fa-solid fa-upload mr-2" aria-hidden />Upload Logo
                 </button>
                 <button type="button" className="w-full px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium">Remove</button>

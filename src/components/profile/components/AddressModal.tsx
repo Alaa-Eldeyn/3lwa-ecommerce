@@ -379,7 +379,7 @@ const AddressModal = ({
             <button
               type="submit"
               disabled={saveAddressMutation.isPending}
-              className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+              className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-secondary transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
               {saveAddressMutation.isPending
                 ? "جاري الحفظ..."
                 : editingAddress

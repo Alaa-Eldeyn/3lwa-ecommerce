@@ -41,7 +41,7 @@ export default function VendorReviewsSection({
         <button
           type="button"
           onClick={onWriteReview}
-          className="inline-flex items-center gap-1.5 px-4 py-3 rounded-lg bg-primary hover:bg-headerDark text-white text-sm font-medium transition-colors shrink-0">
+          className="inline-flex items-center gap-1.5 px-4 py-3 rounded-lg bg-primary hover:bg-secondary text-white text-sm font-medium transition-colors shrink-0">
           <PenLine className="w-3.5 h-3.5" />
           {t("writeReview")}
         </button>
@@ -130,7 +130,7 @@ export default function VendorReviewsSection({
                 type="button"
                 onClick={onLoadMore}
                 disabled={reviewsLoading}
-                className="px-6 py-2.5 rounded-xl border border-primary text-primary dark:text-primary hover:bg-primary hover:text-white font-medium transition-colors disabled:opacity-50 inline-flex items-center gap-2">
+                className="px-6 py-2.5 rounded-xl border border-primary text-primary dark:text-primary hover:bg-secondary hover:text-white font-medium transition-colors disabled:opacity-50 inline-flex items-center gap-2">
                 {reviewsLoading ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden /> : null}
                 {t("loadMoreReviews")}
               </button>

@@ -22,7 +22,7 @@ export function ItemDetailsV2() {
             <button type="button" className="px-5 py-2.5 text-primary bg-white border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors font-medium">
               <i className="fa-solid fa-star mr-2" aria-hidden />View Item Reviews
             </button>
-            <Link href="/vendor/edit-item" className="px-5 py-2.5 text-white bg-primary rounded-lg hover:bg-header transition-colors font-medium inline-flex items-center">
+            <Link href="/vendor/edit-item" className="px-5 py-2.5 text-white bg-primary rounded-lg hover:bg-secondary transition-colors font-medium inline-flex items-center">
               <i className="fa-solid fa-edit mr-2" aria-hidden />Edit Item
             </Link>
           </div>

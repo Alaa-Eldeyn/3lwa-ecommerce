@@ -113,7 +113,7 @@ export function OrderDetailsV2() {
               <div id="tracking-section" className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-gray-900">Tracking Information</h2>
-                  <button type="button" className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90">
+                  <button type="button" className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-secondary">
                     <i className="fas fa-plus mr-2" aria-hidden />Add Tracking
                   </button>
                 </div>
@@ -199,7 +199,7 @@ export function OrderDetailsV2() {
               <div id="actions-section" className="bg-white rounded-lg border border-gray-200 p-6">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">Actions</h2>
                 <div className="space-y-3">
-                  <button type="button" className="w-full px-4 py-3 bg-primary text-white rounded-lg font-medium hover:bg-opacity-90 flex items-center justify-center">
+                  <button type="button" className="w-full px-4 py-3 bg-primary text-white rounded-lg font-medium hover:bg-secondary flex items-center justify-center">
                     <i className="fas fa-check-circle mr-2" aria-hidden />Confirm Dispatch
                   </button>
                   <Link href="/vendor/shipment-status" className="block w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 flex items-center justify-center">

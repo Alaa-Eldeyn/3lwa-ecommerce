@@ -284,7 +284,7 @@ export function AddItem() {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
+              className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary transition-colors">
               <i className="fa-solid fa-rocket mr-2" aria-hidden />
               Publish Offer
             </button>

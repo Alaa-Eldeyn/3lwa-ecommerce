@@ -141,7 +141,7 @@ export function CampaignsGrid() {
                     </button>
                   )}
                   {c.btnPrimary && (
-                    <button type="button" className="flex-1 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-header transition-colors">
+                    <button type="button" className="flex-1 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary transition-colors">
                       {c.btnPrimary}
                     </button>
                   )}

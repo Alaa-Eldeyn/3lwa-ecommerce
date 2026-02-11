@@ -85,7 +85,7 @@ export function CampaignsList() {
             </div>
           </div>
           <div className="flex items-end">
-            <button type="button" className="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-header transition-colors">
+            <button type="button" className="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-secondary transition-colors">
               <i className="fa-solid fa-filter mr-2" aria-hidden />Apply Filters
             </button>
           </div>
@@ -165,7 +165,7 @@ export function CampaignsList() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <button type="button" className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">View Details</button>
-                  <button type="button" className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-header">
+                  <button type="button" className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-secondary">
                     {c.status === "Scheduled" ? "Add Items" : c.title.includes("Spotlight") ? "Optimize" : "Manage Items"}
                   </button>
                 </div>

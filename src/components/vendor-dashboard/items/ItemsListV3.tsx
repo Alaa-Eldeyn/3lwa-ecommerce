@@ -26,7 +26,7 @@ export function ItemsListV3() {
             <button type="button" className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
               <i className="fa-solid fa-download mr-2" aria-hidden />Export
             </button>
-            <Link href="/vendor/add-item" className="px-4 py-2 text-white bg-primary rounded-lg hover:bg-header transition-colors inline-flex items-center">
+            <Link href="/vendor/add-item" className="px-4 py-2 text-white bg-primary rounded-lg hover:bg-secondary transition-colors inline-flex items-center">
               <i className="fa-solid fa-plus mr-2" aria-hidden />Add New Item
             </Link>
           </div>

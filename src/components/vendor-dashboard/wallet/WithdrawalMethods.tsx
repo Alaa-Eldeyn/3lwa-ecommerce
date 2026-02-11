@@ -12,7 +12,7 @@ export function WithdrawalMethods() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold text-gray-900">Withdrawal Methods</h1>
-          <button type="button" className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-header transition-all font-medium inline-flex items-center">
+          <button type="button" className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-all font-medium inline-flex items-center">
             <i className="fa-solid fa-plus mr-2" aria-hidden />
             Add Method
           </button>

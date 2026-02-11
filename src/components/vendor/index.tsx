@@ -242,7 +242,7 @@ const VendorPage = () => {
           </p>
           <button
             onClick={() => router.push(`/products?v=${id}`)}
-            className="px-6 py-3 bg-primary hover:bg-headerDark text-white font-semibold rounded-xl transition-colors">
+            className="px-6 py-3 bg-primary hover:bg-secondary text-white font-semibold rounded-xl transition-colors">
             {t("backToProducts")}
           </button>
         </div>
@@ -394,7 +394,7 @@ const VendorPage = () => {
               </div>
               <button
                 onClick={() => router.push(`/products?v=${id}`)}
-                className="bg-primary hover:bg-headerDark text-white font-semibold py-3 px-6 text-sm sm:text-base sm:px-8 rounded-xl transition-colors flex items-center gap-2">
+                className="bg-primary hover:bg-secondary text-white font-semibold py-3 px-6 text-sm sm:text-base sm:px-8 rounded-xl transition-colors flex items-center gap-2">
                 <span>{tProducts("viewAllShort")}</span>
                 {isArabic ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
               </button>

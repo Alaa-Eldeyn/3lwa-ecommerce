@@ -57,7 +57,7 @@ const ShippingAddress = ({ onAddressChange, purpose = "checkout" }: ShippingAddr
         <button
           type="button"
           onClick={handleAddNew}
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors">
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl hover:bg-secondary transition-colors">
           <Plus size={20} />
           <span className="hidden md:inline">{t("addNew")}</span>
         </button>

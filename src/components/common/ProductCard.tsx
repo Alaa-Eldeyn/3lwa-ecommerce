@@ -298,7 +298,7 @@ const ProductCard = ({
               <button
                 onClick={handleAddToCart}
                 disabled={stockStatus === "OutOfStock" || !offerCombinationPricingId}
-                className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg center soft p-2.5 md:p-3.5 font-medium shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-primary hover:bg-secondary text-white rounded-lg center soft p-2.5 md:p-3.5 font-medium shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Add to cart">
                 <span className="lg:mx-2 text-xs md:text-sm">{t("addToCart")}</span>
                 <ShoppingCart size={18} className="hidden lg:block" />
@@ -649,7 +649,7 @@ const ProductCard = ({
             ) : (
               <button
                 onClick={handleAddToCart}
-                className="w-fit px-3 md:px-4 bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 text-white rounded-2xl center soft py-2 md:py-3 font-semibold text-xs md:text-sm shadow-md hover:shadow-lg"
+                className="w-fit px-3 md:px-4 bg-primary hover:bg-secondary dark:bg-primary dark:hover:bg-secondary text-white rounded-2xl center soft py-2 md:py-3 font-semibold text-xs md:text-sm shadow-md hover:shadow-lg"
                 title="Add to cart">
                 Add to cart
               </button>
@@ -814,7 +814,7 @@ const ProductCard = ({
             ) : (
               <button
                 onClick={handleAddToCart}
-                className="w-full bg-primary text-white rounded-xl center soft py-2 md:py-3 font-semibold text-xs md:text-sm transition-all"
+                className="w-full bg-primary hover:bg-secondary text-white rounded-xl center soft py-2 md:py-3 font-semibold text-xs md:text-sm transition-all"
                 title="Add to cart">
                 <ShoppingCart size={14} className="mr-1 md:mr-2 md:w-4 md:h-4" />
                 Add to Cart

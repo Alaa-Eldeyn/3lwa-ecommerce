@@ -273,7 +273,7 @@ const Cart = () => {
 
                 <Link
                   href="/checkout"
-                  className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-lg transition-all transform active:scale-[0.98] shadow-sm shadow-primary/20 flex items-center justify-center gap-3">
+                  className="w-full bg-primary hover:bg-secondary text-white font-bold py-4 px-6 rounded-lg transition-all transform active:scale-[0.98] shadow-sm shadow-primary/20 flex items-center justify-center gap-3">
                   {tOrderSummary("goToCheckout")}
                   <ArrowRight size={18} className={isArabic ? "rotate-180" : ""} />
                 </Link>

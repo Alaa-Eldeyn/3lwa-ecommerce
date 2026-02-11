@@ -123,7 +123,7 @@ export function DashboardV1() {
             </select>
             <button
               type="button"
-              className="px-4 py-2 bg-primary hover:bg-header text-white text-sm font-semibold rounded-lg transition-all flex items-center gap-2">
+              className="px-4 py-2 bg-primary hover:bg-secondary text-white text-sm font-semibold rounded-lg transition-all flex items-center gap-2">
               <i className="fa-solid fa-download" aria-hidden />
               {t("exportReport")}
             </button>

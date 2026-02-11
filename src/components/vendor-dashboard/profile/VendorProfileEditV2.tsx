@@ -143,7 +143,7 @@ export function VendorProfileEditV2() {
 
             <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
               <button type="button" className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">Cancel</button>
-              <button type="submit" className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-header font-medium transition-colors">Save Changes</button>
+              <button type="submit" className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-secondary font-medium transition-colors">Save Changes</button>
             </div>
           </form>
         </div>

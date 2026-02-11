@@ -46,7 +46,7 @@ export function OrdersListV2() {
                 <input type="date" className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" aria-label="Date from" />
                 <span className="text-sm text-gray-500">to</span>
                 <input type="date" className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" aria-label="Date to" />
-                <button type="button" className="px-4 py-2 bg-primary hover:bg-header text-white text-sm font-semibold rounded-lg transition-all">
+                <button type="button" className="px-4 py-2 bg-primary hover:bg-secondary text-white text-sm font-semibold rounded-lg transition-all">
                   Apply Filter
                 </button>
               </div>
@@ -159,7 +159,7 @@ export function OrdersListV2() {
                   <span className="text-xs font-medium text-amber-600 bg-amber-100 px-3 py-1 rounded-full">Processing</span>
                 </div>
                 <div className="space-y-3">
-                  <Link href="/vendor/shipment-status" className="flex w-full px-4 py-3 bg-primary hover:bg-header text-white font-semibold rounded-lg transition-all items-center justify-center gap-2">
+                  <Link href="/vendor/shipment-status" className="flex w-full px-4 py-3 bg-primary hover:bg-secondary text-white font-semibold rounded-lg transition-all items-center justify-center gap-2">
                     <i className="fa-solid fa-truck" aria-hidden />Mark as Shipped
                   </Link>
                   <button type="button" className="w-full px-4 py-3 border border-gray-200 text-gray-700 hover:bg-gray-50 font-medium rounded-lg transition-all flex items-center justify-center gap-2">

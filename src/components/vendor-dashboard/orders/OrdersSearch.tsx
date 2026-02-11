@@ -23,7 +23,7 @@ export function OrdersSearch() {
             <button type="button" className="bg-white border border-gray-300 text-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
               <i className="fa-solid fa-download mr-2" aria-hidden />Export Orders
             </button>
-            <button type="button" className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
+            <button type="button" className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary transition-colors">
               <i className="fa-solid fa-filter mr-2" aria-hidden />Advanced Filters
             </button>
           </div>
@@ -60,7 +60,7 @@ export function OrdersSearch() {
             <input type="date" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" aria-label="Date to" />
           </div>
           <div className="flex items-end">
-            <button type="button" className="w-full bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
+            <button type="button" className="w-full bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary transition-colors">
               Apply Filters
             </button>
           </div>

@@ -239,7 +239,7 @@ const Checkout = () => {
                       type="button"
                       onClick={handleApplyPromo}
                       disabled={!promoCode.trim() || isApplyingPromo}
-                      className="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                      className="px-6 py-3 bg-primary hover:bg-secondary text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                       {isApplyingPromo ? t("applying") : t("apply")}
                     </button>
                   </div>

@@ -22,7 +22,7 @@ export function VendorNotFound() {
           </p>
           <div className="mt-8 space-y-4">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-              <Link href="/vendor/dashboard" className="bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center">
+              <Link href="/vendor/dashboard" className="bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-secondary transition-colors flex items-center">
                 <i className="fa-solid fa-chart-line mr-2" aria-hidden />Go to Dashboard
               </Link>
               <button type="button" onClick={() => window.history.back()} className="bg-white border border-gray-300 text-foreground px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center">

@@ -256,7 +256,7 @@ export function OrderDetails() {
 
             <div id="order-actions-card" className="bg-white rounded-lg shadow-sm border border-gray-200">
               <div className="p-6 space-y-3">
-                <button type="button" className="w-full bg-primary hover:bg-primary/90 text-white py-3 px-4 rounded-lg font-medium flex items-center justify-center">
+                <button type="button" className="w-full bg-primary hover:bg-secondary text-white py-3 px-4 rounded-lg font-medium flex items-center justify-center">
                   <i className="fa-solid fa-print mr-2" aria-hidden />Print Invoice
                 </button>
                 <button type="button" className="w-full bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium flex items-center justify-center">

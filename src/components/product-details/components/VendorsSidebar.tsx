@@ -392,7 +392,7 @@ const VendorsSidebar = ({
                               disabled={!isInStock}
                               className={`w-full flex items-center justify-center gap-2 text-sm font-medium rounded-lg transition-colors py-2.5 px-4 ${
                                 isInStock
-                                  ? "bg-primary hover:bg-primary/90 text-white shadow-sm hover:shadow-md"
+                                  ? "bg-primary hover:bg-secondary text-white shadow-sm hover:shadow-md"
                                   : "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                               }`}
                               title="Add to cart">

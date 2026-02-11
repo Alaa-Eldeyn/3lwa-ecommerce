@@ -93,7 +93,7 @@ const OrdersTab = () => {
           <p className="text-gray-600 dark:text-gray-400 mb-4">{t("orders.noOrders")}</p>
           <button
             onClick={() => router.push("/products")}
-            className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 soft">
+            className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-secondary soft">
             {t("orders.startShopping")}
           </button>
         </div>

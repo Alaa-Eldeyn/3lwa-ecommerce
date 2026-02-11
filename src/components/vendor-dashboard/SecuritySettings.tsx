@@ -20,7 +20,7 @@ export function SecuritySettings() {
               <label className="block text-sm font-medium text-foreground mb-2">New password</label>
               <input type="password" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" />
             </div>
-            <button type="button" className="bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-primary/90">Update password</button>
+            <button type="button" className="bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-secondary">Update password</button>
           </div>
         </div>
       </main>

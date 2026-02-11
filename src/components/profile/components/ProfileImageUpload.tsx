@@ -96,7 +96,7 @@ const ProfileImageUpload = ({
         <button
           type="button"
           onClick={() => setShowModal(true)}
-          className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg hover:bg-primary/90 soft border-4 border-white dark:border-gray-800">
+          className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg hover:bg-secondary soft border-4 border-white dark:border-gray-800">
           <Camera size={20} />
         </button>
       </div>

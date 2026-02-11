@@ -162,7 +162,7 @@ const SecurityTab = ({ isLoading, onSubmit, t }: SecurityTabProps) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full md:w-auto px-8 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-xl soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50">
+            className="w-full md:w-auto px-8 py-3 bg-primary hover:bg-secondary text-white font-medium rounded-xl soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50">
             {isLoading ? t("security.updating") : t("security.updatePassword")}
           </button>
         </form>

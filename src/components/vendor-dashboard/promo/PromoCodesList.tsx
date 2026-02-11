@@ -21,7 +21,7 @@ export function PromoCodesList() {
             <Link href="/vendor/create-promo" className="px-4 py-2 text-sm border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-all inline-flex items-center">
               <i className="fa-solid fa-tag mr-2" aria-hidden />Create Promo Code
             </Link>
-            <Link href="/vendor/campaigns" className="px-4 py-3 bg-primary hover:bg-header text-white font-semibold rounded-lg transition-all inline-flex items-center shrink-0">
+            <Link href="/vendor/campaigns" className="px-4 py-3 bg-primary hover:bg-secondary text-white font-semibold rounded-lg transition-all inline-flex items-center shrink-0">
               <i className="fa-solid fa-plus mr-2" aria-hidden />Browse Campaigns
             </Link>
           </div>

@@ -20,7 +20,7 @@ export function WalletV2() {
             <p className="text-sm text-gray-500 mt-1">Manage your earnings, transactions, and payout preferences</p>
           </div>
           <div className="flex items-center space-x-3">
-            <button type="button" className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-header transition-colors font-medium">
+            <button type="button" className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-secondary transition-colors font-medium">
               <i className="fa-solid fa-download" aria-hidden />
               <span>Export Statement</span>
             </button>
@@ -123,7 +123,7 @@ export function WalletV2() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">Withdrawal Methods</h2>
-          <Link href="/vendor/withdrawal-methods" className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-header transition-colors font-medium">
+          <Link href="/vendor/withdrawal-methods" className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-secondary transition-colors font-medium">
             <i className="fa-solid fa-plus" aria-hidden />
             <span>Add Method</span>
           </Link>
@@ -161,7 +161,7 @@ export function WalletV2() {
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <button type="button" className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-header transition-colors font-medium">
+              <button type="button" className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors font-medium">
                 <i className="fa-solid fa-edit mr-2" aria-hidden />Edit
               </button>
               <button type="button" className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
@@ -208,7 +208,7 @@ export function WalletV2() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">Warehouses</h2>
-          <button type="button" className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-header transition-colors font-medium">
+          <button type="button" className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-secondary transition-colors font-medium">
             <i className="fa-solid fa-plus" aria-hidden />
             <span>Add Warehouse</span>
           </button>
@@ -247,7 +247,7 @@ export function WalletV2() {
               </div>
             </div>
             <div className="flex items-center space-x-3 mt-4 pt-4 border-t border-gray-100">
-              <button type="button" className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-header transition-colors font-medium">
+              <button type="button" className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors font-medium">
                 <i className="fa-solid fa-edit mr-2" aria-hidden />Edit
               </button>
               <button type="button" className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
@@ -288,7 +288,7 @@ export function WalletV2() {
               </div>
             </div>
             <div className="flex items-center space-x-3 mt-4 pt-4 border-t border-gray-100">
-              <button type="button" className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-header transition-colors font-medium">
+              <button type="button" className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors font-medium">
                 <i className="fa-solid fa-edit mr-2" aria-hidden />Edit
               </button>
               <button type="button" className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">

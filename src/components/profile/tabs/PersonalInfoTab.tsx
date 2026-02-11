@@ -373,7 +373,7 @@ const PersonalInfoTab = ({
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full md:w-auto px-8 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-xl soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50">
+          className="w-full md:w-auto px-8 py-3 bg-primary hover:bg-secondary text-white font-medium rounded-xl soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50">
           {isLoading ? t("personalInfo.saving") : t("personalInfo.saveChanges")}
         </button>
       </form>
@@ -529,7 +529,7 @@ const ChangeEmailModal = ({
             <button
               type="submit"
               disabled={isLoading || !email || email === currentEmail}
-              className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+              className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-secondary transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
               {isLoading ? t("personalInfo.sending") : t("personalInfo.sendCode")}
             </button>
             <button
@@ -618,7 +618,7 @@ const VerifyEmailModal = ({
             <button
               type="submit"
               disabled={isLoading || code.length !== 6}
-              className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+              className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-secondary transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
               {isLoading ? t("personalInfo.verifying") : t("personalInfo.verifyUpdate")}
             </button>
             <button
@@ -732,7 +732,7 @@ const ChangePhoneModal = ({
             <button
               type="submit"
               disabled={isLoading || !phone || phone === currentPhone}
-              className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+              className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-secondary transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
               {isLoading ? t("personalInfo.sending") : t("personalInfo.sendCode")}
             </button>
             <button
@@ -823,7 +823,7 @@ const VerifyPhoneModal = ({
             <button
               type="submit"
               disabled={isLoading || code.length !== 6}
-              className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+              className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-secondary transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
               {isLoading ? t("personalInfo.verifying") : t("personalInfo.verifyUpdate")}
             </button>
             <button

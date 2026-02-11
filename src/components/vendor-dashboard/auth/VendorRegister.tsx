@@ -389,7 +389,7 @@ export function VendorRegister() {
                   type="submit"
                   id="register-btn"
                   disabled={isSubmitting}
-                  className="bg-primary text-white py-3 px-8 rounded-lg font-medium hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
+                  className="bg-primary text-white py-3 px-8 rounded-lg font-medium hover:bg-secondary focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
                 >
                   <span id="register-btn-text">{isSubmitting ? "Creating Account..." : "Create Account"}</span>
                   {isSubmitting && <i className="fa-solid fa-spinner fa-spin ml-2" aria-hidden />}

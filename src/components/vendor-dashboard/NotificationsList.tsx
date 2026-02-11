@@ -67,7 +67,7 @@ export function NotificationsList() {
                     <span className="text-xs text-gray-400">{n.time}</span>
                     <div className="flex items-center space-x-2">
                       {n.primaryBtn && (
-                        <button type="button" className={`px-3 py-1.5 rounded text-xs font-medium ${n.unread ? "bg-primary text-white hover:bg-primary/90" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`}>
+                        <button type="button" className={`px-3 py-1.5 rounded text-xs font-medium ${n.unread ? "bg-primary text-white hover:bg-secondary" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`}>
                           {n.primaryBtn}
                         </button>
                       )}

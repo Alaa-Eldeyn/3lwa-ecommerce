@@ -62,7 +62,7 @@ export function ItemsList() {
                 <i className="fa-solid fa-chevron-down absolute right-3 top-3 text-gray-400 text-xs pointer-events-none" aria-hidden />
               </div>
             </div>
-            <Link href="/vendor/add-item" className="px-5 py-2.5 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 flex items-center">
+            <Link href="/vendor/add-item" className="px-5 py-2.5 bg-primary text-white rounded-lg text-sm font-medium hover:bg-secondary flex items-center">
               <i className="fa-solid fa-plus mr-2" aria-hidden />Add New Item
             </Link>
           </div>

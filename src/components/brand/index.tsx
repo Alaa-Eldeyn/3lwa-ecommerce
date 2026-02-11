@@ -88,7 +88,7 @@ const BrandPage = () => {
           </p>
           <button
             onClick={() => router.push("/brands")}
-            className="px-6 py-3 bg-primary hover:bg-headerDark text-white font-semibold rounded-xl transition-colors">
+            className="px-6 py-3 bg-primary hover:bg-secondary text-white font-semibold rounded-xl transition-colors">
             {tBrand("backToBrands")}
           </button>
         </div>
@@ -237,7 +237,7 @@ const BrandPage = () => {
             </div>
             <button
               onClick={() => router.push(`/products?b=${id}`)}
-              className="w-auto bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 sm:px-8 rounded-xl transition-colors flex items-center justify-center gap-2">
+              className="w-auto bg-primary hover:bg-secondary text-white font-semibold py-3 px-6 sm:px-8 rounded-xl transition-colors flex items-center justify-center gap-2">
               <span>{t("viewAllShort")}</span>
               {isArabic ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
             </button>

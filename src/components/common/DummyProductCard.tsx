@@ -126,7 +126,7 @@ const DummyProductCard = ({
             ) : (
               <button
                 onClick={handleAddToCart}
-                className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg center soft p-3.5 font-medium shadow-sm hover:shadow-md"
+                className="w-full bg-primary hover:bg-secondary text-white rounded-lg center soft p-3.5 font-medium shadow-sm hover:shadow-md"
                 title="Add to cart">
                 <span className="lg:mx-2 text-sm">أضف للسلة</span>
                 <ShoppingCart size={18} className="hidden lg:block" />
@@ -500,7 +500,7 @@ const DummyProductCard = ({
             ) : (
               <button
                 onClick={handleAddToCart}
-                className="w-fit px-4! bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 text-white rounded-2xl center soft py-3 font-semibold text-sm shadow-md hover:shadow-lg"
+                className="w-fit px-4! bg-primary hover:bg-secondary dark:bg-primary dark:hover:bg-secondary text-white rounded-2xl center soft py-3 font-semibold text-sm shadow-md hover:shadow-lg"
                 title="Add to cart">
                 Add to cart
               </button>

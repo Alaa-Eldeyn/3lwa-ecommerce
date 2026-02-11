@@ -232,7 +232,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
           </Link>
           <Link
             href="/"
-            className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-semibold rounded-xl text-white bg-primary hover:bg-primary/90 w-full sm:w-auto">
+            className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-semibold rounded-xl text-white bg-primary hover:bg-secondary w-full sm:w-auto">
             {t("continueShopping")}
           </Link>
         </div>

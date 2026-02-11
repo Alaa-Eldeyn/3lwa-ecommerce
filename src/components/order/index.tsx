@@ -213,7 +213,7 @@ const Order = ({ id }: OrderProps) => {
           <p className="text-lg text-red-600 dark:text-red-400 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-opacity-90 transition-colors">
+            className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-secondary transition-colors">
             {t("tryAgain")}
           </button>
         </div>

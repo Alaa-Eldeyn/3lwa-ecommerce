@@ -16,7 +16,7 @@ export function PromoCodesTable() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold text-gray-900">Promo Codes</h1>
-          <Link href="/vendor/create-promo" className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors inline-flex items-center gap-2">
+          <Link href="/vendor/create-promo" className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-secondary transition-colors inline-flex items-center gap-2">
             <i className="fa-solid fa-plus" aria-hidden /><span>Create Promo Code</span>
           </Link>
         </div>

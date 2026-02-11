@@ -136,7 +136,7 @@ export function WithdrawalRequest() {
                 </div>
               </div>
             </div>
-            <button type="button" className="w-full py-3 bg-primary text-white rounded-lg font-semibold hover:bg-header transition-colors">
+            <button type="button" className="w-full py-3 bg-primary text-white rounded-lg font-semibold hover:bg-secondary transition-colors">
               Submit Withdrawal Request
             </button>
             <p className="text-xs text-gray-500 text-center mt-4">Processing typically takes 2-3 business days</p>

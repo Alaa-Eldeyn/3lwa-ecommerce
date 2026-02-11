@@ -24,7 +24,7 @@ export function EditItem() {
             <button type="button" className="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium">
               Discard
             </button>
-            <button type="button" className="px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-header font-medium">
+            <button type="button" className="px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary font-medium">
               Save Changes
             </button>
           </div>

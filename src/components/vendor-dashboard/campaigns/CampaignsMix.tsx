@@ -36,7 +36,7 @@ export function CampaignsMix() {
             <option>Expired</option>
           </select>
         </div>
-        <button type="button" className="flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-header transition-colors">
+        <button type="button" className="flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors">
           <i className="fas fa-search text-sm" aria-hidden />
           <span className="text-sm font-medium">Browse All</span>
         </button>
@@ -143,7 +143,7 @@ export function CampaignsMix() {
                   <span className={`text-xs ${c.eligibilityClass} px-2 py-1 rounded-full`}>{c.eligibility}</span>
                 </div>
               </div>
-              <button type="button" className="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:bg-header transition-colors">
+              <button type="button" className="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:bg-secondary transition-colors">
                 Join Campaign
               </button>
             </div>
@@ -189,7 +189,7 @@ export function CampaignsMix() {
                   <button type="button" className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors">
                     View Details
                   </button>
-                  <button type="button" className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-header transition-colors">
+                  <button type="button" className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-secondary transition-colors">
                     Manage Items
                   </button>
                 </div>

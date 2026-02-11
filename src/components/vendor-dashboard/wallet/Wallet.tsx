@@ -18,7 +18,7 @@ export function Wallet() {
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold text-gray-900">Wallet Overview</h1>
           <div className="flex items-center space-x-3">
-            <Link href="/vendor/withdrawal-request" className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-header transition-all font-medium inline-flex items-center">
+            <Link href="/vendor/withdrawal-request" className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-all font-medium inline-flex items-center">
               <i className="fa-solid fa-money-bill-transfer mr-2" aria-hidden />
               Request Withdrawal
             </Link>
@@ -147,7 +147,7 @@ export function Wallet() {
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <Link href="/vendor/withdrawal-request" className="px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-header transition-all font-medium inline-flex items-center">
+            <Link href="/vendor/withdrawal-request" className="px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-all font-medium inline-flex items-center">
               <i className="fa-solid fa-hand-holding-dollar mr-2" aria-hidden />
               Request Withdrawal
             </Link>

@@ -88,7 +88,7 @@ export function JoinCampaign() {
               <p className="text-2xl font-bold text-green-600">$347</p>
               <p className="text-sm text-gray-500">Potential Boost</p>
             </div>
-            <button type="button" className="px-8 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-header transition-colors">
+            <button type="button" className="px-8 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-secondary transition-colors">
               Join Campaign
             </button>
           </div>
