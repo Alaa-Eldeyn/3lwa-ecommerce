@@ -78,15 +78,24 @@ const Products = () => {
   const [sortBy, setSortBy] = useState<string>("default");
 
   // Wrap filter setters so changing a filter applies immediately (resets page, closes mobile sidebar)
-  const applyOnChange = <T,>(setter: (v: T) => void) => (value: T) => {
-    setter(value);
-    setPageNumber(1);
-    setIsFiltersOpen(false);
-  };
+  const applyOnChange =
+    <T,>(setter: (v: T) => void) =>
+    (value: T) => {
+      setter(value);
+      setPageNumber(1);
+      setIsFiltersOpen(false);
+    };
 
   // --- Fetch Dynamic Filters ---
   const { data: filtersData } = useQuery({
-    queryKey: ["dynamicFilters", categoryIdFromUrl,brandIdFromUrl,vendorIdFromUrl, searchTerm,searchTermFromUrl],
+    queryKey: [
+      "dynamicFilters",
+      categoryIdFromUrl,
+      brandIdFromUrl,
+      vendorIdFromUrl,
+      searchTerm,
+      searchTermFromUrl,
+    ],
     queryFn: async () => {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/ItemAdvancedSearch/filters`,
@@ -307,11 +316,13 @@ const Products = () => {
                   onChange={(e) => handleSortChange(e.target.value)}
                   className="w-full lg:w-auto px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-sm">
                   <option value="default">{tProducts("sortDefault")}</option>
-                  <option value="price-low">{tProducts("sortPriceLow")}</option>
-                  <option value="price-high">{tProducts("sortPriceHigh")}</option>
-                  <option value="name-asc">{tProducts("sortNameAsc")}</option>
-                  <option value="name-desc">{tProducts("sortNameDesc")}</option>
+                  <option value="price_asc">{tProducts("sortPriceAsc")}</option>
+                  <option value="price_desc">{tProducts("sortPriceDesc")}</option>
                   <option value="newest">{tProducts("sortNewest")}</option>
+                  <option value="rating">{tProducts("sortRating")}</option>
+                  <option value="vendor_rating">{tProducts("sortVendorRating")}</option>
+                  <option value="fastest_delivery">{tProducts("sortFastestDelivery")}</option>
+                  <option value="most_sold">{tProducts("sortMostSold")}</option>
                 </select>
               </div>
 
@@ -333,7 +344,6 @@ const Products = () => {
                 </svg>
                 {t("filtersTitle")}
               </button>
-
 
               {/* Layout Toggle */}
               <div className="hidden lg:flex items-center gap-2 border border-gray-200 dark:border-gray-700 rounded-xl p-1">
@@ -390,7 +400,9 @@ const Products = () => {
             <div>{tProducts("loading")}</div>
           ) : products.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-600 dark:text-gray-400 text-lg">{tProducts("noProductsFound")}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-lg">
+                {tProducts("noProductsFound")}
+              </p>
               {/* Optional: Add a reset button here if filters are active */}
             </div>
           ) : layoutMode === "grid" ? (
