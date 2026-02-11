@@ -169,7 +169,7 @@ const CheckoutSummary = ({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-primary hover:bg-secondary text-white font-semibold py-4 rounded-full transition-colors flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed">
+        className="w-full bg-primary hover:bg-secondary text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed">
         {isSubmitting ? t("creatingOrder") : t("placeOrder")}
         {!isSubmitting && (
           <ChevronRight

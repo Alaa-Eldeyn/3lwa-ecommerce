@@ -74,7 +74,7 @@ function ReviewFormModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-full border-2 border-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:border-primary"
+            className="p-2 rounded-lg border-2 border-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:border-primary"
             aria-label="Close">
             <X size={20} />
           </button>
@@ -131,7 +131,7 @@ function ReviewFormModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 py-2.5 bg-primary dark:bg-white text-white dark:text-primary rounded-full font-medium hover:bg-secondary dark:hover:bg-gray-200 disabled:opacity-50 border-2 border-transparent focus:outline-none focus:border-primary">
+              className="flex-1 py-2.5 bg-primary dark:bg-white text-white dark:text-primary rounded-lg font-medium hover:bg-secondary dark:hover:bg-gray-200 disabled:opacity-50 border-2 border-transparent focus:outline-none focus:border-primary">
               {isSubmitting
                 ? t("submitting")
                 : editingReview
@@ -141,7 +141,7 @@ function ReviewFormModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-full font-medium hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:border-primary">
+              className="px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:border-primary">
               {t("cancel")}
             </button>
           </div>
@@ -513,7 +513,7 @@ const TabsVariation = ({ description, product }: TabsVariationProps) => {
             <button
               type="button"
               onClick={openCreateModal}
-              className="px-6 py-2 bg-primary dark:bg-white text-white dark:text-primary rounded-full font-medium hover:bg-secondary dark:hover:bg-gray-200 transition-colors">
+              className="px-6 py-2 bg-primary dark:bg-white text-white dark:text-primary rounded-lg font-medium hover:bg-secondary dark:hover:bg-gray-200 transition-colors">
               {t("writeReview")}
             </button>
           </div>
@@ -554,7 +554,7 @@ const TabsVariation = ({ description, product }: TabsVariationProps) => {
                 <div className="text-center">
                   <button
                     onClick={loadMoreReviews}
-                    className="px-8 py-3 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-full font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    className="px-8 py-3 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                     {t("loadMoreReviews")}
                   </button>
                 </div>

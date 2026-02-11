@@ -296,7 +296,7 @@ const ProductRowCard = ({
               <button
                 onClick={handleAddToCart}
                 disabled={stockStatus === "OutOfStock"}
-                className="bg-primary hover:bg-primary/90 text-white dark:bg-white dark:text-primary dark:hover:bg-gray-200 rounded-full px-4 py-2 center soft font-medium text-xs md:text-sm shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all whitespace-nowrap"
+                className="bg-primary hover:bg-primary/90 text-white dark:bg-white dark:text-primary dark:hover:bg-gray-200 rounded-lg px-4 py-2 center soft font-medium text-xs md:text-sm shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all whitespace-nowrap"
                 title="Add to cart">
                 <ShoppingCart size={16} className="me-2"/>
                 <span>{t("addToCart")}</span>
