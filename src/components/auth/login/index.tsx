@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, Eye, EyeOff } from "lucide-react";
 import "react-phone-number-input/style.css";
@@ -42,7 +42,7 @@ const Login = () => {
     control,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginSchema) as Resolver<LoginFormData>,
   });
 
   const onSubmit = async (data: LoginFormData) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { createPortal } from "react-dom";
@@ -56,9 +56,14 @@ const addressSchema = z.object({
   cityId: z.string().min(1, "يرجى اختيار المدينة"),
   address: z.string().min(5, "العنوان يجب أن يكون 5 أحرف على الأقل"),
   phone: z
-    .string()
-    .min(1, "رقم الهاتف مطلوب")
-    .refine((val) => isValidPhoneNumber(val), "رقم الهاتف غير صحيح"),
+    .union([z.string(), z.undefined(), z.literal(null)])
+    .transform((val) => (val === undefined || val === null ? "" : val))
+    .pipe(
+      z
+        .string()
+        .min(1, "رقم الهاتف مطلوب")
+        .refine((val) => isValidPhoneNumber(val), "رقم الهاتف غير صحيح")
+    ),
   setAsDefault: z.boolean(),
 });
 
@@ -90,7 +95,7 @@ const AddressModal = ({
     watch,
     formState: { errors: formErrors },
   } = useForm<AddressFormSchema>({
-    resolver: zodResolver(addressSchema),
+    resolver: zodResolver(addressSchema) as Resolver<AddressFormSchema>,
     defaultValues: {
       recipientName: "",
       stateId: "",

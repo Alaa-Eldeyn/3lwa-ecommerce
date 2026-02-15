@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import "react-phone-number-input/style.css";
@@ -40,7 +40,7 @@ const Register = () => {
     setError,
     formState: { errors },
   } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerSchema) as Resolver<RegisterFormData>,
   });
 
   const onSubmit = async (data: RegisterFormData) => {
