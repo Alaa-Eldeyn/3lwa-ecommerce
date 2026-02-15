@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { useTranslations, useLocale } from "next-intl"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
-import { Category } from "@/src/types/types"
+import { Category, ROOT_CATEGORY_PARENT_ID } from "@/src/types/types"
 import { useSearchParams, useRouter, usePathname } from "next/navigation"
 
 const SearchBar = () => {
@@ -80,9 +80,11 @@ const SearchBar = () => {
     refetchOnWindowFocus: false,
   })
 
-  const mainCategories = categories?.data?.data?.filter(
-    (cat: Category) => cat.isMainCategory
-  ) || []
+  // Main categories: root level (parentId is empty GUID)
+  const mainCategories =
+    categories?.data?.data?.filter(
+      (cat: Category) => cat.parentId === ROOT_CATEGORY_PARENT_ID
+    ) || []
 
   return (
     <div className="relative w-full pb-1 lg:pb-0">

@@ -8,15 +8,7 @@ import LangSwitch from "./header/LangSwitch";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-
-interface Category {
-  id: string;
-  titleAr: string;
-  titleEn: string;
-  children: Category[];
-  parentId: string;
-  isMainCategory: boolean;
-}
+import { Category, ROOT_CATEGORY_PARENT_ID } from "@/src/types/types";
 
 const CategoriesSidebar = () => {
   const { isCategoriesOpen, closeCategories } = useHeaderStore();
@@ -31,9 +23,11 @@ const CategoriesSidebar = () => {
     refetchOnWindowFocus: false,
   });
 
-  // فلترة الـ Main Categories فقط
+  // Main categories: root level (parentId is empty GUID)
   const mainCategories =
-    categories?.data?.data?.filter((cat: Category) => cat.isMainCategory) || [];
+    categories?.data?.data?.filter(
+      (cat: Category) => cat.parentId === ROOT_CATEGORY_PARENT_ID
+    ) || [];
 
   const handleCategoryClick = (category: Category) => {
     if (category.children && category.children.length > 0) {
@@ -82,7 +76,11 @@ const CategoriesSidebar = () => {
             )}
             <TextAlignJustify size={20} />
             <h2 className="text-lg font-bold">
-              {selectedCategory ? selectedCategory.titleAr : t("all")}
+              {selectedCategory
+                ? isArabic
+                  ? selectedCategory.titleAr
+                  : selectedCategory.titleEn
+                : t("all")}
             </h2>
           </div>
           <div className="flex items-center gap-2">
@@ -144,18 +142,19 @@ const CategoriesSidebar = () => {
                   href={`/products?c=${selectedCategory.id}`}
                   onClick={handleClose}
                   className="block mb-4 p-3 bg-primary dark:bg-primary text-white font-semibold text-center rounded-lg hover:opacity-90 transition-opacity">
-                  عرض جميع {selectedCategory.titleAr}
+                  {isArabic ? "عرض جميع " : "View all "}
+                  {isArabic ? selectedCategory.titleAr : selectedCategory.titleEn}
                 </Link>
 
                 {/* Subcategories */}
                 <div className="space-y-3">
-                  {selectedCategory.children.map((subcategory) => (
+                  {(selectedCategory.children ?? []).map((subcategory) => (
                     <div key={subcategory.id}>
                       <Link
                         href={`/products?c=${subcategory.id}`}
                         onClick={handleClose}
                         className="block text-sm font-medium text-gray-900 dark:text-white hover:text-primary dark:hover:text-primary transition-colors py-2 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded">
-                        {subcategory.titleAr}
+                        {isArabic ? subcategory.titleAr : subcategory.titleEn}
                       </Link>
                     </div>
                   ))}

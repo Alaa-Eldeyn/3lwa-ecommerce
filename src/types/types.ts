@@ -147,24 +147,27 @@ export interface ProductsResponse {
   errors: string[];
 }
 
+/** Empty GUID used as parentId for root/main categories in the tree API */
+export const ROOT_CATEGORY_PARENT_ID = "00000000-0000-0000-0000-000000000000";
+
 export interface Category {
+  id: string;
   titleAr: string;
   titleEn: string;
   parentId: string;
+  children?: Category[];
   isFinal: boolean;
   isHomeCategory: boolean;
-  isFeaturedCategory: boolean;
-  isMainCategory: boolean;
+  isFeaturedCategory?: boolean;
   priceRequired: boolean;
   pricingSystemId: string;
   displayOrder: number;
   treeViewSerial: string;
   imageUrl: string | null;
-  icon: string | null;
+  icon?: string | null;
   createdDateUtc: string;
   categoryAttributes: any[];
   pricingSystemType: number;
-  id: string;
 }
 
 // Wishlist Types
