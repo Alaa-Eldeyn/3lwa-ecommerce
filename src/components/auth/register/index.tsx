@@ -5,19 +5,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import "react-phone-number-input/style.css";
 import PhoneInput, { parsePhoneNumber, isValidPhoneNumber } from "react-phone-number-input";
-import { Link } from "@/src/i18n/routing";
+import { Link, useRouter } from "@/src/i18n/routing";
 import { useState, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { registerSchema } from "@/src/schemas/schemas";
 import { RegisterFormData } from "@/src/types/types";
 import { registerUser } from "@/src/auth/auth";
 import { useUserStore } from "@/src/store/userStore";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Lottie from "lottie-react";
 
 const Register = () => {
   const t = useTranslations("auth");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { setUser } = useUserStore();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -76,7 +77,14 @@ const Register = () => {
 
       const user = await registerUser(registrationData);
       setUser(user);
-      router.push("/");
+
+      // Redirect to previous page if available, otherwise go to home
+      const redirectPath = searchParams.get("redirect");
+      if (redirectPath) {
+        router.push(decodeURIComponent(redirectPath));
+      } else {
+        router.push("/");
+      }
     } catch (error) {
       console.error("Registration error:", error);
     } finally {
@@ -353,7 +361,13 @@ const Register = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 {t("alreadyHaveAccount")}{" "}
-                <Link href="/login" className="font-medium text-primary hover:text-primary/80 soft">
+                <Link
+                  href={
+                    searchParams.get("redirect")
+                      ? `/login?redirect=${encodeURIComponent(searchParams.get("redirect")!)}`
+                      : "/login"
+                  }
+                  className="font-medium text-primary hover:text-primary/80 soft">
                   {t("signInNow")}
                 </Link>
               </p>

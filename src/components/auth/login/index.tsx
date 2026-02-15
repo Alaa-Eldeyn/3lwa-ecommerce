@@ -249,7 +249,11 @@ const Login = () => {
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 {t("dontHaveAccount")}{" "}
                 <Link
-                  href="/register"
+                  href={
+                    searchParams.get("redirect")
+                      ? `/register?redirect=${encodeURIComponent(searchParams.get("redirect")!)}`
+                      : "/register"
+                  }
                   className="font-medium text-primary hover:text-primary/80 soft">
                   {t("signUpNow")}
                 </Link>
