@@ -1,7 +1,11 @@
 import z from "zod";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 export const loginSchema = z.object({
-  phone: z.string().min(1, "Phone number is required"),
+  phone: z
+    .string()
+    .min(1, "Phone number is required")
+    .refine((val) => isValidPhoneNumber(val), "Please enter a valid phone number"),
   phoneCode: z.string().optional(),
   phoneNumber: z.string().optional(),
   password: z.string().min(8, "Password must be at least 8 characters"),
@@ -15,7 +19,10 @@ export const registerSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
   phoneCode:z.string().optional(),
   phoneNumber:z.string().optional(),
-  phone: z.string().min(1, "Phone code is required"),
+  phone: z
+    .string()
+    .min(1, "Phone number is required")
+    .refine((val) => isValidPhoneNumber(val), "Please enter a valid phone number"),
   confirmPassword: z.string(),
   agreeToTerms: z.boolean().refine((val) => val === true, {
     message: "You must agree to the terms and conditions",

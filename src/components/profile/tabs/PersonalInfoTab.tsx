@@ -5,9 +5,8 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale } from "next-intl";
 import { Mail, Edit2, Phone } from "lucide-react";
-import PhoneInput from "react-phone-number-input";
+import PhoneInput, { parsePhoneNumber, isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import { parsePhoneNumber } from "libphonenumber-js";
 import { createPortal } from "react-dom";
 import { profileSchema } from "@/src/schemas/schemas";
 import { ProfileFormData } from "@/src/types/types";
@@ -675,6 +674,11 @@ const ChangePhoneModal = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!phone || phone === currentPhone) {
+      return;
+    }
+
+    if (!isValidPhoneNumber(phone)) {
+      toast.error(t("personalInfo.invalidPhone"));
       return;
     }
 

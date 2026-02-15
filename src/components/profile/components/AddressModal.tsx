@@ -4,9 +4,8 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { createPortal } from "react-dom";
-import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import { parsePhoneNumber } from "libphonenumber-js";
+import PhoneInput, { parsePhoneNumber, isValidPhoneNumber } from "react-phone-number-input";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { customAxios } from "@/src/auth/customAxios";
 import { useEffect, useState } from "react";
@@ -56,7 +55,10 @@ const addressSchema = z.object({
   stateId: z.string().min(1, "يرجى اختيار المحافظة"),
   cityId: z.string().min(1, "يرجى اختيار المدينة"),
   address: z.string().min(5, "العنوان يجب أن يكون 5 أحرف على الأقل"),
-  phone: z.string().min(10, "رقم الهاتف غير صحيح"),
+  phone: z
+    .string()
+    .min(1, "رقم الهاتف مطلوب")
+    .refine((val) => isValidPhoneNumber(val), "رقم الهاتف غير صحيح"),
   setAsDefault: z.boolean(),
 });
 

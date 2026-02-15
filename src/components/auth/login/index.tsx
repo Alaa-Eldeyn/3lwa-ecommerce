@@ -3,9 +3,8 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, Eye, EyeOff } from "lucide-react";
-import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import { parsePhoneNumber } from "libphonenumber-js";
+import PhoneInput, { parsePhoneNumber, isValidPhoneNumber } from "react-phone-number-input";
 import { Link, useRouter } from "@/src/i18n/routing";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
@@ -47,20 +46,23 @@ const Login = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
+    if (!data.phone || !isValidPhoneNumber(data.phone)) {
+      return;
+    }
     setIsLoading(true);
     try {
       let phoneCode = "";
       let phoneNumber = "";
-      if (data.phone) {
-        try {
-          const parsed = parsePhoneNumber(data.phone);
-          if (parsed) {
-            phoneCode = "+" + parsed.countryCallingCode;
-            phoneNumber = parsed.nationalNumber;
-          }
-        } catch (error) {
-          console.error("Phone parsing error:", error);
+      try {
+        const parsed = parsePhoneNumber(data.phone);
+        if (parsed) {
+          phoneCode = "+" + parsed.countryCallingCode;
+          phoneNumber = parsed.nationalNumber;
         }
+      } catch (error) {
+        console.error("Phone parsing error:", error);
+        setIsLoading(false);
+        return;
       }
 
       const loginData = {

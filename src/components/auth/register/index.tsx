@@ -3,9 +3,8 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
-import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import { parsePhoneNumber } from "libphonenumber-js";
+import PhoneInput, { parsePhoneNumber, isValidPhoneNumber } from "react-phone-number-input";
 import { Link } from "@/src/i18n/routing";
 import { useState, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
@@ -38,26 +37,34 @@ const Register = () => {
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
 
   const onSubmit = async (data: RegisterFormData) => {
+    if (!data.phone || !isValidPhoneNumber(data.phone)) {
+      setError("phone", {
+        type: "manual",
+        message: t("invalidPhone") || "Please enter a valid phone number",
+      });
+      return;
+    }
     setIsLoading(true);
     try {
       let phoneCode = "";
       let phoneNumber = "";
-      if (data.phone) {
-        try {
-          const parsed = parsePhoneNumber(data.phone);
-          if (parsed) {
-            phoneCode = "+" + parsed.countryCallingCode;
-            phoneNumber = parsed.nationalNumber;
-          }
-        } catch (error) {
-          console.error("Phone parsing error:", error);
+      try {
+        const parsed = parsePhoneNumber(data.phone);
+        if (parsed) {
+          phoneCode = "+" + parsed.countryCallingCode;
+          phoneNumber = parsed.nationalNumber;
         }
+      } catch (error) {
+        console.error("Phone parsing error:", error);
+        setIsLoading(false);
+        return;
       }
 
       // إرسال البيانات مع الكود والرقم المنفصلين
@@ -193,6 +200,9 @@ const Register = () => {
                     />
                   )}
                 />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                )}
               </div>
 
               {/* Password Field */}
