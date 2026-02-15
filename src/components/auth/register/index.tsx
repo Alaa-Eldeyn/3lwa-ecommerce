@@ -12,6 +12,7 @@ import { registerSchema } from "@/src/schemas/schemas";
 import { RegisterFormData } from "@/src/types/types";
 import { registerUser } from "@/src/auth/auth";
 import { useUserStore } from "@/src/store/userStore";
+import { useCartStore } from "@/src/store/cartStore";
 import { useSearchParams } from "next/navigation";
 import Lottie from "lottie-react";
 
@@ -20,6 +21,7 @@ const Register = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { setUser } = useUserStore();
+  const { syncWithServer } = useCartStore();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -77,6 +79,9 @@ const Register = () => {
 
       const user = await registerUser(registrationData);
       setUser(user);
+
+      // Sync guest cart to server after registration
+      await syncWithServer();
 
       // Redirect to previous page if available, otherwise go to home
       const redirectPath = searchParams.get("redirect");
