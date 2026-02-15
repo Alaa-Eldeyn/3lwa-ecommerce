@@ -78,6 +78,21 @@ const ImageGallery = ({ images, productTitle, discountPercentage, itemCombinatio
   return (
     <>
       <div className="sticky top-4">
+        {/* Preload full-size images */}
+        <div className="absolute left-0 top-0 w-full h-[500px] overflow-hidden invisible pointer-events-none contain-strict">
+          {images.map((img, index) => (
+            <div key={index} className="absolute inset-0">
+              <Image
+                src={`${process.env.NEXT_PUBLIC_DOMAIN}/${img}`}
+                alt=""
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+          ))}
+        </div>
+
         {/* Main Image */}
         <div className="w-full h-[500px] bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden relative group mb-4 flex items-center justify-center">
           {discountPercentage && discountPercentage > 0 && (
@@ -97,6 +112,7 @@ const ImageGallery = ({ images, productTitle, discountPercentage, itemCombinatio
             src={`${process.env.NEXT_PUBLIC_DOMAIN}/${images[selectedImage]}`}
             alt={productTitle}
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-contain p-8 transform group-hover:scale-105 transition-transform duration-500"
             priority
             onClick={openFullScreen}
