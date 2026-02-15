@@ -854,6 +854,7 @@
       "total": "المجموع الكلي",
       "seller": "البائع",
       "qty": "الكمية",
+      "itemDiscount": "الخصم",
       "deliveryNotes": "ملاحظات التوصيل",
       "deliveryNotesPlaceholder": "أضف أي ملاحظات خاصة للتوصيل (اختياري)",
       "placeOrder": "تأكيد الطلب",
@@ -863,7 +864,8 @@
     "errors": {
       "selectAddress": "يرجى اختيار عنوان التوصيل",
       "selectPaymentMethod": "يرجى اختيار طريقة الدفع",
-      "invalidPaymentMethod": "طريقة الدفع غير صالحة"
+      "invalidPaymentMethod": "طريقة الدفع غير صالحة",
+      "invalidCoupon": "كود الخصم غير صالح أو منتهي الصلاحية"
     },
     "success": {
       "orderCreated": "تم إنشاء الطلب بنجاح"

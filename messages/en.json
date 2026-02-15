@@ -853,6 +853,7 @@
       "total": "Total",
       "seller": "Seller",
       "qty": "Qty",
+      "itemDiscount": "Discount",
       "deliveryNotes": "Delivery Notes",
       "deliveryNotesPlaceholder": "Add any special delivery instructions (optional)",
       "placeOrder": "Place Order",
@@ -862,7 +863,8 @@
     "errors": {
       "selectAddress": "Please select a delivery address",
       "selectPaymentMethod": "Please select a payment method",
-      "invalidPaymentMethod": "Invalid payment method"
+      "invalidPaymentMethod": "Invalid payment method",
+      "invalidCoupon": "Invalid or expired coupon"
     },
     "success": {
       "orderCreated": "Order created successfully"

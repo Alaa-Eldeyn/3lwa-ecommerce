@@ -1,5 +1,5 @@
 "use client";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Tag, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -18,6 +18,13 @@ interface CheckoutItem {
   isAvailable: boolean;
 }
 
+export interface CouponInfo {
+  code: string;
+  discountAmount: number;
+  discountPercentage?: number;
+  discountType: string;
+}
+
 interface CheckoutSummaryProps {
   items: CheckoutItem[];
   subtotal: number;
@@ -28,6 +35,10 @@ interface CheckoutSummaryProps {
   isLoading?: boolean;
   onDeliveryNotesChange?: (notes: string) => void;
   isSubmitting?: boolean;
+  appliedPromoCode?: string | null;
+  couponInfo?: CouponInfo | null;
+  onApplyCoupon?: (code: string) => Promise<{ success: boolean }>;
+  onRemoveCoupon?: () => void;
 }
 
 const CheckoutSummary = ({
@@ -40,11 +51,18 @@ const CheckoutSummary = ({
   isLoading = false,
   onDeliveryNotesChange,
   isSubmitting = false,
+  appliedPromoCode = null,
+  couponInfo = null,
+  onApplyCoupon,
+  onRemoveCoupon,
 }: CheckoutSummaryProps) => {
   const locale = useLocale();
   const isArabic = locale === "ar";
   const t = useTranslations("checkout.orderSummary");
+  const tCheckout = useTranslations("checkout");
   const [deliveryNotes, setDeliveryNotes] = useState("");
+  const [promoCode, setPromoCode] = useState("");
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
 
   const handleNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const notes = e.target.value;
@@ -52,37 +70,47 @@ const CheckoutSummary = ({
     onDeliveryNotesChange?.(notes);
   };
 
+  const handleApplyPromo = async () => {
+    if (!promoCode.trim() || !onApplyCoupon) return;
+    setIsApplyingPromo(true);
+    try {
+      const result = await onApplyCoupon(promoCode.trim());
+      if (result.success) {
+        setPromoCode("");
+      }
+    } catch (error) {
+      console.error("Failed to apply promo code:", error);
+    } finally {
+      setIsApplyingPromo(false);
+    }
+  };
+
+  const handleRemovePromo = () => {
+    onRemoveCoupon?.();
+    setPromoCode("");
+  };
+
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700 sticky top-36">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-          {t("title")}
-        </h2>
-        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-          {t("loading")}
-        </div>
+      <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t("title")}</h2>
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">{t("loading")}</div>
       </div>
     );
   }
 
   if (items.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700 sticky top-36">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-          {t("title")}
-        </h2>
-        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-          {t("empty")}
-        </div>
+      <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t("title")}</h2>
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">{t("empty")}</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700 sticky top-36">
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-        {t("title")}
-      </h2>
+    <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t("title")}</h2>
 
       {/* Order Items */}
       <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
@@ -101,14 +129,81 @@ const CheckoutSummary = ({
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {t("qty")}: {item.quantity}
                 </p>
+                {item.discountAmount > 0 && (
+                  <p className="text-xs text-green-600 dark:text-green-400 mt-0.5">
+                    {t("itemDiscount")}: -${item.discountAmount.toFixed(2)}
+                  </p>
+                )}
               </div>
-              <p className="font-semibold text-gray-900 dark:text-white text-sm">
+              <p className="font-semibold text-gray-900 dark:text-white text-sm shrink-0">
                 ${item.subTotal.toFixed(2)}
               </p>
             </div>
           );
         })}
       </div>
+
+      {/* Coupon Code */}
+      {onApplyCoupon && onRemoveCoupon && (
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+            <Tag size={18} className="text-primary" />
+            {tCheckout("couponCode")}
+          </h3>
+          {appliedPromoCode ? (
+            <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+              <div className="flex flex-col gap-0.5">
+                <div className="flex items-center gap-2">
+                  <Tag className="text-green-600 dark:text-green-400 shrink-0" size={18} />
+                  <span className="font-medium text-green-700 dark:text-green-300 text-sm">
+                    {couponInfo?.code ?? appliedPromoCode}
+                  </span>
+                  <span className="text-xs text-green-600 dark:text-green-400">
+                    {tCheckout("applied")}
+                  </span>
+                </div>
+                {couponInfo && couponInfo.discountAmount > 0 && (
+                  <span className="text-xs text-green-600 dark:text-green-400 mt-0.5">
+                    {couponInfo.discountType === "Percentage" && couponInfo.discountPercentage != null
+                      ? `${couponInfo.discountPercentage}% off`
+                      : `-$${(couponInfo.discountAmount / 100).toFixed(2)}`}
+                  </span>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={handleRemovePromo}
+                className="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors p-1 shrink-0"
+                aria-label="Remove coupon">
+                <X size={18} />
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={promoCode}
+                onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                placeholder={tCheckout("couponCodePlaceholder")}
+                className="flex-1 px-3 py-2.5 text-sm border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleApplyPromo();
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleApplyPromo}
+                disabled={!promoCode.trim() || isApplyingPromo}
+                className="px-4 py-2.5 bg-primary hover:bg-secondary text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap">
+                {isApplyingPromo ? tCheckout("applying") : tCheckout("apply")}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="h-px bg-gray-200 dark:bg-gray-700 mb-6" />
 
@@ -142,9 +237,7 @@ const CheckoutSummary = ({
 
       {/* Total */}
       <div className="flex justify-between items-center mb-6">
-        <span className="text-lg font-semibold text-gray-900 dark:text-white">
-          {t("total")}
-        </span>
+        <span className="text-lg font-semibold text-gray-900 dark:text-white">{t("total")}</span>
         <span className="text-2xl font-bold text-primary">${total.toFixed(2)}</span>
       </div>
 

@@ -8,7 +8,6 @@ import CheckoutSummary from "./components/CheckoutSummary";
 import { useUserStore } from "@/src/store/userStore";
 import { useLocale, useTranslations } from "next-intl";
 import { useCartStore } from "@/src/store/cartStore";
-import { Tag, X } from "lucide-react";
 import { customAxios } from "@/src/auth/customAxios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -20,9 +19,7 @@ const Checkout = () => {
   const [paymentMethodId, setPaymentMethodId] = useState<string | null>(null);
   const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
-  const [promoCode, setPromoCode] = useState("");
   const [appliedPromoCode, setAppliedPromoCode] = useState<string | null>(null);
-  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
   const [checkoutData, setCheckoutData] = useState<any>(null);
   const [deliveryNotes, setDeliveryNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,7 +47,7 @@ const Checkout = () => {
     initializeCart();
   }, [isAuthenticated, loadCartFromServer]);
 
-  // Prepare checkout - call API when page loads, address changes, or coupon is applied
+  // Prepare checkout - call API when page loads, address changes, or coupon is removed
   useEffect(() => {
     const prepareCheckout = async () => {
       if (!isAuthenticated() || items.length === 0 || isInitialLoading) return;
@@ -74,30 +71,43 @@ const Checkout = () => {
     prepareCheckout();
   }, [isInitialLoading, items.length, selectedAddress?.id, appliedPromoCode, isAuthenticated]);
 
-  const handleApplyPromo = async () => {
-    if (!promoCode.trim()) return;
+  // Apply coupon: call prepare with the code, update checkout data only when coupon is valid
+  const applyCoupon = async (code: string): Promise<{ success: boolean }> => {
+    const trimmedCode = code.trim();
+    if (!trimmedCode) return { success: false };
 
-    setIsApplyingPromo(true);
     try {
-      // TODO: Call API to validate and apply promo code
-      // const response = await applyPromoCode(promoCode);
-      // if (response.success) {
-      //   setAppliedPromoCode(promoCode);
-      //   setPromoCode("");
-      // }
-      console.log("Applying promo code:", promoCode);
-      setAppliedPromoCode(promoCode);
-      setPromoCode("");
-    } catch (error) {
-      console.error("Failed to apply promo code:", error);
-    } finally {
-      setIsApplyingPromo(false);
-    }
-  };
+      const response = await customAxios.post("/Checkout/prepare", {
+        deliveryAddressId: selectedAddress?.id || null,
+        couponCode: trimmedCode,
+      });
 
-  const handleRemovePromo = () => {
-    setAppliedPromoCode(null);
-    setPromoCode("");
+      const data = response.data;
+
+      // API can return 200 with couponInfo/couponId null when coupon is invalid
+      if (trimmedCode && (data?.couponInfo == null && data?.couponId == null)) {
+        toast.error(t("errors.invalidCoupon") || "Invalid or expired coupon");
+        return { success: false };
+      }
+
+      if (data?.items || data?.priceBreakdown) {
+        setCheckoutData(data);
+        setAppliedPromoCode(trimmedCode);
+        return { success: true };
+      }
+
+      toast.error(t("errors.invalidCoupon") || "Invalid coupon");
+      return { success: false };
+    } catch (error: any) {
+      console.error("Failed to apply coupon:", error);
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.errors?.[0] ||
+        t("errors.invalidCoupon") ||
+        "Invalid or expired coupon";
+      toast.error(message);
+      return { success: false };
+    }
   };
 
   // Fetch payment methods to get methodType
@@ -195,57 +205,6 @@ const Checkout = () => {
             <div className="lg:col-span-2 space-y-6">
               <ShippingAddress onAddressChange={setSelectedAddress} />
 
-              {/* Coupon Code */}
-              <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                  <Tag size={24} className="text-primary" />
-                  {t("couponCode")}
-                </h2>
-
-                {appliedPromoCode ? (
-                  <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <Tag className="text-green-600 dark:text-green-400" size={20} />
-                      <span className="font-medium text-green-700 dark:text-green-300">
-                        {appliedPromoCode}
-                      </span>
-                      <span className="text-sm text-green-600 dark:text-green-400">
-                        {t("applied")}
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={handleRemovePromo}
-                      className="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors">
-                      <X size={20} />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex gap-3">
-                    <input
-                      type="text"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                      placeholder={t("couponCodePlaceholder")}
-                      className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          handleApplyPromo();
-                        }
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={handleApplyPromo}
-                      disabled={!promoCode.trim() || isApplyingPromo}
-                      className="px-6 py-3 bg-primary hover:bg-secondary text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                      {isApplyingPromo ? t("applying") : t("apply")}
-                    </button>
-                  </div>
-                )}
-              </div>
-
               <PaymentMethod
                 selectedMethod={paymentMethodId}
                 onChange={(methodId) => setPaymentMethodId(methodId)}
@@ -264,6 +223,11 @@ const Checkout = () => {
                 isLoading={isLoading || isInitialLoading || !checkoutData}
                 onDeliveryNotesChange={setDeliveryNotes}
                 isSubmitting={isSubmitting}
+                
+                appliedPromoCode={appliedPromoCode}
+                couponInfo={checkoutData?.couponInfo ?? null}
+                onApplyCoupon={applyCoupon}
+                onRemoveCoupon={() => setAppliedPromoCode(null)}
               />
             </div>
           </div>
