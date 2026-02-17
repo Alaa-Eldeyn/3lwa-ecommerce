@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { Link } from "@/src/i18n/routing";
 import { useLocale } from "next-intl";
 import axios from "axios";
+import { customAxios } from "@/src/auth/customAxios";
 import type {
   Item,
   ItemSearchResponse,
@@ -14,6 +16,80 @@ import type {
   // CategoryAttributesResponse,
   // AttributeOption,
 } from "@/src/types/item-search.types";
+
+export type VendorWarehouse = {
+  id: string;
+  address: string;
+  isDefaultPlatformWarehouse: boolean;
+  vendorId: string | null;
+  email: string | null;
+  vendorName: string | null;
+  isActive: boolean;
+};
+
+export type ItemCondition = {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  isNew: boolean;
+};
+
+/** GET /Item/combinations/{itemId} – combination attribute value in a combination */
+export type CombinationAttributeValue = {
+  combinationAttributeId: string;
+  attributeId: string;
+  attributeTitleAr: string;
+  attributeTitleEn: string;
+  attributeTitle: string;
+  attributeValue: string;
+};
+
+/** Single combination from GET /Item/combinations/{itemId} */
+export type ItemCombination = {
+  itemId: string;
+  itemCombinationId: string;
+  isDefault: boolean;
+  combinationAttributeValue: CombinationAttributeValue[];
+  id: string;
+};
+
+/** User-entered pricing row for one combination (keyed by itemCombinationId) */
+export type CombinationPricingRow = {
+  enabled: boolean;
+  price: string;
+  salesPrice: string;
+  availableQuantity: string;
+  minOrderQuantity: string;
+  maxOrderQuantity: string;
+  lowStockThreshold: string;
+  barcode: string;
+  sku: string;
+};
+
+/** Request body for POST VendorItem/save (create or edit). */
+export type VendorItemSavePricing = {
+  pricingId?: string;
+  existingCombinationId?: string;
+  price: number;
+  salesPrice: number;
+  availableQuantity: number;
+  conditionId: string;
+  minOrderQuantity?: number;
+  maxOrderQuantity?: number;
+  lowStockThreshold?: number;
+  barcode?: string;
+  sku?: string;
+};
+
+export type VendorItemSaveRequest = {
+  vendorItemId?: string;
+  itemId: string;
+  warehouseId: string;
+  estimatedDeliveryDays: number;
+  isFreeShipping: boolean;
+  hasWarranty: boolean;
+  pricings: VendorItemSavePricing[];
+};
 
 const SEARCH_DEBOUNCE_MS = 350;
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -28,6 +104,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 // }
 
 export function AddItem() {
+  const router = useRouter();
   const locale = useLocale();
   const isArabic = locale === "ar";
 
@@ -45,20 +122,95 @@ export function AddItem() {
   // const [selectedOptionIdsByAttribute, setSelectedOptionIdsByAttribute] = useState<Record<string, string[]>>({});
   // const [combinationRows, setCombinationRows] = useState<CombinationRow[]>([]);
 
-  // Basic pricing state
+  // Warehouses (platform + vendor)
+  const [warehouses, setWarehouses] = useState<VendorWarehouse[]>([]);
+  const [warehousesLoading, setWarehousesLoading] = useState(true);
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState("");
+
+  // Item conditions (New, Used, Refurbished, etc.)
+  const [itemConditions, setItemConditions] = useState<ItemCondition[]>([]);
+  const [conditionsLoading, setConditionsLoading] = useState(true);
+  const [selectedConditionId, setSelectedConditionId] = useState("");
+
+  // Fulfillment (in addition to warehouse)
+  const [estimatedDeliveryDays, setEstimatedDeliveryDays] = useState(3);
+  const [isFreeShipping, setIsFreeShipping] = useState(false);
+  const [hasWarranty, setHasWarranty] = useState(false);
+
+  // Item combinations (from GET /Item/combinations/{itemId})
+  const [combinations, setCombinations] = useState<ItemCombination[]>([]);
+  const [combinationPricing, setCombinationPricing] = useState<Record<string, CombinationPricingRow>>({});
+
+  // Basic pricing state (used when item has no combinations)
   const [salePrice, setSalePrice] = useState("");
   const [costPrice, setCostPrice] = useState("");
   const [stockQuantity, setStockQuantity] = useState("");
   const [lowStockAlert, setLowStockAlert] = useState("");
 
-  // Attribute API is admin-only – use combination mode when API is available:
-  const pricingMode: "basic" | "combination" = "basic";
+  // Save offer
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  const pricingMode: "basic" | "combination" = combinations.length > 0 ? "combination" : "basic";
   // useMemo(() => {
   //   const hasMultipleOptions = categoryAttributes.some(
   //     (attr) => (attr.AttributeOptionsJson?.length ?? 0) > 1
   //   );
   //   return hasMultipleOptions ? "combination" : "basic";
   // }, [categoryAttributes]);
+
+  // Fetch available warehouses for vendor (platform + vendor's own)
+  useEffect(() => {
+    let cancelled = false;
+    setWarehousesLoading(true);
+    customAxios
+      .get<VendorWarehouse[]>("/vendors/me/warehouses")
+      .then((res) => {
+        const list = Array.isArray(res.data) ? res.data : [];
+        const active = list.filter((w) => w.isActive);
+        if (!cancelled) {
+          setWarehouses(active);
+          if (active.length > 0) {
+            setSelectedWarehouseId((prev) => prev || active[0].id);
+          }
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setWarehouses([]);
+      })
+      .finally(() => {
+        if (!cancelled) setWarehousesLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Fetch item conditions (New, Used, Refurbished, etc.)
+  useEffect(() => {
+    let cancelled = false;
+    setConditionsLoading(true);
+    customAxios
+      .get<{ data: ItemCondition[] }>("/item-conditions")
+      .then((res) => {
+        const list = Array.isArray(res.data?.data) ? res.data.data : [];
+        if (!cancelled) {
+          setItemConditions(list);
+          if (list.length > 0) {
+            setSelectedConditionId((prev) => prev || list[0].id);
+          }
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setItemConditions([]);
+      })
+      .finally(() => {
+        if (!cancelled) setConditionsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Debounce search query
   useEffect(() => {
@@ -101,113 +253,219 @@ export function AddItem() {
     setSearchResults([]);
     setSearchDropdownOpen(false);
     setItemDetail(null);
-    // setCategoryAttributes([]);
-    // setSelectedOptionIdsByAttribute({});
-    // setCombinationRows([]);
+    setCombinations([]);
+    setCombinationPricing({});
 
     setItemDetailLoading(true);
-    // setAttributesLoading(true);
-    axios
-      .get<ItemByIdResponse>(`${BASE_URL}/Item/${item.id}`)
-      .then((res) => {
-        const detail = res.data?.data;
+    const itemId = item.id;
+    Promise.all([
+      axios.get<ItemByIdResponse>(`${BASE_URL}/Item/${itemId}`),
+      axios.get<{ success: boolean; data: ItemCombination[] }>(`${BASE_URL}/Item/combinations/${itemId}`),
+    ])
+      .then(([detailRes, combRes]) => {
+        const detail = detailRes.data?.data;
         if (!detail) return;
         setItemDetail(detail);
-        const price =
-          detail.baseSalesPrice ?? detail.minimumPrice ?? detail.maximumPrice ?? detail.basePrice;
-        if (price != null && !Number.isNaN(Number(price))) setSalePrice(String(price));
-        if (detail.basePrice != null && !Number.isNaN(Number(detail.basePrice)))
-          setCostPrice(String(detail.basePrice));
-        if (detail.quantity != null && !Number.isNaN(Number(detail.quantity)))
-          setStockQuantity(String(detail.quantity));
-        // Attribute API is admin-only – uncomment when available:
-        // return axios
-        //   .get<CategoryAttributesResponse>(`${BASE_URL}/Attribute/category/${detail.categoryId}`)
-        //   .then((attrRes) => ({ detail, attrs: attrRes.data?.data ?? [] }));
+        const combList = Array.isArray(combRes.data?.data) ? combRes.data.data : [];
+        setCombinations(combList);
+
+        const defaultPrice = detail.basePrice != null && !Number.isNaN(Number(detail.basePrice))
+          ? String(detail.basePrice)
+          : "";
+        const defaultSales =
+          detail.baseSalesPrice != null && !Number.isNaN(Number(detail.baseSalesPrice))
+            ? String(detail.baseSalesPrice)
+            : detail.minimumPrice != null && !Number.isNaN(Number(detail.minimumPrice))
+              ? String(detail.minimumPrice)
+              : defaultPrice;
+        const defaultQty =
+          detail.quantity != null && !Number.isNaN(Number(detail.quantity))
+            ? String(detail.quantity)
+            : "0";
+
+        if (combList.length === 0) {
+          setSalePrice(defaultSales);
+          setCostPrice(defaultPrice);
+          setStockQuantity(defaultQty);
+        } else {
+          const initial: Record<string, CombinationPricingRow> = {};
+          combList.forEach((c) => {
+            initial[c.itemCombinationId] = {
+              enabled: false,
+              price: defaultPrice,
+              salesPrice: defaultSales,
+              availableQuantity: defaultQty,
+              minOrderQuantity: "1",
+              maxOrderQuantity: "99999",
+              lowStockThreshold: "0",
+              barcode: detail.barcode ?? "",
+              sku: detail.sku ?? "",
+            };
+          });
+          setCombinationPricing(initial);
+        }
       })
-      // .then((payload) => {
-      //   if (!payload) return;
-      //   setCategoryAttributes(payload.attrs);
-      //   const byAttr: Record<string, string[]> = {};
-      //   payload.attrs.forEach((attr) => {
-      //     const values = payload.detail.itemAttributes
-      //       .filter((a) => a.attributeId === attr.attributeId)
-      //       .map((a) => a.value)
-      //       .filter(Boolean);
-      //     const options = attr.AttributeOptionsJson ?? [];
-      //     const firstOption = [...options].sort((a, b) => a.displayOrder - b.displayOrder)[0];
-      //     byAttr[attr.attributeId] =
-      //       values.length > 0 ? values : (firstOption ? [firstOption.id] : []);
-      //   });
-      //   setSelectedOptionIdsByAttribute(byAttr);
-      // })
       .catch(() => {
         setItemDetail(null);
-        // setCategoryAttributes([]);
+        setCombinations([]);
+        setCombinationPricing({});
       })
       .finally(() => {
         setItemDetailLoading(false);
-        // setAttributesLoading(false);
       });
   }, []);
 
-  // Attribute API is admin-only – uncomment when available:
-  // const orderedAttributes = useMemo(
-  //   () => [...categoryAttributes].sort((a, b) => a.displayOrder - b.displayOrder),
-  //   [categoryAttributes]
-  // );
-  // useEffect(() => {
-  //   if (pricingMode !== "combination" || orderedAttributes.length === 0) {
-  //     setCombinationRows([]);
-  //     return;
-  //   }
-  //   const optionIdArrays = orderedAttributes.map(
-  //     (attr) => selectedOptionIdsByAttribute[attr.attributeId] ?? []
-  //   );
-  //   const hasEmpty = optionIdArrays.some((arr) => arr.length === 0);
-  //   if (hasEmpty) {
-  //     setCombinationRows([]);
-  //     return;
-  //   }
-  //   const product = cartesian(optionIdArrays);
-  //   const defaultPrice = itemDetail?.basePrice != null ? String(itemDetail.basePrice) : "";
-  //   const defaultStock = itemDetail?.quantity != null ? String(itemDetail.quantity) : "";
-  //   setCombinationRows((prev) => {
-  //     const prevByKey = new Map(prev.map((r) => [r.optionIds.join("|"), r]));
-  //     return product.map((optionIds) => {
-  //       const key = optionIds.join("|");
-  //       const existing = prevByKey.get(key);
-  //       return {
-  //         optionIds,
-  //         price: existing?.price ?? defaultPrice,
-  //         stock: existing?.stock ?? defaultStock,
-  //         sku: existing?.sku ?? "",
-  //       };
-  //     });
-  //   });
-  // }, [pricingMode, orderedAttributes, selectedOptionIdsByAttribute, itemDetail?.basePrice, itemDetail?.quantity]);
-  // const toggleAttributeOption = useCallback((attributeId: string, optionId: string) => {
-  //   setSelectedOptionIdsByAttribute((prev) => {
-  //     const current = prev[attributeId] ?? [];
-  //     const has = current.includes(optionId);
-  //     const next = has ? current.filter((id) => id !== optionId) : [...current, optionId];
-  //     return { ...prev, [attributeId]: next.length > 0 ? next : current };
-  //   });
-  // }, []);
-  // const selectAllAttributeOptions = useCallback((attributeId: string, optionIds: string[]) => {
-  //   setSelectedOptionIdsByAttribute((prev) => ({ ...prev, [attributeId]: optionIds }));
-  // }, []);
 
   const clearSelectedItem = useCallback(() => {
     setItemDetail(null);
-    // setCategoryAttributes([]);
-    // setSelectedOptionIdsByAttribute({});
-    // setCombinationRows([]);
+    setCombinations([]);
+    setCombinationPricing({});
     setSalePrice("");
     setCostPrice("");
     setStockQuantity("");
     setLowStockAlert("");
+    setSelectedConditionId("");
   }, []);
+
+  const updateCombinationPricing = useCallback(
+    (itemCombinationId: string, field: keyof CombinationPricingRow, value: string | boolean) => {
+      setCombinationPricing((prev) => {
+        const row = prev[itemCombinationId];
+        if (!row) return prev;
+        return {
+          ...prev,
+          [itemCombinationId]: { ...row, [field]: value },
+        };
+      });
+    },
+    []
+  );
+
+  const combinationLabel = useCallback(
+    (c: ItemCombination) => {
+      const parts = (c.combinationAttributeValue ?? []).map((av) =>
+        isArabic ? av.attributeTitleAr : av.attributeTitleEn
+      );
+      return parts.length > 0 ? parts.join(" · ") : `Combination ${c.itemCombinationId.slice(0, 8)}`;
+    },
+    [isArabic]
+  );
+
+  const handleSaveOffer = useCallback(async () => {
+    if (!itemDetail || !selectedWarehouseId || !selectedConditionId) {
+      setSaveError("Please select an item, warehouse, and condition.");
+      return;
+    }
+
+    let pricings: VendorItemSaveRequest["pricings"];
+
+    if (pricingMode === "combination") {
+      const enabled = combinations.filter((c) => combinationPricing[c.itemCombinationId]?.enabled);
+      if (enabled.length === 0) {
+        setSaveError("Please enable at least one combination to sell.");
+        return;
+      }
+      for (const c of enabled) {
+        const row = combinationPricing[c.itemCombinationId]!;
+        const salesPriceNum = parseFloat(row.salesPrice);
+        const availableQty = parseInt(row.availableQuantity, 10);
+        if (Number.isNaN(salesPriceNum) || salesPriceNum < 0) {
+          setSaveError(`Enter a valid sale price for: ${combinationLabel(c)}`);
+          return;
+        }
+        if (Number.isNaN(availableQty) || availableQty < 0) {
+          setSaveError(`Enter a valid quantity for: ${combinationLabel(c)}`);
+          return;
+        }
+      }
+      pricings = enabled.map((c) => {
+        const row = combinationPricing[c.itemCombinationId]!;
+        const priceNum = parseFloat(row.price) || 0;
+        const salesPriceNum = parseFloat(row.salesPrice) || 0;
+        const availableQty = parseInt(row.availableQuantity, 10) || 0;
+        const minOrder = parseInt(row.minOrderQuantity, 10) || 1;
+        const maxOrder = parseInt(row.maxOrderQuantity, 10) || 99999;
+        const lowStock = parseInt(row.lowStockThreshold, 10) || 0;
+        return {
+          existingCombinationId: c.itemCombinationId,
+          price: priceNum,
+          salesPrice: salesPriceNum,
+          availableQuantity: availableQty,
+          conditionId: selectedConditionId,
+          minOrderQuantity: minOrder,
+          maxOrderQuantity: maxOrder,
+          lowStockThreshold: lowStock,
+          barcode: row.barcode ?? "",
+          sku: row.sku ?? "",
+        };
+      });
+    } else {
+      const salesPriceNum = parseFloat(salePrice);
+      const priceNum = parseFloat(costPrice);
+      const availableQty = parseInt(stockQuantity, 10) || 0;
+      if (Number.isNaN(salesPriceNum) || salesPriceNum < 0) {
+        setSaveError("Please enter a valid sale price.");
+        return;
+      }
+      if (availableQty < 0) {
+        setSaveError("Please enter a valid stock quantity.");
+        return;
+      }
+      pricings = [
+        {
+          price: Number.isNaN(priceNum) ? 0 : priceNum,
+          salesPrice: salesPriceNum,
+          availableQuantity: availableQty,
+          conditionId: selectedConditionId,
+          minOrderQuantity: 1,
+          maxOrderQuantity: 99999,
+          lowStockThreshold: parseInt(lowStockAlert, 10) || 0,
+          barcode: itemDetail.barcode ?? "",
+          sku: itemDetail.sku ?? "",
+        },
+      ];
+    }
+
+    setSaveError(null);
+    setSaveLoading(true);
+    try {
+      const body: VendorItemSaveRequest = {
+        itemId: itemDetail.id,
+        warehouseId: selectedWarehouseId,
+        estimatedDeliveryDays,
+        isFreeShipping,
+        hasWarranty,
+        pricings,
+      };
+      await customAxios.post("/VendorItem/save", body);
+      router.push(`/${locale}/vendor/items`);
+    } catch (err: unknown) {
+      const message =
+        err && typeof err === "object" && "response" in err
+          ? String((err as { response?: { data?: { message?: string } } }).response?.data?.message ?? "Failed to save offer")
+          : "Failed to save offer";
+      setSaveError(message);
+    } finally {
+      setSaveLoading(false);
+    }
+  }, [
+    itemDetail,
+    selectedWarehouseId,
+    selectedConditionId,
+    pricingMode,
+    combinations,
+    combinationPricing,
+    combinationLabel,
+    salePrice,
+    costPrice,
+    stockQuantity,
+    lowStockAlert,
+    estimatedDeliveryDays,
+    isFreeShipping,
+    hasWarranty,
+    locale,
+    router,
+  ]);
 
   // Dynamic calculations for basic pricing
   const salePriceNum = parseFloat(salePrice) || 0;
@@ -218,34 +476,6 @@ export function AddItem() {
   const profitPerUnit = (salePriceNum - costPriceNum).toFixed(2);
   const totalValue = (salePriceNum * stockNum).toFixed(2);
 
-  // Attribute API (combination mode) – uncomment when available:
-  // const combinationTotals = useMemo(() => {
-  //   let totalValueComb = 0;
-  //   combinationRows.forEach((row) => {
-  //     const p = parseFloat(row.price) || 0;
-  //     const s = parseInt(row.stock, 10) || 0;
-  //     totalValueComb += p * s;
-  //   });
-  //   return { totalValue: totalValueComb.toFixed(2), count: combinationRows.length };
-  // }, [combinationRows]);
-  // const updateCombinationRow = useCallback(
-  //   (index: number, field: "price" | "stock" | "sku", value: string) => {
-  //     setCombinationRows((prev) => {
-  //       const next = [...prev];
-  //       next[index] = { ...next[index], [field]: value };
-  //       return next;
-  //     });
-  //   },
-  //   []
-  // );
-  // const getOptionLabel = useCallback(
-  //   (attr: CategoryAttribute, optionId: string): string => {
-  //     const opt = attr.AttributeOptionsJson?.find((o) => o.id === optionId);
-  //     if (!opt) return optionId;
-  //     return isArabic ? opt.titleAr : opt.titleEn;
-  //   },
-  //   [isArabic]
-  // );
 
   const displayTitle = (item: Item | ItemDetail) =>
     (isArabic ? item.titleAr : item.titleEn) || item.title || "";
@@ -281,12 +511,28 @@ export function AddItem() {
           </div>
         </div>
         {itemDetail && (
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col items-end gap-2">
+            {saveError && (
+              <p className="text-sm text-red-600" role="alert">
+                {saveError}
+              </p>
+            )}
             <button
               type="button"
-              className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary transition-colors">
-              <i className="fa-solid fa-rocket mr-2" aria-hidden />
-              Publish Offer
+              onClick={handleSaveOffer}
+              disabled={saveLoading}
+              className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary transition-colors disabled:opacity-60 disabled:pointer-events-none">
+              {saveLoading ? (
+                <>
+                  <i className="fa-solid fa-spinner fa-spin mr-2" aria-hidden />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <i className="fa-solid fa-rocket mr-2" aria-hidden />
+                  Publish Offer
+                </>
+              )}
             </button>
           </div>
         )}
@@ -409,6 +655,26 @@ export function AddItem() {
                   <p className="text-sm text-gray-600">Brand</p>
                   <p className="text-sm text-foreground">{displayBrand(itemDetail)}</p>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    Condition
+                  </label>
+                  <select
+                    value={selectedConditionId}
+                    onChange={(e) => setSelectedConditionId(e.target.value)}
+                    disabled={conditionsLoading}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
+                    aria-label="Item condition">
+                    <option value="">
+                      {conditionsLoading ? "Loading conditions..." : "Select condition"}
+                    </option>
+                    {itemConditions.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {isArabic ? c.nameAr : c.nameEn}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -420,12 +686,21 @@ export function AddItem() {
                     Warehouse Assignment
                   </label>
                   <select
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    value={selectedWarehouseId}
+                    onChange={(e) => setSelectedWarehouseId(e.target.value)}
+                    disabled={warehousesLoading}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
                     aria-label="Warehouse">
-                    <option value="">Select Warehouse</option>
-                    <option value="main">Main Warehouse - Dubai</option>
-                    <option value="secondary">Secondary - Abu Dhabi</option>
-                    <option value="partner">Partner Warehouse - Sharjah</option>
+                    <option value="">
+                      {warehousesLoading ? "Loading warehouses..." : "Select Warehouse"}
+                    </option>
+                    {warehouses.map((w) => (
+                      <option key={w.id} value={w.id}>
+                        {w.isDefaultPlatformWarehouse
+                          ? `Platform — ${w.address}`
+                          : (w.vendorName || w.address)}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div>
@@ -433,14 +708,36 @@ export function AddItem() {
                     Handling Time
                   </label>
                   <select
+                    value={estimatedDeliveryDays}
+                    onChange={(e) => setEstimatedDeliveryDays(Number(e.target.value))}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    aria-label="Handling time">
-                    <option value="1">1 business day</option>
-                    <option value="2">2 business days</option>
-                    <option value="3">3 business days</option>
-                    <option value="5">5 business days</option>
+                    aria-label="Estimated delivery days">
+                    <option value={1}>1 business day</option>
+                    <option value={2}>2 business days</option>
+                    <option value={3}>3 business days</option>
+                    <option value={5}>5 business days</option>
                   </select>
                 </div>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={isFreeShipping}
+                    onChange={(e) => setIsFreeShipping(e.target.checked)}
+                    className="rounded border-gray-300 text-primary focus:ring-primary/20"
+                    aria-label="Free shipping"
+                  />
+                  <span className="text-sm text-foreground">Free shipping</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={hasWarranty}
+                    onChange={(e) => setHasWarranty(e.target.checked)}
+                    className="rounded border-gray-300 text-primary focus:ring-primary/20"
+                    aria-label="Has warranty"
+                  />
+                  <span className="text-sm text-foreground">Has warranty</span>
+                </label>
               </div>
             </div>
           </div>
@@ -525,7 +822,175 @@ export function AddItem() {
                 </div>
               )}
 
-              {/* Attribute API is admin-only – uncomment when GET /Attribute/category/{categoryId} is available to vendor: */}
+              {pricingMode === "combination" && (
+                <div className="space-y-6">
+                  <p className="text-sm text-gray-600 mb-4">
+                    Select which combinations you sell and set price, quantity, and identifiers for each.
+                  </p>
+                  <div className="space-y-6">
+                    {combinations.map((c) => {
+                      const row = combinationPricing[c.itemCombinationId];
+                      if (!row) return null;
+                      return (
+                        <div
+                          key={c.itemCombinationId}
+                          className="border border-gray-200 rounded-lg p-4 bg-gray-50/50">
+                          <div className="flex items-center gap-3 mb-4">
+                            <input
+                              type="checkbox"
+                              id={`sell-${c.itemCombinationId}`}
+                              checked={row.enabled}
+                              onChange={(e) =>
+                                updateCombinationPricing(c.itemCombinationId, "enabled", e.target.checked)
+                              }
+                              className="rounded border-gray-300 text-primary focus:ring-primary/20"
+                            />
+                            <label
+                              htmlFor={`sell-${c.itemCombinationId}`}
+                              className="font-medium text-foreground cursor-pointer">
+                              {combinationLabel(c)}
+                            </label>
+                          </div>
+                          {row.enabled && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pl-7">
+                              <div>
+                                <label className="block text-xs font-medium text-gray-600 mb-1">
+                                  Cost Price (EGP)
+                                </label>
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  min="0"
+                                  value={row.price}
+                                  onChange={(e) =>
+                                    updateCombinationPricing(c.itemCombinationId, "price", e.target.value)
+                                  }
+                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs font-medium text-gray-600 mb-1">
+                                  Sale Price (EGP)
+                                </label>
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  min="0"
+                                  value={row.salesPrice}
+                                  onChange={(e) =>
+                                    updateCombinationPricing(c.itemCombinationId, "salesPrice", e.target.value)
+                                  }
+                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs font-medium text-gray-600 mb-1">
+                                  Quantity
+                                </label>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={row.availableQuantity}
+                                  onChange={(e) =>
+                                    updateCombinationPricing(
+                                      c.itemCombinationId,
+                                      "availableQuantity",
+                                      e.target.value
+                                    )
+                                  }
+                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs font-medium text-gray-600 mb-1">
+                                  Min order
+                                </label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  value={row.minOrderQuantity}
+                                  onChange={(e) =>
+                                    updateCombinationPricing(
+                                      c.itemCombinationId,
+                                      "minOrderQuantity",
+                                      e.target.value
+                                    )
+                                  }
+                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs font-medium text-gray-600 mb-1">
+                                  Max order
+                                </label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  value={row.maxOrderQuantity}
+                                  onChange={(e) =>
+                                    updateCombinationPricing(
+                                      c.itemCombinationId,
+                                      "maxOrderQuantity",
+                                      e.target.value
+                                    )
+                                  }
+                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs font-medium text-gray-600 mb-1">
+                                  Low stock alert
+                                </label>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={row.lowStockThreshold}
+                                  onChange={(e) =>
+                                    updateCombinationPricing(
+                                      c.itemCombinationId,
+                                      "lowStockThreshold",
+                                      e.target.value
+                                    )
+                                  }
+                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                />
+                              </div>
+                              <div className="md:col-span-2">
+                                <label className="block text-xs font-medium text-gray-600 mb-1">
+                                  Barcode
+                                </label>
+                                <input
+                                  type="text"
+                                  value={row.barcode}
+                                  onChange={(e) =>
+                                    updateCombinationPricing(c.itemCombinationId, "barcode", e.target.value)
+                                  }
+                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs font-medium text-gray-600 mb-1">
+                                  SKU
+                                </label>
+                                <input
+                                  type="text"
+                                  value={row.sku}
+                                  onChange={(e) =>
+                                    updateCombinationPricing(c.itemCombinationId, "sku", e.target.value)
+                                  }
+                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Legacy attribute-based combination UI (admin-only) – kept for reference: */}
               {/* {pricingMode === "combination" && (
                 <div className="space-y-6">
                   <div className="space-y-4">
