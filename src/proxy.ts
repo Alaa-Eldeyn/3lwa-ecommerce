@@ -7,44 +7,84 @@ const intlMiddleware = createMiddleware({
   localeDetection: false,
 });
 
-// الصفحات اللي مش عايز اليوزر يفتحها لو هو لوج إن
-const authPages = ["/login", "/signin", "/signup"];
+// Auth pages
+const authPages = ["/login", "/register", "/vendor/login"];
 
-// الصفحات اللي مش عايز اليوزر يفتحها لو هو مش لوجد إن
-const protectedPages = ["/checkout"];
+// Customer-only
+const customerProtectedPages = ["/checkout"];
+
+// Vendor-only
+const vendorPages = [
+  "/vendor/dashboard",
+  "/vendor/items",
+  "/vendor/items-2",
+  "/vendor/items-3",
+  "/vendor/add-item",
+];
 
 export function proxy(req: NextRequest) {
-  const user = req.cookies.get("basitUser")?.value;
-  // const isUserLoggedIn = Boolean(user);
-  const isUserLoggedIn = true;
+  // Get user cookie
+  const userCookie = req.cookies.get("basitUser")?.value;
+  const isUserLoggedIn = Boolean(userCookie);
+  const userRole = parseUserRole(userCookie);
 
-  const url = new URL(req.url);
-  let pathname = url.pathname; 
-  
+  let pathname = req.nextUrl.pathname;
+
+  // Get locale
   const localeMatch = pathname.match(/^\/(ar|en)\b/);
   const locale = localeMatch ? localeMatch[1] : "ar";
 
-  pathname = pathname.replace(/^\/(ar|en)/, "");
+  // Remove locale from pathname
+  pathname = pathname.replace(/^\/(ar|en)/, "") || "/";
 
-  if (!isUserLoggedIn && protectedPages.includes(pathname)) {
-    // Store the current path as redirect parameter
+  // Protect vendor routes
+  // If vendor -> redirect to dashboard
+  if (isVendorRole(userRole) && !vendorPages.includes(pathname)) {
+    return NextResponse.redirect(new URL(`/${locale}/vendor/dashboard`, req.url));
+  }
+
+  // If not vendor -> redirect to home
+  if (!isVendorRole(userRole) && vendorPages.includes(pathname)) {
+    return NextResponse.redirect(new URL(`/${locale}`, req.url));
+  }
+
+  // Protect customer routes
+  // If not customer -> redirect to home
+  if (!isCustomerRole(userRole) && customerProtectedPages.includes(pathname)) {
     const redirectUrl = new URL(`/${locale}/login`, req.url);
     redirectUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (user && authPages.some((page) => pathname.includes(page))) {
+  // Protect auth pages (if logged in, redirect to home)
+  if (isUserLoggedIn && authPages.includes(pathname)) {
     return NextResponse.redirect(new URL(`/${locale}`, req.url));
   }
 
-  
   return intlMiddleware(req) || NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/",
-    "/(ar|en)/:path*",
-    "/((?!_next|_vercel|.*\\..*).*)",
-  ],
+  matcher: ["/", "/(ar|en)/:path*", "/((?!_next|_vercel|.*\\..*).*)"],
 };
+
+// Helper functions
+// Parse user role from cookie
+function parseUserRole(cookieValue: string | undefined): string | undefined {
+  if (!cookieValue) return undefined;
+  try {
+    return (JSON.parse(cookieValue) as { role?: string })?.role;
+  } catch {
+    return undefined;
+  }
+}
+
+// Check if user is a vendor
+function isVendorRole(role: string | undefined): boolean {
+  return role?.toLowerCase() === "vendor";
+}
+
+// Check if user is a customer
+function isCustomerRole(role: string | undefined): boolean {
+  return role?.toLowerCase() === "customer";
+}
