@@ -206,20 +206,30 @@ const CartSidebar = () => {
               </span>
             </div>
 
-            {/* Buttons */}
-            <div className="space-y-2">
-              <button
-                onClick={askToClearCart}
-                className="w-full flex items-center justify-center gap-2 bg-error text-white py-3 rounded-lg font-semibold hover:bg-error-hover transition">
-                <Trash2 size={18} />
-                {t("clearCart")}
-              </button>
+            {/* Cart + Checkout buttons */}
+            <div className="flex gap-2">
               <Link
                 href="/cart"
                 onClick={closeCart}
-                className="block w-full text-center bg-primary dark:bg-primary text-white py-3 rounded-lg font-semibold hover:bg-secondary transition">
+                className="flex-1 text-center border-2 border-primary text-primary dark:border-primary dark:text-primary bg-transparent py-3 rounded-lg font-semibold hover:bg-primary/10 transition">
                 {t("viewCart")}
               </Link>
+              <Link
+                href="/checkout"
+                onClick={closeCart}
+                className="flex-1 text-center bg-primary dark:bg-primary text-white py-3 rounded-lg font-semibold hover:bg-secondary transition">
+                {tOrderSummary("goToCheckout")}
+              </Link>
+            </div>
+
+            {/* Clear cart - small */}
+            <div className="flex justify-end">
+              <button
+                onClick={askToClearCart}
+                className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-error transition">
+                <Trash2 size={14} />
+                {t("clearCart")}
+              </button>
             </div>
           </div>
         )}
