@@ -13,9 +13,6 @@ const authPages = ["/login", "/register", "/dashboard/login"];
 // Customer-only
 const customerProtectedPages = ["/checkout"];
 
-// Vendor-only
-const vendorPages = ["/dashboard"];
-
 export function proxy(req: NextRequest) {
   // Get user cookie
   const userCookie = req.cookies.get("basitUser")?.value;
@@ -33,12 +30,12 @@ export function proxy(req: NextRequest) {
 
   // Protect vendor routes
   // If vendor -> redirect to dashboard
-  if (isVendorRole(userRole) && !vendorPages.includes(pathname)) {
+  if (isVendorRole(userRole) && isVendorPage(pathname)) {
     return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
   }
 
   // If not vendor -> redirect to home
-  if (!isVendorRole(userRole) && vendorPages.includes(pathname)) {
+  if (!isVendorRole(userRole) && isVendorPage(pathname)) {
     return NextResponse.redirect(new URL(`/${locale}`, req.url));
   }
 
@@ -73,12 +70,17 @@ function parseUserRole(cookieValue: string | undefined): string | undefined {
   }
 }
 
+// Check if user is a customer
+function isCustomerRole(role: string | undefined): boolean {
+  return role?.toLowerCase() === "customer";
+}
+
 // Check if user is a vendor
 function isVendorRole(role: string | undefined): boolean {
   return role?.toLowerCase() === "vendor";
 }
 
-// Check if user is a customer
-function isCustomerRole(role: string | undefined): boolean {
-  return role?.toLowerCase() === "customer";
+// Check if path is a vendor page
+function isVendorPage(pathname: string): boolean {
+  return pathname.startsWith("/dashboard") && !pathname.startsWith("/dashboard/login");
 }
