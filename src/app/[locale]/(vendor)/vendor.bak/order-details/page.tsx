@@ -1,4 +1,4 @@
-import { OrderDetails } from "@/src/components/vendor-dashboard/orders/OrderDetails";
+import { OrderDetails } from "@/src/components/dashboard/orders/OrderDetails";
 
 export default function OrderDetailsPage() {
   return <OrderDetails />;

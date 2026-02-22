@@ -1,4 +1,4 @@
-import { ShipmentStatus } from "@/src/components/vendor-dashboard/orders/ShipmentStatus";
+import { ShipmentStatus } from "@/src/components/dashboard/orders/ShipmentStatus";
 
 export default function ShipmentStatusPage() {
   return <ShipmentStatus />;

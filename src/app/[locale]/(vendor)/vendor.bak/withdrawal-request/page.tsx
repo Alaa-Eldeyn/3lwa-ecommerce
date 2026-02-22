@@ -1,4 +1,4 @@
-import { WithdrawalRequest } from "@/src/components/vendor-dashboard/wallet/WithdrawalRequest";
+import { WithdrawalRequest } from "@/src/components/dashboard/wallet/WithdrawalRequest";
 
 export default function WithdrawalRequestPage() {
   return <WithdrawalRequest />;

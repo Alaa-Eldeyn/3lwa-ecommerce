@@ -1,6 +1,6 @@
 "use client";
 
-import { VendorSidebarLayout } from "../vendor-dashboard/VendorSidebarLayout";
+import { VendorSidebarLayout } from "./VendorSidebarLayout";
 
 export function SecuritySettings() {
   return (

@@ -1,4 +1,4 @@
-import { VendorRegister } from "@/src/components/vendor-dashboard/auth/VendorRegister";
+import { VendorRegister } from "@/src/components/dashboard/auth/VendorRegister";
 
 export default function VendorRegisterPage() {
   return <VendorRegister />;

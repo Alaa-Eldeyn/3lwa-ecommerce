@@ -1,4 +1,4 @@
-import { RefundsList } from "@/src/components/vendor-dashboard/refunds/RefundsList";
+import { RefundsList } from "@/src/components/dashboard/refunds/RefundsList";
 
 export default function RefundsPage() {
   return <RefundsList />;

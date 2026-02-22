@@ -1,4 +1,4 @@
-import { DashboardAlert } from "@/src/components/vendor-dashboard/dashboard/DashboardAlert";
+import { DashboardAlert } from "@/src/components/dashboard/dashboard/DashboardAlert";
 
 export default function DashboardAlertPage() {
   return <DashboardAlert />;

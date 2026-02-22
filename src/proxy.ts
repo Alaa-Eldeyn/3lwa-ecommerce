@@ -8,19 +8,13 @@ const intlMiddleware = createMiddleware({
 });
 
 // Auth pages
-const authPages = ["/login", "/register", "/vendor/login"];
+const authPages = ["/login", "/register", "/dashboard/login"];
 
 // Customer-only
 const customerProtectedPages = ["/checkout"];
 
 // Vendor-only
-const vendorPages = [
-  "/vendor/dashboard",
-  "/vendor/items",
-  "/vendor/items-2",
-  "/vendor/items-3",
-  "/vendor/add-item",
-];
+const vendorPages = ["/dashboard"];
 
 export function proxy(req: NextRequest) {
   // Get user cookie
@@ -40,7 +34,7 @@ export function proxy(req: NextRequest) {
   // Protect vendor routes
   // If vendor -> redirect to dashboard
   if (isVendorRole(userRole) && !vendorPages.includes(pathname)) {
-    return NextResponse.redirect(new URL(`/${locale}/vendor/dashboard`, req.url));
+    return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
   }
 
   // If not vendor -> redirect to home

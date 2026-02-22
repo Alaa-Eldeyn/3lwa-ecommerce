@@ -1,4 +1,4 @@
-import { VendorNotFound } from "@/src/components/vendor-dashboard/VendorNotFound";
+import { VendorNotFound } from "@/src/components/dashboard/VendorNotFound";
 
 export default function VendorNotFoundPage() {
   return <VendorNotFound />;

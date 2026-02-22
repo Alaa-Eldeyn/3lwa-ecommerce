@@ -6,14 +6,14 @@ import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 
 const navItems = [
-  { href: "/vendor/dashboard", icon: "fa-chart-line", label: "Dashboard" },
-  { href: "/vendor/orders", icon: "fa-shopping-bag", label: "Orders" },
-  { href: "/vendor/items", icon: "fa-box", label: "Items" },
-  { href: "/vendor/refunds", icon: "fa-undo", label: "Refunds" },
-  { href: "/vendor/promo-codes", icon: "fa-tags", label: "Promo Codes" },
-  { href: "/vendor/campaigns", icon: "fa-bullhorn", label: "Campaigns" },
-  { href: "/vendor/wallet", icon: "fa-wallet", label: "Wallet" },
-  { href: "/vendor/vendor-reviews", icon: "fa-star", label: "Reviews" },
+  { href: "/dashboard", icon: "fa-chart-line", label: "Dashboard" },
+  { href: "/dashboard/orders", icon: "fa-shopping-bag", label: "Orders" },
+  { href: "/dashboard/items", icon: "fa-box", label: "Items" },
+  { href: "/dashboard/refunds", icon: "fa-undo", label: "Refunds" },
+  { href: "/dashboard/promo-codes", icon: "fa-tags", label: "Promo Codes" },
+  { href: "/dashboard/campaigns", icon: "fa-bullhorn", label: "Campaigns" },
+  { href: "/dashboard/wallet", icon: "fa-wallet", label: "Wallet" },
+  { href: "/dashboard/vendor-reviews", icon: "fa-star", label: "Reviews" },
 ];
 
 export function VendorHeader() {
@@ -33,8 +33,8 @@ export function VendorHeader() {
   }, [accountOpen]);
 
   const isActive = (href: string) => {
-    if (href === "/vendor/dashboard")
-      return pathname === "/vendor/dashboard" || pathname?.endsWith("/vendor");
+    if (href === "/dashboard")
+      return pathname === "/dashboard" || pathname?.endsWith("/dashboard");
     return pathname?.startsWith(href);
   };
 

@@ -1,4 +1,4 @@
-import { VendorForgotPassword } from "@/src/components/vendor-dashboard/auth/VendorForgotPassword";
+import { VendorForgotPassword } from "@/src/components/dashboard/auth/VendorForgotPassword";
 
 export default function VendorForgotPasswordPage() {
   return <VendorForgotPassword />;

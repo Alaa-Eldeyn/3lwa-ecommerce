@@ -1,4 +1,4 @@
-import { SecuritySettings } from "@/src/components/vendor-dashboard/SecuritySettings";
+import { SecuritySettings } from "@/src/components/dashboard/SecuritySettings";
 
 export default function SecuritySettingsPage() {
   return <SecuritySettings />;

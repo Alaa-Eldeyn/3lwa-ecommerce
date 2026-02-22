@@ -1,4 +1,4 @@
-import { VendorHeader } from "@/src/components/vendor-dashboard/VendorHeader";
+import { VendorHeader } from "@/src/components/dashboard/VendorHeader";
 
 export default function VendorLayout({
   children,

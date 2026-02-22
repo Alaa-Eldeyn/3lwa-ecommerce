@@ -1,4 +1,4 @@
-import { WithdrawalMethods } from "@/src/components/vendor-dashboard/wallet/WithdrawalMethods";
+import { WithdrawalMethods } from "@/src/components/dashboard/wallet/WithdrawalMethods";
 
 export default function WithdrawalMethodsPage() {
   return <WithdrawalMethods />;

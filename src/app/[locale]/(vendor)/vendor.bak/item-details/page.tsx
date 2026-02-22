@@ -1,4 +1,4 @@
-import { ItemDetails } from "@/src/components/vendor-dashboard/items/ItemDetails";
+import { ItemDetails } from "@/src/components/dashboard/items/ItemDetails";
 
 export default function ItemDetailsPage() {
   return <ItemDetails />;
