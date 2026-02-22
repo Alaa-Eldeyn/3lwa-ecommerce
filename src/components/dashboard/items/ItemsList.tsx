@@ -1,15 +1,16 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const items = [
-  { name: "Premium Wireless Headphones", sku: "WH-PRO-001", stock: 48, price: "$129.99", sold: "234 sold", status: "Active", statusClass: "bg-green-100 text-green-700", stockClass: "", img: "/placeholder.png44d6b24262-f433849a138127beb3c0", alt: "premium wireless headphones black on white background product photography" },
-  { name: "Smart Watch Pro", sku: "SW-PRO-002", stock: 92, price: "$299.99", sold: "187 sold", status: "Active", statusClass: "bg-green-100 text-green-700", stockClass: "", img: "/placeholder.png731647a66a-56dd49212dbddcaccaca", alt: "smart watch fitness tracker black modern product photography" },
-  { name: "Bluetooth Speaker", sku: "BT-SPK-003", stock: 8, price: "$79.99", sold: "312 sold", status: "Low Stock", statusClass: "bg-orange-100 text-orange-700", stockClass: "text-orange-600", img: "/placeholder.png2312db6c70-1d8be3d3ddcf8963dc36", alt: "bluetooth speaker portable wireless black product photography" },
-  { name: "USB-C Fast Charging Cable", sku: "USB-C-004", stock: 156, price: "$19.99", sold: "521 sold", status: "Active", statusClass: "bg-green-100 text-green-700", stockClass: "", img: "/placeholder.pngcd61429dc1-51e64fa7a5b5c45a829c", alt: "usb-c charging cable white modern product photography" },
-  { name: "Wireless Ergonomic Mouse", sku: "WM-ERG-005", stock: 34, price: "$49.99", sold: "98 sold", status: "Inactive", statusClass: "bg-gray-100 text-gray-700", stockClass: "", img: "/placeholder.pnge04e21910b-6553456bddc85b8f9d4d", alt: "wireless mouse ergonomic black product photography" },
-  { name: "Aluminum Laptop Stand", sku: "LAP-STD-006", stock: 0, price: "$59.99", sold: "0 sold", status: "Draft", statusClass: "bg-yellow-100 text-yellow-700", stockClass: "", img: "/placeholder.pnga1ecd19460-9a0db6fba5ef70c6485c", alt: "laptop stand aluminum modern minimalist product photography" },
-  { name: "RGB Mechanical Keyboard", sku: "RGB-KB-007", stock: 67, price: "$119.99", sold: "143 sold", status: "Active", statusClass: "bg-green-100 text-green-700", stockClass: "", img: "/placeholder.png68ed8ac243-237b62e7965150b297a7", alt: "mechanical keyboard rgb backlit gaming product photography" },
+  { name: "Premium Wireless Headphones", sku: "WH-PRO-001", stock: 48, price: 129.99, sold: "234 sold", status: "Active", statusClass: "bg-green-100 text-green-700", stockClass: "", img: "/placeholder.png44d6b24262-f433849a138127beb3c0", alt: "premium wireless headphones black on white background product photography" },
+  { name: "Smart Watch Pro", sku: "SW-PRO-002", stock: 92, price: 299.99, sold: "187 sold", status: "Active", statusClass: "bg-green-100 text-green-700", stockClass: "", img: "/placeholder.png731647a66a-56dd49212dbddcaccaca", alt: "smart watch fitness tracker black modern product photography" },
+  { name: "Bluetooth Speaker", sku: "BT-SPK-003", stock: 8, price: 79.99, sold: "312 sold", status: "Low Stock", statusClass: "bg-orange-100 text-orange-700", stockClass: "text-orange-600", img: "/placeholder.png2312db6c70-1d8be3d3ddcf8963dc36", alt: "bluetooth speaker portable wireless black product photography" },
+  { name: "USB-C Fast Charging Cable", sku: "USB-C-004", stock: 156, price: 19.99, sold: "521 sold", status: "Active", statusClass: "bg-green-100 text-green-700", stockClass: "", img: "/placeholder.pngcd61429dc1-51e64fa7a5b5c45a829c", alt: "usb-c charging cable white modern product photography" },
+  { name: "Wireless Ergonomic Mouse", sku: "WM-ERG-005", stock: 34, price: 49.99, sold: "98 sold", status: "Inactive", statusClass: "bg-gray-100 text-gray-700", stockClass: "", img: "/placeholder.pnge04e21910b-6553456bddc85b8f9d4d", alt: "wireless mouse ergonomic black product photography" },
+  { name: "Aluminum Laptop Stand", sku: "LAP-STD-006", stock: 0, price: 59.99, sold: "0 sold", status: "Draft", statusClass: "bg-yellow-100 text-yellow-700", stockClass: "", img: "/placeholder.pnga1ecd19460-9a0db6fba5ef70c6485c", alt: "laptop stand aluminum modern minimalist product photography" },
+  { name: "RGB Mechanical Keyboard", sku: "RGB-KB-007", stock: 67, price: 119.99, sold: "143 sold", status: "Active", statusClass: "bg-green-100 text-green-700", stockClass: "", img: "/placeholder.png68ed8ac243-237b62e7965150b297a7", alt: "mechanical keyboard rgb backlit gaming product photography" },
 ];
 
 export function ItemsList() {
@@ -122,7 +123,7 @@ export function ItemsList() {
                         <p className="text-sm text-gray-500 mb-1">SKU: {item.sku}</p>
                         <div className="flex items-center text-sm text-gray-600">
                           <span className={`mr-4 ${item.stockClass}`}><i className="fa-solid fa-box text-gray-400 mr-1" aria-hidden />Stock: {item.stock}</span>
-                          <span className="mr-4"><i className="fa-solid fa-dollar-sign text-gray-400 mr-1" aria-hidden />{item.price}</span>
+                          <span className="mr-4"><i className="fa-solid fa-dollar-sign text-gray-400 mr-1" aria-hidden />{formatPrice(item.price)}</span>
                           <span><i className="fa-solid fa-shopping-cart text-gray-400 mr-1" aria-hidden />{item.sold}</span>
                         </div>
                       </div>

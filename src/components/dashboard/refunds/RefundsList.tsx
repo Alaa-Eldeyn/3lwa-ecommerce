@@ -1,20 +1,21 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const pendingRefunds = [
-  { id: "refund-card-1", name: "Premium Wireless Headphones", orderId: "ORD-2024-5847", reason: "Product Defective", amount: "$129.00", updated: "2 hours ago", note: "The left speaker is not working properly. Audio cuts out frequently.", img: "/placeholder.png", alt: "wireless headphones product" },
-  { id: "refund-card-2", name: "Smart Fitness Watch", orderId: "ORD-2024-5823", reason: "Wrong Item Received", amount: "$89.00", updated: "5 hours ago", note: "Ordered Silver but received Black color. Need exchange or refund.", img: "/placeholder.png", alt: "smart fitness watch product" },
-  { id: "refund-card-3", name: "Protective Phone Case", orderId: "ORD-2024-5809", reason: "Not As Described", amount: "$27.00", updated: "1 day ago", note: "Case does not fit iPhone 15 Pro as advertised. Too loose.", img: "/placeholder.png", alt: "phone case protective cover" },
+  { id: "refund-card-1", name: "Premium Wireless Headphones", orderId: "ORD-2024-5847", reason: "Product Defective", amount: 129, updated: "2 hours ago", note: "The left speaker is not working properly. Audio cuts out frequently.", img: "/placeholder.png", alt: "wireless headphones product" },
+  { id: "refund-card-2", name: "Smart Fitness Watch", orderId: "ORD-2024-5823", reason: "Wrong Item Received", amount: 89, updated: "5 hours ago", note: "Ordered Silver but received Black color. Need exchange or refund.", img: "/placeholder.png", alt: "smart fitness watch product" },
+  { id: "refund-card-3", name: "Protective Phone Case", orderId: "ORD-2024-5809", reason: "Not As Described", amount: 27, updated: "1 day ago", note: "Case does not fit iPhone 15 Pro as advertised. Too loose.", img: "/placeholder.png", alt: "phone case protective cover" },
 ];
 
 const approvedRefunds = [
-  { id: "refund-card-4", name: "Wireless Earbuds Pro", orderId: "ORD-2024-5791", reason: "Changed Mind", amount: "$79.00", updated: "2 days ago", note: "Purchased different model. Product unused and in original packaging.", img: "/placeholder.png", alt: "wireless earbuds product" },
-  { id: "refund-card-5", name: "Premium Watch Band", orderId: "ORD-2024-5776", reason: "Damaged in Transit", amount: "$39.00", updated: "3 days ago", note: "Band arrived with scratches and packaging was damaged.", img: "/placeholder.png", alt: "smart watch band accessory" },
+  { id: "refund-card-4", name: "Wireless Earbuds Pro", orderId: "ORD-2024-5791", reason: "Changed Mind", amount: 79, updated: "2 days ago", note: "Purchased different model. Product unused and in original packaging.", img: "/placeholder.png", alt: "wireless earbuds product" },
+  { id: "refund-card-5", name: "Premium Watch Band", orderId: "ORD-2024-5776", reason: "Damaged in Transit", amount: 39, updated: "3 days ago", note: "Band arrived with scratches and packaging was damaged.", img: "/placeholder.png", alt: "smart watch band accessory" },
 ];
 
 const rejectedRefunds = [
-  { id: "refund-card-6", name: "USB-C Cable Pack", orderId: "ORD-2024-5752", reason: "Changed Mind", amount: "$15.00", updated: "5 days ago", note: "Return window expired. Product was delivered 45 days ago.", img: "/placeholder.png", alt: "phone accessories product" },
+  { id: "refund-card-6", name: "USB-C Cable Pack", orderId: "ORD-2024-5752", reason: "Changed Mind", amount: 15, updated: "5 days ago", note: "Return window expired. Product was delivered 45 days ago.", img: "/placeholder.png", alt: "phone accessories product" },
 ];
 
 function RefundCard({
@@ -34,7 +35,7 @@ function RefundCard({
   name: string;
   orderId: string;
   reason: string;
-  amount: string;
+  amount: number;
   updated: string;
   note: string;
   img: string;
@@ -65,7 +66,7 @@ function RefundCard({
             </div>
             <div>
               <p className="text-xs text-gray-500 mb-1">Amount</p>
-              <p className="text-sm font-medium text-gray-900">{amount}</p>
+              <p className="text-sm font-medium text-gray-900">{formatPrice(amount)}</p>
             </div>
             <div>
               <p className="text-xs text-gray-500 mb-1">Last Updated</p>

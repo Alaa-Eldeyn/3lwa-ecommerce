@@ -1,11 +1,12 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const orderItemsV2 = [
-  { name: "Premium Wireless Headphones", sku: "WH-2024-001", specs: "Color: Black | Size: Standard", qty: 1, price: "$129.00", img: "/placeholder.png", alt: "modern wireless headphones product shot" },
-  { name: "Smart Fitness Watch", sku: "SW-2024-045", specs: "Color: Silver | Band: Sport", qty: 1, price: "$89.00", img: "/placeholder.png", alt: "smart watch fitness tracker product" },
-  { name: "Protective Phone Case", sku: "PC-2024-128", specs: "Color: Clear | Model: iPhone 15 Pro", qty: 1, price: "$27.00", img: "/placeholder.png", alt: "phone case protective cover product" },
+  { name: "Premium Wireless Headphones", sku: "WH-2024-001", specs: "Color: Black | Size: Standard", qty: 1, price: 129, img: "/placeholder.png", alt: "modern wireless headphones product shot" },
+  { name: "Smart Fitness Watch", sku: "SW-2024-045", specs: "Color: Silver | Band: Sport", qty: 1, price: 89, img: "/placeholder.png", alt: "smart watch fitness tracker product" },
+  { name: "Protective Phone Case", sku: "PC-2024-128", specs: "Color: Clear | Model: iPhone 15 Pro", qty: 1, price: 27, img: "/placeholder.png", alt: "phone case protective cover product" },
 ];
 
 export function OrderDetailsV2() {
@@ -76,7 +77,7 @@ export function OrderDetailsV2() {
                       </div>
                       <div className="text-right">
                         <p className="text-sm text-gray-500">Price</p>
-                        <p className="font-semibold text-gray-900">{item.price}</p>
+                        <p className="font-semibold text-gray-900">{formatPrice(item.price)}</p>
                       </div>
                     </div>
                   ))}
@@ -173,24 +174,24 @@ export function OrderDetailsV2() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">Subtotal</span>
-                    <span className="text-sm font-medium text-gray-900">$245.00</span>
+                    <span className="text-sm font-medium text-gray-900">{formatPrice(245)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">Shipping</span>
-                    <span className="text-sm font-medium text-gray-900">$0.00</span>
+                    <span className="text-sm font-medium text-gray-900">{formatPrice(0)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">Tax</span>
-                    <span className="text-sm font-medium text-gray-900">$0.00</span>
+                    <span className="text-sm font-medium text-gray-900">{formatPrice(0)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-green-600">Discount</span>
-                    <span className="text-sm font-medium text-green-600">-$0.00</span>
+                    <span className="text-sm font-medium text-green-600">-{formatPrice(0)}</span>
                   </div>
                   <div className="pt-3 border-t border-gray-200">
                     <div className="flex justify-between">
                       <span className="font-semibold text-gray-900">Total</span>
-                      <span className="font-bold text-gray-900 text-lg">$245.00</span>
+                      <span className="font-bold text-gray-900 text-lg">{formatPrice(245)}</span>
                     </div>
                   </div>
                 </div>

@@ -1,14 +1,15 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const items = [
-  { name: "Dell XPS 15 Laptop", sku: "LAP-001", stock: 24, price: "$1,299.00", discount: "40%", final: "$779.40", img: "/placeholder.png", alt: "Laptop" },
-  { name: "Sony WH-1000XM5 Headphones", sku: "AUD-002", stock: 45, price: "$399.99", discount: "30%", final: "$279.99", img: "/placeholder.png", alt: "Headphones" },
-  { name: "iPhone 15 Pro Max", sku: "PHN-003", stock: 18, price: "$1,199.00", discount: "40%", final: "$719.40", img: "/placeholder.png", alt: "Smartphone" },
-  { name: "Logitech MX Master 3S", sku: "ACC-004", stock: 67, price: "$99.99", discount: "30%", final: "$69.99", img: "/placeholder.png", alt: "Mouse" },
-  { name: "Keychron K8 Pro Keyboard", sku: "ACC-005", stock: 52, price: "$89.99", discount: "30%", final: "$62.99", img: "/placeholder.png", alt: "Keyboard" },
-  { name: "iPad Air 5th Gen", sku: "TAB-006", stock: 31, price: "$599.00", discount: "30%", final: "$419.30", img: "/placeholder.png", alt: "Tablet" },
+  { name: "Dell XPS 15 Laptop", sku: "LAP-001", stock: 24, price: 1299, discount: "40%", final: 779.4, img: "/placeholder.png", alt: "Laptop" },
+  { name: "Sony WH-1000XM5 Headphones", sku: "AUD-002", stock: 45, price: 399.99, discount: "30%", final: 279.99, img: "/placeholder.png", alt: "Headphones" },
+  { name: "iPhone 15 Pro Max", sku: "PHN-003", stock: 18, price: 1199, discount: "40%", final: 719.4, img: "/placeholder.png", alt: "Smartphone" },
+  { name: "Logitech MX Master 3S", sku: "ACC-004", stock: 67, price: 99.99, discount: "30%", final: 69.99, img: "/placeholder.png", alt: "Mouse" },
+  { name: "Keychron K8 Pro Keyboard", sku: "ACC-005", stock: 52, price: 89.99, discount: "30%", final: 62.99, img: "/placeholder.png", alt: "Keyboard" },
+  { name: "iPad Air 5th Gen", sku: "TAB-006", stock: 31, price: 599, discount: "30%", final: 419.3, img: "/placeholder.png", alt: "Tablet" },
 ];
 
 export function JoinCampaignV2() {
@@ -122,12 +123,12 @@ export function JoinCampaignV2() {
                         <div className="flex items-center space-x-4 text-xs text-gray-600">
                           <span>SKU: {item.sku}</span>
                           <span>Stock: {item.stock}</span>
-                          <span className="text-primary font-medium">{item.price}</span>
+                          <span className="text-primary font-medium">{formatPrice(item.price)}</span>
                         </div>
                       </div>
                       <div className="text-right shrink-0">
                         <div className="text-sm font-medium text-gray-900 mb-1">{item.discount} Discount</div>
-                        <div className="text-xs text-gray-600">Final: {item.final}</div>
+                        <div className="text-xs text-gray-600">Final: {formatPrice(item.final)}</div>
                       </div>
                     </div>
                   </div>

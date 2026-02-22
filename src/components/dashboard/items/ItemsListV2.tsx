@@ -1,12 +1,13 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const listItems = [
-  { id: "ITEM-001", name: "Premium Cotton T-Shirt", status: "Active", statusClass: "text-green-600 bg-green-50", stockLabel: "In Stock", stockClass: "text-blue-600 bg-blue-50", sku: "TSH-001", category: "Clothing", variants: "3 variants", priceRange: "$25.00 - $35.00", badge: "2 Warehouses", badgeClass: "bg-green-50 text-green-700", sub: "Last updated: 2 hours ago", sold: "145 sold", soldSub: "This month", icon: "fa-shirt" },
-  { id: "ITEM-002", name: "Running Shoes Pro", status: "Read-only", statusClass: "text-red-600 bg-red-50", stockLabel: "Low Stock", stockClass: "text-amber-600 bg-amber-50", sku: "SHO-002", category: "Footwear", variants: "5 variants", priceRange: "$85.00 - $120.00", badge: "Active Orders", badgeClass: "bg-red-50 text-red-700", sub: "Cannot edit while orders pending", sold: "89 sold", soldSub: "This month", icon: "fa-shoe-prints" },
-  { id: "ITEM-003", name: "Wireless Headphones", status: "Draft", statusClass: "text-gray-600 bg-gray-50", stockLabel: "Missing Info", stockClass: "text-red-600 bg-red-50", sku: "HDH-003", category: "Electronics", variants: "Incomplete pricing • No variants set", priceRange: "", badge: "Missing Attributes", badgeClass: "bg-amber-50 text-amber-700", sub: "Complete to publish", sold: "Not published", soldSub: "Draft mode", icon: "fa-laptop" },
-  { id: "ITEM-004", name: "Smart Watch Series X", status: "Inactive", statusClass: "text-gray-600 bg-gray-100", stockLabel: "Out of Stock", stockClass: "text-red-600 bg-red-50", sku: "WAT-004", category: "Electronics", variants: "4 variants", priceRange: "$299.00 - $399.00", badge: "No Warehouse", badgeClass: "bg-red-50 text-red-700", sub: "Configure location to reactivate", sold: "67 sold", soldSub: "Last month", icon: "fa-watch" },
+  { id: "ITEM-001", name: "Premium Cotton T-Shirt", status: "Active", statusClass: "text-green-600 bg-green-50", stockLabel: "In Stock", stockClass: "text-blue-600 bg-blue-50", sku: "TSH-001", category: "Clothing", variants: "3 variants", priceMin: 25, priceMax: 35, badge: "2 Warehouses", badgeClass: "bg-green-50 text-green-700", sub: "Last updated: 2 hours ago", sold: "145 sold", soldSub: "This month", icon: "fa-shirt" },
+  { id: "ITEM-002", name: "Running Shoes Pro", status: "Read-only", statusClass: "text-red-600 bg-red-50", stockLabel: "Low Stock", stockClass: "text-amber-600 bg-amber-50", sku: "SHO-002", category: "Footwear", variants: "5 variants", priceMin: 85, priceMax: 120, badge: "Active Orders", badgeClass: "bg-red-50 text-red-700", sub: "Cannot edit while orders pending", sold: "89 sold", soldSub: "This month", icon: "fa-shoe-prints" },
+  { id: "ITEM-003", name: "Wireless Headphones", status: "Draft", statusClass: "text-gray-600 bg-gray-50", stockLabel: "Missing Info", stockClass: "text-red-600 bg-red-50", sku: "HDH-003", category: "Electronics", variants: "Incomplete pricing • No variants set", badge: "Missing Attributes", badgeClass: "bg-amber-50 text-amber-700", sub: "Complete to publish", sold: "Not published", soldSub: "Draft mode", icon: "fa-laptop" },
+  { id: "ITEM-004", name: "Smart Watch Series X", status: "Inactive", statusClass: "text-gray-600 bg-gray-100", stockLabel: "Out of Stock", stockClass: "text-red-600 bg-red-50", sku: "WAT-004", category: "Electronics", variants: "4 variants", priceMin: 299, priceMax: 399, badge: "No Warehouse", badgeClass: "bg-red-50 text-red-700", sub: "Configure location to reactivate", sold: "67 sold", soldSub: "Last month", icon: "fa-watch" },
 ];
 
 export function ItemsListV2() {
@@ -76,7 +77,7 @@ export function ItemsListV2() {
                         <span className={`text-xs font-medium px-2 py-1 rounded-full ${item.stockClass}`}>{item.stockLabel}</span>
                       </div>
                       <div className="text-sm text-gray-600 mb-2">SKU: {item.sku} • Category: {item.category}</div>
-                      <div className="text-sm text-gray-600 mb-3">{item.variants}{item.priceRange ? ` • Price: ${item.priceRange}` : ""}</div>
+                      <div className="text-sm text-gray-600 mb-3">{item.variants}{"priceMin" in item && "priceMax" in item && item.priceMin != null && item.priceMax != null ? ` • Price: ${formatPrice(item.priceMin)} - ${formatPrice(item.priceMax)}` : ""}</div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className={`text-xs px-2 py-1 rounded-full ${item.badgeClass}`}>
                           {item.badge.includes("Warehouse") && <i className="fa-solid fa-warehouse mr-1" aria-hidden />}
@@ -129,9 +130,9 @@ export function ItemsListV2() {
               <h4 className="text-md font-bold text-foreground mb-4">Product Variants</h4>
               <div className="space-y-3">
                 {[
-                  { color: "bg-blue-500", label: "Blue - Medium", stock: "45 units", price: "$29.99" },
-                  { color: "bg-red-500", label: "Red - Large", stock: "32 units", price: "$29.99" },
-                  { color: "bg-black", label: "Black - Small", stock: "28 units", price: "$25.00" },
+                  { color: "bg-blue-500", label: "Blue - Medium", stock: "45 units", price: 29.99 },
+                  { color: "bg-red-500", label: "Red - Large", stock: "32 units", price: 29.99 },
+                  { color: "bg-black", label: "Black - Small", stock: "28 units", price: 25 },
                 ].map((v) => (
                   <div key={v.label} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <div className={`w-8 h-8 ${v.color} rounded border border-gray-200 shrink-0`} />
@@ -139,7 +140,7 @@ export function ItemsListV2() {
                       <div className="font-semibold text-foreground text-sm">{v.label}</div>
                       <div className="text-xs text-gray-500">Stock: {v.stock}</div>
                     </div>
-                    <div className="text-sm font-bold text-foreground">{v.price}</div>
+                    <div className="text-sm font-bold text-foreground">{formatPrice(v.price)}</div>
                   </div>
                 ))}
               </div>

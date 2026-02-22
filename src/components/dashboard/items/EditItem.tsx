@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { CURRENCY_SYMBOL, formatPrice } from "@/src/config/currency";
 
 export function EditItem() {
   return (
@@ -72,9 +73,9 @@ export function EditItem() {
             </div>
             <div className="space-y-5">
               {[
-                { name: "Black - Standard", price: "149.99", cost: "85.00", stock: 45, margin: "43%", profit: "$64.99" },
-                { name: "White - Standard", price: "149.99", cost: "85.00", stock: 32, margin: "43%", profit: "$64.99" },
-                { name: "Silver - Limited Edition", price: "179.99", cost: "95.00", stock: 18, margin: "47%", profit: "$84.99" },
+                { name: "Black - Standard", price: "149.99", cost: "85.00", stock: 45, margin: "43%", profit: 64.99 },
+                { name: "White - Standard", price: "149.99", cost: "85.00", stock: 32, margin: "43%", profit: 64.99 },
+                { name: "Silver - Limited Edition", price: "179.99", cost: "95.00", stock: 18, margin: "47%", profit: 84.99 },
               ].map((v) => (
                 <div key={v.name} className="border border-gray-200 rounded-lg p-5">
                   <div className="flex items-center justify-between mb-4">
@@ -90,14 +91,14 @@ export function EditItem() {
                     <div>
                       <label className="block text-xs font-medium text-gray-600 mb-1.5">Price</label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">{CURRENCY_SYMBOL}</span>
                         <input type="text" defaultValue={v.price} className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
                       </div>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-600 mb-1.5">Cost per item</label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">{CURRENCY_SYMBOL}</span>
                         <input type="text" defaultValue={v.cost} className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
                       </div>
                     </div>
@@ -106,7 +107,7 @@ export function EditItem() {
                       <input type="number" defaultValue={v.stock} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
                     </div>
                   </div>
-                  <p className="text-xs text-gray-500 mt-3">Profit margin: {v.margin} · {v.profit} per item</p>
+                  <p className="text-xs text-gray-500 mt-3">Profit margin: {v.margin} · {formatPrice(v.profit)} per item</p>
                 </div>
               ))}
             </div>
@@ -201,7 +202,7 @@ export function EditItem() {
                   <h4 className="font-semibold text-gray-800 mb-1">Premium Wireless Headphones</h4>
                   <p className="text-sm text-gray-600 mb-3">AudioTech Pro</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-primary">$149.99</span>
+                    <span className="text-lg font-bold text-primary">{formatPrice(149.99)}</span>
                     <span className="text-xs text-gray-500">45 in stock</span>
                   </div>
                 </div>
@@ -230,7 +231,7 @@ export function EditItem() {
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-gray-100">
                   <span className="text-sm text-gray-600">Revenue</span>
-                  <span className="text-sm font-semibold text-gray-800">$35,097.66</span>
+                  <span className="text-sm font-semibold text-gray-800">{formatPrice(35097.66)}</span>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-gray-100">
                   <span className="text-sm text-gray-600">Average Rating</span>

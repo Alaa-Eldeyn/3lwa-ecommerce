@@ -1,11 +1,12 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const listItems = [
   { code: "SAVE20", status: "Active", statusClass: "text-green-600 bg-green-50", desc: "20% discount on all items - General promotion code for new customers", dates: "Jan 1 - Dec 31, 2024", redemptions: "142 uses", items: "All items" },
   { code: "WINTER25", status: "Active", statusClass: "text-green-600 bg-green-50", desc: "Winter sale - 25% off selected electronics", dates: "Jan 15 - Feb 15", redemptions: "47 / 100", items: "12 items" },
-  { code: "FREESHIP", status: "Expired", statusClass: "text-gray-600 bg-gray-100", desc: "Free shipping on orders over $50", dates: "Jan 1 - Jan 31", redemptions: "89 uses", items: "25 items" },
+  { code: "FREESHIP", status: "Expired", statusClass: "text-gray-600 bg-gray-100", desc: `Free shipping on orders over ${formatPrice(50)}`, dates: "Jan 1 - Jan 31", redemptions: "89 uses", items: "25 items" },
 ];
 
 export function PromoCodesList() {

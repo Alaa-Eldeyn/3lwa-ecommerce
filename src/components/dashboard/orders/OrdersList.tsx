@@ -1,19 +1,20 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const todayOrders = [
-  { id: "ORD-2024-5847", date: "January 15, 2024 • 2:45 PM", items: "3", total: "$245.00", status: "Processing", statusClass: "bg-yellow-100 text-yellow-800", icon: "fa-clock", iconBg: "bg-yellow-50", iconColor: "text-yellow-600", customer: "Sarah Johnson", location: "New York, NY" },
-  { id: "ORD-2024-5846", date: "January 15, 2024 • 11:20 AM", items: "2", total: "$189.00", status: "Shipped", statusClass: "bg-purple-100 text-purple-800", icon: "fa-truck", iconBg: "bg-purple-50", iconColor: "text-purple-600", customer: "Michael Chen", location: "Los Angeles, CA" },
-  { id: "ORD-2024-5845", date: "January 15, 2024 • 9:15 AM", items: "5", total: "$567.50", status: "Pending", statusClass: "bg-blue-100 text-blue-800", icon: "fa-box", iconBg: "bg-blue-50", iconColor: "text-blue-600", customer: "Emma Rodriguez", location: "Chicago, IL" },
+  { id: "ORD-2024-5847", date: "January 15, 2024 • 2:45 PM", items: "3", total: 245, status: "Processing", statusClass: "bg-yellow-100 text-yellow-800", icon: "fa-clock", iconBg: "bg-yellow-50", iconColor: "text-yellow-600", customer: "Sarah Johnson", location: "New York, NY" },
+  { id: "ORD-2024-5846", date: "January 15, 2024 • 11:20 AM", items: "2", total: 189, status: "Shipped", statusClass: "bg-purple-100 text-purple-800", icon: "fa-truck", iconBg: "bg-purple-50", iconColor: "text-purple-600", customer: "Michael Chen", location: "Los Angeles, CA" },
+  { id: "ORD-2024-5845", date: "January 15, 2024 • 9:15 AM", items: "5", total: 567.5, status: "Pending", statusClass: "bg-blue-100 text-blue-800", icon: "fa-box", iconBg: "bg-blue-50", iconColor: "text-blue-600", customer: "Emma Rodriguez", location: "Chicago, IL" },
 ];
 
 const thisWeekOrders = [
-  { id: "ORD-2024-5844", date: "January 14, 2024 • 4:30 PM", items: "1", total: "$129.00", status: "Delivered", statusClass: "bg-green-100 text-green-800", icon: "fa-check-circle", iconBg: "bg-green-50", iconColor: "text-green-600", customer: "David Thompson", location: "Miami, FL" },
-  { id: "ORD-2024-5843", date: "January 14, 2024 • 1:15 PM", items: "4", total: "$398.00", status: "Shipped", statusClass: "bg-purple-100 text-purple-800", icon: "fa-truck", iconBg: "bg-purple-50", iconColor: "text-purple-600", customer: "Lisa Park", location: "Seattle, WA" },
-  { id: "ORD-2024-5842", date: "January 13, 2024 • 6:45 PM", items: "2", total: "$276.00", status: "Processing", statusClass: "bg-yellow-100 text-yellow-800", icon: "fa-clock", iconBg: "bg-yellow-50", iconColor: "text-yellow-600", customer: "Alex Williams", location: "Boston, MA" },
-  { id: "ORD-2024-5841", date: "January 13, 2024 • 2:30 PM", items: "3", total: "$445.00", status: "Delivered", statusClass: "bg-green-100 text-green-800", icon: "fa-check-circle", iconBg: "bg-green-50", iconColor: "text-green-600", customer: "Jennifer Martinez", location: "Austin, TX" },
-  { id: "ORD-2024-5840", date: "January 12, 2024 • 10:20 AM", items: "1", total: "$89.00", status: "Cancelled", statusClass: "bg-red-100 text-red-800", icon: "fa-times-circle", iconBg: "bg-red-50", iconColor: "text-red-600", customer: "Robert Taylor", location: "Denver, CO" },
+  { id: "ORD-2024-5844", date: "January 14, 2024 • 4:30 PM", items: "1", total: 129, status: "Delivered", statusClass: "bg-green-100 text-green-800", icon: "fa-check-circle", iconBg: "bg-green-50", iconColor: "text-green-600", customer: "David Thompson", location: "Miami, FL" },
+  { id: "ORD-2024-5843", date: "January 14, 2024 • 1:15 PM", items: "4", total: 398, status: "Shipped", statusClass: "bg-purple-100 text-purple-800", icon: "fa-truck", iconBg: "bg-purple-50", iconColor: "text-purple-600", customer: "Lisa Park", location: "Seattle, WA" },
+  { id: "ORD-2024-5842", date: "January 13, 2024 • 6:45 PM", items: "2", total: 276, status: "Processing", statusClass: "bg-yellow-100 text-yellow-800", icon: "fa-clock", iconBg: "bg-yellow-50", iconColor: "text-yellow-600", customer: "Alex Williams", location: "Boston, MA" },
+  { id: "ORD-2024-5841", date: "January 13, 2024 • 2:30 PM", items: "3", total: 445, status: "Delivered", statusClass: "bg-green-100 text-green-800", icon: "fa-check-circle", iconBg: "bg-green-50", iconColor: "text-green-600", customer: "Jennifer Martinez", location: "Austin, TX" },
+  { id: "ORD-2024-5840", date: "January 12, 2024 • 10:20 AM", items: "1", total: 89, status: "Cancelled", statusClass: "bg-red-100 text-red-800", icon: "fa-times-circle", iconBg: "bg-red-50", iconColor: "text-red-600", customer: "Robert Taylor", location: "Denver, CO" },
 ];
 
 function OrderCard({ order }: { order: (typeof todayOrders)[0] }) {
@@ -36,7 +37,7 @@ function OrderCard({ order }: { order: (typeof todayOrders)[0] }) {
           </div>
           <div className="text-right">
             <p className="text-sm text-gray-500">Total</p>
-            <p className="font-semibold text-gray-900">{order.total}</p>
+            <p className="font-semibold text-gray-900">{formatPrice(order.total)}</p>
           </div>
           <span className={`px-4 py-2 ${order.statusClass} text-sm font-medium rounded-lg`}>{order.status}</span>
           <span className="text-gray-400 hover:text-gray-600">
@@ -121,7 +122,7 @@ export function OrdersList() {
                   <i className="fas fa-dollar-sign text-green-600" aria-hidden />
                 </div>
               </div>
-              <p className="text-3xl font-bold text-gray-900">$24,890</p>
+              <p className="text-3xl font-bold text-gray-900">{formatPrice(24890)}</p>
               <p className="text-xs text-green-600 mt-2"><i className="fas fa-arrow-up mr-1" aria-hidden />18% from last month</p>
             </div>
           </div>

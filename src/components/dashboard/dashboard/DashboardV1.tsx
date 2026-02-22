@@ -3,40 +3,13 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/routing";
 import { useUserStore } from "@/src/store/userStore";
+import { formatPrice } from "@/src/config/currency";
 
 const topItems = [
-  {
-    name: "Premium Cotton T-Shirt",
-    sku: "TSH-001",
-    price: "$29.99",
-    sold: "142 sold",
-    change: "+24%",
-    icon: "fa-shirt",
-  },
-  {
-    name: "Running Shoes Pro",
-    sku: "SHO-045",
-    price: "$89.99",
-    sold: "98 sold",
-    change: "+18%",
-    icon: "fa-shoe-prints",
-  },
-  {
-    name: "Summer Cap Collection",
-    sku: "CAP-023",
-    price: "$19.99",
-    sold: "87 sold",
-    change: "+15%",
-    icon: "fa-hat-cowboy",
-  },
-  {
-    name: "Leather Handbag",
-    sku: "BAG-112",
-    price: "$129.99",
-    sold: "56 sold",
-    change: "+12%",
-    icon: "fa-bag-shopping",
-  },
+  { name: "Premium Cotton T-Shirt", sku: "TSH-001", price: 29.99, sold: "142 sold", change: "+24%", icon: "fa-shirt" },
+  { name: "Running Shoes Pro", sku: "SHO-045", price: 89.99, sold: "98 sold", change: "+18%", icon: "fa-shoe-prints" },
+  { name: "Summer Cap Collection", sku: "CAP-023", price: 19.99, sold: "87 sold", change: "+15%", icon: "fa-hat-cowboy" },
+  { name: "Leather Handbag", sku: "BAG-112", price: 129.99, sold: "56 sold", change: "+12%", icon: "fa-bag-shopping" },
 ];
 
 type OrderStatusKey =
@@ -49,52 +22,16 @@ const recentOrders: Array<{
   id: string;
   items: string;
   time: string;
-  total: string;
+  total: number;
   statusKey: OrderStatusKey;
   statusClass: string;
   totalClass?: string;
 }> = [
-  {
-    id: "ORD-2847",
-    items: "3 items",
-    time: "2 hours ago",
-    total: "$159.97",
-    statusKey: "statusPaid",
-    statusClass: "text-green-600 bg-green-50",
-  },
-  {
-    id: "ORD-2846",
-    items: "1 item",
-    time: "5 hours ago",
-    total: "$89.99",
-    statusKey: "statusProcessing",
-    statusClass: "text-amber-600 bg-amber-50",
-  },
-  {
-    id: "ORD-2845",
-    items: "2 items",
-    time: "1 day ago",
-    total: "$49.98",
-    statusKey: "statusShipped",
-    statusClass: "text-blue-600 bg-blue-50",
-  },
-  {
-    id: "ORD-2844",
-    items: "5 items",
-    time: "2 days ago",
-    total: "$324.95",
-    statusKey: "statusDelivered",
-    statusClass: "text-green-600 bg-green-50",
-  },
-  {
-    id: "ORD-2843",
-    items: "1 item",
-    time: "3 days ago",
-    total: "$29.99",
-    statusKey: "statusCancelled",
-    statusClass: "text-red-600 bg-red-50",
-    totalClass: "text-gray-400",
-  },
+  { id: "ORD-2847", items: "3 items", time: "2 hours ago", total: 159.97, statusKey: "statusPaid", statusClass: "text-green-600 bg-green-50" },
+  { id: "ORD-2846", items: "1 item", time: "5 hours ago", total: 89.99, statusKey: "statusProcessing", statusClass: "text-amber-600 bg-amber-50" },
+  { id: "ORD-2845", items: "2 items", time: "1 day ago", total: 49.98, statusKey: "statusShipped", statusClass: "text-blue-600 bg-blue-50" },
+  { id: "ORD-2844", items: "5 items", time: "2 days ago", total: 324.95, statusKey: "statusDelivered", statusClass: "text-green-600 bg-green-50" },
+  { id: "ORD-2843", items: "1 item", time: "3 days ago", total: 29.99, statusKey: "statusCancelled", statusClass: "text-red-600 bg-red-50", totalClass: "text-gray-400" },
 ];
 
 export function DashboardV1() {
@@ -143,7 +80,7 @@ export function DashboardV1() {
               +12.5%
             </span>
           </div>
-          <div className="text-2xl font-bold text-foreground mb-1">$24,580</div>
+          <div className="text-2xl font-bold text-foreground mb-1">{formatPrice(24580)}</div>
           <div className="text-sm text-gray-500">{t("totalSales")}</div>
         </div>
         <div
@@ -185,7 +122,7 @@ export function DashboardV1() {
               {t("available")}
             </span>
           </div>
-          <div className="text-2xl font-bold text-foreground mb-1">$8,240</div>
+          <div className="text-2xl font-bold text-foreground mb-1">{formatPrice(8240)}</div>
           <div className="text-sm text-gray-500">{t("walletBalance")}</div>
         </div>
       </div>
@@ -200,7 +137,7 @@ export function DashboardV1() {
                 <i className="fa-solid fa-clock text-orange-600" aria-hidden />
               </div>
               <div>
-                <div className="text-xl font-bold text-foreground">$3,450</div>
+                <div className="text-xl font-bold text-foreground">{formatPrice(3450)}</div>
                 <div className="text-xs text-gray-600">{t("pendingBalance")}</div>
               </div>
             </div>
@@ -278,7 +215,7 @@ export function DashboardV1() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-bold text-foreground">{item.price}</div>
+                  <div className="font-bold text-foreground">{formatPrice(item.price)}</div>
                   <div className="text-xs text-green-600 font-medium">{item.sold}</div>
                 </div>
                 <div className="w-16 text-right">
@@ -314,7 +251,7 @@ export function DashboardV1() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-500">{order.time}</span>
                   <span className={`text-sm font-bold ${order.totalClass ?? "text-foreground"}`}>
-                    {order.total}
+                    {formatPrice(order.total)}
                   </span>
                 </div>
               </Link>

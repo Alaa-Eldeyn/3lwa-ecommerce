@@ -1,13 +1,14 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const transactions = [
-  { title: "Order Payment", detail: "Order #ORD-2024-1247", date: "Dec 10, 2024 at 2:45 PM", amount: "+$245.00", status: "Completed", icon: "fa-arrow-down", iconBg: "bg-green-100", iconColor: "text-green-600", amountClass: "text-green-600", statusBg: "bg-green-100", statusColor: "text-green-800" },
-  { title: "Order Payment", detail: "Order #ORD-2024-1246", date: "Dec 10, 2024 at 11:20 AM", amount: "+$580.00", status: "Completed", icon: "fa-arrow-down", iconBg: "bg-green-100", iconColor: "text-green-600", amountClass: "text-green-600", statusBg: "bg-green-100", statusColor: "text-green-800" },
-  { title: "Withdrawal to Bank", detail: "Bank Account ****4523", date: "Dec 9, 2024 at 4:15 PM", amount: "-$1,500.00", status: "Processing", icon: "fa-arrow-up", iconBg: "bg-red-100", iconColor: "text-red-600", amountClass: "text-red-600", statusBg: "bg-blue-100", statusColor: "text-blue-800" },
-  { title: "Refund Processed", detail: "Order #ORD-2024-1238", date: "Dec 8, 2024 at 9:30 AM", amount: "-$125.00", status: "Completed", icon: "fa-undo", iconBg: "bg-orange-100", iconColor: "text-orange-600", amountClass: "text-orange-600", statusBg: "bg-orange-100", statusColor: "text-orange-800" },
-  { title: "Order Payment", detail: "Order #ORD-2024-1235", date: "Dec 7, 2024 at 3:50 PM", amount: "+$890.00", status: "Completed", icon: "fa-arrow-down", iconBg: "bg-green-100", iconColor: "text-green-600", amountClass: "text-green-600", statusBg: "bg-green-100", statusColor: "text-green-800" },
+  { title: "Order Payment", detail: "Order #ORD-2024-1247", date: "Dec 10, 2024 at 2:45 PM", amount: 245, sign: "+", status: "Completed", icon: "fa-arrow-down", iconBg: "bg-green-100", iconColor: "text-green-600", amountClass: "text-green-600", statusBg: "bg-green-100", statusColor: "text-green-800" },
+  { title: "Order Payment", detail: "Order #ORD-2024-1246", date: "Dec 10, 2024 at 11:20 AM", amount: 580, sign: "+", status: "Completed", icon: "fa-arrow-down", iconBg: "bg-green-100", iconColor: "text-green-600", amountClass: "text-green-600", statusBg: "bg-green-100", statusColor: "text-green-800" },
+  { title: "Withdrawal to Bank", detail: "Bank Account ****4523", date: "Dec 9, 2024 at 4:15 PM", amount: 1500, sign: "-", status: "Processing", icon: "fa-arrow-up", iconBg: "bg-red-100", iconColor: "text-red-600", amountClass: "text-red-600", statusBg: "bg-blue-100", statusColor: "text-blue-800" },
+  { title: "Refund Processed", detail: "Order #ORD-2024-1238", date: "Dec 8, 2024 at 9:30 AM", amount: 125, sign: "-", status: "Completed", icon: "fa-undo", iconBg: "bg-orange-100", iconColor: "text-orange-600", amountClass: "text-orange-600", statusBg: "bg-orange-100", statusColor: "text-orange-800" },
+  { title: "Order Payment", detail: "Order #ORD-2024-1235", date: "Dec 7, 2024 at 3:50 PM", amount: 890, sign: "+", status: "Completed", icon: "fa-arrow-down", iconBg: "bg-green-100", iconColor: "text-green-600", amountClass: "text-green-600", statusBg: "bg-green-100", statusColor: "text-green-800" },
 ];
 
 export function WalletV2() {
@@ -39,10 +40,10 @@ export function WalletV2() {
             </button>
           </div>
           <p className="text-white/80 text-sm mb-2">Available Balance</p>
-          <p className="text-4xl font-bold mb-4">$12,847.50</p>
+          <p className="text-4xl font-bold mb-4">{formatPrice(12847.5)}</p>
           <div className="flex items-center space-x-2 text-sm">
             <i className="fa-solid fa-arrow-up" aria-hidden />
-            <span>+$2,340 this month</span>
+            <span>+{formatPrice(2340)} this month</span>
           </div>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -52,7 +53,7 @@ export function WalletV2() {
             </div>
           </div>
           <p className="text-gray-500 text-sm mb-2">Pending Payout</p>
-          <p className="text-3xl font-bold text-gray-900 mb-2">$3,420.00</p>
+          <p className="text-3xl font-bold text-gray-900 mb-2">{formatPrice(3420)}</p>
           <p className="text-xs text-gray-500">Expected: Dec 15, 2024</p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -62,7 +63,7 @@ export function WalletV2() {
             </div>
           </div>
           <p className="text-gray-500 text-sm mb-2">Total Earnings</p>
-          <p className="text-3xl font-bold text-gray-900 mb-2">$48,920.00</p>
+          <p className="text-3xl font-bold text-gray-900 mb-2">{formatPrice(48920)}</p>
           <p className="text-xs text-gray-500">All time</p>
         </div>
       </div>
@@ -106,7 +107,7 @@ export function WalletV2() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className={`text-2xl font-bold ${tx.amountClass}`}>{tx.amount}</p>
+                  <p className={`text-2xl font-bold ${tx.amountClass}`}>{tx.sign}{formatPrice(tx.amount)}</p>
                   <span className={`inline-block px-3 py-1 ${tx.statusBg} ${tx.statusColor} text-xs font-medium rounded-full mt-2`}>{tx.status}</span>
                 </div>
               </div>

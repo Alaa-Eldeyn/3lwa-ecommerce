@@ -1,16 +1,17 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const cards = [
-  { title: "Wireless Bluetooth Headphones", sku: "WBH-2024-001", pricingType: "Basic Pricing", pricingClass: "text-primary", price: "$89.99", stock: "In Stock", stockClass: "bg-green-500", campaign: true, rating: "4.8", reviews: "124 reviews", img: "/placeholder.png", alt: "wireless bluetooth headphones" },
-  { title: "Smart Fitness Watch", sku: "SFW-2024-045", pricingType: "Combination", pricingClass: "text-secondary", price: "$129.99", stock: "In Stock", stockClass: "bg-green-500", campaign: false, rating: "4.6", reviews: "89 reviews", img: "/placeholder.png", alt: "smart watch" },
-  { title: "Portable Power Bank 20000mAh", sku: "PPB-2024-078", pricingType: "Basic Pricing", pricingClass: "text-primary", price: "$45.99", stock: "Low Stock", stockClass: "bg-yellow-500", campaign: true, rating: "4.9", reviews: "203 reviews", img: "/placeholder.png", alt: "power bank" },
-  { title: "RGB Gaming Mouse Pro", sku: "RGM-2024-112", pricingType: "Combination", pricingClass: "text-secondary", price: "$69.99", stock: "Out of Stock", stockClass: "bg-red-500", campaign: false, rating: "4.7", reviews: "156 reviews", img: "/placeholder.png", alt: "gaming mouse" },
-  { title: "Mechanical Gaming Keyboard", sku: "MGK-2024-089", pricingType: "Combination", pricingClass: "text-secondary", price: "$119.99", stock: "In Stock", stockClass: "bg-green-500", campaign: false, rating: "4.5", reviews: "78 reviews", img: "/placeholder.png", alt: "keyboard" },
-  { title: "USB-C Hub 7-in-1 Adapter", sku: "UCH-2024-034", pricingType: "Basic Pricing", pricingClass: "text-primary", price: "$39.99", stock: "In Stock", stockClass: "bg-green-500", campaign: true, rating: "4.4", reviews: "92 reviews", img: "/placeholder.png", alt: "usb-c hub" },
-  { title: "Adjustable Laptop Stand", sku: "ALS-2024-067", pricingType: "Basic Pricing", pricingClass: "text-primary", price: "$54.99", stock: "In Stock", stockClass: "bg-green-500", campaign: false, rating: "4.8", reviews: "167 reviews", img: "/placeholder.png", alt: "laptop stand" },
-  { title: "HD Webcam 1080p Streaming", sku: "HDW-2024-023", pricingType: "Combination", pricingClass: "text-secondary", price: "$79.99", stock: "Low Stock", stockClass: "bg-yellow-500", campaign: false, rating: "4.6", reviews: "134 reviews", img: "/placeholder.png", alt: "webcam" },
+  { title: "Wireless Bluetooth Headphones", sku: "WBH-2024-001", pricingType: "Basic Pricing", pricingClass: "text-primary", price: 89.99, stock: "In Stock", stockClass: "bg-green-500", campaign: true, rating: "4.8", reviews: "124 reviews", img: "/placeholder.png", alt: "wireless bluetooth headphones" },
+  { title: "Smart Fitness Watch", sku: "SFW-2024-045", pricingType: "Combination", pricingClass: "text-secondary", price: 129.99, stock: "In Stock", stockClass: "bg-green-500", campaign: false, rating: "4.6", reviews: "89 reviews", img: "/placeholder.png", alt: "smart watch" },
+  { title: "Portable Power Bank 20000mAh", sku: "PPB-2024-078", pricingType: "Basic Pricing", pricingClass: "text-primary", price: 45.99, stock: "Low Stock", stockClass: "bg-yellow-500", campaign: true, rating: "4.9", reviews: "203 reviews", img: "/placeholder.png", alt: "power bank" },
+  { title: "RGB Gaming Mouse Pro", sku: "RGM-2024-112", pricingType: "Combination", pricingClass: "text-secondary", price: 69.99, stock: "Out of Stock", stockClass: "bg-red-500", campaign: false, rating: "4.7", reviews: "156 reviews", img: "/placeholder.png", alt: "gaming mouse" },
+  { title: "Mechanical Gaming Keyboard", sku: "MGK-2024-089", pricingType: "Combination", pricingClass: "text-secondary", price: 119.99, stock: "In Stock", stockClass: "bg-green-500", campaign: false, rating: "4.5", reviews: "78 reviews", img: "/placeholder.png", alt: "keyboard" },
+  { title: "USB-C Hub 7-in-1 Adapter", sku: "UCH-2024-034", pricingType: "Basic Pricing", pricingClass: "text-primary", price: 39.99, stock: "In Stock", stockClass: "bg-green-500", campaign: true, rating: "4.4", reviews: "92 reviews", img: "/placeholder.png", alt: "usb-c hub" },
+  { title: "Adjustable Laptop Stand", sku: "ALS-2024-067", pricingType: "Basic Pricing", pricingClass: "text-primary", price: 54.99, stock: "In Stock", stockClass: "bg-green-500", campaign: false, rating: "4.8", reviews: "167 reviews", img: "/placeholder.png", alt: "laptop stand" },
+  { title: "HD Webcam 1080p Streaming", sku: "HDW-2024-023", pricingType: "Combination", pricingClass: "text-secondary", price: 79.99, stock: "Low Stock", stockClass: "bg-yellow-500", campaign: false, rating: "4.6", reviews: "134 reviews", img: "/placeholder.png", alt: "webcam" },
 ];
 
 export function ItemsListV3() {
@@ -136,7 +137,7 @@ export function ItemsListV3() {
                 <p className="text-xs text-gray-500 mb-3">SKU: {item.sku}</p>
                 <div className="flex items-center justify-between mb-3">
                   <span className={`text-sm font-medium ${item.pricingType === "Basic Pricing" ? "text-primary" : "text-secondary"}`}>{item.pricingType}</span>
-                  <span className="text-lg font-bold text-gray-900">{item.price}</span>
+                  <span className="text-lg font-bold text-gray-900">{formatPrice(item.price)}</span>
                 </div>
                 <div className="flex items-center text-sm text-gray-600 mb-4">
                   <i className="fa-solid fa-star text-yellow-400 mr-1" aria-hidden />

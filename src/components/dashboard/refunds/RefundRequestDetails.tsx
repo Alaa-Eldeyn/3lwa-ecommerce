@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const attachments = [
   { img: "/placeholder.png", alt: "damaged headphones close-up crack on headband", name: "headband_damage.jpg" },
@@ -54,7 +55,7 @@ export function RefundRequestDetails() {
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-500 mb-1">Refund Amount</p>
-              <p className="text-2xl font-bold text-gray-800">$234.00</p>
+              <p className="text-2xl font-bold text-gray-800">{formatPrice(234)}</p>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-200">
@@ -113,7 +114,7 @@ export function RefundRequestDetails() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-semibold text-gray-800">$234.00</p>
+                    <p className="text-lg font-semibold text-gray-800">{formatPrice(234)}</p>
                     <span className="inline-block mt-2 bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-medium">Refund Requested</span>
                   </div>
                 </div>
@@ -122,19 +123,19 @@ export function RefundRequestDetails() {
             <div className="pt-4">
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-gray-600">Item Subtotal</span>
-                <span className="text-gray-800 font-medium">$234.00</span>
+                <span className="text-gray-800 font-medium">{formatPrice(234)}</span>
               </div>
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-gray-600">Shipping Fee</span>
-                <span className="text-gray-800 font-medium">$0.00</span>
+                <span className="text-gray-800 font-medium">{formatPrice(0)}</span>
               </div>
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-gray-600">Tax</span>
-                <span className="text-gray-800 font-medium">$0.00</span>
+                <span className="text-gray-800 font-medium">{formatPrice(0)}</span>
               </div>
               <div className="flex justify-between pt-2 border-t border-gray-200 mt-2">
                 <span className="text-base font-semibold text-gray-800">Total Refund Amount</span>
-                <span className="text-lg font-bold text-gray-800">$234.00</span>
+                <span className="text-lg font-bold text-gray-800">{formatPrice(234)}</span>
               </div>
             </div>
           </div>

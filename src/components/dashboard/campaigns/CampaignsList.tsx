@@ -1,18 +1,20 @@
 "use client";
 
+import { formatPrice } from "@/src/config/currency";
+
 const stats = [
   { icon: "fa-bullhorn", iconBg: "bg-primary/10", iconColor: "text-primary", label: "Active Campaigns", value: "8", sub: "participating in" },
   { icon: "fa-percentage", iconBg: "bg-green-100", iconColor: "text-green-600", label: "Promo Codes", value: "12", sub: "active codes" },
-  { icon: "fa-chart-line", iconBg: "bg-blue-100", iconColor: "text-blue-600", label: "Campaign Sales", value: "$8,450", sub: "this month", badge: "+24%" },
+  { icon: "fa-chart-line", iconBg: "bg-blue-100", iconColor: "text-blue-600", label: "Campaign Sales", valueNum: 8450, sub: "this month", badge: "+24%" },
   { icon: "fa-clock", iconBg: "bg-purple-100", iconColor: "text-purple-600", label: "Pending Approval", value: "3", sub: "awaiting review" },
 ];
 
 const campaigns = [
-  { title: "Winter Sale 2026", status: "Active", badge2: "Auto-Enrolled", desc: "Platform-wide winter promotion with up to 40% discount on selected categories", date: "Jan 15 - Feb 15, 2026", items: "24 items participating", sales: "$3,240 sales", discount: "20-40%", orders: "87", conversion: "12.4%", gradient: "from-red-500 to-pink-500", icon: "fa-fire" },
-  { title: "Valentine's Day Special", status: "Active", badge2: "Opted In", desc: "Special offers for Valentine's Day gifts and romantic products", date: "Feb 1 - Feb 14, 2026", items: "8 items participating", sales: "$1,890 sales", discount: "15-25%", orders: "34", conversion: "8.7%", gradient: "from-purple-500 to-indigo-500", icon: "fa-heart" },
+  { title: "Winter Sale 2026", status: "Active", badge2: "Auto-Enrolled", desc: "Platform-wide winter promotion with up to 40% discount on selected categories", date: "Jan 15 - Feb 15, 2026", items: "24 items participating", salesAmount: 3240, discount: "20-40%", orders: "87", conversion: "12.4%", gradient: "from-red-500 to-pink-500", icon: "fa-fire" },
+  { title: "Valentine's Day Special", status: "Active", badge2: "Opted In", desc: "Special offers for Valentine's Day gifts and romantic products", date: "Feb 1 - Feb 14, 2026", items: "8 items participating", salesAmount: 1890, discount: "15-25%", orders: "34", conversion: "8.7%", gradient: "from-purple-500 to-indigo-500", icon: "fa-heart" },
   { title: "Eco-Friendly Products Week", status: "Scheduled", desc: "Promote sustainable and eco-friendly products with special pricing", date: "Mar 1 - Mar 7, 2026", items: "12 items selected", extra: "Starts in 10 days", discount: "10-20%", reach: "15k+ users", gradient: "from-green-500 to-teal-500", icon: "fa-leaf" },
-  { title: "Flash Sale Friday", status: "Active", badge2: "Limited Time", desc: "Weekly flash sale with deep discounts for 24 hours only", date: "Every Friday", items: "5 items this week", sales: "$2,560 sales", discount: "30-50%", orders: "52", timeLeft: "6h 24m", gradient: "from-orange-500 to-red-500", icon: "fa-bolt" },
-  { title: "New Vendor Spotlight", status: "Active", badge2: "Featured", desc: "Exclusive promotion for new vendors to boost visibility and sales", date: "Jan 10 - Feb 10, 2026", items: "All items eligible", sales: "$760 sales", boost: "2x visibility", orders: "18", newCustomers: "14", gradient: "from-blue-500 to-cyan-500", icon: "fa-star" },
+  { title: "Flash Sale Friday", status: "Active", badge2: "Limited Time", desc: "Weekly flash sale with deep discounts for 24 hours only", date: "Every Friday", items: "5 items this week", salesAmount: 2560, discount: "30-50%", orders: "52", timeLeft: "6h 24m", gradient: "from-orange-500 to-red-500", icon: "fa-bolt" },
+  { title: "New Vendor Spotlight", status: "Active", badge2: "Featured", desc: "Exclusive promotion for new vendors to boost visibility and sales", date: "Jan 10 - Feb 10, 2026", items: "All items eligible", salesAmount: 760, boost: "2x visibility", orders: "18", newCustomers: "14", gradient: "from-blue-500 to-cyan-500", icon: "fa-star" },
 ];
 
 export function CampaignsList() {
@@ -32,7 +34,7 @@ export function CampaignsList() {
               {s.badge && <span className="text-green-500 text-sm font-medium flex items-center"><i className="fa-solid fa-arrow-up text-xs mr-1" aria-hidden />{s.badge}</span>}
             </div>
             <h3 className="text-gray-500 text-sm mb-1">{s.label}</h3>
-            <p className="text-2xl font-bold text-gray-800">{s.value}</p>
+            <p className="text-2xl font-bold text-gray-800">{"valueNum" in s ? formatPrice(s.valueNum) : s.value}</p>
             <p className="text-xs text-gray-400 mt-2">{s.sub}</p>
           </div>
         ))}
@@ -141,7 +143,7 @@ export function CampaignsList() {
                         <i className="fa-solid fa-box mr-2" aria-hidden />
                         <span>{c.items}</span>
                       </div>
-                      {c.sales && <div className="flex items-center text-green-600 font-medium"><i className="fa-solid fa-chart-line mr-2" aria-hidden /><span>{c.sales}</span></div>}
+                      {"salesAmount" in c && c.salesAmount != null && <div className="flex items-center text-green-600 font-medium"><i className="fa-solid fa-chart-line mr-2" aria-hidden /><span>{formatPrice(c.salesAmount)} sales</span></div>}
                       {c.extra && <div className="flex items-center text-gray-500"><i className="fa-solid fa-clock mr-2" aria-hidden /><span>{c.extra}</span></div>}
                     </div>
                   </div>

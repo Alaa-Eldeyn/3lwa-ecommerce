@@ -1,16 +1,17 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const items = [
-  { id: 1, name: "Wireless Bluetooth Headphones", desc: "Premium quality audio device", price: "$129.99", boost: "+$32.50 boost", rating: "4.8 (124 reviews)", img: "/placeholder.png", alt: "Wireless Bluetooth Headphones", eligible: true, selected: true },
-  { id: 2, name: "Latest Smartphone Pro", desc: "Advanced mobile technology", price: "$899.99", boost: "+$225.00 boost", rating: "4.9 (89 reviews)", img: "/placeholder.png", alt: "Smartphone", eligible: true, selected: true },
-  { id: 3, name: "Gaming Mechanical Keyboard", desc: "RGB backlit gaming peripheral", price: "$159.99", boost: "+$40.00 boost", rating: "4.7 (67 reviews)", img: "/placeholder.png", alt: "Gaming Keyboard", eligible: true, selected: true },
-  { id: 4, name: "Professional Laptop", desc: "High-performance computing device", price: "$1,299.99", boost: "+$325.00 boost", rating: "4.6 (143 reviews)", img: "/placeholder.png", alt: "Laptop", eligible: true, selected: false },
-  { id: 5, name: "Smart Fitness Watch", desc: "Advanced health monitoring device", price: "$249.99", boost: "+$62.50 boost", rating: "4.5 (98 reviews)", img: "/placeholder.png", alt: "Smart Watch", eligible: true, selected: false },
-  { id: 6, name: "Wireless Earbuds Pro", desc: "True wireless audio experience", price: "$179.99", boost: "+$45.00 boost", rating: "4.8 (156 reviews)", img: "/placeholder.png", alt: "Earbuds", eligible: true, selected: false },
-  { id: 7, name: "Ceramic Home Vase", desc: "Decorative home accessory", price: "$49.99", boost: "Not eligible", rating: "4.3 (23 reviews)", img: "/placeholder.png", alt: "Vase", eligible: false, selected: false },
-  { id: 8, name: "Tablet Pro", desc: "Sleek digital device", price: "$549.99", boost: "+$137.50 boost", rating: "4.7 (76 reviews)", img: "/placeholder.png", alt: "Tablet", eligible: true, selected: false },
+  { id: 1, name: "Wireless Bluetooth Headphones", desc: "Premium quality audio device", price: 129.99, boostAmount: 32.5, rating: "4.8 (124 reviews)", img: "/placeholder.png", alt: "Wireless Bluetooth Headphones", eligible: true, selected: true },
+  { id: 2, name: "Latest Smartphone Pro", desc: "Advanced mobile technology", price: 899.99, boostAmount: 225, rating: "4.9 (89 reviews)", img: "/placeholder.png", alt: "Smartphone", eligible: true, selected: true },
+  { id: 3, name: "Gaming Mechanical Keyboard", desc: "RGB backlit gaming peripheral", price: 159.99, boostAmount: 40, rating: "4.7 (67 reviews)", img: "/placeholder.png", alt: "Gaming Keyboard", eligible: true, selected: true },
+  { id: 4, name: "Professional Laptop", desc: "High-performance computing device", price: 1299.99, boostAmount: 325, rating: "4.6 (143 reviews)", img: "/placeholder.png", alt: "Laptop", eligible: true, selected: false },
+  { id: 5, name: "Smart Fitness Watch", desc: "Advanced health monitoring device", price: 249.99, boostAmount: 62.5, rating: "4.5 (98 reviews)", img: "/placeholder.png", alt: "Smart Watch", eligible: true, selected: false },
+  { id: 6, name: "Wireless Earbuds Pro", desc: "True wireless audio experience", price: 179.99, boostAmount: 45, rating: "4.8 (156 reviews)", img: "/placeholder.png", alt: "Earbuds", eligible: true, selected: false },
+  { id: 7, name: "Ceramic Home Vase", desc: "Decorative home accessory", price: 49.99, boostAmount: null as number | null, rating: "4.3 (23 reviews)", img: "/placeholder.png", alt: "Vase", eligible: false, selected: false },
+  { id: 8, name: "Tablet Pro", desc: "Sleek digital device", price: 549.99, boostAmount: 137.5, rating: "4.7 (76 reviews)", img: "/placeholder.png", alt: "Tablet", eligible: true, selected: false },
 ];
 
 export function JoinCampaign() {
@@ -122,8 +123,8 @@ export function JoinCampaign() {
               <h4 className={`font-semibold mb-1 ${item.eligible ? "text-gray-900" : "text-gray-500"}`}>{item.name}</h4>
               <p className={`text-sm mb-3 ${item.eligible ? "text-gray-600" : "text-gray-400"}`}>{item.desc}</p>
               <div className="flex items-center justify-between mb-3">
-                <span className={`text-lg font-bold ${item.eligible ? "text-gray-900" : "text-gray-500"}`}>{item.price}</span>
-                <span className={`text-sm font-medium ${item.eligible ? "text-green-600" : "text-gray-400"}`}>{item.boost}</span>
+                <span className={`text-lg font-bold ${item.eligible ? "text-gray-900" : "text-gray-500"}`}>{formatPrice(item.price)}</span>
+                <span className={`text-sm font-medium ${item.eligible ? "text-green-600" : "text-gray-400"}`}>{item.boostAmount != null ? `+${formatPrice(item.boostAmount)} boost` : "Not eligible"}</span>
               </div>
               <div className={`flex items-center text-sm ${item.eligible ? "text-gray-500" : "text-gray-400"}`}>
                 <i className={`fas fa-star mr-1 ${item.eligible ? "text-yellow-400" : "text-gray-300"}`} aria-hidden />

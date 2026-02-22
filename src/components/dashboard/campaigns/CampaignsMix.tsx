@@ -1,10 +1,12 @@
 "use client";
 
+import { formatPrice } from "@/src/config/currency";
+
 const stats = [
   { label: "Available Campaigns", value: "12", icon: "fa-bullhorn", iconBg: "bg-blue-100", iconColor: "text-blue-600" },
   { label: "Joined Campaigns", value: "5", icon: "fa-handshake", iconBg: "bg-primary/10", iconColor: "text-primary" },
   { label: "Active Promotions", value: "8", icon: "fa-tags", iconBg: "bg-green-100", iconColor: "text-green-600" },
-  { label: "Potential Revenue", value: "$2,450", icon: "fa-dollar-sign", iconBg: "bg-yellow-100", iconColor: "text-yellow-600" },
+  { label: "Potential Revenue", valueNum: 2450, icon: "fa-dollar-sign", iconBg: "bg-yellow-100", iconColor: "text-yellow-600" },
 ];
 
 const available = [
@@ -14,8 +16,8 @@ const available = [
 ];
 
 const joined = [
-  { title: "Tech Innovation Week", desc: "Showcase cutting-edge technology products with enhanced visibility and marketing support", boost: "+22%", items: "8 items", remaining: "12 days", revenue: "$1,245" },
-  { title: "Premium Accessories Drive", desc: "Focus on high-quality accessories with premium positioning and customer targeting", boost: "+28%", items: "12 items", remaining: "25 days", revenue: "$890" },
+  { title: "Tech Innovation Week", desc: "Showcase cutting-edge technology products with enhanced visibility and marketing support", boost: "+22%", items: "8 items", remaining: "12 days", revenue: 1245 },
+  { title: "Premium Accessories Drive", desc: "Focus on high-quality accessories with premium positioning and customer targeting", boost: "+28%", items: "12 items", remaining: "25 days", revenue: 890 },
 ];
 
 export function CampaignsMix() {
@@ -48,7 +50,7 @@ export function CampaignsMix() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500 mb-1">{s.label}</p>
-                <p className="text-2xl font-bold text-gray-900">{s.value}</p>
+                <p className="text-2xl font-bold text-gray-900">{"valueNum" in s ? formatPrice(s.valueNum) : s.value}</p>
               </div>
               <div className={`w-12 h-12 ${s.iconBg} rounded-lg flex items-center justify-center`}>
                 <i className={`fas ${s.icon} ${s.iconColor} text-xl`} aria-hidden />
@@ -181,7 +183,7 @@ export function CampaignsMix() {
                     </div>
                     <div>
                       <p className="text-xs text-gray-500 mb-1">Campaign Revenue</p>
-                      <p className="text-sm font-semibold text-green-600">{c.revenue}</p>
+                      <p className="text-sm font-semibold text-green-600">{formatPrice(c.revenue)}</p>
                     </div>
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const shipments = [
   {
@@ -11,7 +12,7 @@ const shipments = [
     status: "In Transit",
     statusClass: "bg-blue-100 text-blue-700",
     statusIcon: "fa-truck",
-    amount: "$156.00",
+    amount: 156,
     progressWidth: "60%",
     timeline: [
       { label: "Order Placed", time: "Jan 18, 10:30 AM", done: true, icon: "fa-check" },
@@ -33,7 +34,7 @@ const shipments = [
     status: "Out for Delivery",
     statusClass: "bg-green-100 text-green-700",
     statusIcon: "fa-box-open",
-    amount: "$89.50",
+    amount: 89.5,
     progressWidth: "80%",
     timeline: [
       { label: "Order Placed", time: "Jan 18, 9:15 AM", done: true, icon: "fa-check" },
@@ -55,7 +56,7 @@ const shipments = [
     status: "Delivered",
     statusClass: "bg-green-100 text-green-700",
     statusIcon: "fa-check-circle",
-    amount: "$234.00",
+    amount: 234,
     progressWidth: "100%",
     timeline: [
       { label: "Order Placed", time: "Jan 17, 11:00 AM", done: true, icon: "fa-check" },
@@ -91,7 +92,7 @@ function ShipmentCard({ s }: { s: (typeof shipments)[0] }) {
             <span className={`inline-flex items-center ${s.statusClass} px-3 py-1 rounded-full text-xs font-medium`}>
               <i className={`fa-solid ${s.statusIcon} mr-1.5`} aria-hidden />{s.status}
             </span>
-            <p className="text-sm font-semibold text-gray-800 mt-2">{s.amount}</p>
+            <p className="text-sm font-semibold text-gray-800 mt-2">{formatPrice(s.amount)}</p>
           </div>
         </div>
 

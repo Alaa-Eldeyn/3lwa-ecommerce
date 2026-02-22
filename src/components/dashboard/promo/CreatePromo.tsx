@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 export function CreatePromo() {
   return (
@@ -83,7 +84,7 @@ export function CreatePromo() {
                   <input type="radio" name="discountType" className="w-5 h-5 text-primary focus:ring-primary" />
                   <div className="ml-3 flex-1">
                     <span className="font-medium text-gray-800">Fixed Amount Discount</span>
-                    <p className="text-sm text-gray-600 mt-0.5">Reduce the price by a fixed amount (e.g., $10 off)</p>
+                    <p className="text-sm text-gray-600 mt-0.5">Reduce the price by a fixed amount (e.g., {formatPrice(10)} off)</p>
                   </div>
                   <i className="fa-solid fa-dollar-sign text-gray-400 text-xl shrink-0" aria-hidden />
                 </label>

@@ -124,7 +124,7 @@ export function WithdrawalRequest() {
             <div className="space-y-3 mb-6">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Withdrawal Amount</span>
-                <span className="font-medium">$0.00</span>
+                <span className="font-medium">{formatPrice(0)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Processing Fee</span>
@@ -133,7 +133,7 @@ export function WithdrawalRequest() {
               <div className="border-t border-gray-200 pt-3">
                 <div className="flex justify-between">
                   <span className="font-semibold text-gray-900">Net Amount</span>
-                  <span className="font-bold text-primary text-lg">$0.00</span>
+                  <span className="font-bold text-primary text-lg">{formatPrice(0)}</span>
                 </div>
               </div>
             </div>

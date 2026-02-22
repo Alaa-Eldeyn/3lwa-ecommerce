@@ -1,14 +1,15 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const recentTransactions = [
-  { type: "credit", title: "Order Payment", detail: "Order #ORD-2024-5892 • Jan 3, 2025", amount: "+$247.50", status: "Completed", icon: "fa-plus", iconBg: "bg-green-100", iconColor: "text-green-600", amountClass: "text-green-600" },
-  { type: "debit", title: "Withdrawal", detail: "Bank Transfer • Jan 2, 2025", amount: "-$2,500.00", status: "Processing", icon: "fa-minus", iconBg: "bg-red-100", iconColor: "text-red-600", amountClass: "text-red-600", statusClass: "text-yellow-600" },
-  { type: "credit", title: "Order Payment", detail: "Order #ORD-2024-5891 • Jan 1, 2025", amount: "+$189.00", status: "Completed", icon: "fa-plus", iconBg: "bg-green-100", iconColor: "text-green-600", amountClass: "text-green-600" },
-  { type: "debit", title: "Refund Processed", detail: "Order #ORD-2024-5845 • Dec 30, 2024", amount: "-$75.00", status: "Completed", icon: "fa-rotate-left", iconBg: "bg-blue-100", iconColor: "text-blue-600", amountClass: "text-red-600" },
-  { type: "credit", title: "Order Payment", detail: "Order #ORD-2024-5844 • Dec 29, 2024", amount: "+$425.80", status: "Completed", icon: "fa-plus", iconBg: "bg-green-100", iconColor: "text-green-600", amountClass: "text-green-600" },
-  { type: "debit", title: "Withdrawal", detail: "Bank Transfer • Dec 28, 2024", amount: "-$5,000.00", status: "Completed", icon: "fa-minus", iconBg: "bg-red-100", iconColor: "text-red-600", amountClass: "text-red-600", statusClass: "text-green-600" },
+  { type: "credit", title: "Order Payment", detail: "Order #ORD-2024-5892 • Jan 3, 2025", amount: 247.5, status: "Completed", icon: "fa-plus", iconBg: "bg-green-100", iconColor: "text-green-600", amountClass: "text-green-600" },
+  { type: "debit", title: "Withdrawal", detail: "Bank Transfer • Jan 2, 2025", amount: 2500, status: "Processing", icon: "fa-minus", iconBg: "bg-red-100", iconColor: "text-red-600", amountClass: "text-red-600", statusClass: "text-yellow-600" },
+  { type: "credit", title: "Order Payment", detail: "Order #ORD-2024-5891 • Jan 1, 2025", amount: 189, status: "Completed", icon: "fa-plus", iconBg: "bg-green-100", iconColor: "text-green-600", amountClass: "text-green-600" },
+  { type: "debit", title: "Refund Processed", detail: "Order #ORD-2024-5845 • Dec 30, 2024", amount: 75, status: "Completed", icon: "fa-rotate-left", iconBg: "bg-blue-100", iconColor: "text-blue-600", amountClass: "text-red-600" },
+  { type: "credit", title: "Order Payment", detail: "Order #ORD-2024-5844 • Dec 29, 2024", amount: 425.8, status: "Completed", icon: "fa-plus", iconBg: "bg-green-100", iconColor: "text-green-600", amountClass: "text-green-600" },
+  { type: "debit", title: "Withdrawal", detail: "Bank Transfer • Dec 28, 2024", amount: 5000, status: "Completed", icon: "fa-minus", iconBg: "bg-red-100", iconColor: "text-red-600", amountClass: "text-red-600", statusClass: "text-green-600" },
 ];
 
 export function Wallet() {
@@ -37,7 +38,7 @@ export function Wallet() {
             <span className="text-sm opacity-90">Current Balance</span>
             <i className="fa-solid fa-wallet text-2xl opacity-80" aria-hidden />
           </div>
-          <div className="text-3xl font-bold mb-2">$12,847.50</div>
+          <div className="text-3xl font-bold mb-2">{formatPrice(12847.5)}</div>
           <div className="text-xs opacity-90">Available for withdrawal</div>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -45,7 +46,7 @@ export function Wallet() {
             <span className="text-sm text-gray-600">Pending Balance</span>
             <i className="fa-solid fa-clock text-xl text-yellow-500" aria-hidden />
           </div>
-          <div className="text-3xl font-bold text-gray-900 mb-2">$3,245.80</div>
+          <div className="text-3xl font-bold text-gray-900 mb-2">{formatPrice(3245.8)}</div>
           <div className="text-xs text-gray-500">Awaiting clearance</div>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -79,7 +80,7 @@ export function Wallet() {
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-semibold text-gray-900">$5,000.00</div>
+                <div className="font-semibold text-gray-900">{formatPrice(5000)}</div>
                 <div className="text-xs text-green-600">Successful</div>
               </div>
             </div>
@@ -94,7 +95,7 @@ export function Wallet() {
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-semibold text-gray-900">$2,500.00</div>
+                <div className="font-semibold text-gray-900">{formatPrice(2500)}</div>
                 <div className="text-xs text-yellow-600">Processing</div>
               </div>
             </div>
@@ -182,7 +183,7 @@ export function Wallet() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className={`font-semibold ${tx.amountClass}`}>{tx.amount}</div>
+                  <div className={`font-semibold ${tx.amountClass}`}>{tx.type === "credit" ? "+" : "-"}{formatPrice(tx.amount)}</div>
                   <div className={`text-xs ${tx.statusClass || "text-gray-500"}`}>{tx.status}</div>
                 </div>
               </div>
