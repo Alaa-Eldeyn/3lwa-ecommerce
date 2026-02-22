@@ -10,6 +10,7 @@ import QuantityController from "../common/QuantityController";
 import { isAuthenticated } from "@/src/auth/auth";
 import { useLocale, useTranslations } from "next-intl";
 import ClearCartModal from "./components/ClearCartModal";
+import { formatPrice } from "@/src/config/currency";
 
 const CartSidebar = () => {
   const { isCartOpen, closeCart } = useHeaderStore();
@@ -174,7 +175,7 @@ const CartSidebar = () => {
 
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-gray-900 dark:text-white">
-                            ${(item.subTotal ?? item.price * item.quantity).toFixed(2)}
+                            {formatPrice(item.subTotal ?? item.price * item.quantity)}
                           </span>
                           <button
                             onClick={(e) => {
@@ -201,7 +202,7 @@ const CartSidebar = () => {
             <div className="flex items-center justify-between text-lg">
               <span className="text-gray-600 dark:text-gray-400">{tOrderSummary("subtotal")}:</span>
               <span className="font-bold text-gray-900 dark:text-white">
-                ${getTotalPrice().toFixed(2)}
+                {formatPrice(getTotalPrice())}
               </span>
             </div>
 

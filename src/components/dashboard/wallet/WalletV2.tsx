@@ -114,7 +114,7 @@ export function WalletV2() {
           ))}
         </div>
         <div className="text-center py-6">
-          <Link href="/vendor/wallet" className="inline-block px-8 py-3 bg-white text-primary border border-primary font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+          <Link href="/dashboard/wallet" className="inline-block px-8 py-3 bg-white text-primary border border-primary font-semibold rounded-lg hover:bg-gray-50 transition-colors">
             View All Transactions
           </Link>
         </div>
@@ -123,7 +123,7 @@ export function WalletV2() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">Withdrawal Methods</h2>
-          <Link href="/vendor/withdrawal-methods" className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-secondary transition-colors font-medium">
+          <Link href="/dashboard/withdrawal-methods" className="flex items-center space-x-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-secondary transition-colors font-medium">
             <i className="fa-solid fa-plus" aria-hidden />
             <span>Add Method</span>
           </Link>

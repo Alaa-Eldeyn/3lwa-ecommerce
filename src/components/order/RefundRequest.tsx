@@ -10,6 +10,7 @@ import { OrderData, OrderDetailItem } from "@/src/types/order-details.types";
 import ShippingAddress from "@/src/components/checkout/components/ShippingAddress";
 import type { Address } from "@/src/components/profile/components/AddressModal";
 import toast from "react-hot-toast";
+import { formatPrice } from "@/src/config/currency";
 
 interface RefundRequestProps {
   orderId: string;
@@ -208,10 +209,10 @@ export default function RefundRequest({ orderId, orderDetailId }: RefundRequestP
                     {t("quantity")}: {item.quantity}
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {t("unitPrice")}: ${item.unitPrice.toFixed(2)}
+                    {t("unitPrice")}: {formatPrice(item.unitPrice)}
                   </p>
                   <p className="font-semibold text-gray-900 dark:text-white mt-1">
-                    {t("subTotal")}: ${item.subTotal.toFixed(2)}
+                    {t("subTotal")}: {formatPrice(item.subTotal)}
                   </p>
                 </div>
               </div>

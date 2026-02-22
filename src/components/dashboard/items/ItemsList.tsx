@@ -62,7 +62,7 @@ export function ItemsList() {
                 <i className="fa-solid fa-chevron-down absolute right-3 top-3 text-gray-400 text-xs pointer-events-none" aria-hidden />
               </div>
             </div>
-            <Link href="/vendor/add-item" className="px-5 py-2.5 bg-primary text-white rounded-lg text-sm font-medium hover:bg-secondary flex items-center">
+            <Link href="/dashboard/add-item" className="px-5 py-2.5 bg-primary text-white rounded-lg text-sm font-medium hover:bg-secondary flex items-center">
               <i className="fa-solid fa-plus mr-2" aria-hidden />Add New Item
             </Link>
           </div>
@@ -127,7 +127,7 @@ export function ItemsList() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Link href="/vendor/edit-item" className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-primary hover:bg-primary/10 rounded">
+                        <Link href="/dashboard/edit-item" className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-primary hover:bg-primary/10 rounded">
                           <i className="fa-solid fa-pencil text-sm" aria-hidden />
                         </Link>
                         <button type="button" className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded">

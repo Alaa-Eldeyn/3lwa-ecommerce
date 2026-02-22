@@ -16,7 +16,7 @@ export function JoinCampaignV2() {
     <div className="px-8 py-6">
       <div className="mb-6">
         <div className="flex items-center space-x-3 mb-3">
-          <Link href="/vendor/campaigns" className="text-primary hover:text-primary/80">
+          <Link href="/dashboard/campaigns" className="text-primary hover:text-primary/80">
             <i className="fa-solid fa-arrow-left" aria-hidden />
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Join Campaign</h1>

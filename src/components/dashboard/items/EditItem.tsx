@@ -8,7 +8,7 @@ export function EditItem() {
       <header className="bg-white border-b border-gray-200 -mx-8 px-8 py-4 mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Link href="/vendor/items" className="text-gray-600 hover:text-gray-800" aria-label="Back">
+            <Link href="/dashboard/items" className="text-gray-600 hover:text-gray-800" aria-label="Back">
               <i className="fa-solid fa-arrow-left text-lg" aria-hidden />
             </Link>
             <div>

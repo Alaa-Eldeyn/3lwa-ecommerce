@@ -27,6 +27,7 @@ import {
   shipmentStatusToTimelineStep,
 } from "@/src/utils/orderStatus";
 import toast from "react-hot-toast";
+import { formatPrice } from "@/src/config/currency";
 
 interface OrderProps {
   id: string;
@@ -353,10 +354,10 @@ const Order = ({ id }: OrderProps) => {
                             )}
                             <div>
                               <p className="text-sm text-gray-600 dark:text-gray-400">
-                                {t("qty")} {item.quantity} × ${item.unitPrice.toFixed(2)}
+                                {t("qty")} {item.quantity} × {formatPrice(item.unitPrice)}
                               </p>
                               <p className="font-semibold text-gray-900 dark:text-white">
-                                ${item.subTotal.toFixed(2)}
+                                {formatPrice(item.subTotal)}
                               </p>
                             </div>
                           </div>
@@ -467,20 +468,20 @@ const Order = ({ id }: OrderProps) => {
               <div className="space-y-3">
                 <div className="flex justify-between text-gray-600 dark:text-gray-400">
                   <span>{t("subtotal")}</span>
-                  <span className="text-gray-900 dark:text-white">${itemsSubtotal.toFixed(2)}</span>
+                  <span className="text-gray-900 dark:text-white">{formatPrice(itemsSubtotal)}</span>
                 </div>
                 {discountAmount > 0 && (
                   <div className="flex justify-between text-gray-600 dark:text-gray-400">
                     <span>{t("discount")}</span>
                     <span className="text-green-600 dark:text-green-400 font-medium">
-                      -${discountAmount.toFixed(2)}
+                      -{formatPrice(discountAmount)}
                     </span>
                   </div>
                 )}
                 {taxAmount > 0 && (
                   <div className="flex justify-between text-gray-600 dark:text-gray-400">
                     <span>{t("tax")}</span>
-                    <span className="text-gray-900 dark:text-white">${taxAmount.toFixed(2)}</span>
+                    <span className="text-gray-900 dark:text-white">{formatPrice(taxAmount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-gray-600 dark:text-gray-400">
@@ -491,13 +492,13 @@ const Order = ({ id }: OrderProps) => {
                         ? "text-green-600 dark:text-green-400 font-medium"
                         : "text-gray-900 dark:text-white"
                     }>
-                    {shippingAmount > 0 ? `$${shippingAmount.toFixed(2)}` : t("shippingFree")}
+                    {shippingAmount > 0 ? formatPrice(shippingAmount) : t("shippingFree")}
                   </span>
                 </div>
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-3">
                   <div className="flex justify-between text-lg font-semibold text-gray-900 dark:text-white">
                     <span>{t("total")}</span>
-                    <span className="text-gray-900 dark:text-white">${totalAmount.toFixed(2)}</span>
+                    <span className="text-gray-900 dark:text-white">{formatPrice(totalAmount)}</span>
                   </div>
                 </div>
               </div>
@@ -645,11 +646,10 @@ const Order = ({ id }: OrderProps) => {
                       {cancelItemTarget.itemName}
                     </h4>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
-                      {t("qty")} {cancelItemTarget.quantity} × $
-                      {cancelItemTarget.unitPrice.toFixed(2)}
+                      {t("qty")} {cancelItemTarget.quantity} × {formatPrice(cancelItemTarget.unitPrice)}
                     </p>
                     <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
-                      ${cancelItemTarget.subTotal.toFixed(2)}
+                      {formatPrice(cancelItemTarget.subTotal)}
                     </p>
                   </div>
                 </div>

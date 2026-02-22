@@ -131,7 +131,7 @@ export function AccountVerificationV1() {
                 </div>
               </div>
               <Link
-                href="/vendor/dashboard"
+                href="/dashboard"
                 className="w-full bg-primary hover:bg-[#0a5c4f] text-white font-semibold py-3.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg mb-4"
               >
                 <span>Go to Dashboard</span>
@@ -178,7 +178,7 @@ export function AccountVerificationV1() {
                 </div>
               </div>
               <div className="space-y-4">
-                <Link href="/vendor/account-verification-2" className="w-full bg-primary hover:bg-[#0a5c4f] text-white font-semibold py-3.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+                <Link href="/dashboard/account-verification-2" className="w-full bg-primary hover:bg-[#0a5c4f] text-white font-semibold py-3.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
                   <i className="fa-solid fa-upload" aria-hidden />
                   <span>Resubmit Documents</span>
                 </Link>

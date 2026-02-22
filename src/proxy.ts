@@ -30,7 +30,7 @@ export function proxy(req: NextRequest) {
 
   // Protect vendor routes
   // If vendor -> redirect to dashboard
-  if (isVendorRole(userRole) && isVendorPage(pathname)) {
+  if (isVendorRole(userRole) && !isVendorPage(pathname)) {
     return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
   }
 

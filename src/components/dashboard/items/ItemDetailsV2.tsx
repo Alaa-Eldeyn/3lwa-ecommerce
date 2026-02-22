@@ -10,7 +10,7 @@ export function ItemDetailsV2() {
       <header className="bg-white border-b border-gray-200 px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/vendor/items" className="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors" aria-label="Back">
+            <Link href="/dashboard/items" className="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors" aria-label="Back">
               <i className="fa-solid fa-arrow-left text-gray-600" aria-hidden />
             </Link>
             <div>
@@ -22,7 +22,7 @@ export function ItemDetailsV2() {
             <button type="button" className="px-5 py-2.5 text-primary bg-white border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors font-medium">
               <i className="fa-solid fa-star mr-2" aria-hidden />View Item Reviews
             </button>
-            <Link href="/vendor/edit-item" className="px-5 py-2.5 text-white bg-primary rounded-lg hover:bg-secondary transition-colors font-medium inline-flex items-center">
+            <Link href="/dashboard/edit-item" className="px-5 py-2.5 text-white bg-primary rounded-lg hover:bg-secondary transition-colors font-medium inline-flex items-center">
               <i className="fa-solid fa-edit mr-2" aria-hidden />Edit Item
             </Link>
           </div>

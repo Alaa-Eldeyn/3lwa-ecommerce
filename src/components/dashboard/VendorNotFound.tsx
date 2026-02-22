@@ -22,7 +22,7 @@ export function VendorNotFound() {
           </p>
           <div className="mt-8 space-y-4">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-              <Link href="/vendor/dashboard" className="bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-secondary transition-colors flex items-center">
+              <Link href="/dashboard" className="bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-secondary transition-colors flex items-center">
                 <i className="fa-solid fa-chart-line mr-2" aria-hidden />Go to Dashboard
               </Link>
               <button type="button" onClick={() => window.history.back()} className="bg-white border border-gray-300 text-foreground px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center">
@@ -62,19 +62,19 @@ export function VendorNotFound() {
           <div className="mt-12">
             <h3 className="text-lg font-semibold text-foreground mb-6">Quick Navigation</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Link href="/vendor/dashboard" className="bg-white border border-gray-200 rounded-lg p-4 text-center hover:border-primary/20 transition-colors group">
+              <Link href="/dashboard" className="bg-white border border-gray-200 rounded-lg p-4 text-center hover:border-primary/20 transition-colors group">
                 <i className="fa-solid fa-chart-line text-2xl text-gray-400 group-hover:text-primary transition-colors mb-2" aria-hidden />
                 <p className="text-sm font-medium text-foreground">Dashboard</p>
               </Link>
-              <Link href="/vendor/orders" className="bg-white border border-gray-200 rounded-lg p-4 text-center hover:border-primary/20 transition-colors group">
+              <Link href="/dashboard/orders" className="bg-white border border-gray-200 rounded-lg p-4 text-center hover:border-primary/20 transition-colors group">
                 <i className="fa-solid fa-box text-2xl text-gray-400 group-hover:text-primary transition-colors mb-2" aria-hidden />
                 <p className="text-sm font-medium text-foreground">Orders</p>
               </Link>
-              <Link href="/vendor/items" className="bg-white border border-gray-200 rounded-lg p-4 text-center hover:border-primary/20 transition-colors group">
+              <Link href="/dashboard/items" className="bg-white border border-gray-200 rounded-lg p-4 text-center hover:border-primary/20 transition-colors group">
                 <i className="fa-solid fa-tags text-2xl text-gray-400 group-hover:text-primary transition-colors mb-2" aria-hidden />
                 <p className="text-sm font-medium text-foreground">Items</p>
               </Link>
-              <Link href="/vendor/profile-edit" className="bg-white border border-gray-200 rounded-lg p-4 text-center hover:border-primary/20 transition-colors group">
+              <Link href="/dashboard/profile-edit" className="bg-white border border-gray-200 rounded-lg p-4 text-center hover:border-primary/20 transition-colors group">
                 <i className="fa-solid fa-user text-2xl text-gray-400 group-hover:text-primary transition-colors mb-2" aria-hidden />
                 <p className="text-sm font-medium text-foreground">Profile</p>
               </Link>

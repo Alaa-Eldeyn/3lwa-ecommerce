@@ -18,7 +18,7 @@ export function ItemsListV2() {
           <p className="text-gray-600">Manage your product catalog, inventory and pricing</p>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/vendor/add-item" className="px-4 py-2 bg-primary hover:bg-secondary text-white text-sm font-semibold rounded-lg transition-all inline-flex items-center">
+          <Link href="/dashboard/add-item" className="px-4 py-2 bg-primary hover:bg-secondary text-white text-sm font-semibold rounded-lg transition-all inline-flex items-center">
             <i className="fa-solid fa-plus mr-2" aria-hidden />Add New Item
           </Link>
           <button type="button" className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all">
@@ -64,7 +64,7 @@ export function ItemsListV2() {
 
             <div id="items-list" className="divide-y divide-gray-200">
               {listItems.map((item) => (
-                <Link key={item.id} href="/vendor/item-details" className="item-row p-6 hover:bg-gray-50 cursor-pointer transition-all block">
+                <Link key={item.id} href="/dashboard/item-details" className="item-row p-6 hover:bg-gray-50 cursor-pointer transition-all block">
                   <div className="flex items-start gap-4">
                     <div className="w-16 h-16 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center shrink-0">
                       <i className={`fa-solid ${item.icon} text-primary text-xl`} aria-hidden />
@@ -148,7 +148,7 @@ export function ItemsListV2() {
             <div id="item-controls" className="p-6 border-b border-gray-200">
               <h4 className="text-md font-bold text-foreground mb-4">Item Actions</h4>
               <div className="space-y-3">
-                <Link href="/vendor/edit-item" className="w-full px-4 py-3 bg-primary hover:bg-secondary text-white font-semibold rounded-lg transition-all flex items-center justify-center gap-2">
+                <Link href="/dashboard/edit-item" className="w-full px-4 py-3 bg-primary hover:bg-secondary text-white font-semibold rounded-lg transition-all flex items-center justify-center gap-2">
                   <i className="fa-solid fa-edit" aria-hidden />Edit Item Details
                 </Link>
                 <button type="button" className="w-full px-4 py-3 border border-primary text-primary hover:bg-primary/5 font-medium rounded-lg transition-all flex items-center justify-center gap-2">

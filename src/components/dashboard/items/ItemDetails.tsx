@@ -17,7 +17,7 @@ export function ItemDetails() {
       <header className="bg-white border-b border-gray-200 px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/vendor/items" className="text-gray-400 hover:text-gray-600" aria-label="Back">
+            <Link href="/dashboard/items" className="text-gray-400 hover:text-gray-600" aria-label="Back">
               <i className="fa-solid fa-arrow-left" aria-hidden />
             </Link>
             <h2 className="text-2xl font-semibold text-gray-800">Premium Wireless Headphones</h2>
@@ -66,7 +66,7 @@ export function ItemDetails() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Link href="/vendor/edit-item" className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 flex items-center">
+              <Link href="/dashboard/edit-item" className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 flex items-center">
                 <i className="fa-solid fa-edit mr-2" aria-hidden />Edit
               </Link>
               <button type="button" className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
@@ -156,7 +156,7 @@ export function ItemDetails() {
               <tbody>
                 {relatedOrders.map((row) => (
                   <tr key={row.id} className="border-b border-gray-100">
-                    <td className="py-4 text-sm font-medium text-primary hover:underline cursor-pointer"><Link href="/vendor/order-details">#{row.id}</Link></td>
+                    <td className="py-4 text-sm font-medium text-primary hover:underline cursor-pointer"><Link href="/dashboard/order-details">#{row.id}</Link></td>
                     <td className="py-4">
                       <div className="flex items-center">
                         <img src="/placeholder-avatar.png" alt="" className="w-8 h-8 rounded-full object-cover mr-2" />

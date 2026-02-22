@@ -1,12 +1,13 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const orders = [
-  { id: "ORD-2847", status: "Paid", statusClass: "text-green-600 bg-green-50", mixed: true, customer: "Sarah Johnson", itemsText: "3 items (2 yours) • Order Date: Jan 15, 2024", badge: "Partial Fulfillment", badgeClass: "bg-amber-50 text-amber-700", sub: "Your items: Processing", total: "$159.97", time: "2 hours ago" },
-  { id: "ORD-2846", status: "Processing", statusClass: "text-amber-600 bg-amber-50", mixed: false, customer: "Mike Chen", itemsText: "1 item (1 yours) • Order Date: Jan 15, 2024", badge: "Full Control", badgeClass: "bg-green-50 text-green-700", sub: null, total: "$89.99", time: "5 hours ago" },
-  { id: "ORD-2845", status: "Shipped", statusClass: "text-blue-600 bg-blue-50", mixed: true, customer: "Emma Wilson", itemsText: "2 items (1 yours) • Order Date: Jan 14, 2024", badge: "Your items: Shipped", badgeClass: "bg-blue-50 text-blue-700", sub: null, total: "$49.98", time: "1 day ago" },
-  { id: "ORD-2844", status: "Delivered", statusClass: "text-green-600 bg-green-50", mixed: false, customer: "David Brown", itemsText: "5 items (3 yours) • Order Date: Jan 12, 2024", badge: "Completed", badgeClass: "bg-green-50 text-green-700", sub: null, total: "$324.95", time: "2 days ago" },
+  { id: "ORD-2847", status: "Paid", statusClass: "text-green-600 bg-green-50", mixed: true, customer: "Sarah Johnson", itemsText: "3 items (2 yours) • Order Date: Jan 15, 2024", badge: "Partial Fulfillment", badgeClass: "bg-amber-50 text-amber-700", sub: "Your items: Processing", total: 159.97, time: "2 hours ago" },
+  { id: "ORD-2846", status: "Processing", statusClass: "text-amber-600 bg-amber-50", mixed: false, customer: "Mike Chen", itemsText: "1 item (1 yours) • Order Date: Jan 15, 2024", badge: "Full Control", badgeClass: "bg-green-50 text-green-700", sub: null, total: 89.99, time: "5 hours ago" },
+  { id: "ORD-2845", status: "Shipped", statusClass: "text-blue-600 bg-blue-50", mixed: true, customer: "Emma Wilson", itemsText: "2 items (1 yours) • Order Date: Jan 14, 2024", badge: "Your items: Shipped", badgeClass: "bg-blue-50 text-blue-700", sub: null, total: 49.98, time: "1 day ago" },
+  { id: "ORD-2844", status: "Delivered", statusClass: "text-green-600 bg-green-50", mixed: false, customer: "David Brown", itemsText: "5 items (3 yours) • Order Date: Jan 12, 2024", badge: "Completed", badgeClass: "bg-green-50 text-green-700", sub: null, total: 324.95, time: "2 days ago" },
 ];
 
 export function OrdersListV2() {
@@ -54,7 +55,7 @@ export function OrdersListV2() {
 
             <div id="orders-list" className="divide-y divide-gray-200">
               {orders.map((order) => (
-                <Link key={order.id} href="/vendor/order-details" className="block order-item p-6 hover:bg-gray-50 cursor-pointer transition-all">
+                <Link key={order.id} href="/dashboard/order-details" className="block order-item p-6 hover:bg-gray-50 cursor-pointer transition-all">
                   <div className="flex items-start gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
@@ -74,7 +75,7 @@ export function OrdersListV2() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-xl font-bold text-foreground mb-1">{order.total}</div>
+                      <div className="text-xl font-bold text-foreground mb-1">{formatPrice(order.total)}</div>
                       <div className="text-sm text-gray-500">{order.time}</div>
                     </div>
                   </div>
@@ -102,7 +103,7 @@ export function OrdersListV2() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Total Amount:</span>
-                  <span className="font-bold text-foreground">$159.97</span>
+                  <span className="font-bold text-foreground">{formatPrice(159.97)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Your Items:</span>
@@ -121,9 +122,9 @@ export function OrdersListV2() {
                   <div className="flex-1">
                     <div className="font-semibold text-foreground text-sm">Premium Cotton T-Shirt</div>
                     <div className="text-xs text-gray-500">Size: M, Color: Blue</div>
-                    <div className="text-xs text-gray-500">Qty: 1 × $29.99</div>
+                    <div className="text-xs text-gray-500">Qty: 1 × {formatPrice(29.99)}</div>
                   </div>
-                  <div className="text-sm font-bold text-foreground">$29.99</div>
+                  <div className="text-sm font-bold text-foreground">{formatPrice(29.99)}</div>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                   <div className="w-12 h-12 bg-white rounded-lg border border-gray-200 flex items-center justify-center">
@@ -132,9 +133,9 @@ export function OrdersListV2() {
                   <div className="flex-1">
                     <div className="font-semibold text-foreground text-sm">Running Shoes Pro</div>
                     <div className="text-xs text-gray-500">Size: 10, Color: Black</div>
-                    <div className="text-xs text-gray-500">Qty: 1 × $89.99</div>
+                    <div className="text-xs text-gray-500">Qty: 1 × {formatPrice(89.99)}</div>
                   </div>
-                  <div className="text-sm font-bold text-foreground">$89.99</div>
+                  <div className="text-sm font-bold text-foreground">{formatPrice(89.99)}</div>
                 </div>
               </div>
               <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
@@ -159,7 +160,7 @@ export function OrdersListV2() {
                   <span className="text-xs font-medium text-amber-600 bg-amber-100 px-3 py-1 rounded-full">Processing</span>
                 </div>
                 <div className="space-y-3">
-                  <Link href="/vendor/shipment-status" className="flex w-full px-4 py-3 bg-primary hover:bg-secondary text-white font-semibold rounded-lg transition-all items-center justify-center gap-2">
+                  <Link href="/dashboard/shipment-status" className="flex w-full px-4 py-3 bg-primary hover:bg-secondary text-white font-semibold rounded-lg transition-all items-center justify-center gap-2">
                     <i className="fa-solid fa-truck" aria-hidden />Mark as Shipped
                   </Link>
                   <button type="button" className="w-full px-4 py-3 border border-gray-200 text-gray-700 hover:bg-gray-50 font-medium rounded-lg transition-all flex items-center justify-center gap-2">

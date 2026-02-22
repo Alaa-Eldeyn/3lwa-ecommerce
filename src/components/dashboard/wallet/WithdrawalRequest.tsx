@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { CURRENCY_SYMBOL, formatPrice } from "@/src/config/currency";
 
 export function WithdrawalRequest() {
   return (
@@ -9,7 +10,7 @@ export function WithdrawalRequest() {
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold text-gray-900">Request Withdrawal</h1>
           <div className="flex items-center space-x-3">
-            <Link href="/vendor/wallet" className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-medium inline-flex items-center">
+            <Link href="/dashboard/wallet" className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-medium inline-flex items-center">
               <i className="fa-solid fa-history mr-2" aria-hidden />
               Withdrawal History
             </Link>
@@ -31,11 +32,11 @@ export function WithdrawalRequest() {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-sm opacity-90">Available Balance</div>
-                    <div className="text-2xl font-bold">$12,847.30</div>
+                    <div className="text-2xl font-bold">{formatPrice(12847.3)}</div>
                   </div>
                   <div className="text-right">
                     <div className="text-sm opacity-90">Pending Balance</div>
-                    <div className="text-lg font-semibold">$2,450.00</div>
+                    <div className="text-lg font-semibold">{formatPrice(2450)}</div>
                   </div>
                 </div>
               </div>
@@ -44,12 +45,12 @@ export function WithdrawalRequest() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Withdrawal Amount</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <span className="text-gray-500 text-lg">$</span>
+                    <span className="text-gray-500 text-lg">{CURRENCY_SYMBOL}</span>
                   </div>
                   <input type="number" className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-lg" placeholder="0.00" min={50} max={12847.3} />
                 </div>
                 <div className="flex items-center justify-between mt-2 text-sm text-gray-500">
-                  <span>Minimum: $50.00</span>
+                  <span>Minimum: {formatPrice(50)}</span>
                   <button type="button" className="text-primary hover:text-header font-medium">Use Maximum</button>
                 </div>
               </div>
@@ -85,7 +86,7 @@ export function WithdrawalRequest() {
                           <div className="text-sm text-gray-500">1-2 business days</div>
                         </div>
                         <div className="text-sm text-gray-600 mt-1">vendor@example.com</div>
-                        <div className="text-xs text-amber-600 mt-1">2.9% + $0.30 fee</div>
+                        <div className="text-xs text-amber-600 mt-1">2.9% + {formatPrice(0.3)} fee</div>
                       </div>
                     </div>
                   </div>
@@ -108,7 +109,7 @@ export function WithdrawalRequest() {
               </div>
 
               <div className="text-center py-4 border-2 border-dashed border-gray-200 rounded-lg">
-                <Link href="/vendor/withdrawal-methods" className="text-primary hover:text-header font-medium inline-flex items-center">
+                <Link href="/dashboard/withdrawal-methods" className="text-primary hover:text-header font-medium inline-flex items-center">
                   <i className="fa-solid fa-plus mr-2" aria-hidden />
                   Add New Withdrawal Method
                 </Link>

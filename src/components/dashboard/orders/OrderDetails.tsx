@@ -1,11 +1,12 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const orderItems = [
-  { name: "Premium Wireless Headphones", sku: "WH-PRO-001", color: "Black", price: "$89.00", qty: 1, img: "/placeholder.png", alt: "premium wireless headphones product shot white background" },
-  { name: "Smart Watch Pro", sku: "SW-PRO-002", color: "Silver", price: "$45.00", qty: 1, img: "/placeholder.png", alt: "smart watch fitness tracker product shot white background" },
-  { name: "Portable Bluetooth Speaker", sku: "BS-PORT-003", color: "Blue", price: "$22.00", qty: 1, img: "/placeholder.png", alt: "portable bluetooth speaker product shot white background" },
+  { name: "Premium Wireless Headphones", sku: "WH-PRO-001", color: "Black", price: 89, qty: 1, img: "/placeholder.png", alt: "premium wireless headphones product shot white background" },
+  { name: "Smart Watch Pro", sku: "SW-PRO-002", color: "Silver", price: 45, qty: 1, img: "/placeholder.png", alt: "smart watch fitness tracker product shot white background" },
+  { name: "Portable Bluetooth Speaker", sku: "BS-PORT-003", color: "Blue", price: 22, qty: 1, img: "/placeholder.png", alt: "portable bluetooth speaker product shot white background" },
 ];
 
 const trackingSteps = [
@@ -21,7 +22,7 @@ export function OrderDetails() {
       <header id="header" className="bg-white border-b border-gray-200 px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Link href="/vendor/orders" className="w-10 h-10 bg-gray-100 hover:bg-gray-200 flex items-center justify-center rounded-lg text-gray-600" aria-label="Back to orders">
+            <Link href="/dashboard/orders" className="w-10 h-10 bg-gray-100 hover:bg-gray-200 flex items-center justify-center rounded-lg text-gray-600" aria-label="Back to orders">
               <i className="fa-solid fa-arrow-left" aria-hidden />
             </Link>
             <div>
@@ -89,8 +90,8 @@ export function OrderDetails() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-600">{item.price} × {item.qty}</p>
-                      <p className="font-semibold text-gray-800">{item.price}</p>
+                      <p className="text-sm text-gray-600">{formatPrice(item.price)} × {item.qty}</p>
+                      <p className="font-semibold text-gray-800">{formatPrice(item.price)}</p>
                     </div>
                   </div>
                 ))}
@@ -101,7 +102,7 @@ export function OrderDetails() {
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-gray-800">Shipment Tracking</h3>
-                  <Link href="/vendor/shipment-status" className="text-primary text-sm font-medium hover:underline">Update Status</Link>
+                  <Link href="/dashboard/shipment-status" className="text-primary text-sm font-medium hover:underline">Update Status</Link>
                 </div>
               </div>
               <div className="p-6">
@@ -148,7 +149,7 @@ export function OrderDetails() {
               <div className="p-6 space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="font-medium text-gray-800">$156.00</span>
+                  <span className="font-medium text-gray-800">{formatPrice(156)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Shipping</span>
@@ -156,11 +157,11 @@ export function OrderDetails() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Tax</span>
-                  <span className="font-medium text-gray-800">$0.00</span>
+                  <span className="font-medium text-gray-800">{formatPrice(0)}</span>
                 </div>
                 <div className="border-t border-gray-200 pt-3 flex justify-between">
                   <span className="font-semibold text-gray-800">Total</span>
-                  <span className="font-bold text-gray-800 text-lg">$156.00</span>
+                  <span className="font-bold text-gray-800 text-lg">{formatPrice(156)}</span>
                 </div>
                 <div className="mt-4 pt-4 border-t border-gray-200">
                   <div className="flex items-center justify-between">
@@ -204,7 +205,7 @@ export function OrderDetails() {
                   </div>
                   <div className="flex items-center justify-between mt-1">
                     <span className="text-sm text-gray-600">Total Spent</span>
-                    <span className="font-medium text-gray-800">$1,247</span>
+                    <span className="font-medium text-gray-800">{formatPrice(1247)}</span>
                   </div>
                 </div>
               </div>

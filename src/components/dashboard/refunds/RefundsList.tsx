@@ -160,7 +160,7 @@ export function RefundsList() {
             </div>
             <div className="space-y-4">
               {pendingRefunds.map((r) => (
-                <Link key={r.id} href="/vendor/refund-request-details">
+                <Link key={r.id} href="/dashboard/refund-request-details">
                   <RefundCard {...r} status="Pending" borderClass="border-gray-200" />
                 </Link>
               ))}

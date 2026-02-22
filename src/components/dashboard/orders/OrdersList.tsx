@@ -18,7 +18,7 @@ const thisWeekOrders = [
 
 function OrderCard({ order }: { order: (typeof todayOrders)[0] }) {
   return (
-    <Link href="/vendor/order-details" className="block bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+    <Link href="/dashboard/order-details" className="block bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-4">
           <div className={`w-12 h-12 ${order.iconBg} rounded-lg flex items-center justify-center`}>

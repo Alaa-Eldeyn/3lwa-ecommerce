@@ -1,7 +1,6 @@
 "use client";
 
 const notifications = [
-  { icon: "fa-shopping-cart", iconBg: "bg-primary/10", iconColor: "text-primary", title: "New Order Received", desc: "Order #ORD-2847 from Sarah Johnson has been placed. Total amount: $156.00", time: "2 hours ago", unread: true, primaryBtn: "View Order", secondaryBtn: "Dismiss" },
   { icon: "fa-exclamation-triangle", iconBg: "bg-orange-100", iconColor: "text-orange-600", title: "Low Stock Alert", desc: "Premium Wireless Headphones has only 3 units left in inventory. Consider restocking soon.", time: "5 hours ago", unread: true, primaryBtn: "Update Inventory", secondaryBtn: "Dismiss" },
   { icon: "fa-star", iconBg: "bg-purple-100", iconColor: "text-purple-600", title: "New Customer Review", desc: "Michael Chen left a 5-star review on Smart Watch Pro: \"Excellent product, fast shipping!\"", time: "1 day ago", unread: true, primaryBtn: "View Review", secondaryBtn: "Dismiss" },
   { icon: "fa-bullhorn", iconBg: "bg-blue-100", iconColor: "text-blue-600", title: "Campaign Started Successfully", desc: "Your Winter Sale 2026 campaign is now live. 12 items are included in this promotion.", time: "2 days ago", unread: false, primaryBtn: "View Campaign", secondaryBtn: "Dismiss" },

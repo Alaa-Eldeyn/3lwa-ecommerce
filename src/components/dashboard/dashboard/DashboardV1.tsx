@@ -221,7 +221,7 @@ export function DashboardV1() {
               </div>
             </div>
             <Link
-              href="/vendor/orders"
+              href="/dashboard/orders"
               className="text-xs font-semibold text-red-600 hover:text-red-700">
               {t("viewAll")}
             </Link>
@@ -242,7 +242,7 @@ export function DashboardV1() {
               </div>
             </div>
             <Link
-              href="/vendor/vendor-reviews"
+              href="/dashboard/vendor-reviews"
               className="text-xs font-semibold text-yellow-600 hover:text-yellow-700">
               {t("viewAll")}
             </Link>
@@ -258,7 +258,7 @@ export function DashboardV1() {
           <div className="flex items-center justify-between mb-5">
             <h3 className="text-lg font-bold text-foreground">{t("topPerformingItems")}</h3>
             <Link
-              href="/vendor/items"
+              href="/dashboard/items"
               className="text-sm font-semibold text-primary hover:text-headerDark">
               {t("viewAllItems")}
             </Link>
@@ -292,7 +292,7 @@ export function DashboardV1() {
           <div className="flex items-center justify-between mb-5">
             <h3 className="text-lg font-bold text-foreground">{t("recentOrders")}</h3>
             <Link
-              href="/vendor/orders"
+              href="/dashboard/orders"
               className="text-sm font-semibold text-primary hover:text-headerDark">
               {t("viewAll")}
             </Link>
@@ -301,7 +301,7 @@ export function DashboardV1() {
             {recentOrders.map((order) => (
               <Link
                 key={order.id}
-                href="/vendor/order-details"
+                href="/dashboard/order-details"
                 className="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all cursor-pointer">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-semibold text-primary">#{order.id}</span>
@@ -385,19 +385,19 @@ export function DashboardV1() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <Link
-              href="/vendor/add-item"
+              href="/dashboard/add-item"
               className="p-4 bg-gradient-to-br from-primary/5 to-primary/10 hover:from-primary/10 hover:to-primary/20 border border-primary/20 rounded-lg transition-all text-left">
               <i className="fa-solid fa-plus text-primary text-xl mb-2" aria-hidden />
               <div className="text-sm font-semibold text-foreground">{t("addNewItem")}</div>
             </Link>
             <Link
-              href="/vendor/create-promo"
+              href="/dashboard/create-promo"
               className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 border border-blue-200 rounded-lg transition-all text-left">
               <i className="fa-solid fa-tag text-blue-600 text-xl mb-2" aria-hidden />
               <div className="text-sm font-semibold text-foreground">{t("createPromo")}</div>
             </Link>
             <Link
-              href="/vendor/withdrawal-request"
+              href="/dashboard/withdrawal-request"
               className="p-4 bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 border border-green-200 rounded-lg transition-all text-left">
               <i
                 className="fa-solid fa-money-bill-transfer text-green-600 text-xl mb-2"

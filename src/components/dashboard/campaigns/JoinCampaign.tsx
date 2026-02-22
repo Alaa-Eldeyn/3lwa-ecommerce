@@ -19,7 +19,7 @@ export function JoinCampaign() {
       <header className="mb-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Link href="/vendor/campaigns" className="flex items-center text-gray-600 hover:text-gray-900 transition-colors">
+            <Link href="/dashboard/campaigns" className="flex items-center text-gray-600 hover:text-gray-900 transition-colors">
               <i className="fas fa-arrow-left mr-2" aria-hidden />
               <span className="text-sm font-medium">Back to Campaigns</span>
             </Link>

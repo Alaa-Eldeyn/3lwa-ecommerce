@@ -51,7 +51,7 @@ export function VendorHeader() {
           {/* Logo - same as default header + "| Vendor" */}
           <div className="flex items-center gap-1">
             <Link
-              href="/vendor/dashboard"
+              href="/dashboard"
               className="flex items-center gap-2"
               aria-label="Vendor Dashboard">
               <Image
@@ -89,19 +89,19 @@ export function VendorHeader() {
                     <p className="text-xs text-gray-500">Verified Vendor</p>
                   </div>
                   <Link
-                    href="/vendor/profile-edit"
+                    href="/dashboard/profile-edit"
                     className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                     onClick={() => setAccountOpen(false)}>
                     Profile
                   </Link>
                   <Link
-                    href="/vendor/security-settings"
+                    href="/dashboard/security-settings"
                     className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                     onClick={() => setAccountOpen(false)}>
                     Security
                   </Link>
                   <Link
-                    href="/vendor/login"
+                    href="/dashboard/login"
                     className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                     onClick={() => setAccountOpen(false)}>
                     Sign out
@@ -111,7 +111,7 @@ export function VendorHeader() {
             </div>
 
             <Link
-              href="/vendor/notifications"
+              href="/dashboard/notifications"
               className="relative text-white hover:ring-1 hover:ring-white/50 rounded-sm px-2 py-1 transition-all flex items-center gap-1"
               aria-label="Notifications">
               <i className="fa-regular fa-bell text-lg" aria-hidden />
@@ -122,7 +122,7 @@ export function VendorHeader() {
           {/* Mobile: menu toggle + notifications + account */}
           <div className="lg:hidden flex items-center gap-2">
             <Link
-              href="/vendor/notifications"
+              href="/dashboard/notifications"
               className="relative text-white p-2 hover:ring-1 hover:ring-white/50 rounded-sm transition-all"
               aria-label="Notifications">
               <i className="fa-regular fa-bell text-xl" aria-hidden />

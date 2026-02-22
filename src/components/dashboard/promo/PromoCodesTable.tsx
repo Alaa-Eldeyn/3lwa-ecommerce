@@ -1,10 +1,11 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const tableRows = [
   { name: "Winter Sale", code: "WINTER25", discount: "25% Off", discountType: "Percentage", validity: "Jan 15 - Feb 15", validitySub: "30 days left", validitySubClass: "text-gray-500", used: 47, limit: 100, usagePct: 47, items: "12 items", itemsSub: "Electronics", status: "Active", statusClass: "bg-green-100 text-green-800" },
-  { name: "New Customer Deal", code: "SAVE50", discount: "$50 Off", discountType: "Fixed Amount", validity: "Feb 1 - Mar 31", validitySub: "Scheduled", validitySubClass: "text-orange-500", used: 0, limit: 50, usagePct: 0, items: "8 items", itemsSub: "All Categories", status: "Scheduled", statusClass: "bg-orange-100 text-orange-800" },
+  { name: "New Customer Deal", code: "SAVE50", discountAmount: 50, discountType: "Fixed Amount", validity: "Feb 1 - Mar 31", validitySub: "Scheduled", validitySubClass: "text-orange-500", used: 0, limit: 50, usagePct: 0, items: "8 items", itemsSub: "All Categories", status: "Scheduled", statusClass: "bg-orange-100 text-orange-800" },
   { name: "Free Shipping", code: "FREESHIP", discount: "Free Shipping", discountType: "Free Shipping", validity: "Jan 1 - Jan 31", validitySub: "Expired", validitySubClass: "text-red-500", used: 89, limit: 200, usagePct: 44.5, items: "25 items", itemsSub: "All Categories", status: "Expired", statusClass: "bg-red-100 text-red-800" },
   { name: "Flash Weekend", code: "FLASH15", discount: "15% Off", discountType: "Percentage", validity: "Feb 10 - Feb 12", validitySub: "3 days", validitySubClass: "text-gray-500", used: 23, limit: 75, usagePct: 30.7, items: "6 items", itemsSub: "Accessories", status: "Active", statusClass: "bg-green-100 text-green-800" },
   { name: "Bulk Purchase", code: "BULK30", discount: "30% Off", discountType: "Percentage", validity: "Jan 20 - Feb 28", validitySub: "25 days left", validitySubClass: "text-gray-500", used: 12, limit: 30, usagePct: 40, items: "15 items", itemsSub: "Laptops", status: "Active", statusClass: "bg-green-100 text-green-800" },
@@ -16,7 +17,7 @@ export function PromoCodesTable() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold text-gray-900">Promo Codes</h1>
-          <Link href="/vendor/create-promo" className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-secondary transition-colors inline-flex items-center gap-2">
+          <Link href="/dashboard/create-promo" className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-secondary transition-colors inline-flex items-center gap-2">
             <i className="fa-solid fa-plus" aria-hidden /><span>Create Promo Code</span>
           </Link>
         </div>
@@ -53,7 +54,7 @@ export function PromoCodesTable() {
             <span className="text-sm text-gray-600">Revenue Impact</span>
             <i className="fa-solid fa-dollar-sign text-orange-600" aria-hidden />
           </div>
-          <div className="text-2xl font-bold text-orange-600">$3,240</div>
+          <div className="text-2xl font-bold text-orange-600">{formatPrice(3240)}</div>
           <div className="text-xs text-gray-500">Generated sales</div>
         </div>
       </div>
@@ -109,7 +110,11 @@ export function PromoCodesTable() {
                     </div>
                   </td>
                   <td className="py-4 px-4">
-                    <div className="text-sm font-medium text-primary">{row.discount}</div>
+                    <div className="text-sm font-medium text-primary">
+                    {"discountAmount" in row && row.discountAmount != null
+                      ? `${formatPrice(row.discountAmount)} Off`
+                      : row.discount}
+                  </div>
                     <div className="text-xs text-gray-500">{row.discountType}</div>
                   </td>
                   <td className="py-4 px-4">

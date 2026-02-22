@@ -1,13 +1,14 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const tableRows = [
-  { id: "ORD-2024-001", track: "TRK789123", customer: "Ahmed Hassan", email: "ahmed.hassan@email.com", location: "Cairo, Egypt", items: "Wireless Headphones", itemsSub: "Qty: 1 • SKU: WH-001", total: "$89.50", status: "Delivered", statusClass: "bg-green-100 text-green-700", date: "Jan 15, 2024", time: "2:30 PM", actionIcon: "fa-download" },
-  { id: "ORD-2024-002", track: "TRK789124", customer: "Fatima Al-Zahra", email: "fatima.zahra@email.com", location: "Alexandria, Egypt", items: "Smart Watch + Phone Case", itemsSub: "Qty: 2 • Multiple SKUs", total: "$156.25", status: "Processing", statusClass: "bg-yellow-100 text-yellow-800", date: "Jan 15, 2024", time: "11:15 AM", actionIcon: "fa-truck" },
-  { id: "ORD-2024-003", track: "TRK789125", customer: "Omar Khalil", email: "omar.khalil@email.com", location: "Giza, Egypt", items: "Bluetooth Speaker", itemsSub: "Qty: 1 • SKU: BS-002", total: "$43.75", status: "Shipped", statusClass: "bg-blue-100 text-blue-800", date: "Jan 14, 2024", time: "4:45 PM", actionIcon: "fa-check" },
-  { id: "ORD-2024-004", track: "TRK789126", customer: "Layla Mohammed", email: "layla.mohammed@email.com", location: "Mansoura, Egypt", items: "Tablet Stand", itemsSub: "Qty: 2 • SKU: TS-003", total: "$98.00", status: "Pending", statusClass: "bg-orange-100 text-orange-800", date: "Jan 14, 2024", time: "9:20 AM", actionIcon: "fa-play" },
-  { id: "ORD-2024-005", track: "TRK789127", customer: "Youssef Ali", email: "youssef.ali@email.com", location: "Aswan, Egypt", items: "Gaming Mouse", itemsSub: "Qty: 1 • SKU: GM-004", total: "$67.30", status: "Cancelled", statusClass: "bg-red-100 text-red-800", date: "Jan 13, 2024", time: "6:10 PM", actionIcon: "fa-undo" },
+  { id: "ORD-2024-001", track: "TRK789123", customer: "Ahmed Hassan", email: "ahmed.hassan@email.com", location: "Cairo, Egypt", items: "Wireless Headphones", itemsSub: "Qty: 1 • SKU: WH-001", total: 89.5, status: "Delivered", statusClass: "bg-green-100 text-green-700", date: "Jan 15, 2024", time: "2:30 PM", actionIcon: "fa-download" },
+  { id: "ORD-2024-002", track: "TRK789124", customer: "Fatima Al-Zahra", email: "fatima.zahra@email.com", location: "Alexandria, Egypt", items: "Smart Watch + Phone Case", itemsSub: "Qty: 2 • Multiple SKUs", total: 156.25, status: "Processing", statusClass: "bg-yellow-100 text-yellow-800", date: "Jan 15, 2024", time: "11:15 AM", actionIcon: "fa-truck" },
+  { id: "ORD-2024-003", track: "TRK789125", customer: "Omar Khalil", email: "omar.khalil@email.com", location: "Giza, Egypt", items: "Bluetooth Speaker", itemsSub: "Qty: 1 • SKU: BS-002", total: 43.75, status: "Shipped", statusClass: "bg-blue-100 text-blue-800", date: "Jan 14, 2024", time: "4:45 PM", actionIcon: "fa-check" },
+  { id: "ORD-2024-004", track: "TRK789126", customer: "Layla Mohammed", email: "layla.mohammed@email.com", location: "Mansoura, Egypt", items: "Tablet Stand", itemsSub: "Qty: 2 • SKU: TS-003", total: 98, status: "Pending", statusClass: "bg-orange-100 text-orange-800", date: "Jan 14, 2024", time: "9:20 AM", actionIcon: "fa-play" },
+  { id: "ORD-2024-005", track: "TRK789127", customer: "Youssef Ali", email: "youssef.ali@email.com", location: "Aswan, Egypt", items: "Gaming Mouse", itemsSub: "Qty: 1 • SKU: GM-004", total: 67.3, status: "Cancelled", statusClass: "bg-red-100 text-red-800", date: "Jan 13, 2024", time: "6:10 PM", actionIcon: "fa-undo" },
 ];
 
 export function OrdersSearch() {
@@ -160,7 +161,7 @@ export function OrdersSearch() {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <p className="text-sm font-medium text-foreground">{row.total}</p>
+                    <p className="text-sm font-medium text-foreground">{formatPrice(row.total)}</p>
                   </td>
                   <td className="px-6 py-4">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${row.statusClass}`}>
@@ -175,7 +176,7 @@ export function OrdersSearch() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-2">
-                      <Link href="/vendor/order-details" className="text-primary hover:text-primary/80 text-sm">
+                      <Link href="/dashboard/order-details" className="text-primary hover:text-primary/80 text-sm">
                         <i className="fa-solid fa-eye" aria-hidden />
                       </Link>
                       <button type="button" className="text-gray-600 hover:text-gray-800 text-sm">

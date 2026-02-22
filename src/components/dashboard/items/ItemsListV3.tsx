@@ -26,7 +26,7 @@ export function ItemsListV3() {
             <button type="button" className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
               <i className="fa-solid fa-download mr-2" aria-hidden />Export
             </button>
-            <Link href="/vendor/add-item" className="px-4 py-2 text-white bg-primary rounded-lg hover:bg-secondary transition-colors inline-flex items-center">
+            <Link href="/dashboard/add-item" className="px-4 py-2 text-white bg-primary rounded-lg hover:bg-secondary transition-colors inline-flex items-center">
               <i className="fa-solid fa-plus mr-2" aria-hidden />Add New Item
             </Link>
           </div>
@@ -144,10 +144,10 @@ export function ItemsListV3() {
                   <span className="text-gray-400">({item.reviews})</span>
                 </div>
                 <div className="flex gap-2">
-                  <Link href="/vendor/item-details" className="flex-1 px-3 py-2 text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors text-sm font-medium text-center inline-flex items-center justify-center">
+                  <Link href="/dashboard/item-details" className="flex-1 px-3 py-2 text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition-colors text-sm font-medium text-center inline-flex items-center justify-center">
                     <i className="fa-solid fa-eye mr-1" aria-hidden />View
                   </Link>
-                  <Link href="/vendor/edit-item" className="flex-1 px-3 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-center inline-flex items-center justify-center">
+                  <Link href="/dashboard/edit-item" className="flex-1 px-3 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-center inline-flex items-center justify-center">
                     <i className="fa-solid fa-edit mr-1" aria-hidden />Edit
                   </Link>
                 </div>

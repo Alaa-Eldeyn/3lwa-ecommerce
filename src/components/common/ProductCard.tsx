@@ -12,6 +12,7 @@ import { useWishlistStore } from "@/src/store/wishlistStore";
 import { useUserStore } from "@/src/store/userStore";
 import QuantityController from "./QuantityController";
 import { Product } from "@/src/types/types";
+import { formatPrice } from "@/src/config/currency";
 
 interface ProductCardProps extends Partial<Product> {
   variant?: "default" | "bordered" | "minimal" | "homz" | "nike" | "clean" | "gradient";
@@ -255,12 +256,12 @@ const ProductCard = ({
           {stockStatus !== "OutOfStock" && (
             <div className="flex items-center gap-2 mb-3">
               <span className="text-base md:text-xl font-bold text-gray-900 dark:text-white">
-                ${currentPrice.toFixed(2)}
+                {formatPrice(currentPrice)}
               </span>
 
               {originalPrice && (
                 <span className="text-xs md:text-sm line-through text-gray-400 dark:text-gray-500">
-                  ${originalPrice.toFixed(2)}
+                  {formatPrice(originalPrice)}
                 </span>
               )}
             </div>
@@ -388,13 +389,13 @@ const ProductCard = ({
           {/* Prices */}
           <div className="flex items-center gap-2">
             <span className="text-base md:text-xl font-bold text-gray-900 dark:text-white">
-              ${currentPrice.toFixed(2)}
+              {formatPrice(currentPrice)}
             </span>
 
             {originalPrice && (
               <>
                 <span className="text-sm md:text-base font-bold line-through text-gray-400 dark:text-gray-500">
-                  ${originalPrice.toFixed(2)}
+                  {formatPrice(originalPrice)}
                 </span>
               </>
             )}
@@ -458,13 +459,13 @@ const ProductCard = ({
           {/* Prices */}
           <div className="flex items-center gap-2">
             <span className="text-base lg:text-lg font-bold text-gray-900 dark:text-white">
-              ${currentPrice.toFixed(2)}
+              {formatPrice(currentPrice)}
             </span>
 
             {originalPrice && (
               <>
                 <span className="text-sm font-bold line-through text-gray-400 dark:text-gray-500">
-                  ${originalPrice.toFixed(2)}
+                  {formatPrice(originalPrice)}
                 </span>
               </>
             )}
@@ -539,12 +540,11 @@ const ProductCard = ({
           {/* Prices and Discount */}
           <div className="flex items-center justify-start gap-2 mb-3">
             <span className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">
-              {currentPrice.toLocaleString()}
-              <span className="text-xs md:text-sm font-normal">جنيه</span>
+              {formatPrice(currentPrice)}
             </span>
             {originalPrice && (
               <span className="line-through text-xs md:text-sm text-gray-400 dark:text-gray-500">
-                ${originalPrice.toFixed(2)}
+                {formatPrice(originalPrice)}
               </span>
             )}
             {discount && (
@@ -629,11 +629,11 @@ const ProductCard = ({
               </div>
               {originalPrice && (
                 <div className="text-[10px] md:text-xs line-through text-gray-400 dark:text-gray-500 mb-0.5">
-                  ${originalPrice.toFixed(2)}
+                  {formatPrice(originalPrice)}
                 </div>
               )}
               <div className="text-base md:text-xl font-bold text-gray-900 dark:text-white">
-                ${currentPrice.toFixed(2)}
+                {formatPrice(currentPrice)}
               </div>
             </div>
 
@@ -708,11 +708,11 @@ const ProductCard = ({
           {/* Prices */}
           <div className="flex items-center gap-2 mb-4">
             <span className="text-base md:text-xl font-bold text-gray-900 dark:text-white">
-              ${currentPrice.toFixed(2)}
+              {formatPrice(currentPrice)}
             </span>
             {originalPrice && (
               <span className="text-xs md:text-sm line-through text-gray-400 dark:text-gray-500">
-                ${originalPrice.toFixed(2)}
+                {formatPrice(originalPrice)}
               </span>
             )}
           </div>
@@ -793,11 +793,11 @@ const ProductCard = ({
             {/* Prices */}
             <div className="flex items-center gap-2 mb-3">
               <span className="text-base md:text-xl font-bold text-white drop-shadow-lg">
-                ${currentPrice.toFixed(2)}
+                {formatPrice(currentPrice)}
               </span>
               {originalPrice && (
                 <span className="text-xs md:text-sm line-through text-white/70 drop-shadow-lg">
-                  ${originalPrice.toFixed(2)}
+                  {formatPrice(originalPrice)}
                 </span>
               )}
             </div>

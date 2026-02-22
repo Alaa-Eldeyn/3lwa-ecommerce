@@ -18,11 +18,11 @@ export function Wallet() {
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold text-gray-900">Wallet Overview</h1>
           <div className="flex items-center space-x-3">
-            <Link href="/vendor/withdrawal-request" className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-all font-medium inline-flex items-center">
+            <Link href="/dashboard/withdrawal-request" className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-all font-medium inline-flex items-center">
               <i className="fa-solid fa-money-bill-transfer mr-2" aria-hidden />
               Request Withdrawal
             </Link>
-            <Link href="/vendor/withdrawal-methods" className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-medium inline-flex items-center">
+            <Link href="/dashboard/withdrawal-methods" className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-medium inline-flex items-center">
               <i className="fa-solid fa-gear mr-2" aria-hidden />
               Manage Methods
             </Link>
@@ -127,7 +127,7 @@ export function Wallet() {
               </div>
               <span className="px-3 py-1 bg-gray-200 text-gray-600 text-xs rounded-full font-medium">Inactive</span>
             </div>
-            <Link href="/vendor/withdrawal-methods" className="block w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-600 hover:border-primary hover:text-primary transition-colors text-center">
+            <Link href="/dashboard/withdrawal-methods" className="block w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-600 hover:border-primary hover:text-primary transition-colors text-center">
               <i className="fa-solid fa-plus mr-2" aria-hidden />
               Add New Method
             </Link>
@@ -147,11 +147,11 @@ export function Wallet() {
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <Link href="/vendor/withdrawal-request" className="px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-all font-medium inline-flex items-center">
+            <Link href="/dashboard/withdrawal-request" className="px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-all font-medium inline-flex items-center">
               <i className="fa-solid fa-hand-holding-dollar mr-2" aria-hidden />
               Request Withdrawal
             </Link>
-            <Link href="/vendor/wallet" className="px-5 py-2.5 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-medium border border-gray-200 inline-flex items-center">
+            <Link href="/dashboard/wallet" className="px-5 py-2.5 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-medium border border-gray-200 inline-flex items-center">
               <i className="fa-solid fa-list mr-2" aria-hidden />
               View All Transactions
             </Link>
@@ -163,7 +163,7 @@ export function Wallet() {
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900">Recent Transactions</h3>
-            <Link href="/vendor/wallet" className="text-sm text-primary hover:underline font-medium">
+            <Link href="/dashboard/wallet" className="text-sm text-primary hover:underline font-medium">
               View All Transactions →
             </Link>
           </div>

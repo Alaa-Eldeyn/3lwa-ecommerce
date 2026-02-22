@@ -10,6 +10,7 @@ import { Link } from "@/src/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { Trash2, Minus, Plus, ArrowLeft, ArrowRight, CreditCard, Lock } from "lucide-react";
 import Image from "next/image";
+import { formatPrice } from "@/src/config/currency";
 
 const Cart = () => {
   const {
@@ -186,7 +187,7 @@ const Cart = () => {
                           )
                         )}
                         <div className="text-xl font-bold text-secondary mt-1">
-                          ${(item.subTotal ?? item.price * item.quantity).toFixed(2)}
+                          {formatPrice(item.subTotal ?? item.price * item.quantity)}
                         </div>
                       </div>
                     </div>
@@ -247,7 +248,7 @@ const Cart = () => {
                   <div className="flex justify-between items-center text-gray-600 dark:text-gray-300">
                     <span>{tOrderSummary("subtotal")}</span>
                     <span className="font-bold text-gray-900 dark:text-white">
-                      ${subtotal.toFixed(2)}
+                      {formatPrice(subtotal)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-gray-400 text-sm">
@@ -266,7 +267,7 @@ const Cart = () => {
                       {tOrderSummary("total")}
                     </span>
                     <span className="text-2xl font-bold text-secondary">
-                      ${subtotal.toFixed(2)}
+                      {formatPrice(subtotal)}
                     </span>
                   </div>
                 </div>

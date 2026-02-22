@@ -8,6 +8,7 @@ import { customAxios } from "@/src/auth/customAxios";
 import { Check, ShoppingCart } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { OrderData } from "@/src/types/order-details.types";
+import { formatPrice } from "@/src/config/currency";
 
 interface OrderStatusProps {
   id: string;
@@ -170,8 +171,8 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
                     </p>
                   </div>
                   <div className={`text-start}`}>
-                    <p className="text-gray-500 dark:text-gray-400 text-xs">${item.unitPrice.toFixed(2)}</p>
-                    <p className="font-bold text-gray-800 dark:text-white">${item.subTotal.toFixed(2)}</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-xs">{formatPrice(item.unitPrice)}</p>
+                    <p className="font-bold text-gray-800 dark:text-white">{formatPrice(item.subTotal)}</p>
                     </div>
                   </div>
                 );
@@ -186,14 +187,14 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
             {/* Subtotal */}
             <div className="flex justify-between items-center">
               <span className="text-gray-500 dark:text-gray-400 text-sm">{t("subtotal")}</span>
-              <span className="text-gray-800 dark:text-white font-medium">${itemsSubtotal.toFixed(2)}</span>
+              <span className="text-gray-800 dark:text-white font-medium">{formatPrice(itemsSubtotal)}</span>
             </div>
 
             {/* Discount */}
             {discountAmount > 0 && (
               <div className="flex justify-between items-center">
                 <span className="text-gray-500 dark:text-gray-400 text-sm">{t("discount")}</span>
-                <span className="text-green-600 dark:text-green-400 font-medium">-${discountAmount.toFixed(2)}</span>
+                <span className="text-green-600 dark:text-green-400 font-medium">-{formatPrice(discountAmount)}</span>
               </div>
             )}
 
@@ -201,7 +202,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
             {taxAmount > 0 && (
               <div className="flex justify-between items-center">
                 <span className="text-gray-500 dark:text-gray-400 text-sm">{t("tax")}</span>
-                <span className="text-gray-800 dark:text-white font-medium">${taxAmount.toFixed(2)}</span>
+                <span className="text-gray-800 dark:text-white font-medium">{formatPrice(taxAmount)}</span>
               </div>
             )}
 
@@ -209,7 +210,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
             <div className="flex justify-between items-center">
               <span className="text-gray-500 dark:text-gray-400 text-sm">{t("shipping")}</span>
               <span className="text-gray-800 dark:text-white font-medium">
-                {shippingAmount > 0 ? `$${shippingAmount.toFixed(2)}` : t("shippingFree")}
+                {shippingAmount > 0 ? formatPrice(shippingAmount) : t("shippingFree")}
               </span>
             </div>
 
@@ -218,7 +219,7 @@ const OrderStatus = ({ id }: OrderStatusProps) => {
               <div>
                 <p className="text-gray-500 dark:text-gray-400 text-sm">{t("totalAmount")}</p>
               </div>
-              <div className="text-2xl font-bold text-primary">${totalAmount.toFixed(2)}</div>
+              <div className="text-2xl font-bold text-primary">{formatPrice(totalAmount)}</div>
             </div>
           </div>
         </div>

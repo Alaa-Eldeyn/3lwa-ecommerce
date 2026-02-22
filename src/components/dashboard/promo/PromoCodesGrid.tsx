@@ -1,14 +1,15 @@
 "use client";
 
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 const gridCards = [
-  { code: "SUMMER25", status: "ACTIVE", statusClass: "bg-green-600", borderClass: "border-green-200", bgClass: "from-green-50 to-green-100", discountType: "25% Off", minPurchase: "$50", usageLimit: "500", validPeriod: "June 1 - July 31, 2024", used: "247 / 500", usagePct: 49, usageBarClass: "bg-green-600", tags: ["Electronics (12)", "Accessories (8)", "+3 more"] },
-  { code: "NEWUSER", status: "ACTIVE", statusClass: "bg-green-600", borderClass: "border-green-200", bgClass: "from-green-50 to-green-100", discountType: "$15 Off", minPurchase: "$30", usageLimit: "1000", validPeriod: "May 15 - Aug 31, 2024", used: "412 / 1000", usagePct: 41, usageBarClass: "bg-green-600", tags: ["All Items"] },
-  { code: "BACKTOSCHOOL", status: "SCHEDULED", statusClass: "bg-blue-600", borderClass: "border-blue-200", bgClass: "from-blue-50 to-blue-100", discountType: "30% Off", minPurchase: "$75", usageLimit: "300", validPeriod: "Aug 1 - Sep 15, 2024", used: "0 / 300", usagePct: 0, usageBarClass: "bg-blue-600", tags: ["Laptops (5)", "Tablets (3)"], statusSub: "Starts in 5 days" },
-  { code: "FLASH50", status: "ACTIVE", statusClass: "bg-green-600", borderClass: "border-green-200", bgClass: "from-green-50 to-green-100", discountType: "$50 Off", minPurchase: "$200", usageLimit: "100", validPeriod: "July 15 - July 31, 2024", used: "87 / 100", usagePct: 87, usageBarClass: "bg-green-600", tags: ["Premium Items (7)"], statusSub: "Ends in 8 days" },
-  { code: "SPRING20", status: "EXPIRED", statusClass: "bg-red-600", borderClass: "border-red-200", bgClass: "from-red-50 to-red-100", discountType: "20% Off", minPurchase: "$40", usageLimit: "200", validPeriod: "Mar 1 - May 31, 2024", used: "156 / 200", usagePct: 78, usageBarClass: "bg-red-600", tags: ["Fashion (15)", "Shoes (9)"], statusSub: "Ended 3 days ago" },
-  { code: "AUTUMN40", status: "SCHEDULED", statusClass: "bg-blue-600", borderClass: "border-blue-200", bgClass: "from-blue-50 to-blue-100", discountType: "40% Off", minPurchase: "$100", usageLimit: "250", validPeriod: "Sep 1 - Oct 31, 2024", used: "0 / 250", usagePct: 0, usageBarClass: "bg-blue-600", tags: ["Clothing (22)"], statusSub: "Starts in 15 days" },
+  { code: "SUMMER25", status: "ACTIVE", statusClass: "bg-green-600", borderClass: "border-green-200", bgClass: "from-green-50 to-green-100", discountType: "25% Off", minPurchase: 50, usageLimit: "500", validPeriod: "June 1 - July 31, 2024", used: "247 / 500", usagePct: 49, usageBarClass: "bg-green-600", tags: ["Electronics (12)", "Accessories (8)", "+3 more"] },
+  { code: "NEWUSER", status: "ACTIVE", statusClass: "bg-green-600", borderClass: "border-green-200", bgClass: "from-green-50 to-green-100", discountTypeAmount: 15, discountTypePercent: null, minPurchase: 30, usageLimit: "1000", validPeriod: "May 15 - Aug 31, 2024", used: "412 / 1000", usagePct: 41, usageBarClass: "bg-green-600", tags: ["All Items"] },
+  { code: "BACKTOSCHOOL", status: "SCHEDULED", statusClass: "bg-blue-600", borderClass: "border-blue-200", bgClass: "from-blue-50 to-blue-100", discountType: "30% Off", minPurchase: 75, usageLimit: "300", validPeriod: "Aug 1 - Sep 15, 2024", used: "0 / 300", usagePct: 0, usageBarClass: "bg-blue-600", tags: ["Laptops (5)", "Tablets (3)"], statusSub: "Starts in 5 days" },
+  { code: "FLASH50", status: "ACTIVE", statusClass: "bg-green-600", borderClass: "border-green-200", bgClass: "from-green-50 to-green-100", discountTypeAmount: 50, discountTypePercent: null, minPurchase: 200, usageLimit: "100", validPeriod: "July 15 - July 31, 2024", used: "87 / 100", usagePct: 87, usageBarClass: "bg-green-600", tags: ["Premium Items (7)"], statusSub: "Ends in 8 days" },
+  { code: "SPRING20", status: "EXPIRED", statusClass: "bg-red-600", borderClass: "border-red-200", bgClass: "from-red-50 to-red-100", discountType: "20% Off", minPurchase: 40, usageLimit: "200", validPeriod: "Mar 1 - May 31, 2024", used: "156 / 200", usagePct: 78, usageBarClass: "bg-red-600", tags: ["Fashion (15)", "Shoes (9)"], statusSub: "Ended 3 days ago" },
+  { code: "AUTUMN40", status: "SCHEDULED", statusClass: "bg-blue-600", borderClass: "border-blue-200", bgClass: "from-blue-50 to-blue-100", discountType: "40% Off", minPurchase: 100, usageLimit: "250", validPeriod: "Sep 1 - Oct 31, 2024", used: "0 / 250", usagePct: 0, usageBarClass: "bg-blue-600", tags: ["Clothing (22)"], statusSub: "Starts in 15 days" },
 ];
 
 export function PromoCodesGrid() {
@@ -34,7 +35,7 @@ export function PromoCodesGrid() {
                 <option>Expired</option>
               </select>
             </div>
-            <Link href="/vendor/create-promo" className="px-6 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-secondary transition-colors inline-flex items-center">
+            <Link href="/dashboard/create-promo" className="px-6 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-secondary transition-colors inline-flex items-center">
               <i className="fa-solid fa-plus mr-2" aria-hidden />Create Code
             </Link>
           </div>
@@ -108,12 +109,16 @@ export function PromoCodesGrid() {
                   <div className="flex items-center gap-6">
                     <div>
                       <p className="text-xs text-gray-500 mb-1">Discount Type</p>
-                      <p className="text-sm font-semibold text-gray-900">{card.discountType}</p>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {"discountTypeAmount" in card && card.discountTypeAmount != null
+                          ? `${formatPrice(card.discountTypeAmount)} Off`
+                          : card.discountType}
+                      </p>
                     </div>
                     <div className="h-8 w-px bg-gray-300" />
                     <div>
                       <p className="text-xs text-gray-500 mb-1">Min. Purchase</p>
-                      <p className="text-sm font-semibold text-gray-900">{card.minPurchase}</p>
+                      <p className="text-sm font-semibold text-gray-900">{formatPrice(card.minPurchase)}</p>
                     </div>
                     <div className="h-8 w-px bg-gray-300" />
                     <div>

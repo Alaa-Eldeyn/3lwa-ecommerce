@@ -122,7 +122,7 @@ function ShipmentCard({ s }: { s: (typeof shipments)[0] }) {
               <span>Tracking: {s.tracking}</span>
             </div>
           </div>
-          <Link href="/vendor/order-details" className="text-primary text-sm font-medium hover:underline">View Details</Link>
+          <Link href="/dashboard/order-details" className="text-primary text-sm font-medium hover:underline">View Details</Link>
         </div>
       </div>
     </div>

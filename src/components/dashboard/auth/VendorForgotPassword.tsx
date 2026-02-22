@@ -251,7 +251,7 @@ export function VendorForgotPassword() {
               <div className="mt-8 text-center space-y-4">
                 <p className="text-gray-600 text-sm">
                   Remember your password?{" "}
-                  <Link href="/vendor/login" className="font-semibold text-primary hover:text-[#0a5c4f] transition-colors">
+                  <Link href="/dashboard/login" className="font-semibold text-primary hover:text-[#0a5c4f] transition-colors">
                     Sign In
                   </Link>
                 </p>
@@ -262,7 +262,7 @@ export function VendorForgotPassword() {
                 </div>
                 <p className="text-gray-600 text-sm">
                   Don&apos;t have an account?{" "}
-                  <Link href="/vendor/register" className="font-semibold text-primary hover:text-[#0a5c4f] transition-colors">
+                  <Link href="/dashboard/register" className="font-semibold text-primary hover:text-[#0a5c4f] transition-colors">
                     Create Account
                   </Link>
                 </p>
@@ -314,7 +314,7 @@ export function VendorForgotPassword() {
                   <span>Try Different Contact Method</span>
                 </button>
                 <div className="text-center">
-                  <Link href="/vendor/login" className="text-sm text-gray-500 hover:text-primary transition-colors">
+                  <Link href="/dashboard/login" className="text-sm text-gray-500 hover:text-primary transition-colors">
                     Back to Sign In
                   </Link>
                 </div>

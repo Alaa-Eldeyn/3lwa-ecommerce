@@ -55,7 +55,7 @@ export function VendorRegister() {
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
-      window.location.href = "/vendor/account-verification";
+      window.location.href = "/dashboard/account-verification";
     }, 2000);
   };
 
@@ -381,7 +381,7 @@ export function VendorRegister() {
               </div>
 
               <div id="form-actions" className="flex items-center justify-between pt-6 border-t border-gray-200">
-                <Link href="/vendor/login" className="text-sm text-gray-600 hover:text-gray-800">
+                <Link href="/dashboard/login" className="text-sm text-gray-600 hover:text-gray-800">
                   <i className="fa-solid fa-arrow-left mr-2" aria-hidden />
                   Back to Login
                 </Link>

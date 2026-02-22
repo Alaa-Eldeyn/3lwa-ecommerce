@@ -215,7 +215,7 @@ export function CreatePromo() {
         </div>
 
         <div className="flex items-center justify-between">
-          <Link href="/vendor/promo-codes" className="px-6 py-3 text-gray-700 hover:text-gray-900 font-medium inline-flex items-center">
+          <Link href="/dashboard/promo-codes" className="px-6 py-3 text-gray-700 hover:text-gray-900 font-medium inline-flex items-center">
             <i className="fa-solid fa-arrow-left mr-2" aria-hidden /> Back to Campaigns
           </Link>
           <div className="flex space-x-4">

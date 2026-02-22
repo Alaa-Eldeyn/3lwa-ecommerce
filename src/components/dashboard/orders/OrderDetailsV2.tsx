@@ -14,7 +14,7 @@ export function OrderDetailsV2() {
       <header id="header" className="bg-white border-b border-gray-200 px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Link href="/vendor/orders" className="text-gray-600 hover:text-gray-900" aria-label="Back">
+            <Link href="/dashboard/orders" className="text-gray-600 hover:text-gray-900" aria-label="Back">
               <i className="fas fa-arrow-left text-lg" aria-hidden />
             </Link>
             <div>
@@ -202,7 +202,7 @@ export function OrderDetailsV2() {
                   <button type="button" className="w-full px-4 py-3 bg-primary text-white rounded-lg font-medium hover:bg-secondary flex items-center justify-center">
                     <i className="fas fa-check-circle mr-2" aria-hidden />Confirm Dispatch
                   </button>
-                  <Link href="/vendor/shipment-status" className="block w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 flex items-center justify-center">
+                  <Link href="/dashboard/shipment-status" className="block w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 flex items-center justify-center">
                     <i className="fas fa-edit mr-2" aria-hidden />Update Status
                   </Link>
                   <button type="button" className="w-full px-4 py-3 border border-red-300 text-red-600 rounded-lg font-medium hover:bg-red-50 flex items-center justify-center">

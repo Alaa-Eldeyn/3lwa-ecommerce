@@ -3,6 +3,7 @@
 import { ArrowRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 interface OrderSummaryProps {
   subtotal: number;
@@ -29,7 +30,7 @@ const OrderSummary = ({
             {t("subtotal")}
           </span>
           <span className="text-base md:text-lg font-bold text-gray-900 dark:text-white">
-            ${subtotal.toFixed(2)}
+            {formatPrice(subtotal)}
           </span>
         </div>
       </div>
@@ -42,7 +43,7 @@ const OrderSummary = ({
           {t("total")}
         </span>
         <span className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
-          ${subtotal.toFixed(2)}
+          {formatPrice(subtotal)}
         </span>
       </div>
 

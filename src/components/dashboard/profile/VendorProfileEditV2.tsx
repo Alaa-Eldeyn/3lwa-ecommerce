@@ -5,7 +5,7 @@ export function VendorProfileEditV2() {
     <div className="px-8 py-6">
       <div className="mb-6">
         <div className="flex items-center text-sm text-gray-600">
-          <a href="/vendor/profile-edit" className="hover:text-primary">Settings</a>
+          <a href="/dashboard/profile-edit" className="hover:text-primary">Settings</a>
           <i className="fa-solid fa-chevron-right mx-2 text-xs" aria-hidden />
           <span className="text-gray-800 font-medium">Business Information</span>
         </div>

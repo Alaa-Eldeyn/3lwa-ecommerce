@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Trash2, ShoppingCart } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 interface WishlistItemProps {
   wishlistItemId: string;
@@ -91,11 +92,11 @@ const WishlistItem = ({
         {isAvailable ? (
           <div className="flex items-center gap-2 mb-4">
             <span className="text-2xl font-bold text-primary">
-              {finalPrice.toFixed(2)} {t("currency")}
+              {formatPrice(finalPrice)} {t("currency")}
             </span>
             {hasDiscount && (
               <span className="text-lg text-gray-500 dark:text-gray-400 line-through">
-                {price.toFixed(2)} {t("currency")}
+                {formatPrice(price)} {t("currency")}
               </span>
             )}
           </div>

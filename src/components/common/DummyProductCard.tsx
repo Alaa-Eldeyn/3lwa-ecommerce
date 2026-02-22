@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
 import { useCartStore } from "@/src/store/cartStore";
 import QuantityController from "./QuantityController";
+import { formatPrice } from "@/src/config/currency";
 
 interface ProductCardProps {
   image: string;
@@ -105,11 +106,11 @@ const DummyProductCard = ({
 
           {/* Prices */}
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">${price}</span>
+            <span className="text-xl font-bold text-gray-900 dark:text-white">{formatPrice(price)}</span>
 
             {oldPrice && (
               <span className="text-sm line-through text-gray-400 dark:text-gray-500">
-                ${oldPrice}
+                {oldPrice != null ? formatPrice(oldPrice) : ""}
               </span>
             )}
           </div>
@@ -232,12 +233,12 @@ const DummyProductCard = ({
 
           {/* Prices */}
           <div className="flex items-center gap-2">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">${price}</span>
+            <span className="text-xl font-bold text-gray-900 dark:text-white">{formatPrice(price)}</span>
 
             {oldPrice && (
               <>
                 <span className="text-base font-bold line-through text-gray-400 dark:text-gray-500">
-                  ${oldPrice}
+                  {oldPrice != null ? formatPrice(oldPrice) : ""}
                 </span>
               </>
             )}
@@ -316,13 +317,13 @@ const DummyProductCard = ({
           {/* Prices */}
           <div className="flex items-center gap-2">
             <span className="text-base lg:text-lg font-bold text-gray-900 dark:text-white">
-              ${price}
+              {formatPrice(price)}
             </span>
 
             {oldPrice && (
               <>
                 <span className="text-sm font-bold line-through text-gray-400 dark:text-gray-500">
-                  ${oldPrice}
+                  {oldPrice != null ? formatPrice(oldPrice) : ""}
                 </span>
               </>
             )}
@@ -480,11 +481,11 @@ const DummyProductCard = ({
               </div>
               {oldPrice && (
                 <div className="text-xs line-through text-gray-400 dark:text-gray-500 mb-0.5">
-                  ${oldPrice.toFixed(2)}
+                  {oldPrice != null ? formatPrice(oldPrice) : ""}
                 </div>
               )}
               <div className="text-xl font-bold text-gray-900 dark:text-white">
-                ${price.toFixed(2)}
+                {formatPrice(price)}
               </div>
             </div>
 
@@ -561,11 +562,11 @@ const DummyProductCard = ({
           {/* Prices */}
           <div className="flex items-center gap-2 mb-4">
             <span className="text-xl font-bold text-gray-900 dark:text-white">
-              ${price.toFixed(2)}
+              {formatPrice(price)}
             </span>
             {oldPrice && (
               <span className="text-sm line-through text-gray-400 dark:text-gray-500">
-                ${oldPrice.toFixed(2)}
+                {oldPrice != null ? formatPrice(oldPrice) : ""}
               </span>
             )}
           </div>
@@ -647,10 +648,10 @@ const DummyProductCard = ({
 
             {/* Prices */}
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-xl font-bold text-white drop-shadow-lg">${price}</span>
+              <span className="text-xl font-bold text-white drop-shadow-lg">{formatPrice(price)}</span>
               {oldPrice && (
                 <span className="text-sm line-through text-white/70 drop-shadow-lg">
-                  ${oldPrice}
+                  {oldPrice != null ? formatPrice(oldPrice) : ""}
                 </span>
               )}
             </div>

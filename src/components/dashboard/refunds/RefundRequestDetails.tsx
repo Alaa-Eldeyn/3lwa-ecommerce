@@ -21,7 +21,7 @@ export function RefundRequestDetails() {
       <header id="header" className="bg-white border-b border-gray-200 px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Link href="/vendor/refunds" className="text-gray-400 hover:text-gray-600" aria-label="Back">
+            <Link href="/dashboard/refunds" className="text-gray-400 hover:text-gray-600" aria-label="Back">
               <i className="fa-solid fa-arrow-left" aria-hidden />
             </Link>
             <h2 className="text-2xl font-semibold text-gray-800">Refund Request Details</h2>

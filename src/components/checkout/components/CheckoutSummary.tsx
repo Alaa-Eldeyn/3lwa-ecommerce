@@ -1,5 +1,6 @@
 "use client";
 import { ChevronRight, Tag, X } from "lucide-react";
+import { formatPrice } from "@/src/config/currency";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -131,12 +132,12 @@ const CheckoutSummary = ({
                 </p>
                 {item.discountAmount > 0 && (
                   <p className="text-xs text-green-600 dark:text-green-400 mt-0.5">
-                    {t("itemDiscount")}: -${item.discountAmount.toFixed(2)}
+                    {t("itemDiscount")}: -{formatPrice(item.discountAmount)}
                   </p>
                 )}
               </div>
               <p className="font-semibold text-gray-900 dark:text-white text-sm shrink-0">
-                ${item.subTotal.toFixed(2)}
+                {formatPrice(item.subTotal)}
               </p>
             </div>
           );
@@ -166,7 +167,7 @@ const CheckoutSummary = ({
                   <span className="text-xs text-green-600 dark:text-green-400 mt-0.5">
                     {couponInfo.discountType === "Percentage" && couponInfo.discountPercentage != null
                       ? `${couponInfo.discountPercentage}% off`
-                      : `-$${(couponInfo.discountAmount / 100).toFixed(2)}`}
+                      : `-${formatPrice(couponInfo.discountAmount / 100)}`}
                   </span>
                 )}
               </div>
@@ -211,24 +212,24 @@ const CheckoutSummary = ({
       <div className="space-y-3 mb-6">
         <div className="flex justify-between text-gray-600 dark:text-gray-400">
           <span>{t("subtotal")}</span>
-          <span>${subtotal.toFixed(2)}</span>
+          <span>{formatPrice(subtotal)}</span>
         </div>
         {discountAmount > 0 && (
           <div className="flex justify-between text-green-600 dark:text-green-400">
             <span>{t("discount")}</span>
-            <span>-${discountAmount.toFixed(2)}</span>
+            <span>-{formatPrice(discountAmount)}</span>
           </div>
         )}
         {shipping > 0 && (
           <div className="flex justify-between text-gray-600 dark:text-gray-400">
             <span>{t("shipping")}</span>
-            <span>${shipping.toFixed(2)}</span>
+            <span>{formatPrice(shipping)}</span>
           </div>
         )}
         {tax > 0 && (
           <div className="flex justify-between text-gray-600 dark:text-gray-400">
             <span>{t("tax")}</span>
-            <span>${tax.toFixed(2)}</span>
+            <span>{formatPrice(tax)}</span>
           </div>
         )}
       </div>
@@ -238,7 +239,7 @@ const CheckoutSummary = ({
       {/* Total */}
       <div className="flex justify-between items-center mb-6">
         <span className="text-lg font-semibold text-gray-900 dark:text-white">{t("total")}</span>
-        <span className="text-2xl font-bold text-primary">${total.toFixed(2)}</span>
+        <span className="text-2xl font-bold text-primary">{formatPrice(total)}</span>
       </div>
 
       {/* Delivery Notes */}

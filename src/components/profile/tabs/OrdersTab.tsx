@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { getOrderStatusInfo } from "@/src/utils/orderStatus";
+import { formatPrice } from "@/src/config/currency";
 
 // Order item summary type
 interface OrderItemSummary {
@@ -177,7 +178,7 @@ const OrdersTab = () => {
               {/* Order Footer */}
               <div className="flex flex-wrap justify-between items-center gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
                 <p className="text-base md:text-lg font-bold text-gray-900 dark:text-white">
-                  {t("orders.total")}: ${order.totalAmount.toFixed(2)}
+                  {t("orders.total")}: {formatPrice(order.totalAmount)}
                 </p>
                 <button
                   onClick={() => router.push(`order/${order.orderId}`)}

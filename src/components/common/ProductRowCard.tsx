@@ -12,6 +12,7 @@ import { useWishlistStore } from "@/src/store/wishlistStore";
 import { useUserStore } from "@/src/store/userStore";
 import QuantityController from "./QuantityController";
 import { Product } from "@/src/types/types";
+import { formatPrice } from "@/src/config/currency";
 
 interface ProductRowCardProps extends Partial<Product> {
   variant?: "default" | "bordered";
@@ -273,11 +274,11 @@ const ProductRowCard = ({
           {/* Price */}
           <div className="flex items-baseline gap-2">
             <span className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
-              ${currentPrice.toFixed(2)}
+              {formatPrice(currentPrice)}
             </span>
             {originalPrice && (
               <span className="text-xs md:text-sm line-through text-gray-400 dark:text-gray-500">
-                ${originalPrice.toFixed(2)}
+                {formatPrice(originalPrice)}
               </span>
             )}
           </div>

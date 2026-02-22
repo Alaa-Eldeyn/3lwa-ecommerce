@@ -7,6 +7,7 @@ import { useLocale } from "next-intl";
 import { AlertTriangle } from "lucide-react";
 import axios from "axios";
 import { customAxios } from "@/src/auth/customAxios";
+import { CURRENCY_SYMBOL, formatPrice } from "@/src/config/currency";
 import type {
   Item,
   ItemSearchResponse,
@@ -673,7 +674,7 @@ export function AddItem() {
   return (
     <main className="flex-1 w-full max-w-[1440px] mx-auto px-6 lg:px-8 py-8">
       <nav className="flex mb-6 text-sm text-gray-500">
-        <Link href={`/${locale}/vendor/items`} className="hover:text-primary">
+        <Link href={`/${locale}/dashboard/items`} className="hover:text-primary">
           Products
         </Link>
         <span className="mx-2">/</span>
@@ -856,7 +857,9 @@ export function AddItem() {
                         Base Price
                       </span>
                       <span className="text-sm font-semibold text-gray-900">
-                        EGP {basePriceDisplay}
+                        {basePriceDisplay !== "" && !Number.isNaN(Number(basePriceDisplay))
+                          ? formatPrice(Number(basePriceDisplay))
+                          : `${CURRENCY_SYMBOL} ${basePriceDisplay}`}
                       </span>
                     </div>
                     <div className="w-px h-8 bg-gray-200" />
@@ -1038,7 +1041,7 @@ export function AddItem() {
                       <div className="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
                         <div className="lg:col-span-4 space-y-4">
                           <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-                            <i className="fa-solid fa-tag" aria-hidden /> Pricing (EGP)
+                            <i className="fa-solid fa-tag" aria-hidden /> Pricing ({CURRENCY_SYMBOL})
                           </h4>
                           <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1">
@@ -1073,7 +1076,7 @@ export function AddItem() {
                             </span>
                             <span className="text-gray-500">
                               Profit:{" "}
-                              <span className="font-medium text-gray-900">EGP {profitPerUnit}</span>
+                              <span className="font-medium text-gray-900">{formatPrice(Number(profitPerUnit) || 0)}</span>
                             </span>
                           </div>
                           <div className="pt-2">
@@ -1296,7 +1299,7 @@ export function AddItem() {
                             <div className="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
                               <div className="lg:col-span-4 space-y-4">
                                 <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-                                  <i className="fa-solid fa-tag" aria-hidden /> Pricing (EGP)
+                                  <i className="fa-solid fa-tag" aria-hidden /> Pricing ({CURRENCY_SYMBOL})
                                 </h4>
                                 <div className="grid grid-cols-2 gap-4">
                                   <div className="space-y-1">
@@ -1337,7 +1340,7 @@ export function AddItem() {
                                   </span>
                                   <span className="text-gray-500">
                                     Profit:{" "}
-                                    <span className="font-medium text-gray-900">EGP {profit}</span>
+                                    <span className="font-medium text-gray-900">{formatPrice(Number(profit) || 0)}</span>
                                   </span>
                                 </div>
                                 <div className="pt-2">
@@ -1674,7 +1677,7 @@ export function AddItem() {
                                 </label>
                                 <div className="relative">
                                   <span className="absolute left-3 top-2 text-gray-500 text-sm">
-                                    EGP
+                                    {CURRENCY_SYMBOL}
                                   </span>
                                   <input
                                     type="number"

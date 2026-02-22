@@ -19,6 +19,7 @@ import { useUserStore } from "@/src/store/userStore";
 import { ProductDetails } from "@/src/types/product-details.types";
 import toast from "react-hot-toast";
 import { Link } from "@/src/i18n/routing";
+import { formatPrice } from "@/src/config/currency";
 
 interface BuyBoxProps {
   product: ProductDetails;
@@ -234,7 +235,7 @@ const BuyBox = ({ product, selectedAttributes, onOpenVendorsSidebar }: BuyBoxPro
           <span className="flex items-center gap-2">
             <Tags size={18} className="text-primary" />
             {vendorCount} {t("otherOffers")} {tProduct("from")}{" "}
-            {product.pricing?.minPrice.toFixed(2)}$
+            {formatPrice(product.pricing?.minPrice ?? 0)}
           </span>
           {isArabic ? (
             <ChevronLeft

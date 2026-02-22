@@ -7,6 +7,7 @@ import { PricingAttribute, ProductDetails } from "@/src/types/product-details.ty
 import axios from "axios";
 import { Link } from "@/src/i18n/routing";
 import { SelectedValueId } from "@/src/types/types";
+import { formatPrice } from "@/src/config/currency";
 
 interface ProductInfoProps {
   product: ProductDetails;
@@ -396,16 +397,16 @@ const ProductInfo = ({
         <div>
           <div className="flex items-baseline gap-3 mb-1">
             <span className="text-3xl font-bold text-primary dark:text-primary">
-              ${price.toFixed(2)}
+              {formatPrice(price)}
             </span>
             {maxPrice && maxPrice > price && (
               <>
                 <span className="text-lg text-gray-400 dark:text-gray-500 line-through decoration-red-400">
-                  ${maxPrice.toFixed(2)}
+                  {formatPrice(maxPrice)}
                 </span>
                 {discount && (
                   <span className="text-xs font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded">
-                    {tProduct("save")} ${(maxPrice - price).toFixed(2)}
+                    {tProduct("save")} {formatPrice(maxPrice - price)}
                   </span>
                 )}
               </>

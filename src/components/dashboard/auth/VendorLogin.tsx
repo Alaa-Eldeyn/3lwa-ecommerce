@@ -31,7 +31,7 @@ export function VendorLogin() {
 
     try {
       await loginVendor(email.trim(), password);
-      router.push("/vendor/dashboard");
+      router.push("/dashboard");
     } catch (error) {
       const message = axios.isAxiosError(error)
         ? (error.response?.data?.message as string | undefined)
@@ -187,7 +187,7 @@ export function VendorLogin() {
               </div>
               <div className="flex items-center justify-between">
                 <Link
-                  href="/vendor/forgot-password"
+                  href="/dashboard/forgot-password"
                   className="text-sm font-semibold text-primary hover:text-header transition-colors">
                   {t("forgotPassword")}
                 </Link>
@@ -217,7 +217,7 @@ export function VendorLogin() {
             <p className="text-gray-600 text-sm">
               {t("noVendorAccount")}{" "}
               <Link
-                href="/vendor/register"
+                href="/dashboard/register"
                 className="font-semibold text-primary hover:text-header transition-colors">
                 {t("registerNow")}
               </Link>
